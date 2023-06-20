@@ -3,8 +3,6 @@ import "../App.css";
 
 function EventCard (props) {
 
-    console.log('Console logging inside Event Card: ', props)
-
     return(
         <div className='floating-info-box-event-card'>
             <h3>Name: {props.item.name}</h3>

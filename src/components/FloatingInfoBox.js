@@ -3,9 +3,7 @@ import EventCard from './EventCard';
 import "../App.css";
 
 function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents}) {
-
-    console.log('neighbourhood events inside the navbox', neighbourhoodEvents)
-
+        
     const eventCards = neighbourhoodEvents.map((item, i) =>{
         return (
             <EventCard 

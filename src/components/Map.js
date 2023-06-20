@@ -13,6 +13,7 @@ import FloatingInfoBox from './FloatingInfoBox';
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import events from '../geodata/events.json';
 
+let popup;
 let isNeighbourhoodClicked = false;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
@@ -25,13 +26,13 @@ function Map() {
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
 
   const colourPairs = [
-    ["#FF0000", "#008000"],  // Red to Green 
-    ["#FFA500", "#800080"],  // Orange to Purple
-    ["#008080", "#FF00FF"],  // Teal to Magenta
-    ["#08fb26", "#8e2add"],  // Green to Orange
-    ["#ff3300", "#fffc00"],  // Yellow to Orange
-    ["#6b03d8", "#01b4fd"],  // Skyblue to Deep Blue
-    ["#fe019a", "#000000"],  // Pink to Black
+    ["#008000", "#FF0000"],  // Red to Green 
+    ["#800080", "#FFA500"],  // Orange to Purple
+    ["#FF00FF", "#008080"],  // Teal to Magenta
+    ["#8e2add", "#08fb26"],  // Green to Orange
+    ["#fffc00", "#ff3300"],  // Yellow to Orange
+    ["#01b4fd", "#6b03d8"],  // Skyblue to Deep Blue
+    ["#000000", "#fe019a"],  // Pink to Black
   ];
 
   const mapContainer = useRef(null);
@@ -83,6 +84,7 @@ function Map() {
     });
 
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
   }
 
   useEffect(() => {
@@ -100,6 +102,8 @@ function Map() {
     map.current.on('load', () => {
 
       map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
+      console.log(neighbourhoods.features)
 
       // loop over the neighborhoods and create a new layer for each
       neighbourhoods.features.forEach((neighbourhood) => {
@@ -127,7 +131,7 @@ function Map() {
         // add two distinct layer types:
         // 1. Fill layer -> we will use this to colour in our boundaries
         // 2. Line layer -> we will use this layer to highlight the borders of our boundaries on hover
-
+        
         map.current.addLayer({
           id: layerId,
           type: 'fill',
@@ -191,14 +195,26 @@ function Map() {
         });
 
         // event listeners on our map for mouseover and mouseleave
+
+        popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        });
         // when mouse is over layer fill the opacity to full and set the line width to 4
         // when the mouse is removed from a layer revert the states back to their default.
 
-        map.current.on('mouseover', layerId, function(){
+        map.current.on('mouseover', layerId, function(e){
+
+          console.log(neighbourhoods.features)
+        
           if (!isNeighbourhoodClicked) {
             map.current.getCanvas().style.cursor = 'pointer';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
             map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+
+            console.log(score);
+            
+            popup.setLngLat(e.lngLat).setHTML(score).addTo(map.current);
           }
         });
         
@@ -207,53 +223,50 @@ function Map() {
             map.current.getCanvas().style.cursor = '';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
             map.current.setPaintProperty(lineLayerId, 'line-width', 0);
+
+            popup.remove();
+
           }
         })
-
-        map.current.on('click', (e) => {
-          
-          const features = map.current.queryRenderedFeatures(e.point);
-
-          if (features.length > 0 && features[0].id !== undefined) {
-
-            isNeighbourhoodClicked = true;  
-            
-            disableColours()
-
-            const [firstFeature] = features;
-
-            console.log(firstFeature.id);
-            
-            // Create a GeoJSON feature object from the clicked feature
-            const geojsonFeature = turf.feature(firstFeature.geometry);
-        
-            // Use turf to calculate the centroid of the feature
-            const centroid = turf.centroid(geojsonFeature);
-        
-            // Get the coordinates of the centroid
-            const [lng, lat] = centroid.geometry.coordinates;
-        
-            // Fly to the centroid of the polygon
-            map.current.flyTo({ center: [lng, lat], zoom: 15 });
-
-            map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
-
-            const matchingEvents = events.filter(event => event.location_id === firstFeature.id);
-
-            setNeighbourhoodEvents(matchingEvents);
-
-            if (matchingEvents.length > 0) {
-              setShowInfoBox(true);
-            }
-
-            // const popup = new mapboxgl.Popup()
-            //   .setLngLat([lng, lat])
-            //   .setHTML('<p> Some Information </p>')
-            //   .addTo(map.current);
-            
-          }
-        });
       });
+    });
+
+    map.current.on('click', (e) => {
+
+      popup.remove();
+          
+      const features = map.current.queryRenderedFeatures(e.point);
+
+      if (features.length > 0 && features[0].id !== undefined) {
+
+        isNeighbourhoodClicked = true;  
+        
+        disableColours()
+
+        const [firstFeature] = features;
+        
+        // Create a GeoJSON feature object from the clicked feature
+        const geojsonFeature = turf.feature(firstFeature.geometry);
+    
+        // Use turf to calculate the centroid of the feature
+        const centroid = turf.centroid(geojsonFeature);
+    
+        // Get the coordinates of the centroid
+        const [lng, lat] = centroid.geometry.coordinates;
+    
+        // Fly to the centroid of the polygon
+        map.current.flyTo({ center: [lng, lat], zoom: 15 });
+
+        map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
+        const matchingEvents = events.filter(event => event.location_id === firstFeature.id);
+
+        setNeighbourhoodEvents(matchingEvents);
+
+        if (matchingEvents.length > 0) {
+          setShowInfoBox(true);
+        }
+      }
     });
 
     events.forEach((event) =>{
@@ -277,7 +290,6 @@ function Map() {
     });
 
   }, []);
-
 
   return (
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
