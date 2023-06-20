@@ -38,7 +38,7 @@ function Map() {
   const map = useRef(null);
   const originalLat = 40.7484;
   const originalLng = -73.9857;
-  const zoom = 12;
+  const zoom = 6;
 
   // Create color scale
   const colourScale = scaleLinear()
@@ -58,7 +58,7 @@ function Map() {
   }
 
   function changeColourScheme(){
-    setColourPairIndex(prevIndex => (prevIndex + 1) % colourPairs.length);
+    setColourPairIndex(prevIndex => (prevIndex + 2) % colourPairs.length);
     handleChangeColours();
   }
 
@@ -98,6 +98,9 @@ function Map() {
     });
 
     map.current.on('load', () => {
+
+      map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
       // loop over the neighborhoods and create a new layer for each
       neighbourhoods.features.forEach((neighbourhood) => {
 
@@ -184,8 +187,8 @@ function Map() {
               ['get', 'min_height']
             ],
             'fill-extrusion-opacity': 0.6
-            }},
-          );
+            }
+        });
 
         // event listeners on our map for mouseover and mouseleave
         // when mouse is over layer fill the opacity to full and set the line width to 4
@@ -214,8 +217,6 @@ function Map() {
           if (features.length > 0 && features[0].id !== undefined) {
 
             isNeighbourhoodClicked = true;  
-
-            setShowInfoBox(true);
             
             disableColours()
 
@@ -241,9 +242,13 @@ function Map() {
 
             setNeighbourhoodEvents(matchingEvents);
 
+            if (matchingEvents.length > 0) {
+              setShowInfoBox(true);
+            }
+
             // const popup = new mapboxgl.Popup()
             //   .setLngLat([lng, lat])
-            //   .setHTML('<h3>Area Info</h3>' + '<p>' + firstFeature.properties.zone + '</p>')
+            //   .setHTML('<p> Some Information </p>')
             //   .addTo(map.current);
             
           }
