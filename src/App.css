@@ -80,9 +80,9 @@ body{
   position: absolute;
   z-index: 1;
   min-width: 240px;
+  max-width: 240px;
   margin-top: 72px;
   right: 72px;
-  height: 480px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   background-color: rgba(18, 19, 22, 0.3);
@@ -90,7 +90,7 @@ body{
   border: 1px solid rgba(255, 255, 255, 0.125);
   color: white;
   padding: 24px 18px;
-  align-items: center;
+  align-items: left;
   display: flex;
   flex-direction: column;
   gap: 12px;

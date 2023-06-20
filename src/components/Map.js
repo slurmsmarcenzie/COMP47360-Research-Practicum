@@ -1,11 +1,17 @@
+// Core dependencies of App
 import React, { useEffect, useRef,useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
-import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
+import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+
+// Components
 import FloatingNav from './FloatingNav';
 import FloatingInfoBox from './FloatingInfoBox';
-import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+
+// Data
+import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
+import events from '../geodata/events.json';
 
 let isNeighbourhoodClicked = false;
 
@@ -16,6 +22,7 @@ function Map() {
   const layerIds = useRef([]);
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
+  const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
 
   const colourPairs = [
     ["#FF0000", "#008000"],  // Red to Green 
@@ -64,6 +71,8 @@ function Map() {
   function enableColours(){
 
     setShowInfoBox(false);
+
+    setNeighbourhoodEvents([]);
 
     isNeighbourhoodClicked = false;
         
@@ -202,8 +211,6 @@ function Map() {
           
           const features = map.current.queryRenderedFeatures(e.point);
 
-          console.log('this is features: ', features)
-
           if (features.length > 0 && features[0].id !== undefined) {
 
             isNeighbourhoodClicked = true;  
@@ -213,9 +220,9 @@ function Map() {
             disableColours()
 
             const [firstFeature] = features;
-            
-            console.log('First feature: ', firstFeature)
 
+            console.log(firstFeature.id);
+            
             // Create a GeoJSON feature object from the clicked feature
             const geojsonFeature = turf.feature(firstFeature.geometry);
         
@@ -230,6 +237,10 @@ function Map() {
 
             map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
+            const matchingEvents = events.filter(event => event.location_id === firstFeature.id);
+
+            setNeighbourhoodEvents(matchingEvents);
+
             // const popup = new mapboxgl.Popup()
             //   .setLngLat([lng, lat])
             //   .setHTML('<h3>Area Info</h3>' + '<p>' + firstFeature.properties.zone + '</p>')
@@ -239,6 +250,27 @@ function Map() {
         });
       });
     });
+
+    events.forEach((event) =>{
+      const marker = new mapboxgl.Marker()
+      .setLngLat([event.location.longitude, event.location.latitude])
+      .addTo(map.current);
+
+      const markerElement = marker.getElement();
+
+      markerElement.addEventListener('click', () => {
+        console.log(event);
+      });
+  
+      markerElement.addEventListener('mouseover', () => {
+        markerElement.style.cursor = 'pointer';
+      });
+  
+      markerElement.addEventListener('mouseout', () => {
+        markerElement.style.cursor = 'default';
+      })
+    });
+
   }, []);
 
 
@@ -250,6 +282,7 @@ function Map() {
         />
         <FloatingInfoBox
           showingFloatingInfoBox={showInfoBox}
+          neighbourhoodEvents = {neighbourhoodEvents}
         />
     </div>
   );
