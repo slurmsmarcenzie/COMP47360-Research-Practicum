@@ -4,7 +4,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import FloatingNav from './FloatingNav';
+import FloatingInfoBox from './FloatingInfoBox';
 import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+
+let isNeighbourhoodClicked = false;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
@@ -12,6 +15,7 @@ function Map() {
 
   const layerIds = useRef([]);
   const [colourPairIndex, setColourPairIndex] = useState(0);
+  const [showInfoBox, setShowInfoBox] = useState(false);
 
   const colourPairs = [
     ["#FF0000", "#008000"],  // Red to Green 
@@ -25,9 +29,9 @@ function Map() {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const lat = 40.7484;
-  const lng = -73.9857;
-  const zoom = 13;
+  const originalLat = 40.7484;
+  const originalLng = -73.9857;
+  const zoom = 12;
 
   // Create color scale
   const colourScale = scaleLinear()
@@ -51,6 +55,27 @@ function Map() {
     handleChangeColours();
   }
 
+  function disableColours(){
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0);
+    });
+  }
+
+  function enableColours(){
+
+    setShowInfoBox(false);
+
+    isNeighbourhoodClicked = false;
+        
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      const lineLayerID = neighbourhood.id + '-line'; // or whatever property holds the layer id
+      map.current.setPaintProperty(lineLayerID, 'line-width', 0);
+    });
+
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+  }
+
   useEffect(() => {
     if (map.current) return;
 
@@ -59,7 +84,7 @@ function Map() {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/dark-v11',
-      center: [lng, lat],
+      center: [originalLng, originalLat],
       zoom: zoom
     });
 
@@ -158,28 +183,38 @@ function Map() {
         // when the mouse is removed from a layer revert the states back to their default.
 
         map.current.on('mouseover', layerId, function(){
-          map.current.getCanvas().style.cursor = 'pointer';
-          map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-          map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+          if (!isNeighbourhoodClicked) {
+            map.current.getCanvas().style.cursor = 'pointer';
+            map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+            map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+          }
         });
         
         map.current.on('mouseleave', layerId, function(){
-          map.current.getCanvas().style.cursor = '';
-          map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
-          map.current.setPaintProperty(lineLayerId, 'line-width', 0);
+          if (!isNeighbourhoodClicked) {
+            map.current.getCanvas().style.cursor = '';
+            map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
+            map.current.setPaintProperty(lineLayerId, 'line-width', 0);
+          }
         })
 
         map.current.on('click', (e) => {
-
+          
           const features = map.current.queryRenderedFeatures(e.point);
 
-          console.log('this is features', features)
+          console.log('this is features: ', features)
 
           if (features.length > 0 && features[0].id !== undefined) {
+
+            isNeighbourhoodClicked = true;  
+
+            setShowInfoBox(true);
             
+            disableColours()
+
             const [firstFeature] = features;
             
-            console.log(firstFeature)
+            console.log('First feature: ', firstFeature)
 
             // Create a GeoJSON feature object from the clicked feature
             const geojsonFeature = turf.feature(firstFeature.geometry);
@@ -191,11 +226,13 @@ function Map() {
             const [lng, lat] = centroid.geometry.coordinates;
         
             // Fly to the centroid of the polygon
-            map.current.flyTo({ center: [lng, lat], zoom: 16 });
+            map.current.flyTo({ center: [lng, lat], zoom: 15 });
+
+            map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
             // const popup = new mapboxgl.Popup()
             //   .setLngLat([lng, lat])
-            //   .setHTML('<h3>Area Info</h3>' + '<p>' + firstFeature.properties.description + '</p>')
+            //   .setHTML('<h3>Area Info</h3>' + '<p>' + firstFeature.properties.zone + '</p>')
             //   .addTo(map.current);
             
           }
@@ -209,6 +246,10 @@ function Map() {
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
       <FloatingNav 
         changeColourScheme={changeColourScheme}
+        enableColours={enableColours}
+        />
+        <FloatingInfoBox
+          showingFloatingInfoBox={showInfoBox}
         />
     </div>
   );
