@@ -13,6 +13,10 @@ import FloatingInfoBox from './FloatingInfoBox';
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import events from '../geodata/events.json';
 
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+
 let popup;
 let isNeighbourhoodClicked = false;
 
