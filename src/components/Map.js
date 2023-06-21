@@ -110,8 +110,12 @@ function Map() {
 
         // add a random score between 0 and 1 to each neighborhood
         const score = Math.random();
+
         // get color corresponding to score
         const colour = colourScale(score);
+
+        // set this as an attribute of the neighbourhood object
+        neighbourhood.colour = colour;
 
         // construct the layer ID
         const layerId = `${neighbourhood.properties.location_id}`;
@@ -205,26 +209,30 @@ function Map() {
 
         map.current.on('mouseover', layerId, function(e){
 
+          popup.remove();
+
           console.log(neighbourhoods.features)
         
           if (!isNeighbourhoodClicked) {
+
             map.current.getCanvas().style.cursor = 'pointer';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
             map.current.setPaintProperty(lineLayerId, 'line-width', 4);
 
             console.log(score);
             
-            popup.setLngLat(e.lngLat).setHTML(score).addTo(map.current);
+            popup.setLngLat(e.lngLat).setHTML(neighbourhood.properties.zone, score).addTo(map.current);
+
           }
         });
         
         map.current.on('mouseleave', layerId, function(){
+
           if (!isNeighbourhoodClicked) {
+
             map.current.getCanvas().style.cursor = '';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
             map.current.setPaintProperty(lineLayerId, 'line-width', 0);
-
-            popup.remove();
 
           }
         })

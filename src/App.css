@@ -95,3 +95,14 @@ body{
   flex-direction: column;
   gap: 12px;
 }
+
+.floating-info-tertiary-button{
+  width: 100%;
+  color: white;
+  font-weight: 600;
+  background-color: blueviolet;
+  height: 28px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
