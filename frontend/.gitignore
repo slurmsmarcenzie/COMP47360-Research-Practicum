@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+#no longer needed, just a reference
+/src_old_dummy
+
 # testing
 /coverage
 

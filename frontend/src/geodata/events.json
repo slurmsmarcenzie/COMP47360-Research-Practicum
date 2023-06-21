@@ -1,0 +1,128 @@
+[
+    {
+        "name": "New York City Marathon",
+        "type": "Sports",
+        "location": {
+            "latitude": 40.7128,
+            "longitude": -74.0060
+        },
+        "start_time": "2023-11-05T09:00:00",
+        "end_time": "2023-11-05T17:00:00",
+        "expected_attendees": 100000,
+        "description": "The world's largest marathon runs through all five boroughs of New York City."
+    },
+    {
+        "name": "Times Square New Year's Eve Celebration",
+        "type": "Holiday",
+        "location": {
+            "latitude": 40.7580,
+            "longitude": -73.9855
+        },
+        "start_time": "2023-12-31T18:00:00",
+        "end_time": "2024-01-01T01:00:00",
+        "expected_attendees": 1000000,
+        "description": "Join the crowd in Times Square to ring in the New Year."
+    },
+    {
+        "name": "Fourth of July Fireworks",
+        "location_id" : 231,
+        "type": "Holiday",
+        "location": {
+            "latitude": 40.7128,
+            "longitude": -74.0060
+        },
+        "start_time": "2023-07-04T20:00:00",
+        "end_time": "2023-07-04T22:00:00",
+        "expected_attendees": 3000000,
+        "description": "The annual Independence Day fireworks show over the East River."
+    },
+    {
+        "name": "NYC Pride Parade",
+        "location_id" : 158,
+        "type": "Parade",
+        "location": {
+            "latitude": 40.7393,
+            "longitude": -74.0083
+        },
+        "start_time": "2023-06-30T12:00:00",
+        "end_time": "2023-06-30T18:00:00",
+        "expected_attendees": 2500000,
+        "description": "The annual NYC Pride Parade marches through the streets of Manhattan."
+    },
+    {
+        "name": "Thanksgiving Day Parade",
+        "location_id" : 230,
+        "type": "Parade",
+        "location": {
+            "latitude": 40.7580,
+            "longitude": -73.9855
+        },
+        "start_time": "2023-11-23T09:00:00",
+        "end_time": "2023-11-23T12:00:00",
+        "expected_attendees": 3500000,
+        "description": "The annual Macy's Thanksgiving Day Parade through the streets of Manhattan."
+    },
+    {
+        "name": "Governors Ball Music Festival",
+        "type": "Music",
+        "location": {
+            "latitude": 40.7957,
+            "longitude": -73.9222
+        },
+        "start_time": "2023-06-02T11:00:00",
+        "end_time": "2023-06-04T23:00:00",
+        "expected_attendees": 150000,
+        "description": "A multi-day music festival on Randall's Island."
+    },
+    {
+        "name": "Electric Zoo Festival",
+        "location_id" : 194,
+        "type": "Music",
+        "location": {
+            "latitude": 40.7957,
+            "longitude": -73.9222
+        },
+        "start_time": "2023-09-01T12:00:00",
+        "end_time": "2023-09-03T23:00:00",
+        "expected_attendees": 85000,
+        "description": "An annual electronic music festival on Randall's Island."
+    },
+    {
+        "name": "Tribeca Film Festival",
+        "location_id" : 231,
+        "type": "Film",
+        "location": {
+            "latitude": 40.7163,
+            "longitude": -74.0086
+        },
+        "start_time": "2023-04-19T09:00:00",
+        "end_time": "2023-04-30T23:59:00",
+        "expected_attendees": 120000,
+        "description": "An annual film festival featuring independent films from around the world."
+    },
+    {
+        "name": "New York Comic Con",
+        "type": "Convention",
+        "location": {
+            "latitude": 40.7570,
+            "longitude": -74.0026
+        },
+        "start_time": "2023-10-05T10:00:00",
+        "end_time": "2023-10-08T19:00:00",
+        "expected_attendees": 200000,
+        "description": "The East Coast's biggest pop culture convention, held at the Javits Center."
+    },
+    {
+        "name": "New York Auto Show",
+        "location_id" : 246,
+        "type": "Exhibition",
+        "location": {
+            "latitude": 40.7570,
+            "longitude": -74.0026
+        },
+        "start_time": "2023-04-14T10:00:00",
+        "end_time": "2023-04-23T19:00:00",
+        "expected_attendees": 1000000,
+        "description": "An annual auto show at the Javits Center, featuring new models and concept cars."
+    }
+]
