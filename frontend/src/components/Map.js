@@ -13,6 +13,7 @@ import FloatingInfoBox from './FloatingInfoBox';
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import events from '../geodata/events.json';
 
+//Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
