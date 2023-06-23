@@ -6,8 +6,6 @@ import { scaleLinear } from 'd3-scale';
 import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
 
 // Components
-import FloatingNav from './FloatingNav';
-import FloatingInfoBox from './FloatingInfoBox';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -16,7 +14,7 @@ import events from '../geodata/events.json';
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
-function Map() {
+function MobileMap() {
 
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
@@ -52,9 +50,18 @@ function Map() {
       return map;
     }, {});
   }, [scores]);  // Dependency array
-  
-  // static methods for our application to load in all values
 
+  const simulateBusynessChange = () => {
+
+    const newScores = scores.map(score => ({
+      ...score,
+      busyness_score: Math.random()  // this generates a random number between 0 and 1
+    }));
+
+    // set the new scores array
+    setScores(newScores);
+  };
+  
   const add3DBuildings = () => {
     map.current.addLayer({
       'id': 'add-3d-buildings',
@@ -172,8 +179,6 @@ function Map() {
     });
   };
 
-  // dynamic methods and interactive for our application to handle and set changes to our map
-
   const handleChangeColours = () => {
 
     // Create a new colourScale each time you handle the color change
@@ -238,54 +243,52 @@ function Map() {
     });
   };
 
-  const initialiseMouseMapEvents = () => {
+  const initialiseMapEvents = () => {
 
     layerIds.current.forEach((layerId) => {
-      const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
-
-      // Mouseover event
-      map.current.on('mousemove', layerId, (e) => {
-        
-          if (!isNeighbourhoodClickedRef.current) {
-
-              map.current.getCanvas().style.cursor = 'pointer';
-              map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-              map.current.setPaintProperty(lineLayerId, 'line-width', 4);
-              
-              const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
-
-              if (features.length > 0) {
-
-                  if (!popup.current) {
-                      popup.current = new mapboxgl.Popup({
-                          closeButton: false,
-                          closeOnClick: false,
-                      });
-                  }
-
-                  const feature = features[0];
-                  const zone = feature.properties.zone; 
-
-                  popup.current.setLngLat(e.lngLat)
-                      .setHTML(`${zone}, ${layerId}`)
-                      .addTo(map.current);
-              }
-          }
-      });
+        const lineLayerId = layerId + '-line'; 
   
-      // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
-      map.current.on('mouseleave', layerId, () => {
-        if (!isNeighbourhoodClickedRef.current) {
+        // Touchstart event
+        map.current.on('touchstart', layerId, (e) => {
+          if (!isNeighbourhoodClickedRef.current) {
+            map.current.getCanvas().style.cursor = 'pointer';
+            map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+            map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+            
+            const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+  
+            if (features.length > 0) {
+              if (!popup.current) {
+                  popup.current = new mapboxgl.Popup({
+                      closeButton: false,
+                      closeOnClick: false,
+                  });
+              }
+  
+              const feature = features[0];
+              const zone = feature.properties.zone; 
+  
+              popup.current.setLngLat(e.lngLat)
+                  .setHTML(`${zone}, ${layerId}`)
+                  .addTo(map.current);
+            }
+          }
+        });
+  
+        // Touchend event
+        map.current.on('touchend', layerId, () => {
+          if (!isNeighbourhoodClickedRef.current) {
             map.current.getCanvas().style.cursor = '';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
             map.current.setPaintProperty(lineLayerId, 'line-width', 0);
-
+  
             if (popup.current) {
-                popup.current.remove();
-                popup.current = null;
+              popup.current.remove();
+              popup.current = null;
             }
           }
-      });
+        });
+  
 
       map.current.on('click', (e) => {
 
@@ -326,35 +329,7 @@ function Map() {
       });
     });
   }
-  
-  const simulateBusynessChange = () => {
 
-    const newScores = scores.map(score => ({
-      ...score,
-      busyness_score: Math.random()  // this generates a random number between 0 and 1
-    }));
-
-    // set the new scores array
-    setScores(newScores);
-  };
-  
-  // Methods for children elements.
-  const floatingNavZoomToLocation = (longitude, latitude) => {
-    map.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 15, // specify your desired zoom level
-      essential: true
-    });
-  }
-
-  const floatingNavSetLineWidth = (zone) => {
-
-    const lineLayerId = zone + '-line';
-
-    map.current.setPaintProperty(lineLayerId, 'line-width', 4);
-
-  }
-  // Dyanmic use effects re-render our app
   useEffect(() => {
     if (!map.current) {
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
@@ -371,7 +346,7 @@ function Map() {
         add3DBuildings();
         renderNeighbourhoods();
         renderEvents();
-        initialiseMouseMapEvents();
+        initialiseMapEvents();
         updateLayerColours();
       });
     }
@@ -397,30 +372,9 @@ function Map() {
   useEffect(() => {
     console.log('Busyness Map Updated:', busynessMap);
   }, [busynessMap]);  
-
-  return (
-
-    <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
-
-      <FloatingNav 
-        events = {events}
-        disableColours = {disableColours}
-        floatingNavZoomToLocation ={floatingNavZoomToLocation}
-        floatingNavSetLineWidth = {floatingNavSetLineWidth}
-        isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-        changeColourScheme={changeColourScheme}
-        enableColours={enableColours}
-        simulateBusynessChange = {simulateBusynessChange}
-        />
-
-      <FloatingInfoBox
-        showingFloatingInfoBox={showInfoBox}
-        neighbourhoodEvents = {neighbourhoodEvents}
-      />
-
-    </div>
-
-  );
+    return(
+        <div ref={mapContainer} style={{ width: '100%', height: '100vh' }} />
+    )
 };
 
-export default Map;
+export default MobileMap
