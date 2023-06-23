@@ -411,6 +411,8 @@ function Map() {
         changeColourScheme={changeColourScheme}
         enableColours={enableColours}
         simulateBusynessChange = {simulateBusynessChange}
+        setNeighbourhoodEvents={setNeighbourhoodEvents}
+        setShowInfoBox={setShowInfoBox}
         />
 
       <FloatingInfoBox
