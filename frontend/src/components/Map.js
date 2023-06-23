@@ -11,43 +11,177 @@ import FloatingInfoBox from './FloatingInfoBox';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
+import scores from '../geodata/output.json'
 import events from '../geodata/events.json';
-
-let popup;
-let isNeighbourhoodClicked = false;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
 function Map() {
 
-  const layerIds = useRef([]);
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
+  const [eventsMap, setEventsMap] = useState({});
+  const [busynessScores, setBusynessScores] = useState([]);
 
-  const colourPairs = [
-    ["#008000", "#FF0000"],  // Red to Green 
-    ["#800080", "#FFA500"],  // Orange to Purple
-    ["#FF00FF", "#008080"],  // Teal to Magenta
-    ["#8e2add", "#08fb26"],  // Green to Orange
-    ["#fffc00", "#ff3300"],  // Yellow to Orange
-    ["#01b4fd", "#6b03d8"],  // Skyblue to Deep Blue
-    ["#000000", "#fe019a"],  // Pink to Black
-  ];
 
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const popup = useRef(null);
+  const layerIds = useRef([]);
+  const isNeighbourhoodClickedRef = useRef(false);
+
   const originalLat = 40.7484;
   const originalLng = -73.9857;
   const zoom = 6;
 
-  // Create color scale
-  const colourScale = scaleLinear()
-    .domain([0, 1])
-    .range(colourPairs[colourPairIndex]); // range of colors between which our data will be mapped  
+  const colourPairs = [
+    ["#008000", "#FF0000"],
+    ["#800080", "#FFA500"],
+    ["#FF00FF", "#008080"],
+    ["#8e2add", "#08fb26"],
+    ["#fffc00", "#ff3300"],
+    ["#01b4fd", "#6b03d8"],
+    ["#000000", "#fe019a"],
+  ];
 
-  function handleChangeColours() {
-    // for each neighbourhood
+  // Create a mapping of location_id to busyness_score.
+  const busynessMap = scores.reduce((map, item) => {
+  map[item.location_id] = item.busyness_score;
+    return map;
+  }, {scores});
+
+  const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
+  
+  const add3DBuildings = () => {
+    map.current.addLayer({
+      'id': 'add-3d-buildings',
+      'source': 'composite',
+      'source-layer': 'building',
+      'filter': ['==', 'extrude', 'true'],
+      'type': 'fill-extrusion',
+      'minzoom': 15,
+      'paint': {
+        'fill-extrusion-color': '#aaa',
+        'fill-extrusion-height': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'height']
+        ],
+        'fill-extrusion-base': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          15,
+          0,
+          15.05,
+          ['get', 'min_height']
+        ],
+        'fill-extrusion-opacity': 0.6
+      }
+    });
+  };
+
+  const renderNeighbourhoods = () => {
+
+    // loop over the neighborhoods and create a new layer for each
+    neighbourhoods.features.forEach((neighbourhood) => {
+
+      // access hash map value to retrieve score
+      const score = busynessMap[neighbourhood.properties.location_id]
+
+      // get color corresponding to score
+      const colour = colourScale(score);
+
+      // set this as an attribute of the neighbourhood object
+      neighbourhood.colour = colour;
+
+      // construct the layer ID
+      const layerId = `${neighbourhood.properties.location_id}`;
+
+      // add new properties to our neighbourhood objects so that we can reuse them later (on hover effect)
+      neighbourhood.id = layerId;
+
+      // we want to remember the score so that the relative colour score on our scale will be retained.
+      neighbourhood.score = score;
+
+      // add the layer ID to our array so we can tell which neighbourhood/layer is being hovered etc.
+      layerIds.current.push(layerId);
+
+      // add new line id to our neighbourhood objects so that we can reuse them later (on hover effect)
+      const lineLayerId = layerId + '-line';
+
+      // add two distinct layer types:
+      // 1. Fill layer -> we will use this to colour in our boundaries
+      // 2. Line layer -> we will use this layer to highlight the borders of our boundaries on hover
+      
+      map.current.addLayer({
+        id: layerId,
+        type: 'fill',
+        source: {
+          type: 'geojson',
+          data: neighbourhood
+        },
+        paint: {
+          'fill-color': colour, // fill color
+          'fill-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'hover'], false],
+            0.9,
+            0.6
+          ],
+          'fill-opacity-transition': { duration: 600 }, // .6 second transition
+        }
+      });
+
+      map.current.addLayer({
+        id: lineLayerId,
+        type: 'line',
+        source: {
+          type: 'geojson',
+          data: neighbourhood
+        },
+        paint: {  
+          'line-color': '#ffffff',
+          'line-width': 0,
+          'line-width-transition': { duration: 600 }, // .6 second transition
+        }
+      });
+    });
+  }
+
+  const renderEvents = () => {
+
+    events.forEach((event) =>{
+
+      const marker = new mapboxgl.Marker().setLngLat([event.location.longitude, event.location.latitude]).addTo(map.current);
+
+      const markerElement = marker.getElement();
+
+      markerElement.addEventListener('click', () => {
+        console.log(event);
+      });
+  
+      markerElement.addEventListener('mouseover', () => {
+        markerElement.style.cursor = 'pointer';
+
+      });
+  
+      markerElement.addEventListener('mouseout', () => {
+        markerElement.style.cursor = 'default';
+      })
+    });
+  };
+
+  const handleChangeColours = () => {
+
+    // Create a new colourScale each time you handle the color change
+    const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
+  
     neighbourhoods.features.forEach((neighbourhood) => {
       // get the original score assigned to our neighbourhood.
       const score = neighbourhood.score;
@@ -58,33 +192,121 @@ function Map() {
     });
   }
 
-  function changeColourScheme(){
-    setColourPairIndex(prevIndex => (prevIndex + 2) % colourPairs.length);
+  const changeColourScheme = () => {
+    console.log(colourPairIndex);
+    setColourPairIndex(prevIndex => (prevIndex + 1) % colourPairs.length);
     handleChangeColours();
   }
 
-  function disableColours(){
+  const disableColours = () => {
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0);
     });
   }
 
-  function enableColours(){
+  const enableColours = () => {
 
     setShowInfoBox(false);
-
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClicked = false;
-        
+    isNeighbourhoodClickedRef.current = false; // use setIsNeighbourhoodClicked
+  
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       const lineLayerID = neighbourhood.id + '-line'; // or whatever property holds the layer id
       map.current.setPaintProperty(lineLayerID, 'line-width', 0);
     });
-
+  
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+  }
 
+  const initialiseMouseMapEvents = () => {
+
+    layerIds.current.forEach((layerId) => {
+      const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
+
+      // Mouseover event
+      map.current.on('mousemove', layerId, (e) => {
+        
+          if (!isNeighbourhoodClickedRef.current) {
+
+              map.current.getCanvas().style.cursor = 'pointer';
+              map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+              map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+              
+              const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+
+              if (features.length > 0) {
+
+                  if (!popup.current) {
+                      popup.current = new mapboxgl.Popup({
+                          closeButton: false,
+                          closeOnClick: false,
+                      });
+                  }
+
+                  const feature = features[0];
+                  const zone = feature.properties.zone; 
+
+                  popup.current.setLngLat(e.lngLat)
+                      .setHTML(`${zone}, ${layerId}`)
+                      .addTo(map.current);
+              }
+          }
+      });
+  
+      // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
+      map.current.on('mouseleave', layerId, () => {
+        if (!isNeighbourhoodClickedRef.current) {
+            map.current.getCanvas().style.cursor = '';
+            map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
+            map.current.setPaintProperty(lineLayerId, 'line-width', 0);
+
+            if (popup.current) {
+                popup.current.remove();
+                popup.current = null;
+            }
+          }
+      });
+
+      map.current.on('click', (e) => {
+
+        popup.current?.remove();
+
+        const features = map.current.queryRenderedFeatures(e.point);
+
+        if (features.length > 0 && features[0].id !== undefined) {
+            
+          isNeighbourhoodClickedRef.current = true;  
+            
+          disableColours();
+
+          const [firstFeature] = features;
+            
+          // Create a GeoJSON feature object from the clicked feature
+          const geojsonFeature = turf.feature(firstFeature.geometry);
+  
+          // Use turf to calculate the centroid of the feature
+          const centroid = turf.centroid(geojsonFeature);
+  
+          // Get the coordinates of the centroid
+          const [lng, lat] = centroid.geometry.coordinates;
+  
+          // Fly to the centroid of the polygon
+          map.current.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+
+          map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
+          const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
+
+          setNeighbourhoodEvents(matchingEvents);
+
+          if (matchingEvents.length > 0) {
+            setShowInfoBox(true);
+            }
+          }
+      });
+    });
   }
 
   useEffect(() => {
@@ -100,216 +322,43 @@ function Map() {
     });
 
     map.current.on('load', () => {
-
       map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+      add3DBuildings();
+      renderNeighbourhoods();
+      renderEvents();
+      initialiseMouseMapEvents();
+    })
+  }, [busynessScores]);
 
-      console.log(neighbourhoods.features)
-
-      // loop over the neighborhoods and create a new layer for each
-      neighbourhoods.features.forEach((neighbourhood) => {
-
-        // add a random score between 0 and 1 to each neighborhood
-        const score = Math.random();
-
-        // get color corresponding to score
-        const colour = colourScale(score);
-
-        // set this as an attribute of the neighbourhood object
-        neighbourhood.colour = colour;
-
-        // construct the layer ID
-        const layerId = `${neighbourhood.properties.location_id}`;
-
-        // add new properties to our neighbourhood objects so that we can reuse them later (on hover effect)
-        neighbourhood.id = layerId;
-
-        // we want to remember the score so that the relative colour score on our scale will be retained.
-        neighbourhood.score = score;
-
-        // add the layer ID to our array so we can tell which neighbourhood/layer is being hovered etc.
-        layerIds.current.push(layerId);
-
-        // add new line id to our neighbourhood objects so that we can reuse them later (on hover effect)
-        const lineLayerId = layerId + '-line';
-
-        // add two distinct layer types:
-        // 1. Fill layer -> we will use this to colour in our boundaries
-        // 2. Line layer -> we will use this layer to highlight the borders of our boundaries on hover
-        
-        map.current.addLayer({
-          id: layerId,
-          type: 'fill',
-          source: {
-            type: 'geojson',
-            data: neighbourhood
-          },
-          paint: {
-            'fill-color': colour, // fill color
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              0.9,
-              0.6
-            ]
-          }
-        });
-
-        map.current.addLayer({
-          id: lineLayerId,
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: neighbourhood
-          },
-          paint: {  
-            'line-color': '#ffffff',
-            'line-width': 0,
-          }
-        });
-
-        map.current.addLayer({
-          'id': 'add-3d-buildings',
-          'source': 'composite',
-          'source-layer': 'building',
-          'filter': ['==', 'extrude', 'true'],
-          'type': 'fill-extrusion',
-          'minzoom': 15,
-          'paint': {
-            'fill-extrusion-color': '#aaa',
-            'fill-extrusion-height': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              15,
-              0,
-              15.05,
-              ['get', 'height']
-            ],
-            'fill-extrusion-base': [
-              'interpolate',
-              ['linear'],
-              ['zoom'],
-              15,
-              0,
-              15.05,
-              ['get', 'min_height']
-            ],
-            'fill-extrusion-opacity': 0.6
-            }
-        });
-
-        // event listeners on our map for mouseover and mouseleave
-
-        popup = new mapboxgl.Popup({
-          closeButton: false,
-          closeOnClick: false
-        });
-        // when mouse is over layer fill the opacity to full and set the line width to 4
-        // when the mouse is removed from a layer revert the states back to their default.
-
-        map.current.on('mouseover', layerId, function(e){
-
-          popup.remove();
-
-          console.log(neighbourhoods.features)
-        
-          if (!isNeighbourhoodClicked) {
-
-            map.current.getCanvas().style.cursor = 'pointer';
-            map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-            map.current.setPaintProperty(lineLayerId, 'line-width', 4);
-
-            console.log(score);
-            
-            popup.setLngLat(e.lngLat).setHTML(neighbourhood.properties.zone, score).addTo(map.current);
-
-          }
-        });
-        
-        map.current.on('mouseleave', layerId, function(){
-
-          if (!isNeighbourhoodClicked) {
-
-            map.current.getCanvas().style.cursor = '';
-            map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
-            map.current.setPaintProperty(lineLayerId, 'line-width', 0);
-
-          }
-        })
-      });
-    });
-
-    map.current.on('click', (e) => {
-
-      popup.remove();
-          
-      const features = map.current.queryRenderedFeatures(e.point);
-
-      if (features.length > 0 && features[0].id !== undefined) {
-
-        isNeighbourhoodClicked = true;  
-        
-        disableColours()
-
-        const [firstFeature] = features;
-        
-        // Create a GeoJSON feature object from the clicked feature
-        const geojsonFeature = turf.feature(firstFeature.geometry);
-    
-        // Use turf to calculate the centroid of the feature
-        const centroid = turf.centroid(geojsonFeature);
-    
-        // Get the coordinates of the centroid
-        const [lng, lat] = centroid.geometry.coordinates;
-    
-        // Fly to the centroid of the polygon
-        map.current.flyTo({ center: [lng, lat], zoom: 15 });
-
-        map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
-
-        const matchingEvents = events.filter(event => event.location_id === firstFeature.id);
-
-        setNeighbourhoodEvents(matchingEvents);
-
-        if (matchingEvents.length > 0) {
-          setShowInfoBox(true);
-        }
+  useEffect(() => {
+    const newEventsMap = {};
+  
+    events.forEach(event => {
+      if (!newEventsMap[event.location_id]) {
+        newEventsMap[event.location_id] = [];
       }
+      newEventsMap[event.location_id].push(event);
     });
-
-    events.forEach((event) =>{
-      const marker = new mapboxgl.Marker()
-      .setLngLat([event.location.longitude, event.location.latitude])
-      .addTo(map.current);
-
-      const markerElement = marker.getElement();
-
-      markerElement.addEventListener('click', () => {
-        console.log(event);
-      });
   
-      markerElement.addEventListener('mouseover', () => {
-        markerElement.style.cursor = 'pointer';
-      });
-  
-      markerElement.addEventListener('mouseout', () => {
-        markerElement.style.cursor = 'default';
-      })
-    });
-
+    setEventsMap(newEventsMap);
   }, []);
 
   return (
+
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
+
       <FloatingNav 
         changeColourScheme={changeColourScheme}
         enableColours={enableColours}
         />
+
         <FloatingInfoBox
           showingFloatingInfoBox={showInfoBox}
           neighbourhoodEvents = {neighbourhoodEvents}
         />
+
     </div>
+
   );
 };
 

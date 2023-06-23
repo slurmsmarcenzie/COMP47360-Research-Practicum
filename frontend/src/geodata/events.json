@@ -1,19 +1,8 @@
 [
     {
-        "name": "New York City Marathon",
-        "type": "Sports",
-        "location": {
-            "latitude": 40.7128,
-            "longitude": -74.0060
-        },
-        "start_time": "2023-11-05T09:00:00",
-        "end_time": "2023-11-05T17:00:00",
-        "expected_attendees": 100000,
-        "description": "The world's largest marathon runs through all five boroughs of New York City."
-    },
-    {
         "name": "Times Square New Year's Eve Celebration",
         "type": "Holiday",
+        "location_id": 230,
         "location": {
             "latitude": 40.7580,
             "longitude": -73.9855
@@ -51,28 +40,16 @@
     },
     {
         "name": "Thanksgiving Day Parade",
-        "location_id" : 230,
+        "location_id" : 100,
         "type": "Parade",
         "location": {
-            "latitude": 40.7580,
-            "longitude": -73.9855
+            "latitude": 40.750797,
+            "longitude": -73.989578
         },
         "start_time": "2023-11-23T09:00:00",
         "end_time": "2023-11-23T12:00:00",
         "expected_attendees": 3500000,
         "description": "The annual Macy's Thanksgiving Day Parade through the streets of Manhattan."
-    },
-    {
-        "name": "Governors Ball Music Festival",
-        "type": "Music",
-        "location": {
-            "latitude": 40.7957,
-            "longitude": -73.9222
-        },
-        "start_time": "2023-06-02T11:00:00",
-        "end_time": "2023-06-04T23:00:00",
-        "expected_attendees": 150000,
-        "description": "A multi-day music festival on Randall's Island."
     },
     {
         "name": "Electric Zoo Festival",
@@ -103,9 +80,10 @@
     {
         "name": "New York Comic Con",
         "type": "Convention",
+        "location_id": 230,
         "location": {
-            "latitude": 40.7570,
-            "longitude": -74.0026
+            "latitude": 40.76061779087554,
+            "longitude":  -73.98527960724417
         },
         "start_time": "2023-10-05T10:00:00",
         "end_time": "2023-10-08T19:00:00",
