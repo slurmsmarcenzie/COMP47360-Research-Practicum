@@ -35,24 +35,48 @@ function Map() {
   const zoom = 8;
 
   const colourPairs = [
-    ["#008000", "#FF0000"],
-    ["#800080", "#FFA500"],
-    ["#FF00FF", "#008080"],
-    ["#8e2add", "#08fb26"],
-    ["#fffc00", "#ff3300"],
-    ["#01b4fd", "#6b03d8"],
-    ["#000000", "#fe019a"],
+    ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
+    ["#008000", "#9ACD32", "#FFD700"], // Green, Yellow Green, Yellow
+    ["#800080", "#C71585", "#FF69B4"], // Purple, Medium Violet Red, Hot Pink
+    ["#4169E1", "#1E90FF", "#00BFFF"], // Royal Blue, Dodger Blue, Deep Sky Blue
+    ["#000000", "#808080", "#FFFFFF"], // Black, Gray, White
+    ["#B22222", "#CD5C5C", "#FFA07A"], // Firebrick, Indian Red, Light Salmon
+    ["#006400", "#228B22", "#32CD32"], // Dark Green, Forest Green, Lime Green
+    ["#8B0000", "#B22222", "#CD5C5C"], // Dark Red, Firebrick, Indian Red
+    ["#2F4F4F", "#696969", "#A9A9A9"], // Dark Slate Gray, Dim Gray, Dark Gray
+    ["#8B008B", "#9932CC", "#BA55D3"], // Dark Magenta, Dark Orchid, Medium Orchid
+    ["#191970", "#0000CD", "#4169E1"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
+  
 
-  const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
+  const colourScale = useMemo(() => {
+    return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
+  }, [colourPairs, colourPairIndex]);
 
-  const busynessMap = useMemo(() => {
+  // Define a memoized value 'busynessMap', which depends on 'scores'
+  const busynessHashMap = useMemo(() => {
+  
+    // 'reduce' is a function that transforms an array into a single value.
+    // In this case, it is transforming the 'scores' array into a single object
+    return scores.reduce((map, item) => {
+      
+      // For each 'item' in 'scores', add a property to 'map' with a key of
+      // 'item.location_id' and a value of 'item.busyness_score'
+      map[item.location_id] = item.busyness_score;
+      
+      // Return the updated 'map' to be used in the next iteration of 'reduce'
+      return map;
+    }, {});  // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
+  
+  
+  const originalBusynessHashMap = useMemo(() => {
     return scores.reduce((map, item) => {
       map[item.location_id] = item.busyness_score;
       return map;
     }, {});
-  }, [scores]);  // Dependency array
-  
+  }, []); // same code implementation except this will never update.
+
   // static methods for our application to load in all values
 
   const add3DBuildings = () => {
@@ -174,25 +198,37 @@ function Map() {
 
   // dynamic methods and interactive for our application to handle and set changes to our map
 
-  const handleChangeColours = () => {
+  const handleChangeColours = (colourPairIndex) => {
 
     // Create a new colourScale each time you handle the color change
-    const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
+    const colourScale = scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
   
-    neighbourhoods.features.forEach((neighbourhood) => {
-      // get the original score assigned to our neighbourhood.
-      const score = neighbourhood.score;
-      // get color corresponding to score
-      const newColour = colourScale(score);
-      // set the 'fill-color' property on the layer to the new color
-      map.current.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
-    });
+    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
+  
+    // Get the current map's style
+    const style = map.current.getStyle();
+  
+    layerIds.current.forEach(layerId => {
+      // Check if the layer exists in the style before trying to update it
+      if (style.layers.some(layer => layer.id === layerId)) {
+        const score = busynessHashMap[layerId];
+        if (score !== undefined) { // Check if the score is defined before using it
+          const newColor = colourScale(score);
+          map.current.setPaintProperty(layerId, 'fill-color', newColor);
+        }
+      } else {
+        console.warn(`Layer with ID ${layerId} doesn't exist`);
+      }
+    })
   }
 
   const changeColourScheme = () => {
     console.log(colourPairIndex);
-    setColourPairIndex(prevIndex => (prevIndex + 1) % colourPairs.length);
-    handleChangeColours();
+    setColourPairIndex(prevIndex => {
+      const newIndex = (prevIndex + 1) % colourPairs.length;
+      handleChangeColours(newIndex);
+      return newIndex;
+    });
   }
 
   const disableColours = () => {
@@ -219,7 +255,7 @@ function Map() {
   const updateLayerColours = () => {
     console.log('updateLayerColours is being accessed');
   
-    if (!map.current || !busynessMap) return; // Added a check for busynessMap
+    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
     // Get the current map's style
     const style = map.current.getStyle();
@@ -227,7 +263,7 @@ function Map() {
     layerIds.current.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessMap[layerId];
+        const score = busynessHashMap[layerId];
         if (score !== undefined) { // Check if the score is defined before using it
           const newColor = colourScale(score);
           map.current.setPaintProperty(layerId, 'fill-color', newColor);
@@ -374,29 +410,58 @@ function Map() {
         initialiseMouseMapEvents();
         updateLayerColours();
       });
+
+      map.current.on('moveend', () => {
+
+        let zoom = map.current.getZoom();
+
+        console.log('current zoom is:', zoom)
+
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+          
+          enableColours();
+
+        }
+      });
     }
   }, []);
   
+  // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
+    
+    console.log('This is the original map: ', originalBusynessHashMap);
+    console.log('This is the dyanmic map: ', busynessHashMap);
+
+    // If the 'current' property of 'map' is defined (i.e., the map instance exists)
     if (map.current) {
+      
+      // If the map's style is already loaded
       if (map.current.isStyleLoaded()) {
+        
+        // Update the layer colours on the map
         updateLayerColours();
       } else {
+        // If the map's style is not yet loaded, set up an event listener to
+        // update the layer colours once the style is loaded
         map.current.on('style.load', updateLayerColours);
       }
     }
   
+    // Define a cleanup function that will run when the component unmounts, or
+    // before this effect runs again
     return () => {
+      
+      // If the 'current' property of 'map' is defined
       if (map.current) {
+        
+        // Remove the event listener for the 'style.load' event to avoid
+        // potential memory leaks
         map.current.off('style.load', updateLayerColours);
       }
     }
-  }, [scores]);
+  }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
+
   
-  
-  useEffect(() => {
-    console.log('Busyness Map Updated:', busynessMap);
-  }, [busynessMap]);  
 
   return (
 

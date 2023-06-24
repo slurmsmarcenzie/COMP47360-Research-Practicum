@@ -34,6 +34,8 @@ function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNa
           </form>
           <button className="floating-nav-cta-button" onClick={simulateBusynessChange}>Simulate Busyness Change</button>
           <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
+          <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
+
         </div>
     )
 }
