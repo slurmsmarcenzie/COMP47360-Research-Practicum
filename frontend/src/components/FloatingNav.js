@@ -1,21 +1,40 @@
 import React from 'react';
 import "../App.css";
+import FloatingInfoBox from './FloatingInfoBox';
 
-function FloatingNav({ changeColourScheme, enableColours }) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange}) {
+
+  const dropDownOptions = events.map((event, index) => 
+    <option key={index} value={JSON.stringify(event)}>
+      {event.name}  
+    </option>
+  );
+
+  const reviewEvent = (e) => {
+    const selectedEvent = JSON.parse(e.target.value);
+    console.log(selectedEvent);
+
+    const {latitude, longitude} = selectedEvent.location;
+
+    floatingNavZoomToLocation(longitude, latitude);
+    floatingNavSetLineWidth(selectedEvent.location_id);
+    isNeighbourhoodClickedRef.current = true;
+    disableColours();
+    setNeighbourhoodEvents([selectedEvent]);
+    setShowInfoBox(true);
+  };
+
     return(
         <div className='floating-nav'>
           <form className='floating-nav-form'>
-            <select className='floating-nav-dropdown'>
-              <option>
-                Test Event 1
-              </option>
-              <option>
-                Test Event 2
-              </option>
+            <select className='floating-nav-dropdown' onChange={reviewEvent}>
+              <option value="" disabled selected>Select an event</option>
+              {dropDownOptions}
             </select>
           </form>
-          <button className="floating-nav-cta-button" onClick={changeColourScheme}>Change Colour Set</button>
+          <button className="floating-nav-cta-button" onClick={simulateBusynessChange}>Simulate Busyness Change</button>
           <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
+          <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
         </div>
     )
 }

@@ -1,12 +1,16 @@
 import React from 'react';
 import Map from './components/Map';
-import Navbar from './components/Navbar';
+import MobileMap from './components/MobileMap'
 
 function App() {
+  
+  const isMobileDevice = () => {
+    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
+
   return (
     <div className="App">
-      {/* <Navbar /> */}
-      <Map />
+      {isMobileDevice() ? <MobileMap /> : <Map />}
     </div>
   );
 }
