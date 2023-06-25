@@ -21,7 +21,7 @@ function Map() {
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
-  const [eventsMap, setEventsMap] = useState({});
+  const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(neighborhoodscores);
   
   const mapContainer = useRef(null);
@@ -213,8 +213,11 @@ function Map() {
       if (style.layers.some(layer => layer.id === layerId)) {
         const score = busynessHashMap[layerId];
         if (score !== undefined) { // Check if the score is defined before using it
-          const newColor = colourScale(score);
-          map.current.setPaintProperty(layerId, 'fill-color', newColor);
+          const newColour = colourScale(score);
+          map.current.setPaintProperty(layerId, 'fill-color', newColour);
+        }
+        else {
+          console.warn(`Current layer does not have a score`);
         }
       } else {
         console.warn(`Layer with ID ${layerId} doesn't exist`);
@@ -242,7 +245,7 @@ function Map() {
     setShowInfoBox(false);
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // use setIsNeighbourhoodClicked
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
@@ -265,8 +268,8 @@ function Map() {
       if (style.layers.some(layer => layer.id === layerId)) {
         const score = busynessHashMap[layerId];
         if (score !== undefined) { // Check if the score is defined before using it
-          const newColor = colourScale(score);
-          map.current.setPaintProperty(layerId, 'fill-color', newColor);
+          const newColour = colourScale(score);
+          map.current.setPaintProperty(layerId, 'fill-color', newColour);
         }
       } else {
         console.warn(`Layer with ID ${layerId} doesn't exist`);
@@ -293,10 +296,30 @@ function Map() {
               if (features.length > 0) {
 
                   if (!popup.current) {
-                      popup.current = new mapboxgl.Popup({
-                          closeButton: false,
-                          closeOnClick: false,
-                      });
+
+                    // code to allow the pop up to display a bit over our mouse interaction.
+
+                    const markerHeight = 10;
+                    const markerRadius = 10;
+                    const linearOffset = 25;
+                    const popupOffsets = {
+                    'top': [0, 0],
+                    'top-left': [0, 0],
+                    'top-right': [0, 0],
+                    'bottom': [0, -markerHeight],
+                    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                    };
+
+                    // creating the popup object
+
+                    popup.current = new mapboxgl.Popup({
+                        offset: popupOffsets,
+                        closeButton: false,
+                        closeOnClick: false,
+                    });
                   }
 
                   const feature = features[0];
@@ -307,6 +330,8 @@ function Map() {
                       .addTo(map.current);
               }
           }
+          console.log(popup.current);
+
       });
   
       // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
