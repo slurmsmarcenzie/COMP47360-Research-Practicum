@@ -1,8 +1,8 @@
 import React from 'react';
 import "../App.css";
-import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+import FloatingInfoBox from './FloatingInfoBox';
 
-function FloatingNav({ events, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange}) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange}) {
 
   const dropDownOptions = events.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -20,6 +20,8 @@ function FloatingNav({ events, floatingNavZoomToLocation, floatingNavSetLineWidt
     floatingNavSetLineWidth(selectedEvent.location_id);
     isNeighbourhoodClickedRef.current = true;
     disableColours();
+    setNeighbourhoodEvents([selectedEvent]);
+    setShowInfoBox(true);
   };
 
     return(
@@ -32,6 +34,7 @@ function FloatingNav({ events, floatingNavZoomToLocation, floatingNavSetLineWidt
           </form>
           <button className="floating-nav-cta-button" onClick={simulateBusynessChange}>Simulate Busyness Change</button>
           <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
+          <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
         </div>
     )
 }
