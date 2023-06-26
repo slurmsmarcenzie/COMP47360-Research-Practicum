@@ -1,5 +1,5 @@
 // Core dependencies of App
-import React, { useEffect, useRef,useState, useMemo } from 'react';
+  import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
@@ -23,7 +23,8 @@ function Map() {
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
   const [eventsMap, setEventsMap] = useState([]);
-  const [scores, setScores] = useState(neighborhoodscores);
+  const [scores, setScores] = useState(null);
+  const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -47,13 +48,14 @@ function Map() {
     ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
   
-
   const colourScale = useMemo(() => {
     return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
   }, [colourPairs, colourPairIndex]);
 
   // Define a memoized value 'busynessMap', which depends on 'scores'
   const busynessHashMap = useMemo(() => {
+
+    if (!scores) return {};  
   
     // 'reduce' is a function that transforms an array into a single value.
     // In this case, it is transforming the 'scores' array into a single object
@@ -65,16 +67,11 @@ function Map() {
       
       // Return the updated 'map' to be used in the next iteration of 'reduce'
       return map;
-    }, {});  // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+    }, {});  
+    
+    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
   
-  
-  const originalBusynessHashMap = useMemo(() => {
-    return scores.reduce((map, item) => {
-      map[item.location_id] = item.busyness_score;
-      return map;
-    }, {});
-  }, []); // same code implementation except this will never update.
 
   // static methods for our application to load in all values
 
@@ -413,41 +410,59 @@ function Map() {
     map.current.setPaintProperty(lineLayerId, 'line-width', 4);
 
   }
-  // Dyanmic use effects re-render our app
-  useEffect(() => {
-    if (!map.current) {
-      mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [originalLng, originalLat],
-        zoom: zoom
-      });
   
-      map.current.on('load', () => {
-        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-        add3DBuildings();
-        renderNeighbourhoods();
-        renderEvents();
-        initialiseMouseMapEvents();
-        updateLayerColours();
-      });
+  useEffect(() => {
+    fetch('output.json') // this our backend
+    .then(response => {
+      if (!response.ok) { throw new Error('Network response was not ok'); }
+      return response.json();
+    })
+    .then(data => setScores(data));
+  }, []);  // This effect is only for fetching scores
 
-      map.current.on('moveend', () => {
-
-        let zoom = map.current.getZoom();
-
-        console.log('current zoom is:', zoom)
-
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
-          
-          enableColours();
-
-        }
-      });
+  useEffect(() => {
+    if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
+      setOriginalBusynessHashMap({ ...busynessHashMap });
     }
-  }, []);
+  }, [busynessHashMap, originalBusynessHashMap]);
+  
+  useEffect(() => {
+    if (scores) {  // Ensure scores is defined 2before initializing the map
+      if (!map.current) {
+        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [originalLng, originalLat],
+          zoom: zoom
+        });
+
+        map.current.on('load', () => {
+          map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+          add3DBuildings();
+          renderNeighbourhoods();
+          renderEvents();
+          initialiseMouseMapEvents();
+          updateLayerColours();
+        });
+
+        map.current.on('moveend', () => {
+
+          let zoom = map.current.getZoom();
+
+          console.log('current zoom is:', zoom)
+
+          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+            
+            enableColours();
+
+          }
+        });
+      }
+    }
+  }, [scores]);  // This effect runs when scores is fetched
+
   
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
