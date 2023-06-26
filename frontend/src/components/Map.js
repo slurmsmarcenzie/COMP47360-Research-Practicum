@@ -1,5 +1,5 @@
 // Core dependencies of App
-import React, { useEffect, useRef,useState, useMemo } from 'react';
+  import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
@@ -8,6 +8,7 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 // Components
 import FloatingNav from './FloatingNav';
 import FloatingInfoBox from './FloatingInfoBox';
+import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -22,7 +23,8 @@ function Map() {
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
   const [eventsMap, setEventsMap] = useState([]);
-  const [scores, setScores] = useState(neighborhoodscores);
+  const [scores, setScores] = useState(null);
+  const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -36,25 +38,24 @@ function Map() {
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
-    ["#008000", "#9ACD32", "#FFD700"], // Green, Yellow Green, Yellow
-    ["#800080", "#C71585", "#FF69B4"], // Purple, Medium Violet Red, Hot Pink
-    ["#4169E1", "#1E90FF", "#00BFFF"], // Royal Blue, Dodger Blue, Deep Sky Blue
-    ["#000000", "#808080", "#FFFFFF"], // Black, Gray, White
-    ["#B22222", "#CD5C5C", "#FFA07A"], // Firebrick, Indian Red, Light Salmon
-    ["#006400", "#228B22", "#32CD32"], // Dark Green, Forest Green, Lime Green
-    ["#8B0000", "#B22222", "#CD5C5C"], // Dark Red, Firebrick, Indian Red
-    ["#2F4F4F", "#696969", "#A9A9A9"], // Dark Slate Gray, Dim Gray, Dark Gray
-    ["#8B008B", "#9932CC", "#BA55D3"], // Dark Magenta, Dark Orchid, Medium Orchid
-    ["#191970", "#0000CD", "#4169E1"]  // Midnight Blue, Medium Blue, Royal Blue
+    ["#FFD700", "#9ACD32", "#008000"], // Green, Yellow Green, Yellow
+    ["#FF69B4", "#C71585", "#800080"], // Purple, Medium Violet Red, Hot Pink
+    ["#00BFFF", "#1E90FF", "#4169E1"], // Royal Blue, Dodger Blue, Deep Sky Blue
+    ["#32CD32", "#228B22", "#006400"], // Dark Green, Forest Green, Lime Green
+    ["#CD5C5C", "#B22222", "#8B0000"], // Dark Red, Firebrick, Indian Red
+    ["#A9A9A9", "#696969", "#2F4F4F"], // Dark Slate Gray, Dim Gray, Dark Gray
+    ["#BA55D3", "#9932CC", "#8B008B"], // Dark Magenta, Dark Orchid, Medium Orchid
+    ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
   
-
   const colourScale = useMemo(() => {
     return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
   }, [colourPairs, colourPairIndex]);
 
   // Define a memoized value 'busynessMap', which depends on 'scores'
   const busynessHashMap = useMemo(() => {
+
+    if (!scores) return {};  
   
     // 'reduce' is a function that transforms an array into a single value.
     // In this case, it is transforming the 'scores' array into a single object
@@ -66,16 +67,11 @@ function Map() {
       
       // Return the updated 'map' to be used in the next iteration of 'reduce'
       return map;
-    }, {});  // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+    }, {});  
+    
+    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
   
-  
-  const originalBusynessHashMap = useMemo(() => {
-    return scores.reduce((map, item) => {
-      map[item.location_id] = item.busyness_score;
-      return map;
-    }, {});
-  }, []); // same code implementation except this will never update.
 
   // static methods for our application to load in all values
 
@@ -330,8 +326,6 @@ function Map() {
                       .addTo(map.current);
               }
           }
-          console.log(popup.current);
-
       });
   
       // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
@@ -376,6 +370,7 @@ function Map() {
 
           map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
+          // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
 
           setNeighbourhoodEvents(matchingEvents);
@@ -415,41 +410,59 @@ function Map() {
     map.current.setPaintProperty(lineLayerId, 'line-width', 4);
 
   }
-  // Dyanmic use effects re-render our app
-  useEffect(() => {
-    if (!map.current) {
-      mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [originalLng, originalLat],
-        zoom: zoom
-      });
   
-      map.current.on('load', () => {
-        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-        add3DBuildings();
-        renderNeighbourhoods();
-        renderEvents();
-        initialiseMouseMapEvents();
-        updateLayerColours();
-      });
+  useEffect(() => {
+    fetch('output.json') // this our backend
+    .then(response => {
+      if (!response.ok) { throw new Error('Network response was not ok'); }
+      return response.json();
+    })
+    .then(data => setScores(data));
+  }, []);  // This effect is only for fetching scores
 
-      map.current.on('moveend', () => {
-
-        let zoom = map.current.getZoom();
-
-        console.log('current zoom is:', zoom)
-
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
-          
-          enableColours();
-
-        }
-      });
+  useEffect(() => {
+    if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
+      setOriginalBusynessHashMap({ ...busynessHashMap });
     }
-  }, []);
+  }, [busynessHashMap, originalBusynessHashMap]);
+  
+  useEffect(() => {
+    if (scores) {  // Ensure scores is defined 2before initializing the map
+      if (!map.current) {
+        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [originalLng, originalLat],
+          zoom: zoom
+        });
+
+        map.current.on('load', () => {
+          map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+          add3DBuildings();
+          renderNeighbourhoods();
+          renderEvents();
+          initialiseMouseMapEvents();
+          updateLayerColours();
+        });
+
+        map.current.on('moveend', () => {
+
+          let zoom = map.current.getZoom();
+
+          console.log('current zoom is:', zoom)
+
+          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+            
+            enableColours();
+
+          }
+        });
+      }
+    }
+  }, [scores]);  // This effect runs when scores is fetched
+
   
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
@@ -491,6 +504,10 @@ function Map() {
   return (
 
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
+
+      <MapLegend
+        colours={colourPairs[colourPairIndex]} 
+      />
 
       <FloatingNav 
         events = {events}
