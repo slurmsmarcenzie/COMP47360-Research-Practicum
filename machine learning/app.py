@@ -1,11 +1,21 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import json
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///metainfo.db"
 db = SQLAlchemy(app)
 
-@app.route("/events")
+#ROUTES:
+@app.route("/predict/<string:datetime>")
+def predict(datetime):
+    #do some work with metrics, return the prediction
+    print("datetime:", datetime)
+    f = open("static/MOCK_DATA.json")
+    data = json.load(f)
+    return data 
+
+@app.route("/info/events")
 def list_events():
     events = Event.query.all()
     data = []
@@ -14,7 +24,7 @@ def list_events():
         data.append(event.__dict__)
     return data
 
-@app.route("/metrics")
+@app.route("/info/metrics")
 def list_metrics():
     metrics = Metric.query.all()
     data = []
@@ -23,16 +33,8 @@ def list_metrics():
         data.append(metric.__dict__)
     return data
 
-@app.route('/<string:event>/<string:metric>/<string:location>/<string:date>', methods=["POST", "GET"])
-def predict(event, metric, location, date):
-    #do some work with metrics, return the prediction
-    object = {
-        "prediction": 0.67
-              }
-    return object
 
-
-#Models:
+#MODELS:
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
@@ -51,5 +53,6 @@ class Metric(db.Model):
         return f'<Metric {self.id}>'   
 
 
+#RUN THAT BADBOY
 if __name__ == "__main__":
     app.run(debug=True, port=7000)
