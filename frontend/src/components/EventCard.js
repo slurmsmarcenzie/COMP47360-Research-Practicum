@@ -1,15 +1,15 @@
 import React from 'react';
 import "../App.css";
 
-function EventCard (props) {
+function EventCard ({item, simulateBusynessChange}) {
 
     return(
         <div className='floating-info-box-event-card'>
-            <h3>Name: {props.item.name}</h3>
-            <h4>Parade Type: {props.item.type}</h4>
-            <p>Expected Attendees: {props.item.expected_attendees}</p>
-            <p>{props.item.description}</p>
-            <button className='floating-info-tertiary-button'>Show Impact</button>
+            <h2>Name: {item.name}</h2>
+            <h3>Parade Type: {item.type}</h3>
+            <p>Expected Attendees: {item.expected_attendees}</p>
+            <p>{item.description}</p>
+            <button className='floating-nav-cta-button' onClick={simulateBusynessChange}>Calculate Event Impact</button>
         </div>
     )
 }
