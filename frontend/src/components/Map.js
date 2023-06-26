@@ -8,6 +8,7 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 // Components
 import FloatingNav from './FloatingNav';
 import FloatingInfoBox from './FloatingInfoBox';
+import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -36,16 +37,14 @@ function Map() {
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
-    ["#008000", "#9ACD32", "#FFD700"], // Green, Yellow Green, Yellow
-    ["#800080", "#C71585", "#FF69B4"], // Purple, Medium Violet Red, Hot Pink
-    ["#4169E1", "#1E90FF", "#00BFFF"], // Royal Blue, Dodger Blue, Deep Sky Blue
-    ["#000000", "#808080", "#FFFFFF"], // Black, Gray, White
-    ["#B22222", "#CD5C5C", "#FFA07A"], // Firebrick, Indian Red, Light Salmon
-    ["#006400", "#228B22", "#32CD32"], // Dark Green, Forest Green, Lime Green
-    ["#8B0000", "#B22222", "#CD5C5C"], // Dark Red, Firebrick, Indian Red
-    ["#2F4F4F", "#696969", "#A9A9A9"], // Dark Slate Gray, Dim Gray, Dark Gray
-    ["#8B008B", "#9932CC", "#BA55D3"], // Dark Magenta, Dark Orchid, Medium Orchid
-    ["#191970", "#0000CD", "#4169E1"]  // Midnight Blue, Medium Blue, Royal Blue
+    ["#FFD700", "#9ACD32", "#008000"], // Green, Yellow Green, Yellow
+    ["#FF69B4", "#C71585", "#800080"], // Purple, Medium Violet Red, Hot Pink
+    ["#00BFFF", "#1E90FF", "#4169E1"], // Royal Blue, Dodger Blue, Deep Sky Blue
+    ["#32CD32", "#228B22", "#006400"], // Dark Green, Forest Green, Lime Green
+    ["#CD5C5C", "#B22222", "#8B0000"], // Dark Red, Firebrick, Indian Red
+    ["#A9A9A9", "#696969", "#2F4F4F"], // Dark Slate Gray, Dim Gray, Dark Gray
+    ["#BA55D3", "#9932CC", "#8B008B"], // Dark Magenta, Dark Orchid, Medium Orchid
+    ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
   
 
@@ -330,8 +329,6 @@ function Map() {
                       .addTo(map.current);
               }
           }
-          console.log(popup.current);
-
       });
   
       // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
@@ -376,6 +373,7 @@ function Map() {
 
           map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
+          // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
 
           setNeighbourhoodEvents(matchingEvents);
@@ -491,6 +489,10 @@ function Map() {
   return (
 
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
+
+      <MapLegend
+        colours={colourPairs[colourPairIndex]} 
+      />
 
       <FloatingNav 
         events = {events}
