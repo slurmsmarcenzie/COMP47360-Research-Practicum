@@ -11,7 +11,7 @@ info.route("/info/events")(list_events)
 
 info.route("/info/metrics")(list_metrics)
 
-predict.route("/predict/<string:datetime>")(prediction)
+predict.route("/predict/<string:date>")(prediction)
 
 
 
