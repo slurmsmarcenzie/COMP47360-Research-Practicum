@@ -22,7 +22,7 @@ import events from '../geodata/events.json';
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
-function Map() {
+function MobileMap() {
 
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
@@ -541,4 +541,4 @@ function Map() {
   );
 };
 
-export default Map;
+export default MobileMap;
