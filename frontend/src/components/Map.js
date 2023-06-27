@@ -15,6 +15,11 @@ import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
 
+// Note: the following lines are important to create a production build that includes mapbox
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
 function Map() {
@@ -412,7 +417,11 @@ function Map() {
   }
   
   useEffect(() => {
-    fetch('output.json') // this our backend
+
+    const formattedDate = new Date().toISOString().slice(0,10);
+    console.log(formattedDate);
+
+    fetch(`http://127.0.0.1:5000/api/predict/${formattedDate}`) // this our backend
     .then(response => {
       if (!response.ok) { throw new Error('Network response was not ok'); }
       return response.json();
