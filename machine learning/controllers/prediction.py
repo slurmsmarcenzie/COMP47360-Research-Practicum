@@ -25,18 +25,23 @@ def prediction(date):
         #TODO - add to log
         raise abort(500, "Unable to read file 'output.json'")
 
-    data = json.load(file)
+    return json.load(file)
 
-    # Ensure that the prediction list has the correct format:
-    valid = False
-    for index, item in enumerate(data):
-        if "location_id" and "busyness_score" in item:
-            valid = True # at least 1 index has correct values
-        else:
-            print("warning: prediction list contains incorrectly formatted values at index %s" % index)
-            #TODO - add to log
-        
-    if valid:
-        return data 
-    else:
-        raise abort(500, "Invalid prediction list created")
+
+    # Below will be left to users of the api
+    # Flask API does not need to handle formatting here as output format of model 
+    # may change. Applications that request a prediction should handle the reponse 
+    # as they see fit
+
+    # # Ensure that the prediction list has the correct format: # #
+    #   valid = False
+    #   for index, item in enumerate(data):
+    #     if "location_id" and "busyness_score" in item:
+    #         valid = True # at least 1 index has correct values
+    #     else:
+    #         print("warning: prediction list contains incorrectly formatted values at index %s" % index)
+    #    
+    # if valid:
+    #     return data 
+    # else:
+    #     raise abort(500, "Invalid prediction list created")
