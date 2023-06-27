@@ -417,7 +417,11 @@ function Map() {
   }
   
   useEffect(() => {
-    fetch('output.json') // this our backend
+
+    const formattedDate = new Date().toISOString().slice(0,10);
+    console.log(formattedDate);
+
+    fetch(`http://127.0.0.1:5000/api/predict/${formattedDate}`) // this our backend
     .then(response => {
       if (!response.ok) { throw new Error('Network response was not ok'); }
       return response.json();
