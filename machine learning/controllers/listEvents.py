@@ -16,7 +16,7 @@ def list_events():
         #TODO - add to log
         raise abort(500, "There was an error retrieving events from the Database")
     
-    # Ensure data is in correct format:
+    # Ensure data is in correct format
     if len(events) > 0:  
         for event in events:
             if not isinstance(event, Event):
@@ -24,6 +24,7 @@ def list_events():
             if "_sa_instance_state" in event.__dict__:
                 event.__dict__.pop("_sa_instance_state")
             data.append(event.__dict__)
+
 
     return data
     

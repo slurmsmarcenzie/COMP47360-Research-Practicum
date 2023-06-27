@@ -1,6 +1,6 @@
 import json
 from flask import abort
-import datetime
+from datetime import datetime
 
 # Get a prediction from the model with the datetime specified in URL
 # Currently uses static file "output.json" to mimic the model
@@ -11,7 +11,7 @@ def prediction(date):
 
     # Prevent invalid datetime:
     try:
-        datetime.date.fromisoformat(date)
+        datetime.fromisoformat(date)
     except ValueError as err:
         print(err)
         #TODO - add to log
