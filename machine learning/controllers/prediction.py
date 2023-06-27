@@ -28,10 +28,12 @@ def prediction(date):
     valid = False
     for index, item in enumerate(data):
         if "location_id" and "busyness_score" in item:
-            valid = True
+            valid = True # at least 1 index has correct values
         else:
             print("warning: prediction list contains incorrectly formatted values at index %s" % index)
             #TODO - add to log
         
     if valid:
         return data 
+    else:
+        raise abort(500, "Invalid prediction list created")
