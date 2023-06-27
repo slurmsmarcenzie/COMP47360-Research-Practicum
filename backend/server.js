@@ -4,7 +4,6 @@ const cors = require("cors");
 const path = require("path");
 const meta = require("./routes/meta")
 const prediction = require("./routes/prediction")
-//const mongoose = require("mongoose");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 
@@ -22,13 +21,6 @@ app.use("/api/predict", prediction)
 app.get('/', (req, res) => {
   res.status(200).send("I will serve React App later :)")
 });
-
-//CONNECT TO LOCAL MONGODB
-// const uri = process.env.ATLAS_URI;
-// mongoose.connect(uri, { useNewUrlParser: true }); //newUrlParser is just to avoid a depreciation warning
-// const connection = mongoose.connection
-// connection.once("open", () => {console.log("MongoDB connection established")});
-
 
 //START SERVER
 app.listen(port, () => {
