@@ -8,6 +8,7 @@ def prediction(date):
     print("prediction quried for datetime:", date)
     #TODO - add to log
 
+    # Prevent invalid datetime:
     try:
         datetime.date.fromisoformat(date)
     except ValueError as err:
@@ -15,6 +16,7 @@ def prediction(date):
         #TODO - add to log
         raise abort(500, "Incorrect date format supplied, should be YYYY-MM-DD")
 
+    # Handle file read error (later this will be handle model failure):
     try:
         file = open("static/output.json") #temporary, will use the model lader
     except IOError as err:

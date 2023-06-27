@@ -8,6 +8,7 @@ def list_metrics():
     metrics = []
     data = []
 
+    # Handle Database error:
     try:
         metrics = Metric.query.all()
     except exc.SQLAlchemyError as er:
@@ -15,6 +16,7 @@ def list_metrics():
         #TODO - add to log
         raise abort(500, "There was an error retrieving metrics from the Database")
 
+    # Ensure data is in correct format:
     if len(metrics) > 0:    
         for metric in metrics:
             if not isinstance(metric, Metric):

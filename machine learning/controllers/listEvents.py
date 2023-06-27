@@ -8,6 +8,7 @@ def list_events():
     events = []
     data = []
 
+    # Handle Database Error:
     try:
         events = Event.query.all()
     except exc.SQLAlchemyError as er:
@@ -15,6 +16,7 @@ def list_events():
         #TODO - add to log
         raise abort(500, "There was an error retrieving events from the Database")
     
+    # Ensure data is in correct format:
     if len(events) > 0:  
         for event in events:
             if not isinstance(event, Event):
