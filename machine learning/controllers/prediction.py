@@ -3,6 +3,7 @@ from flask import abort
 import datetime
 
 # Get a prediction from the model with the datetime specified in URL
+# Currently uses static file "output.json" to mimic the model
 # Return a JSON array of busyness/location scores 
 def prediction(date):
     print("prediction quried for datetime:", date)
