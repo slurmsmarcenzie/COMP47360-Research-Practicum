@@ -31,7 +31,7 @@ function Map() {
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
-
+  
   const mapContainer = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
@@ -435,7 +435,7 @@ function Map() {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
   }, [busynessHashMap, originalBusynessHashMap]);
-
+  
   useEffect(() => {
     console.log('This is the updated HashMap of Difference', hashMapOfDifference);
   }, [hashMapOfDifference]);
@@ -453,7 +453,7 @@ function Map() {
   
     setHashMapOfDifference(temporaryHashMap);
   };
-  
+
   useEffect(() => {
     if (scores) {  // Ensure scores is defined 2before initializing the map
       if (!map.current) {
@@ -526,8 +526,6 @@ function Map() {
       }
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
-
-  
 
   return (
 

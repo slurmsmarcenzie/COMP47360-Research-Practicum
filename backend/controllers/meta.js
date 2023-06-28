@@ -2,7 +2,7 @@ const axios = require("axios")
 
 const getEvents = (req, res) => {
     //fetch events from ML API
-    const uri = "http://44.204.145.251/events"
+    const uri = "http://127.0.0.1:7000/info/events"
     axios.get(uri)
     .then(response => {
         res.status(200).json(response.data)
@@ -15,7 +15,7 @@ const getEvents = (req, res) => {
 
 const getMetrics = (req, res) => {
     //fetch metrics from ML API
-    const uri = "http://44.204.145.251/metrics"
+    const uri = "http://127.0.0.1:7000/info/metrics"
     axios.get(uri)
     .then(response => {
       res.status(200).json(response.data)
