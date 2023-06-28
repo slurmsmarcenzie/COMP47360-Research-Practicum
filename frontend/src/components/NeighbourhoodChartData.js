@@ -1,38 +1,61 @@
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({hashMap}) {
+function NeighbourhoodChartData({ hashMap, colours }) {
     
-    const labels = Object.keys(hashMap);
-    const dataValues = Object.values(hashMap);
-    
+    console.log(colours);
+
+    const filteredHashMap = Object.keys(hashMap).reduce((acc, key) => {
+        const value = hashMap[key];
+        if (value < -0.3 || value > 0.3) {
+          acc[key] = value;
+        }
+        return acc;
+      }, {});
+
+    const labels = filteredHashMap ? Object.keys(filteredHashMap) : [];
+    const dataValues = filteredHashMap ? Object.values(filteredHashMap) : [];
+  
     const data = {
-        labels: labels,
-        datasets: [
-        {
-            label: 'Busyness',
-            data: dataValues,
-            backgroundColor: 'rgba(75,192,192,0.4)',
-            borderColor: 'rgba(75,192,192,1)',
-            borderWidth: 1,
+      labels: labels,
+      datasets: [
+        { label: 'Busyness',
+          barThickness: 4,
+          data: dataValues,
+          borderColor: '#FFF',
+          borderWidth: 1,
         },
-        ],
+      ],
     };
-    
+  
     const options = {
-        responsive: true,
+        maintainAspectRatio: false, // Set to false to control the canvas size manually
+        responsive: true, // Enable responsiveness
+        legend: {
+            display: false
+        },
+        indexAxis: 'y',
         scales: {
-        y: {
-            beginAtZero: true
+            y: {
+                beginAtZero: true,
+            ticks: {
+                color : '#fefefe'
+                }
+            },
+            x: {
+                ticks: {
+                    color : '#fefefe'
+                }
             }
         }
     };
 
-    return(
-        <div>
-            <Bar data={data} options={options}/>
-      </div>
+    return (
+        <div className='floating-info-box-chart-container'>
+            <Bar data={data} options={options} />
+        </div>
     );
 }
 

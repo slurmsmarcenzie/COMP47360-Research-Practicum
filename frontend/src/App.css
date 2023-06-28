@@ -179,3 +179,8 @@ body{
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+.floating-info-box-chart-container{
+  min-height: 400px;
+  max-height: 540px;  
+}

@@ -403,11 +403,16 @@ function Map() {
   };
 
   const calculateHashMapDifference = () => {
+
+    if (!busynessHashMap || !originalBusynessHashMap) {
+      return;
+    }
+
     let temporaryHashMap = {};
   
     for (let key in busynessHashMap) {
       if (originalBusynessHashMap.hasOwnProperty(key)) {
-        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
+        temporaryHashMap[key] = originalBusynessHashMap[key] - busynessHashMap[key];
       } else {
         temporaryHashMap[key] = busynessHashMap[key];
       }
@@ -415,7 +420,25 @@ function Map() {
   
     setHashMapOfDifference(temporaryHashMap);
   };
+
+  const calculateEventImpact = () => {
+
+    setNeighbourhoodEvents([]);
+
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
+    setTimeout(() => {
+      simulateBusynessChange();
+    }, 1000)
+  }
+
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
     map.current.flyTo({
@@ -456,7 +479,11 @@ function Map() {
   useEffect(() => {
     console.log('This is the updated HashMap of Difference', hashMapOfDifference);
   }, [hashMapOfDifference]);
-  
+
+  useEffect(() => {
+    calculateHashMapDifference();
+  }, [busynessHashMap]); // This means the effect will rerun whenever busynessHashMap changes
+
   useEffect(() => {
     if (scores) {  // Ensure scores is defined 2before initializing the map
       if (!map.current) {
@@ -488,6 +515,8 @@ function Map() {
             
             enableColours();
 
+            setShowChartData(false);
+
           }
         });
       }
@@ -496,9 +525,6 @@ function Map() {
 
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
-    
-    console.log('This is the original map: ', originalBusynessHashMap);
-    console.log('This is the dyanmic map: ', busynessHashMap);
 
     // If the 'current' property of 'map' is defined (i.e., the map instance exists)
     if (map.current) {
@@ -548,7 +574,6 @@ function Map() {
         simulateBusynessChange = {simulateBusynessChange}
         setNeighbourhoodEvents={setNeighbourhoodEvents}
         setShowInfoBox={setShowInfoBox}
-        calculateHashMapDifference={calculateHashMapDifference}
         />
 
       <FloatingInfoBox
@@ -557,6 +582,8 @@ function Map() {
         hashMapOfDifference={hashMapOfDifference}
         showChartData={showChartData}
         setShowChartData={setShowChartData}
+        calculateEventImpact={calculateEventImpact}
+        colours={colourPairs[colourPairIndex]}
       />
 
     </div>

@@ -1,5 +1,7 @@
 const MapLegend = ({ colours }) => {
 
+    console.log(colours)
+
     const gradient = colours.join(', ');
 
     return (
