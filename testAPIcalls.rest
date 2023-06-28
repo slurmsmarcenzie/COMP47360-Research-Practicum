@@ -1,0 +1,10 @@
+get http://localhost:5000/fake
+
+###
+get http://localhost:5000/api/meta/events
+
+###
+get http://localhost:5000/testerror
+
+###
+get http://localhost:5000
