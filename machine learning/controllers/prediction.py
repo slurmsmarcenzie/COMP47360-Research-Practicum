@@ -19,7 +19,7 @@ def prediction(date):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/output.json") #temporary, will use the model lader
+        file = open("static/MOCK_DATA.json") #temporary, will use the model lader
     except IOError as err:
         print(err)
         #TODO - add to log
