@@ -1,5 +1,5 @@
 // Core dependencies of App
-  import React, { useEffect, useRef,useState, useMemo } from 'react';
+import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
@@ -31,6 +31,7 @@ function Map() {
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+  const [showChartData, setShowChartData] = useState(false);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -244,6 +245,7 @@ function Map() {
 
   const enableColours = () => {
 
+    setShowChartData(false);
     setShowInfoBox(false);
     setNeighbourhoodEvents([]);
 
@@ -399,6 +401,20 @@ function Map() {
     // set the new scores array
     setScores(newScores);
   };
+
+  const calculateHashMapDifference = () => {
+    let temporaryHashMap = {};
+  
+    for (let key in busynessHashMap) {
+      if (originalBusynessHashMap.hasOwnProperty(key)) {
+        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
+      } else {
+        temporaryHashMap[key] = busynessHashMap[key];
+      }
+    }
+  
+    setHashMapOfDifference(temporaryHashMap);
+  };
   
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -417,6 +433,7 @@ function Map() {
 
   }
   
+  // use effects to help us dynamically render the mapz
   useEffect(() => {
 
     const formattedDate = new Date().toISOString().slice(0,10);
@@ -440,20 +457,6 @@ function Map() {
     console.log('This is the updated HashMap of Difference', hashMapOfDifference);
   }, [hashMapOfDifference]);
   
-  const calculateHashMapDifference = () => {
-    let temporaryHashMap = {};
-  
-    for (let key in busynessHashMap) {
-      if (originalBusynessHashMap.hasOwnProperty(key)) {
-        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
-      } else {
-        temporaryHashMap[key] = busynessHashMap[key];
-      }
-    }
-  
-    setHashMapOfDifference(temporaryHashMap);
-  };
-
   useEffect(() => {
     if (scores) {  // Ensure scores is defined 2before initializing the map
       if (!map.current) {
@@ -491,7 +494,6 @@ function Map() {
     }
   }, [scores]);  // This effect runs when scores is fetched
 
-  
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
     
@@ -551,7 +553,10 @@ function Map() {
 
       <FloatingInfoBox
         showingFloatingInfoBox={showInfoBox}
-        neighbourhoodEvents = {neighbourhoodEvents}
+        neighbourhoodEvents={neighbourhoodEvents}
+        hashMapOfDifference={hashMapOfDifference}
+        showChartData={showChartData}
+        setShowChartData={setShowChartData}
       />
 
     </div>

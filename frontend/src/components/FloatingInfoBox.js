@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import EventCard from './EventCard';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, simulateBusynessChange}) {
-        
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, simulateBusynessChange, hashMapOfDifference, showChartData, setShowChartData}) {
+    
     const eventCards = neighbourhoodEvents.map((item, i) =>{
         return (
             <EventCard 
             key = {i}
             item={item}
             simulateBusynessChange={simulateBusynessChange}
+            hashMap={hashMapOfDifference}
+            showChartData={showChartData}
+            setShowChartData={setShowChartData}
             />
         )
     }) 

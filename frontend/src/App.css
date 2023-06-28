@@ -6,7 +6,7 @@ body{
   position: absolute;
   z-index: 1;
   min-width: 180px;
-  max-width: 240px;
+  max-width: 180px;
   margin-top: 72px;
   margin-left: 72px;
   backdrop-filter: blur(16px) saturate(180%);
