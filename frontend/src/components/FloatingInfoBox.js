@@ -1,24 +1,34 @@
-import React from 'react';
+import React, {useState} from 'react';
 import EventCard from './EventCard';
+import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, simulateBusynessChange}) {
-        
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours}) {
+    
     const eventCards = neighbourhoodEvents.map((item, i) =>{
-        return (
+        
+    return (
             <EventCard 
             key = {i}
             item={item}
-            simulateBusynessChange={simulateBusynessChange}
+            calculateEventImpact={calculateEventImpact}
+            setShowChartData={setShowChartData}
             />
         )
     }) 
 
-    return showingFloatingInfoBox ? (
-        <div className='floating-info-box'>
-            {eventCards}
-        </div>
-    ) : null;
+    return (
+        showingFloatingInfoBox && (
+            <div className='floating-info-box'>
+                {showChartData ? 
+                <NeighbourhoodChartData 
+                hashMap={hashMapOfDifference}
+                colours={colours}
+                /> 
+                : eventCards}
+            </div>
+        )
+    );
 }
 
 export default FloatingInfoBox
