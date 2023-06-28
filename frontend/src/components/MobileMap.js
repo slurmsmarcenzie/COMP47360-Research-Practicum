@@ -12,7 +12,7 @@ import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
-import neighborhoodscores from '../geodata/output.json'
+// import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
 
 // Note: the following lines are important to create a production build that includes mapbox
@@ -30,7 +30,8 @@ function MobileMap() {
   const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
-  
+  const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+
   const mapContainer = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
@@ -397,6 +398,7 @@ function MobileMap() {
 
     // set the new scores array
     setScores(newScores);
+    calculateHashMapDifference();
   };
   
   // Methods for children elements.
@@ -434,6 +436,24 @@ function MobileMap() {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
   }, [busynessHashMap, originalBusynessHashMap]);
+
+  useEffect(() => {
+    console.log('This is the updated HashMap of Difference', hashMapOfDifference);
+  }, [hashMapOfDifference]);
+  
+  const calculateHashMapDifference = () => {
+    let temporaryHashMap = {};
+  
+    for (let key in busynessHashMap) {
+      if (originalBusynessHashMap.hasOwnProperty(key)) {
+        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
+      } else {
+        temporaryHashMap[key] = busynessHashMap[key];
+      }
+    }
+  
+    setHashMapOfDifference(temporaryHashMap);
+  };
   
   useEffect(() => {
     if (scores) {  // Ensure scores is defined 2before initializing the map
@@ -517,7 +537,7 @@ function MobileMap() {
       <MapLegend
         colours={colourPairs[colourPairIndex]} 
       />
-{/* 
+
       <FloatingNav 
         events = {events}
         disableColours = {disableColours}
@@ -529,12 +549,13 @@ function MobileMap() {
         simulateBusynessChange = {simulateBusynessChange}
         setNeighbourhoodEvents={setNeighbourhoodEvents}
         setShowInfoBox={setShowInfoBox}
+        calculateHashMapDifference={calculateHashMapDifference}
         />
 
       <FloatingInfoBox
         showingFloatingInfoBox={showInfoBox}
         neighbourhoodEvents = {neighbourhoodEvents}
-      /> */}
+      />
 
     </div>
 
