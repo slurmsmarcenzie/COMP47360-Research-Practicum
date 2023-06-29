@@ -3,8 +3,9 @@ const app = express()
 const cors = require("cors");
 const meta = require("./routes/meta")
 const prediction = require("./routes/prediction")
+const baseline = require("./routes/baseline")
 const port = process.env.PORT || 5000
-const {logger, httpLogger} = require("../logging/backend/express/logger")
+//const {logger, httpLogger} = require("../logging/backend/express/logger")
 require("dotenv").config();
 
 //Middleware:
@@ -17,12 +18,11 @@ app.use(express.json())
 //Routes:
 app.use("/api/meta", meta)
 app.use("/api/predict", prediction)
+app.use("/api/baseline", baseline)
 
 
 app.get('/', (req, res) => {
   res.status(200).send("Home Page. I will serve React App later :)")
-  logger.info("test of logger")
-  httpLogger.info("request made for '/'")
 });
 
 app.get('*', (req, res) => {
