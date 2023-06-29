@@ -3,7 +3,7 @@ from flask import abort
 from datetime import datetime
 
 # Get a prediction from the model with the datetime specified in URL
-# Currently uses static file "output.json" to mimic the model
+# Currently uses static file "MOCK_DATA.json" to mimic the model
 # Return a JSON array of busyness/location scores 
 def prediction(date):
     print("prediction quried for datetime:", date)
@@ -23,7 +23,7 @@ def prediction(date):
     except IOError as err:
         print(err)
         #TODO - add to log
-        raise abort(500, "Unable to read file 'output.json'")
+        raise abort(500, "Unable to read file 'MOCK_DATA.json'")
 
     return json.load(file)
 
