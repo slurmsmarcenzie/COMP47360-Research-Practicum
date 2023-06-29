@@ -11,3 +11,6 @@ get http://localhost:5000/testerror
 
 ###
 get http://localhost:5000
+
+###
+get http://localhost:5000/api/predict/1995-01-21
