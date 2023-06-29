@@ -1,0 +1,3 @@
+backend/express/logs/
+backend/flask/logs/
+frontend/react/logs/
