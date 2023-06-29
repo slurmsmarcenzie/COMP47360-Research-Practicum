@@ -5,7 +5,7 @@ const meta = require("./routes/meta")
 const prediction = require("./routes/prediction")
 const baseline = require("./routes/baseline")
 const port = process.env.PORT || 5000
-//const {logger, httpLogger} = require("../logging/backend/express/logger")
+const {generalLogger, httpLogger} = require("../logging/backend/express/logger")
 require("dotenv").config();
 
 //Middleware:
