@@ -1,5 +1,5 @@
 // Core dependencies of App
-  import React, { useEffect, useRef,useState, useMemo } from 'react';
+import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
@@ -12,7 +12,7 @@ import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
-import neighborhoodscores from '../geodata/output.json'
+// import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
 
 // Note: the following lines are important to create a production build that includes mapbox
@@ -30,6 +30,8 @@ function Map() {
   const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
+  const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+  const [showChartData, setShowChartData] = useState(false);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -243,6 +245,7 @@ function Map() {
 
   const enableColours = () => {
 
+    setShowChartData(false);
     setShowInfoBox(false);
     setNeighbourhoodEvents([]);
 
@@ -398,7 +401,44 @@ function Map() {
     // set the new scores array
     setScores(newScores);
   };
+
+  const calculateHashMapDifference = () => {
+
+    if (!busynessHashMap || !originalBusynessHashMap) {
+      return;
+    }
+
+    let temporaryHashMap = {};
   
+    for (let key in busynessHashMap) {
+      if (originalBusynessHashMap.hasOwnProperty(key)) {
+        temporaryHashMap[key] = originalBusynessHashMap[key] - busynessHashMap[key];
+      } else {
+        temporaryHashMap[key] = busynessHashMap[key];
+      }
+    }
+  
+    setHashMapOfDifference(temporaryHashMap);
+  };
+
+  const calculateEventImpact = () => {
+
+    setNeighbourhoodEvents([]);
+
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+  
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
+    setTimeout(() => {
+      simulateBusynessChange();
+    }, 1000)
+  }
+
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
     map.current.flyTo({
@@ -416,6 +456,7 @@ function Map() {
 
   }
   
+  // use effects to help us dynamically render the mapz
   useEffect(() => {
 
     const formattedDate = new Date().toISOString().slice(0,10);
@@ -435,6 +476,14 @@ function Map() {
     }
   }, [busynessHashMap, originalBusynessHashMap]);
   
+  useEffect(() => {
+    console.log('This is the updated HashMap of Difference', hashMapOfDifference);
+  }, [hashMapOfDifference]);
+
+  useEffect(() => {
+    calculateHashMapDifference();
+  }, [busynessHashMap]); // This means the effect will rerun whenever busynessHashMap changes
+
   useEffect(() => {
     if (scores) {  // Ensure scores is defined 2before initializing the map
       if (!map.current) {
@@ -466,18 +515,16 @@ function Map() {
             
             enableColours();
 
+            setShowChartData(false);
+
           }
         });
       }
     }
   }, [scores]);  // This effect runs when scores is fetched
 
-  
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
-    
-    console.log('This is the original map: ', originalBusynessHashMap);
-    console.log('This is the dyanmic map: ', busynessHashMap);
 
     // If the 'current' property of 'map' is defined (i.e., the map instance exists)
     if (map.current) {
@@ -508,8 +555,6 @@ function Map() {
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
-  
-
   return (
 
     <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
@@ -533,7 +578,12 @@ function Map() {
 
       <FloatingInfoBox
         showingFloatingInfoBox={showInfoBox}
-        neighbourhoodEvents = {neighbourhoodEvents}
+        neighbourhoodEvents={neighbourhoodEvents}
+        hashMapOfDifference={hashMapOfDifference}
+        showChartData={showChartData}
+        setShowChartData={setShowChartData}
+        calculateEventImpact={calculateEventImpact}
+        colours={colourPairs[colourPairIndex]}
       />
 
     </div>
