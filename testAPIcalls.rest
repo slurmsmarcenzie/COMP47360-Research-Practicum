@@ -1,3 +1,6 @@
+//If you install vscode rest client extension. You can sent http requests here
+// Saves having to use the browser or tools like postman
+
 get http://localhost:5000/fake
 
 ###
