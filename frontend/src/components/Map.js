@@ -232,7 +232,6 @@ function Map() {
   }
 
   const changeColourScheme = () => {
-    console.log(colourPairIndex);
     setColourPairIndex(prevIndex => {
       const newIndex = (prevIndex + 1) % colourPairs.length;
       handleChangeColours(newIndex);
@@ -440,9 +439,22 @@ function Map() {
 
     setTimeout(() => {
       simulateBusynessChange();
-    }, 1000)
+    }, 600)
   
   }
+
+  const highlightEventImpact = (labels) => {
+
+    console.log('Labels inside the highlightEvent function:', labels);
+
+    layerIds.current.forEach((id) => {
+      let opacity = labels.includes(id) ? 0.9 : 0.4;
+      let line = labels.includes(id) ? 2 : 0;
+      map.current.setPaintProperty(id, 'fill-opacity', opacity);
+      map.current.setPaintProperty(id+'-line', 'line-width', line);
+    });
+  }
+
 
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -471,12 +483,10 @@ function Map() {
         const response = await fetch(`${BASE_API_URL}/predict/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
-        console.log('Setting scores: ', data)
         setScores(data);
       } 
       
       catch (err) {
-        console.error('Error: ', err);
         if (retryCount.current < 3) {
           retryCount.current++;
           setTimeout(() => {fetchScores()}, 10000);
@@ -495,10 +505,6 @@ function Map() {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
   }, [busynessHashMap, originalBusynessHashMap]);
-  
-  useEffect(() => {
-    console.log('This is the updated HashMap of Difference', hashMapOfDifference);
-  }, [hashMapOfDifference]);
 
   useEffect(() => {
     calculateHashMapDifference();
@@ -533,8 +539,6 @@ function Map() {
       map.current.on('moveend', () => {
 
         let zoom = map.current.getZoom();
-
-        console.log('current zoom is:', zoom)
 
         if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
           
@@ -608,6 +612,7 @@ function Map() {
         setShowChartData={setShowChartData}
         calculateEventImpact={calculateEventImpact}
         colours={colourPairs[colourPairIndex]}
+        highlightEventImpact={highlightEventImpact}
       />
 
     </div>
