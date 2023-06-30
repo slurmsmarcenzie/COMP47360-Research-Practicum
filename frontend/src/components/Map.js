@@ -21,6 +21,7 @@ import events from '../geodata/events.json';
 // mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
 
 function Map() {
 
@@ -32,12 +33,14 @@ function Map() {
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
   const [showChartData, setShowChartData] = useState(false);
+  const [error, setError] = useState(null);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
   const layerIds = useRef([]);
   const isNeighbourhoodClickedRef = useRef(false);
+  const retryCount = useRef(0);
 
   const originalLat = 40.7484;
   const originalLng = -73.9857;
@@ -260,7 +263,6 @@ function Map() {
   }
 
   const updateLayerColours = () => {
-    console.log('updateLayerColours is being accessed');
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
@@ -412,13 +414,14 @@ function Map() {
   
     for (let key in busynessHashMap) {
       if (originalBusynessHashMap.hasOwnProperty(key)) {
-        temporaryHashMap[key] = originalBusynessHashMap[key] - busynessHashMap[key];
+        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
       } else {
         temporaryHashMap[key] = busynessHashMap[key];
       }
     }
   
     setHashMapOfDifference(temporaryHashMap);
+
   };
 
   const calculateEventImpact = () => {
@@ -437,6 +440,7 @@ function Map() {
     setTimeout(() => {
       simulateBusynessChange();
     }, 1000)
+  
   }
 
   // Methods for children elements.
@@ -456,19 +460,33 @@ function Map() {
 
   }
   
-  // use effects to help us dynamically render the mapz
   useEffect(() => {
-
-    const formattedDate = new Date().toISOString().slice(0,10);
-    console.log(formattedDate);
-
-    fetch(`http://127.0.0.1:5000/api/predict/${formattedDate}`) // this our backend
-    .then(response => {
-      if (!response.ok) { throw new Error('Network response was not ok'); }
-      return response.json();
-    })
-    .then(data => setScores(data));
-  }, []);  // This effect is only for fetching scores
+  
+    const fetchScores = async () => {
+  
+      const formattedDate = new Date().toISOString().slice(0,10);
+      
+      try {
+        const response = await fetch(`${BASE_API_URL}/predict/${formattedDate}`);
+        if (!response.ok) { throw new Error('Network response was not ok'); }
+        const data = await response.json();
+        setScores(data);
+      } 
+      
+      catch (err) {
+        console.error('Error: ', err);
+        if (retryCount.current < 3) {
+          retryCount.current++;
+          setTimeout(() => {fetchScores()}, 10000);
+        } else {
+          setError('Failed to fetch scores after three attempts');
+        }
+      }
+    };
+  
+    fetchScores();
+  
+  }, []);
 
   useEffect(() => {
     if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
@@ -485,41 +503,40 @@ function Map() {
   }, [busynessHashMap]); // This means the effect will rerun whenever busynessHashMap changes
 
   useEffect(() => {
-    if (scores) {  // Ensure scores is defined 2before initializing the map
-      if (!map.current) {
-        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [originalLng, originalLat],
-          zoom: zoom
-        });
+    if (!map.current) {
+      mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-        map.current.on('load', () => {
-          map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-          add3DBuildings();
-          renderNeighbourhoods();
-          renderEvents();
-          initialiseMouseMapEvents();
-          updateLayerColours();
-        });
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: [originalLng, originalLat],
+        zoom: zoom
+      });
 
-        map.current.on('moveend', () => {
+      map.current.on('load', () => {
+        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+        add3DBuildings();
+        renderNeighbourhoods();
+        renderEvents();
+        initialiseMouseMapEvents();
+        updateLayerColours();
+      });
 
-          let zoom = map.current.getZoom();
+      map.current.on('moveend', () => {
 
-          console.log('current zoom is:', zoom)
+        let zoom = map.current.getZoom();
 
-          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
-            
-            enableColours();
+        console.log('current zoom is:', zoom)
 
-            setShowChartData(false);
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+          
+          enableColours();
 
-          }
-        });
-      }
+          setShowChartData(false);
+
+        }
+      });
     }
   }, [scores]);  // This effect runs when scores is fetched
 
