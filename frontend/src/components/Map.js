@@ -402,6 +402,7 @@ function Map() {
 
     // set the new scores array
     setScores(newScores);
+
   };
 
   const calculateHashMapDifference = () => {
@@ -470,6 +471,7 @@ function Map() {
         const response = await fetch(`${BASE_API_URL}/predict/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
+        console.log('Setting scores: ', data)
         setScores(data);
       } 
       
@@ -504,7 +506,10 @@ function Map() {
 
   useEffect(() => {
 
-    if (!map.current) {
+    // check that there is no map and that the scores have been successfully 
+    // retrieved by the fetch api before we create a map
+    
+    if (!map.current && scores) {
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
       map.current = new mapboxgl.Map({
@@ -520,7 +525,9 @@ function Map() {
         renderNeighbourhoods();
         renderEvents();
         initialiseMouseMapEvents();
-        updateLayerColours();
+        setTimeout(() => {
+          updateLayerColours()
+        }, 500);
       });
 
       map.current.on('moveend', () => {
