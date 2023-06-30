@@ -1,1 +1,1 @@
-# COMP47360-Research-Practicum *test change2*
+# COMP47360-Research-Practicum
