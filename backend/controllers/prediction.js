@@ -3,7 +3,7 @@ const { generalLogger } = require("../../logging/backend/express/logger");
 
 //fetch prediction from ML:
 const queryPrediction = (req, res, next) => {
-    console.log("queryPrediction: ", res.req.ip);
+    res.req.ip
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
     generalLogger.info(`prediction requested for: ${req.params}`)
