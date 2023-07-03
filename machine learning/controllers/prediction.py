@@ -33,6 +33,7 @@ def prediction(date):
     # may change. Applications that request a prediction should handle the reponse 
     # as they see fit
 
+    # # Example:
     # # Ensure that the prediction list has the correct format: # #
     #   valid = False
     #   for index, item in enumerate(data):
