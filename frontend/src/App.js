@@ -1,6 +1,9 @@
 import React from 'react';
 import Map from './components/Map';
 import MobileMap from './components/MobileMap'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import About from './components/About'
+
 
 function App() {
   

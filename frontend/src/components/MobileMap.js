@@ -6,11 +6,19 @@ import { scaleLinear } from 'd3-scale';
 import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
 
 // Components
+import FloatingNav from './FloatingNav';
+import FloatingInfoBox from './FloatingInfoBox';
+import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
+
+// Note: the following lines are important to create a production build that includes mapbox
+// @ts-ignore
+// eslint-disable-next-line import/no-webpack-loader-syntax
+// mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 
@@ -19,8 +27,9 @@ function MobileMap() {
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
-  const [eventsMap, setEventsMap] = useState({});
-  const [scores, setScores] = useState(neighborhoodscores);
+  const [eventsMap, setEventsMap] = useState([]);
+  const [scores, setScores] = useState(null);
+  const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -33,35 +42,44 @@ function MobileMap() {
   const zoom = 8;
 
   const colourPairs = [
-    ["#008000", "#FF0000"],
-    ["#800080", "#FFA500"],
-    ["#FF00FF", "#008080"],
-    ["#8e2add", "#08fb26"],
-    ["#fffc00", "#ff3300"],
-    ["#01b4fd", "#6b03d8"],
-    ["#000000", "#fe019a"],
+    ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
+    ["#FFD700", "#9ACD32", "#008000"], // Green, Yellow Green, Yellow
+    ["#FF69B4", "#C71585", "#800080"], // Purple, Medium Violet Red, Hot Pink
+    ["#00BFFF", "#1E90FF", "#4169E1"], // Royal Blue, Dodger Blue, Deep Sky Blue
+    ["#32CD32", "#228B22", "#006400"], // Dark Green, Forest Green, Lime Green
+    ["#CD5C5C", "#B22222", "#8B0000"], // Dark Red, Firebrick, Indian Red
+    ["#A9A9A9", "#696969", "#2F4F4F"], // Dark Slate Gray, Dim Gray, Dark Gray
+    ["#BA55D3", "#9932CC", "#8B008B"], // Dark Magenta, Dark Orchid, Medium Orchid
+    ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
-
-  const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
-
-  const busynessMap = useMemo(() => {
-    return scores.reduce((map, item) => {
-      map[item.location_id] = item.busyness_score;
-      return map;
-    }, {});
-  }, [scores]);  // Dependency array
-
-  const simulateBusynessChange = () => {
-
-    const newScores = scores.map(score => ({
-      ...score,
-      busyness_score: Math.random()  // this generates a random number between 0 and 1
-    }));
-
-    // set the new scores array
-    setScores(newScores);
-  };
   
+  const colourScale = useMemo(() => {
+    return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
+  }, [colourPairs, colourPairIndex]);
+
+  // Define a memoized value 'busynessMap', which depends on 'scores'
+  const busynessHashMap = useMemo(() => {
+
+    if (!scores) return {};  
+  
+    // 'reduce' is a function that transforms an array into a single value.
+    // In this case, it is transforming the 'scores' array into a single object
+    return scores.reduce((map, item) => {
+      
+      // For each 'item' in 'scores', add a property to 'map' with a key of
+      // 'item.location_id' and a value of 'item.busyness_score'
+      map[item.location_id] = item.busyness_score;
+      
+      // Return the updated 'map' to be used in the next iteration of 'reduce'
+      return map;
+    }, {});  
+    
+    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
+  
+
+  // static methods for our application to load in all values
+
   const add3DBuildings = () => {
     map.current.addLayer({
       'id': 'add-3d-buildings',
@@ -179,25 +197,42 @@ function MobileMap() {
     });
   };
 
-  const handleChangeColours = () => {
+  // dynamic methods and interactive for our application to handle and set changes to our map
+
+  const handleChangeColours = (colourPairIndex) => {
 
     // Create a new colourScale each time you handle the color change
-    const colourScale = scaleLinear().domain([0, 1]).range(colourPairs[colourPairIndex]);
+    const colourScale = scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
   
-    neighbourhoods.features.forEach((neighbourhood) => {
-      // get the original score assigned to our neighbourhood.
-      const score = neighbourhood.score;
-      // get color corresponding to score
-      const newColour = colourScale(score);
-      // set the 'fill-color' property on the layer to the new color
-      map.current.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
-    });
+    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
+  
+    // Get the current map's style
+    const style = map.current.getStyle();
+  
+    layerIds.current.forEach(layerId => {
+      // Check if the layer exists in the style before trying to update it
+      if (style.layers.some(layer => layer.id === layerId)) {
+        const score = busynessHashMap[layerId];
+        if (score !== undefined) { // Check if the score is defined before using it
+          const newColour = colourScale(score);
+          map.current.setPaintProperty(layerId, 'fill-color', newColour);
+        }
+        else {
+          console.warn(`Current layer does not have a score`);
+        }
+      } else {
+        console.warn(`Layer with ID ${layerId} doesn't exist`);
+      }
+    })
   }
 
   const changeColourScheme = () => {
     console.log(colourPairIndex);
-    setColourPairIndex(prevIndex => (prevIndex + 1) % colourPairs.length);
-    handleChangeColours();
+    setColourPairIndex(prevIndex => {
+      const newIndex = (prevIndex + 1) % colourPairs.length;
+      handleChangeColours(newIndex);
+      return newIndex;
+    });
   }
 
   const disableColours = () => {
@@ -211,7 +246,7 @@ function MobileMap() {
     setShowInfoBox(false);
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // use setIsNeighbourhoodClicked
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
@@ -224,7 +259,7 @@ function MobileMap() {
   const updateLayerColours = () => {
     console.log('updateLayerColours is being accessed');
   
-    if (!map.current || !busynessMap) return; // Added a check for busynessMap
+    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
     // Get the current map's style
     const style = map.current.getStyle();
@@ -232,10 +267,10 @@ function MobileMap() {
     layerIds.current.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessMap[layerId];
+        const score = busynessHashMap[layerId];
         if (score !== undefined) { // Check if the score is defined before using it
-          const newColor = colourScale(score);
-          map.current.setPaintProperty(layerId, 'fill-color', newColor);
+          const newColour = colourScale(score);
+          map.current.setPaintProperty(layerId, 'fill-color', newColour);
         }
       } else {
         console.warn(`Layer with ID ${layerId} doesn't exist`);
@@ -243,52 +278,74 @@ function MobileMap() {
     });
   };
 
-  const initialiseMapEvents = () => {
+  const initialiseMouseMapEvents = () => {
 
     layerIds.current.forEach((layerId) => {
-        const lineLayerId = layerId + '-line'; 
-  
-        // Touchstart event
-        map.current.on('touchstart', layerId, (e) => {
+      const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
+
+      // Mouseover event
+      map.current.on('mousemove', layerId, (e) => {
+        
           if (!isNeighbourhoodClickedRef.current) {
-            map.current.getCanvas().style.cursor = 'pointer';
-            map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-            map.current.setPaintProperty(lineLayerId, 'line-width', 4);
-            
-            const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
-  
-            if (features.length > 0) {
-              if (!popup.current) {
-                  popup.current = new mapboxgl.Popup({
-                      closeButton: false,
-                      closeOnClick: false,
-                  });
+
+              map.current.getCanvas().style.cursor = 'pointer';
+              map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+              map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+              
+              const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+
+              if (features.length > 0) {
+
+                  if (!popup.current) {
+
+                    // code to allow the pop up to display a bit over our mouse interaction.
+
+                    const markerHeight = 10;
+                    const markerRadius = 10;
+                    const linearOffset = 25;
+                    const popupOffsets = {
+                    'top': [0, 0],
+                    'top-left': [0, 0],
+                    'top-right': [0, 0],
+                    'bottom': [0, -markerHeight],
+                    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+                    'left': [markerRadius, (markerHeight - markerRadius) * -1],
+                    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+                    };
+
+                    // creating the popup object
+
+                    popup.current = new mapboxgl.Popup({
+                        offset: popupOffsets,
+                        closeButton: false,
+                        closeOnClick: false,
+                    });
+                  }
+
+                  const feature = features[0];
+                  const zone = feature.properties.zone; 
+
+                  popup.current.setLngLat(e.lngLat)
+                      .setHTML(`${zone}, ${layerId}`)
+                      .addTo(map.current);
               }
-  
-              const feature = features[0];
-              const zone = feature.properties.zone; 
-  
-              popup.current.setLngLat(e.lngLat)
-                  .setHTML(`${zone}, ${layerId}`)
-                  .addTo(map.current);
-            }
           }
-        });
+      });
   
-        // Touchend event
-        map.current.on('touchend', layerId, () => {
-          if (!isNeighbourhoodClickedRef.current) {
+      // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
+      map.current.on('mouseleave', layerId, () => {
+        if (!isNeighbourhoodClickedRef.current) {
             map.current.getCanvas().style.cursor = '';
             map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
             map.current.setPaintProperty(lineLayerId, 'line-width', 0);
-  
+
             if (popup.current) {
-              popup.current.remove();
-              popup.current = null;
+                popup.current.remove();
+                popup.current = null;
             }
           }
-        });
-  
+      });
 
       map.current.on('click', (e) => {
 
@@ -318,6 +375,7 @@ function MobileMap() {
 
           map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
+          // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
 
           setNeighbourhoodEvents(matchingEvents);
@@ -329,52 +387,158 @@ function MobileMap() {
       });
     });
   }
+  
+  const simulateBusynessChange = () => {
+
+    const newScores = scores.map(score => ({
+      ...score,
+      busyness_score: Math.random()  // this generates a random number between 0 and 1
+    }));
+
+    // set the new scores array
+    setScores(newScores);
+  };
+  
+  // Methods for children elements.
+  const floatingNavZoomToLocation = (longitude, latitude) => {
+    map.current.flyTo({
+      center: [longitude, latitude],
+      zoom: 15, // specify your desired zoom level
+      essential: true
+    });
+  }
+
+  const floatingNavSetLineWidth = (zone) => {
+
+    const lineLayerId = zone + '-line';
+
+    map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+
+  }
+  
+  useEffect(() => {
+
+    const formattedDate = new Date().toISOString().slice(0,10);
+    console.log(formattedDate);
+
+    fetch(`http://127.0.0.1:5000/api/predict/${formattedDate}`) // this our backend
+    .then(response => {
+      if (!response.ok) { throw new Error('Network response was not ok'); }
+      return response.json();
+    })
+    .then(data => setScores(data));
+  }, []);  // This effect is only for fetching scores
 
   useEffect(() => {
-    if (!map.current) {
-      mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [originalLng, originalLat],
-        zoom: zoom
-      });
-  
-      map.current.on('load', () => {
-        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-        add3DBuildings();
-        renderNeighbourhoods();
-        renderEvents();
-        initialiseMapEvents();
-        updateLayerColours();
-      });
+    if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
+      setOriginalBusynessHashMap({ ...busynessHashMap });
     }
-  }, []);
+  }, [busynessHashMap, originalBusynessHashMap]);
   
   useEffect(() => {
+    if (scores) {  // Ensure scores is defined 2before initializing the map
+      if (!map.current) {
+        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/dark-v11',
+          center: [originalLng, originalLat],
+          zoom: zoom
+        });
+
+        map.current.on('load', () => {
+          map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+          add3DBuildings();
+          renderNeighbourhoods();
+          renderEvents();
+          initialiseMouseMapEvents();
+          updateLayerColours();
+        });
+
+        map.current.on('moveend', () => {
+
+          let zoom = map.current.getZoom();
+
+          console.log('current zoom is:', zoom)
+
+          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+            
+            enableColours();
+
+          }
+        });
+      }
+    }
+  }, [scores]);  // This effect runs when scores is fetched
+
+  
+  // Define an effect that runs when the 'scores' prop changes
+  useEffect(() => {
+    
+    console.log('This is the original map: ', originalBusynessHashMap);
+    console.log('This is the dyanmic map: ', busynessHashMap);
+
+    // If the 'current' property of 'map' is defined (i.e., the map instance exists)
     if (map.current) {
+      
+      // If the map's style is already loaded
       if (map.current.isStyleLoaded()) {
+        
+        // Update the layer colours on the map
         updateLayerColours();
       } else {
+        // If the map's style is not yet loaded, set up an event listener to
+        // update the layer colours once the style is loaded
         map.current.on('style.load', updateLayerColours);
       }
     }
   
+    // Define a cleanup function that will run when the component unmounts, or
+    // before this effect runs again
     return () => {
+      
+      // If the 'current' property of 'map' is defined
       if (map.current) {
+        
+        // Remove the event listener for the 'style.load' event to avoid
+        // potential memory leaks
         map.current.off('style.load', updateLayerColours);
       }
     }
-  }, [scores]);
+  }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
+
   
-  
-  useEffect(() => {
-    console.log('Busyness Map Updated:', busynessMap);
-  }, [busynessMap]);  
-    return(
-        <div ref={mapContainer} style={{ width: '100%', height: '100vh' }} />
-    )
+
+  return (
+
+    <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
+
+      <MapLegend
+        colours={colourPairs[colourPairIndex]} 
+      />
+{/* 
+      <FloatingNav 
+        events = {events}
+        disableColours = {disableColours}
+        floatingNavZoomToLocation ={floatingNavZoomToLocation}
+        floatingNavSetLineWidth = {floatingNavSetLineWidth}
+        isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+        changeColourScheme={changeColourScheme}
+        enableColours={enableColours}
+        simulateBusynessChange = {simulateBusynessChange}
+        setNeighbourhoodEvents={setNeighbourhoodEvents}
+        setShowInfoBox={setShowInfoBox}
+        />
+
+      <FloatingInfoBox
+        showingFloatingInfoBox={showInfoBox}
+        neighbourhoodEvents = {neighbourhoodEvents}
+      /> */}
+
+    </div>
+
+  );
 };
 
-export default MobileMap
+export default MobileMap;

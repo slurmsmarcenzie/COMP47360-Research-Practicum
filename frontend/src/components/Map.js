@@ -1,5 +1,5 @@
 // Core dependencies of App
-  import React, { useEffect, useRef,useState, useMemo } from 'react';
+import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
@@ -7,12 +7,13 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 
 // Components
 import FloatingNav from './FloatingNav';
+import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
-import neighborhoodscores from '../geodata/output.json'
+// import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
 
 // Note: the following lines are important to create a production build that includes mapbox
@@ -21,25 +22,32 @@ import events from '../geodata/events.json';
 // mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
 
 function Map() {
 
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
+  const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
   const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
+  const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+  const [zone, setZone] = useState(null);
+  const [showChartData, setShowChartData] = useState(false);
+  const [error, setError] = useState(null);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
   const layerIds = useRef([]);
   const isNeighbourhoodClickedRef = useRef(false);
+  const retryCount = useRef(0);
 
   const originalLat = 40.7484;
   const originalLng = -73.9857;
-  const zoom = 8;
+  const zoom = 7;
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -227,7 +235,6 @@ function Map() {
   }
 
   const changeColourScheme = () => {
-    console.log(colourPairIndex);
     setColourPairIndex(prevIndex => {
       const newIndex = (prevIndex + 1) % colourPairs.length;
       handleChangeColours(newIndex);
@@ -243,7 +250,9 @@ function Map() {
 
   const enableColours = () => {
 
+    setShowChartData(false);
     setShowInfoBox(false);
+    setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
@@ -257,7 +266,6 @@ function Map() {
   }
 
   const updateLayerColours = () => {
-    console.log('updateLayerColours is being accessed');
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
@@ -325,7 +333,7 @@ function Map() {
 
                   const feature = features[0];
                   const zone = feature.properties.zone; 
-
+                  
                   popup.current.setLngLat(e.lngLat)
                       .setHTML(`${zone}, ${layerId}`)
                       .addTo(map.current);
@@ -374,6 +382,7 @@ function Map() {
           map.current.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
           map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+          const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
@@ -382,7 +391,12 @@ function Map() {
 
           if (matchingEvents.length > 0) {
             setShowInfoBox(true);
+            } else {
+              // Show the neighborhood info box since there are no matching events
+              setShowNeighborhoodInfoBox(true);
             }
+
+            setZone(zone);
           }
       });
     });
@@ -397,8 +411,61 @@ function Map() {
 
     // set the new scores array
     setScores(newScores);
+
   };
+
+  const calculateHashMapDifference = () => {
+
+    if (!busynessHashMap || !originalBusynessHashMap) {
+      return;
+    }
+
+    let temporaryHashMap = {};
   
+    for (let key in busynessHashMap) {
+      if (originalBusynessHashMap.hasOwnProperty(key)) {
+        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
+      } else {
+        temporaryHashMap[key] = busynessHashMap[key];
+      }
+    }
+  
+    setHashMapOfDifference(temporaryHashMap);
+
+  };
+
+  const calculateEventImpact = () => {
+
+    setNeighbourhoodEvents([]);
+
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+  
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
+    setTimeout(() => {
+      simulateBusynessChange();
+    }, 600)
+  
+  }
+
+  const highlightEventImpact = (labels) => {
+
+    console.log('Labels inside the highlightEvent function:', labels);
+
+    layerIds.current.forEach((id) => {
+      let opacity = labels.includes(id) ? 0.9 : 0.4;
+      let line = labels.includes(id) ? 2 : 0;
+      map.current.setPaintProperty(id, 'fill-opacity', opacity);
+      map.current.setPaintProperty(id+'-line', 'line-width', line);
+    });
+  }
+
+
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
     map.current.flyTo({
@@ -417,63 +484,84 @@ function Map() {
   }
   
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/predict/1995-01-21') // this our backend
-    .then(response => {
-      if (!response.ok) { throw new Error('Network response was not ok'); }
-      return response.json();
-    })
-    .then(data => setScores(data));
-  }, []);  // This effect is only for fetching scores
+    const fetchScores = async () => {
+  
+      const formattedDate = new Date().toISOString().slice(0,10);
+      
+      try {
+        const response = await fetch(`${BASE_API_URL}/predict/${formattedDate}`);
+        if (!response.ok) { throw new Error('Network response was not ok'); }
+        const data = await response.json();
+        setScores(data);
+      } 
+      
+      catch (err) {
+        if (retryCount.current < 3) {
+          retryCount.current++;
+          setTimeout(() => {fetchScores()}, 10000);
+        } else {
+          setError('Failed to fetch scores after three attempts');
+        }
+      }
+    };
+  
+    fetchScores();
+  
+  }, []);
 
   useEffect(() => {
     if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
   }, [busynessHashMap, originalBusynessHashMap]);
-  
+
   useEffect(() => {
-    if (scores) {  // Ensure scores is defined 2before initializing the map
-      if (!map.current) {
-        mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+    calculateHashMapDifference();
+  }, [busynessHashMap]); // This means the effect will rerun whenever busynessHashMap changes
 
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          center: [originalLng, originalLat],
-          zoom: zoom
-        });
+  useEffect(() => {
 
-        map.current.on('load', () => {
-          map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-          add3DBuildings();
-          renderNeighbourhoods();
-          renderEvents();
-          initialiseMouseMapEvents();
-          updateLayerColours();
-        });
+    // check that there is no map and that the scores have been successfully 
+    // retrieved by the fetch api before we create a map
+    
+    if (!map.current && scores) {
+      mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
-        map.current.on('moveend', () => {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: [originalLng, originalLat],
+        zoom: zoom
+      });
 
-          let zoom = map.current.getZoom();
+      map.current.on('load', () => {
+        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+        add3DBuildings();
+        renderNeighbourhoods();
+        renderEvents();
+        initialiseMouseMapEvents();
+        setTimeout(() => {
+          updateLayerColours()
+        }, 500);
+      });
 
-          console.log('current zoom is:', zoom)
+      map.current.on('moveend', () => {
 
-          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
-            
-            enableColours();
+        let zoom = map.current.getZoom();
 
-          }
-        });
-      }
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+          
+          enableColours();
+
+          setShowChartData(false);
+
+        }
+      });
     }
   }, [scores]);  // This effect runs when scores is fetched
 
-  
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
-    
-    console.log('This is the original map: ', originalBusynessHashMap);
-    console.log('This is the dyanmic map: ', busynessHashMap);
 
     // If the 'current' property of 'map' is defined (i.e., the map instance exists)
     if (map.current) {
@@ -504,12 +592,11 @@ function Map() {
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
-  
-
   return (
+    <div>
+        <Navbar />
 
-    <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
-
+    <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
       <MapLegend
         colours={colourPairs[colourPairIndex]} 
       />
@@ -525,14 +612,24 @@ function Map() {
         simulateBusynessChange = {simulateBusynessChange}
         setNeighbourhoodEvents={setNeighbourhoodEvents}
         setShowInfoBox={setShowInfoBox}
+        setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
         />
 
       <FloatingInfoBox
         showingFloatingInfoBox={showInfoBox}
-        neighbourhoodEvents = {neighbourhoodEvents}
+        showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
+        neighbourhoodEvents={neighbourhoodEvents}
+        zone={zone}
+        hashMapOfDifference={hashMapOfDifference}
+        showChartData={showChartData}
+        setShowChartData={setShowChartData}
+        calculateEventImpact={calculateEventImpact}
+        colours={colourPairs[colourPairIndex]}
+        highlightEventImpact={highlightEventImpact}
       />
 
     </div>
+    </div>  
 
   );
 };
