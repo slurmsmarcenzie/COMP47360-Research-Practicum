@@ -2,7 +2,7 @@ const axios = require("axios")
 const {generalLogger} = require("../../logging/backend/express/logger")
 
 const getEvents = (req, res, next) => {
-    res.req.ip
+    res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
     //fetch events from ML API
     const uri = "http://127.0.0.1:7000/info/events"
 
