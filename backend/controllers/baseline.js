@@ -1,20 +1,20 @@
-const axios = require("axios");
+const axios = require("axios")
 const { generalLogger } = require("../../logging/backend/express/logger");
 
-//fetch prediction from ML:
-const queryPrediction = (req, res, next) => {
-    console.log("queryPrediction: ", res.req.ip);
+//fetch baseline from ML:
+const queryBaseline = (req, res, next) => {
+    res.req.ip //sets the object
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`prediction requested for: ${req.params}`)
+    generalLogger.info(`baseline requested for: ${req.params}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
-    const uri = `http://127.0.0.1:7000/predict/${date}` 
+    const uri = `http://127.0.0.1:7000/baseline/${date}` 
 
     axios.get(uri)
       .then(response => {
         if (response.data === null || response.data === undefined || response.data.length === 0){
-          generalLogger.warn(`prediction list is empty: ${response.data}`)
+          generalLogger.warn("warning, baseline list is empty")
           res.status(200).json([]); //send empty JSON list if empty response received
           next()
         }
@@ -26,17 +26,16 @@ const queryPrediction = (req, res, next) => {
                 data.push(item);
               }
               else {
-                generalLogger.warn(`prediction item skipped (incorrect format): ${item}`);
+                generalLogger.warn("warning: baseline item skipped (incorrect format)");
               }
             }
-            generalLogger.info("prediction result is OK and contains data")
+            generalLogger.info("response is OK and contains data")
             res.status(200).json(data)
             next()
-            
         }
       })
       .catch(error => {
-        generalLogger.error(`error getting predictions: ${error}`)
+        generalLogger.error(`error getting baseline: ${error}`)
         res.status(500).json({"error": error})
         next()
       });
@@ -44,4 +43,4 @@ const queryPrediction = (req, res, next) => {
 
 }
 
-module.exports = {queryPrediction};
+module.exports = {queryBaseline};
