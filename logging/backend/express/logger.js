@@ -10,7 +10,7 @@ const generalFormat = format.printf(({ level, timestamp, message}) => {
 
 //Format for logging http  request/respons
 const httpFormat = format.printf(({ level, timestamp, message}) => {
-    return `[${level}] ${timestamp} | ${message.req.ip} | ${message.req.method} '${message.req.url}' | ${message.statusCode}`;
+    return `[${level}] ${timestamp} | ${message.req.ip} | ${message.req.method} '${message.req.originalUrl}' | ${message.statusCode}`;
 });
 
 const generalLogger = winston.createLogger({
