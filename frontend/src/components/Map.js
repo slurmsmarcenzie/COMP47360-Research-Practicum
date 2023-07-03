@@ -597,40 +597,44 @@ function Map() {
     <div>
         <Navbar />
 
-    <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
-      <MapLegend
-        colours={colourPairs[colourPairIndex]} 
-      />
-
-      <FloatingNav 
-        events = {events}
-        disableColours = {disableColours}
-        floatingNavZoomToLocation ={floatingNavZoomToLocation}
-        floatingNavSetLineWidth = {floatingNavSetLineWidth}
-        isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-        changeColourScheme={changeColourScheme}
-        enableColours={enableColours}
-        simulateBusynessChange = {simulateBusynessChange}
-        setNeighbourhoodEvents={setNeighbourhoodEvents}
-        setShowInfoBox={setShowInfoBox}
-        setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
+      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 72px)' }}>
+        <MapLegend
+          colours={colourPairs[colourPairIndex]} 
         />
 
-      <FloatingInfoBox
-        showingFloatingInfoBox={showInfoBox}
-        showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
-        neighbourhoodEvents={neighbourhoodEvents}
-        zone={zone}
-        hashMapOfDifference={hashMapOfDifference}
-        showChartData={showChartData}
-        setShowChartData={setShowChartData}
-        calculateEventImpact={calculateEventImpact}
-        colours={colourPairs[colourPairIndex]}
-        highlightEventImpact={highlightEventImpact}
-      />
+        <FloatingNav 
+          events = {events}
+          zone={zone}
+          disableColours = {disableColours}
+          floatingNavZoomToLocation ={floatingNavZoomToLocation}
+          floatingNavSetLineWidth = {floatingNavSetLineWidth}
+          isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+          changeColourScheme={changeColourScheme}
+          enableColours={enableColours}
+          simulateBusynessChange = {simulateBusynessChange}
+          setNeighbourhoodEvents={setNeighbourhoodEvents}
+          setShowInfoBox={setShowInfoBox}
+          setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
+          setZone={setZone}
+          />
+
+        <FloatingInfoBox
+          showingFloatingInfoBox={showInfoBox}
+          showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
+          neighbourhoodEvents={neighbourhoodEvents}
+          zone={zone}
+          setZone={setZone}
+          hashMapOfDifference={hashMapOfDifference}
+          showChartData={showChartData}
+          setShowChartData={setShowChartData}
+          calculateEventImpact={calculateEventImpact}
+          colours={colourPairs[colourPairIndex]}
+          highlightEventImpact={highlightEventImpact}
+        />
+
+      </div>
 
     </div>
-    </div>  
 
   );
 };

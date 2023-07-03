@@ -2,7 +2,6 @@ body{
   font-family: 'Inter', sans-serif;
 }
 
-
 .floating-nav{
   position: absolute;
   z-index: 1;
@@ -26,7 +25,7 @@ body{
 .navbar {
   padding-left: 36px;
   padding-right: 36px;
-  background-color: #000000;
+  background-color: rgba(18, 19, 22, 1);
   height: 80px;
   width: calc(100% - 72px);
   color: white;
@@ -88,8 +87,8 @@ body{
 .floating-info-box{
   position: absolute;
   z-index: 1;
-  min-width: 240px;
-  max-width: 240px;
+  min-width: 300px;
+  max-width: 300px;
   margin-top: 72px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
@@ -205,6 +204,21 @@ body{
 }
 
 .floating-info-box-chart-container{
-  min-height: 400px;
-  max-height: 540px;  
+  height: 240px;
+}
+
+.floating-infobox-box-button-container{
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  padding: auto;
+}
+
+.parent-chart-container{
+  gap: 12px;
+}
+
+.floating-infobox-box-toggle-button{
+
 }

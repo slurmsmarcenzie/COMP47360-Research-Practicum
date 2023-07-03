@@ -121,11 +121,15 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
     }
 
     return (
-        <div className='floating-info-box-chart-container'>
-            {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
-            <button className=''onClick={() => setShowMostImpacted(!showMostImpacted)}>
-                {showMostImpacted ? 'Show least impacted' : 'Show most impacted'}
-            </button>
+        <div className='parent-chart-container'> 
+            <div className='floating-info-box-chart-container'>
+                {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
+            </div>
+            <div className='floating-infobox-box-button-container'>
+                <button className='floating-infobox-box-toggle-button'onClick={() => setShowMostImpacted(!showMostImpacted)}>
+                    {showMostImpacted ? 'Show least impacted' : 'Show most impacted'}
+                </button>
+            </div>
         </div>
     );
 }
