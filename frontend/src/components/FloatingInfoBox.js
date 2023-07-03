@@ -3,8 +3,9 @@ import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact}) {
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone}) {
     
+
     const eventCards = neighbourhoodEvents.map((item, i) =>{
         
     return (
@@ -16,20 +17,26 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
             />
         )
     }) 
-
-    return (
-        showingFloatingInfoBox && (
-            <div className='floating-info-box'>
-                {showChartData ? 
-                <NeighbourhoodChartData 
+    
+  return (
+    (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
+      <div className='floating-info-box'>
+        <h1>{zone}</h1>
+        {showingFloatingInfoBox
+          ? showChartData
+            ? (
+              <NeighbourhoodChartData 
                 hashMap={hashMapOfDifference}
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
-                /> 
-                : eventCards}
-            </div>
-        )
-    );
+              />
+            )
+            : eventCards
+          : <p>There are no events in this zone.</p>
+        }
+      </div>
+    )
+  );
 }
 
 export default FloatingInfoBox

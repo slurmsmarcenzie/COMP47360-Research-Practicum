@@ -7,6 +7,7 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 
 // Components
 import FloatingNav from './FloatingNav';
+import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
 
@@ -27,11 +28,13 @@ function Map() {
 
   const [colourPairIndex, setColourPairIndex] = useState(0);
   const [showInfoBox, setShowInfoBox] = useState(false);
+  const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
   const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+  const [zone, setZone] = useState(null);
   const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
   
@@ -44,7 +47,7 @@ function Map() {
 
   const originalLat = 40.7484;
   const originalLng = -73.9857;
-  const zoom = 8;
+  const zoom = 7;
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -249,6 +252,7 @@ function Map() {
 
     setShowChartData(false);
     setShowInfoBox(false);
+    setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
@@ -329,7 +333,7 @@ function Map() {
 
                   const feature = features[0];
                   const zone = feature.properties.zone; 
-
+                  
                   popup.current.setLngLat(e.lngLat)
                       .setHTML(`${zone}, ${layerId}`)
                       .addTo(map.current);
@@ -378,6 +382,7 @@ function Map() {
           map.current.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
           map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+          const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
@@ -386,7 +391,12 @@ function Map() {
 
           if (matchingEvents.length > 0) {
             setShowInfoBox(true);
+            } else {
+              // Show the neighborhood info box since there are no matching events
+              setShowNeighborhoodInfoBox(true);
             }
+
+            setZone(zone);
           }
       });
     });
@@ -584,9 +594,10 @@ function Map() {
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
+    <div>
+        <Navbar />
 
-    <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
-
+    <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
       <MapLegend
         colours={colourPairs[colourPairIndex]} 
       />
@@ -602,11 +613,14 @@ function Map() {
         simulateBusynessChange = {simulateBusynessChange}
         setNeighbourhoodEvents={setNeighbourhoodEvents}
         setShowInfoBox={setShowInfoBox}
+        setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
         />
 
       <FloatingInfoBox
         showingFloatingInfoBox={showInfoBox}
+        showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
         neighbourhoodEvents={neighbourhoodEvents}
+        zone={zone}
         hashMapOfDifference={hashMapOfDifference}
         showChartData={showChartData}
         setShowChartData={setShowChartData}
@@ -616,6 +630,7 @@ function Map() {
       />
 
     </div>
+    </div>  
 
   );
 };
