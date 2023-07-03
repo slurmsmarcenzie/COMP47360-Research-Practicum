@@ -3,6 +3,7 @@ const { generalLogger } = require("../../logging/backend/express/logger");
 
 //fetch prediction from ML:
 const queryPrediction = (req, res, next) => {
+    console.log("queryPrediction: ", res.req.ip);
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
     generalLogger.info(`prediction requested for: ${req.params}`)
@@ -15,6 +16,7 @@ const queryPrediction = (req, res, next) => {
         if (response.data === null || response.data === undefined || response.data.length === 0){
           generalLogger.warn(`prediction list is empty: ${response.data}`)
           res.status(200).json([]); //send empty JSON list if empty response received
+          next()
         }
         else {
           //make sure response has correct format [location_id, busyness_score]:
@@ -27,13 +29,16 @@ const queryPrediction = (req, res, next) => {
                 generalLogger.warn(`prediction item skipped (incorrect format): ${item}`);
               }
             }
-            generalLogger.info("prediction result OK")
-            res.status(200).json(data) //response is OK and contains data
+            generalLogger.info("prediction result is OK and contains data")
+            res.status(200).json(data)
+            next()
             
         }
       })
       .catch(error => {
+        generalLogger.error(`error getting predictions: ${error}`)
         res.status(500).json({"error": error})
+        next()
       });
 
 

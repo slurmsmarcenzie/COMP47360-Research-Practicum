@@ -1,21 +1,22 @@
 const axios = require("axios")
+const { generalLogger } = require("../../logging/backend/express/logger");
 
-//fetch prediction from ML:
-const queryBaseline = (req, res) => {
+//fetch baseline from ML:
+const queryBaseline = (req, res, next) => {
+    res.req.ip //sets the object
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
-    // TODO - add to log
-    console.log("baseline requested for:", req.params)
-    console.log("converted to ISOString: ", date);
+    generalLogger.info(`baseline requested for: ${req.params}`)
+    generalLogger.info(`converted to ISOString: ${date}`);
 
     const uri = `http://127.0.0.1:7000/baseline/${date}` 
 
     axios.get(uri)
       .then(response => {
         if (response.data === null || response.data === undefined || response.data.length === 0){
-          res.status(200).json([]); //send empty JSON list if bad response received
-          //TODO - add to log
-          console.log("warning, baseline list is empty")
+          generalLogger.warn("warning, baseline list is empty")
+          res.status(200).json([]); //send empty JSON list if empty response received
+          next()
         }
         else {
           //make sure response has correct format [location_id, busyness_score]:
@@ -25,14 +26,18 @@ const queryBaseline = (req, res) => {
                 data.push(item);
               }
               else {
-                console.log("warning: baseline item skipped (incorrect format)");
+                generalLogger.warn("warning: baseline item skipped (incorrect format)");
               }
             }
-            res.status(200).json(data) //response is OK and contains data
+            generalLogger.info("response is OK and contains data")
+            res.status(200).json(data)
+            next()
         }
       })
       .catch(error => {
+        generalLogger.error(`error getting baseline: ${error}`)
         res.status(500).json({"error": error})
+        next()
       });
 
 
