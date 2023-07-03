@@ -212,13 +212,37 @@ body{
   height: auto;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: auto;
+  margin-top: 12px;
 }
 
 .parent-chart-container{
   gap: 12px;
 }
 
-.floating-infobox-box-toggle-button{
+.floating-infobox-box-toggle-button {
+  width: 100%;
+  max-width: 240px;
+  color: white;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.1); 
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
+.floating-infobox-box-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.floating-infobox-box-toggle-button:active {
+  background-color: rgba(255, 255, 255, 0.3); 
+}
+
+.floating-infobox-box-toggle-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }

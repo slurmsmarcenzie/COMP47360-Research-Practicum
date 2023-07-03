@@ -127,7 +127,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             </div>
             <div className='floating-infobox-box-button-container'>
                 <button className='floating-infobox-box-toggle-button'onClick={() => setShowMostImpacted(!showMostImpacted)}>
-                    {showMostImpacted ? 'Show least impacted' : 'Show most impacted'}
+                    {showMostImpacted ? 'Show least impacted zones' : 'Show most impacted zones'}
                 </button>
             </div>
         </div>
