@@ -1,4 +1,4 @@
-  import React from 'react';
+import React from 'react';
 import "../App.css";
 import afterParty from '../images/afterparty.JPG';
 import { Link } from 'react-router-dom';

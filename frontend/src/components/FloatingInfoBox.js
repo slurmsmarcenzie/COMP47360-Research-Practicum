@@ -1,40 +1,42 @@
-import React from 'react';
+import React, {useState} from 'react';
 import EventCard from './EventCard';
+import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, showingNeighborHoodInfoBox, neighbourhoodEvents, simulateBusynessChange, zone}) {
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone}) {
     
-    // const hasEvents = neighbourhoodEvents.length > 0;
 
     const eventCards = neighbourhoodEvents.map((item, i) =>{
-        return (
+        
+    return (
             <EventCard 
             key = {i}
             item={item}
-            simulateBusynessChange={simulateBusynessChange}
+            calculateEventImpact={calculateEventImpact}
+            setShowChartData={setShowChartData}
             />
         )
     }) 
-
-    if (showingFloatingInfoBox) {
-        return (
-          <div className='floating-info-box'>
-            <h1>{zone}</h1>
-            {eventCards}
-          </div>
-        );
-      }
     
-      if (showingNeighborHoodInfoBox) {
-        return (
-          <div className='floating-info-box'>
-            <h1>{zone}</h1>
-            <p>There are no events in this zone.</p>
-          </div>
-        );
-      }
-    
-      return null;
+  return (
+    (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
+      <div className='floating-info-box'>
+        <h1>{zone}</h1>
+        {showingFloatingInfoBox
+          ? showChartData
+            ? (
+              <NeighbourhoodChartData 
+                hashMap={hashMapOfDifference}
+                colours={colours}
+                highlightEventImpact={highlightEventImpact}
+              />
+            )
+            : eventCards
+          : <p>There are no events in this zone.</p>
+        }
+      </div>
+    )
+  );
 }
 
 export default FloatingInfoBox
