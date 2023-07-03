@@ -438,7 +438,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
@@ -455,10 +455,8 @@ function Map() {
 
   const highlightEventImpact = (labels) => {
 
-    console.log('Labels inside the highlightEvent function:', labels);
-
     layerIds.current.forEach((id) => {
-      let opacity = labels.includes(id) ? 0.9 : 0.4;
+      let opacity = labels.includes(id) ? 0.9 : 0.3;
       let line = labels.includes(id) ? 2 : 0;
       map.current.setPaintProperty(id, 'fill-opacity', opacity);
       map.current.setPaintProperty(id+'-line', 'line-width', line);
@@ -548,8 +546,6 @@ function Map() {
 
       map.current.on('moveend', () => {
 
-        let zoom = map.current.getZoom();
-
         if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
           
           enableColours();
@@ -557,6 +553,7 @@ function Map() {
           setShowChartData(false);
 
         }
+        
       });
     }
   }, [scores]);  // This effect runs when scores is fetched
@@ -595,9 +592,11 @@ function Map() {
 
   return (
     <div>
+
+      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh)' }}>
+        
         <Navbar />
 
-      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 72px)' }}>
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
         />
