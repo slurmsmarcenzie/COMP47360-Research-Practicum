@@ -8,10 +8,14 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
 
-    console.log('This is the hashmap in our graph function:', hashMap);
-
     // Get the impacted zones
     const getImpactedZones = () => {
+
+        // error handling to prevent that the hashmap is not empty
+        if (!hashMap) {
+            return {labels: [], dataValues: []};
+        }
+
         // Get an array of [key, value] pairs from the hashMap
         const entries = Object.entries(hashMap);
 
@@ -45,7 +49,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             labels: labels,
             datasets: [
                 { label: 'Busyness',
-                barThickness: 16,
+                barThickness: 24,
                 data: dataValues,
                 backgroundColor: (context) => {
                     const chart = context.chart;
@@ -56,7 +60,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
                     if (context.dataIndex >= 0){
                         return showMostImpacted ? getGradientMostImpacted(chart) : getGradientLeastImpacted(chart);
                     } else{
-                        return 'blue'
+                        return 'white'
                     }
                 },
                 borderWidth: 1,
@@ -70,6 +74,16 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             responsive: true, // Enable responsiveness
             legend: {
                 display: false
+            },
+            plugins: {
+                legend: {
+                    display: false, // This should already remove the legend.
+                },
+                tooltip: {
+                    callbacks: {
+                        title: () => {}, // This removes the title in the tooltip.
+                    },
+                },
             },
             indexAxis: 'y',
             scales: {
@@ -102,6 +116,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             highlightEventImpact(labels);
             setRenderChart(chartData);
         }, 300)
+
     }, [showMostImpacted, hashMap]);
 
     const getGradientMostImpacted = (context) => {
