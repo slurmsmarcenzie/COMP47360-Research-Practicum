@@ -15,8 +15,6 @@ app.use(express.json())
 //  app.use(express.static(path.join(__dirname, "build")));
 //  app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
 
-//I do not like how the http_logger is being used here. This was the only way i can currently get the middleware to work. Will return to this later
-
 //Routes:
 app.use("/api/meta", meta, http_logger)
 app.use("/api/predict", prediction, http_logger)
@@ -31,6 +29,8 @@ app.get('*', (req, res, next) => {
   res.status(404).send("Unknown route. Please check the URL entered")
   http_logger(req, res, next)
 });
+
+//TODO - I do not like how the http_logger is being used here. This was the only way i can currently get the middleware to work. Will return to this later
 
 
 
