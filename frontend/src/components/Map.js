@@ -15,6 +15,7 @@ import MapLegend from './MapLegend';
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 // import neighborhoodscores from '../geodata/output.json'
 import events from '../geodata/events.json';
+import prunedEvents from '../geodata/prunedEvents.json'
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -184,9 +185,9 @@ function Map() {
 
   const renderEvents = () => {
 
-    events.forEach((event) =>{
+    prunedEvents.forEach((event) =>{
 
-      const marker = new mapboxgl.Marker().setLngLat([event.location.longitude, event.location.latitude]).addTo(map.current);
+      const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map.current);
 
       const markerElement = marker.getElement();
 
@@ -385,7 +386,7 @@ function Map() {
           const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
-          const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
+          const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
 
           setNeighbourhoodEvents(matchingEvents);
 
