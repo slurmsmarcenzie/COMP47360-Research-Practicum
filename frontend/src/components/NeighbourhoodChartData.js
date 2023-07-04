@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID}) {
 
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
@@ -113,7 +113,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
         const chartData = makeChartData(labels, dataValues);
 
         setTimeout(() => {
-            highlightEventImpact(labels);
+            highlightEventImpact(Zone_ID, labels);
             setRenderChart(chartData);
         }, 300)
 

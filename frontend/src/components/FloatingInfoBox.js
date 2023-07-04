@@ -1,22 +1,28 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
 function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone}) {
-    
+  
+  const [Zone_ID, setZone_ID] = useState(null);
 
-    const eventCards = neighbourhoodEvents.map((item, i) =>{
-        
+  useEffect(() => {
+    if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
+      setZone_ID(neighbourhoodEvents[0].Zone_ID);
+    }
+  }, [neighbourhoodEvents]);
+
+  const eventCards = neighbourhoodEvents.map((item, i) =>{
     return (
-            <EventCard 
-            key = {i}
-            item={item}
-            calculateEventImpact={calculateEventImpact}
-            setShowChartData={setShowChartData}
-            />
-        )
-    }) 
+      <EventCard 
+        key = {i}
+        item={item}
+        calculateEventImpact={calculateEventImpact}
+        setShowChartData={setShowChartData}
+      />
+      )
+  });
     
   return (
     (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
@@ -29,6 +35,7 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
                 hashMap={hashMapOfDifference}
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
+                Zone_ID={Zone_ID}
               />
             )
             : eventCards

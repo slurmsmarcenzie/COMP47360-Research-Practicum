@@ -454,14 +454,20 @@ function Map() {
   
   }
 
-  const highlightEventImpact = (labels) => {
+  const highlightEventImpact = (Zone_ID, labels) => {
 
-    layerIds.current.forEach((id) => {
-      let opacity = labels.includes(id) ? 0.9 : 0.3;
-      let line = labels.includes(id) ? 2 : 0;
-      map.current.setPaintProperty(id, 'fill-opacity', opacity);
-      map.current.setPaintProperty(id+'-line', 'line-width', line);
+    console.log('ID in the event impact function: ', Zone_ID)
+
+    layerIds.current.forEach((layer) => {
+      let opacity = labels.includes(layer) ? 0.7 : 0.1;
+      let line = labels.includes(layer) ? 1 : 0;
+      map.current.setPaintProperty(layer, 'fill-opacity', opacity);
+      map.current.setPaintProperty(layer+'-line', 'line-width', line);
     });
+
+    map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
+    map.current.setPaintProperty(Zone_ID+'-line', 'line-width', 4);
+
   }
 
   // Methods for children elements.
