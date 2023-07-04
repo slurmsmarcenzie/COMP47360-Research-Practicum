@@ -191,8 +191,8 @@
     {
       "Event_ID": 8,
       "Event_Name": "4th of July Fireworks",
-      "Zone_ID": "Two Bridges/Seward Park",
-      "Zone_Name": 232,
+      "Zone_ID": 232,
+      "Zone_Name": "Two Bridges/Seward Park",
       "Start_Date": {
          "Time": "7/4/2022 0:00"
       },
@@ -200,7 +200,7 @@
          "Time": "7/4/2022 23:59"
       },
       "Event_Agency": "",
-      "Event_Type": "",
+      "Event_Type": "Special Event",
       "Event_Borough": "Manhattan",
       "Event_Location_Text": "East River Walk: East River Esplanade",
       "Event_Location_Start_Coordinates": "[40.71599281291161, -73.97536662439524]",

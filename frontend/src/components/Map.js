@@ -546,7 +546,7 @@ function Map() {
 
       map.current.on('moveend', () => {
 
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 10) {
           
           enableColours();
 
@@ -604,7 +604,7 @@ function Map() {
         />
 
         <FloatingNav 
-          events = {events}
+          prunedEvents = {prunedEvents}
           zone={zone}
           disableColours = {disableColours}
           floatingNavZoomToLocation ={floatingNavZoomToLocation}

@@ -2,22 +2,23 @@ import React from 'react';
 import "../App.css";
 import { select } from 'd3';
 
-function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange, setShowNeighborhoodInfoBox, zone, setZone}) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange, setShowNeighborhoodInfoBox, zone, setZone}) {
 
-  const dropDownOptions = events.map((event, index) => 
+  const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
-      {event.name}  
+      {event.Event_Name}  
     </option>
   );
 
   const reviewEvent = (e) => {
     const selectedEvent = JSON.parse(e.target.value);
 
-    const {latitude, longitude} = selectedEvent.location;  
+    const latitude = selectedEvent.Event_Location.Latitude
+    const longitude = selectedEvent.Event_Location.Longitude
 
-    setZone(selectedEvent.location_name);
+    setZone(selectedEvent.Zone_Name);
     floatingNavZoomToLocation(longitude, latitude);
-    floatingNavSetLineWidth(selectedEvent.location_id);
+    floatingNavSetLineWidth(selectedEvent.Zone_ID);
     isNeighbourhoodClickedRef.current = true;
     disableColours();
     setNeighbourhoodEvents([selectedEvent]);
