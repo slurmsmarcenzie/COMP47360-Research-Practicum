@@ -21,7 +21,7 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
   return (
     (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
       <div className='floating-info-box'>
-        <h1>{zone}</h1>
+        <h1 className='floating-info-box-zone-header'>{zone}</h1>
         {showingFloatingInfoBox
           ? showChartData
             ? (

@@ -463,7 +463,6 @@ function Map() {
     });
   }
 
-
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
     map.current.flyTo({
