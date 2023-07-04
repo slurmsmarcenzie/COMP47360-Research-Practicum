@@ -1,11 +1,12 @@
 const winston = require("winston");
 const {transports, format} = winston;
+const path = require("path")
 
 const PATH = "../logging/backend/express/logs";
 
 var formatLabel = function (callingModule) {
-    var parts = callingModule.filename.split('\\');
-    const newparts = parts[parts.length - 2] + '\\' + parts.pop();  //note fix this to work with all OS
+    var parts = callingModule.filename.split(path.sep);
+    const newparts = parts[parts.length - 2] + path.sep + parts.pop();  //note fix this to work with all OS
     return newparts
 };
 
