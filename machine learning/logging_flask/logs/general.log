@@ -1,0 +1,10 @@
+[INFO] 2023-07-04 17:49:09,862 [baseline.py : baseline] baseline quried for datetime: 1995-01-21T00:00:00.000Z
+[INFO] 2023-07-04 17:49:09,863 [baseline.py : baseline] Reading file MOCK_BASELINE.json
+[INFO] 2023-07-04 17:49:29,320 [baseline.py : baseline] baseline quried for datetime: 1995-01-21T00:00:00.000Z
+[ERROR] 2023-07-04 17:49:29,322 [baseline.py : baseline] Unable to read file [Errno 2] No such file or directory: 'static/MOCK_BASELINE.json'
+[INFO] 2023-07-04 17:49:58,792 [baseline.py : baseline] baseline quried for datetime: 1995-01-21T00:00:00.000Z
+[ERROR] 2023-07-04 17:49:58,793 [baseline.py : baseline] Unable to read file [Errno 2] No such file or directory: 'static/MOCK_BASELINE.json'
+[INFO] 2023-07-04 17:51:31,960 [baseline.py : baseline] baseline quried for datetime: 1995-01-21T00:00:00.000Z
+[INFO] 2023-07-04 17:51:31,960 [baseline.py : baseline] Reading file MOCK_BASELINE.json
+[INFO] 2023-07-04 17:56:51,531 [meta.py : list_events] Event data is OK. Sending
+[INFO] 2023-07-04 17:58:46,234 [meta.py : list_events] Event data is OK. Sending
