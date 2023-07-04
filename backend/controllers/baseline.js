@@ -1,5 +1,5 @@
 const axios = require("axios")
-const generalLogger = require("../../logging/backend/express/generalLogger")(module)
+const generalLogger = require("../logging/generalLogger")(module)
 
 //fetch baseline from ML:
 const queryBaseline = (req, res, next) => {

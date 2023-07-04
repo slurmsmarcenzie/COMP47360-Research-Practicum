@@ -1,5 +1,5 @@
 const axios = require("axios")
-const generalLogger = require("../../logging/backend/express/generalLogger")(module)
+const generalLogger = require("../logging/generalLogger")(module)
 
 const getEvents = (req, res, next) => {
     res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
