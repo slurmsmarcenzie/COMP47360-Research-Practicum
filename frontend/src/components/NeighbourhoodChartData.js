@@ -3,10 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, updateLayerColours}) {
 
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
+    const [useOriginal, setUseOriginal] = useState(false);
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -135,6 +136,11 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
         return gradientSegment;
     }
 
+    const handleToggle = () => {
+        setUseOriginal(!useOriginal);
+        updateLayerColours(!useOriginal);
+      };
+
     return (
         <div className='parent-chart-container'> 
             <div className='floating-info-box-chart-container'>
@@ -144,6 +150,8 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
                 <button className='floating-infobox-box-toggle-button'onClick={() => setShowMostImpacted(!showMostImpacted)}>
                     {showMostImpacted ? 'Show least impacted zones' : 'Show most impacted zones'}
                 </button>
+                <button className='floating-infobox-box-toggle-button' onClick={handleToggle}> {useOriginal ? 'Show with Impact' : 'Show Baseline'}
+      </button>
             </div>
         </div>
     );

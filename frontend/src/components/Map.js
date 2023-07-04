@@ -265,9 +265,8 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
   }
 
-  const updateLayerColours = () => {
-  
-    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
+  const updateLayerColours = (useOriginal) => {
+    if (!map.current) return;
   
     // Get the current map's style
     const style = map.current.getStyle();
@@ -275,8 +274,8 @@ function Map() {
     layerIds.current.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessHashMap[layerId];
-        if (score !== undefined) { // Check if the score is defined before using it
+        const score = useOriginal ? originalBusynessHashMap[layerId] : busynessHashMap[layerId];
+        if (score !== undefined) {
           const newColour = colourScale(score);
           map.current.setPaintProperty(layerId, 'fill-color', newColour);
         }
@@ -285,6 +284,7 @@ function Map() {
       }
     });
   };
+  
 
   const initialiseMouseMapEvents = () => {
 
@@ -408,7 +408,7 @@ function Map() {
       ...score,
       busyness_score: Math.random()  // this generates a random number between 0 and 1
     }));
-
+    console.log('New Scores:', newScores);
     // set the new scores array
     setScores(newScores);
 
@@ -431,6 +431,9 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
+    console.log('HashMap Difference:', temporaryHashMap);
+    console.log('Original HashMap:', originalBusynessHashMap);
+    console.log('Busyness HashMap:', busynessHashMap);
 
   };
 
@@ -494,6 +497,7 @@ function Map() {
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
+        console.log(data);
       } 
       
       catch (err) {
@@ -542,7 +546,7 @@ function Map() {
         renderEvents();
         initialiseMouseMapEvents();
         setTimeout(() => {
-          updateLayerColours()
+          updateLayerColours(false)
         }, 500);
       });
 
@@ -571,7 +575,7 @@ function Map() {
       if (map.current.isStyleLoaded()) {
         
         // Update the layer colours on the map
-        updateLayerColours();
+        updateLayerColours(false);
       } else {
         // If the map's style is not yet loaded, set up an event listener to
         // update the layer colours once the style is loaded
@@ -616,6 +620,7 @@ function Map() {
           setShowInfoBox={setShowInfoBox}
           setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
           setZone={setZone}
+          updateLayerColours={updateLayerColours}
           />
 
         <FloatingInfoBox
@@ -630,7 +635,10 @@ function Map() {
           calculateEventImpact={calculateEventImpact}
           colours={colourPairs[colourPairIndex]}
           highlightEventImpact={highlightEventImpact}
+          updateLayerColours={updateLayerColours}
         />
+
+        
 
       </div>
 
