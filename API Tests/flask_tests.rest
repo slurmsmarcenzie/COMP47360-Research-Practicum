@@ -1,0 +1,19 @@
+//Important. If you want to use these tests, install the rest extension (vscode)
+
+###
+http://localhost:7000
+
+###
+http://localhost:7000/badroute
+
+###
+http://localhost:7000/info/events
+
+###
+http://localhost:7000/predict/1995-01-21T00:00:00.000Z
+
+###
+http://localhost:7000/predict/baddatetime
+
+###
+http://localhost:7000/baseline/1995-01-21T00:00:00.000Z
