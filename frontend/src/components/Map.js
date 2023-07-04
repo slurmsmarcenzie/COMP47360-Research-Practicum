@@ -310,7 +310,7 @@ function Map() {
 
                     const markerHeight = 10;
                     const markerRadius = 10;
-                    const linearOffset = 25;
+                    const linearOffset = 5;
                     const popupOffsets = {
                     'top': [0, 0],
                     'top-left': [0, 0],
@@ -591,11 +591,13 @@ function Map() {
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
-    <div>
 
-      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh)' }}>
-        
-        <Navbar />
+    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
+
+      <Navbar />
+
+
+      <div ref={mapContainer} style={{ width: '100%', height: '100%' }}>
 
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
