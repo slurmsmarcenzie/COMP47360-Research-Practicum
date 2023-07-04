@@ -7,7 +7,7 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 
 // Components
 import FloatingNav from './FloatingNav';
-import Navbar from './Navbar';
+// import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
 
@@ -438,7 +438,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
@@ -458,7 +458,7 @@ function Map() {
     console.log('Labels inside the highlightEvent function:', labels);
 
     layerIds.current.forEach((id) => {
-      let opacity = labels.includes(id) ? 0.9 : 0.4;
+      let opacity = labels.includes(id) ? 0.9 : 0.3;
       let line = labels.includes(id) ? 2 : 0;
       map.current.setPaintProperty(id, 'fill-opacity', opacity);
       map.current.setPaintProperty(id+'-line', 'line-width', line);
@@ -595,9 +595,9 @@ function Map() {
 
   return (
     <div>
-        <Navbar />
+        
 
-      <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 72px)' }}>
+        <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
         />

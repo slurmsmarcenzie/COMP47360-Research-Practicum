@@ -1,5 +1,5 @@
 // Core dependencies of App
-import React, { useEffect, useRef,useState, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
