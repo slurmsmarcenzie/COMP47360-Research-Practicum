@@ -22,13 +22,13 @@ app.use("/api/baseline", baseline, http_logger)
 
 app.get('/', (req, res, next) => {
   res.status(200).send("Home Page. I will serve React App later :)")
-  http_logger(req, res, next)
-});
+  next()
+}, http_logger);
 
 app.get('*', (req, res, next) => {
   res.status(404).send("Unknown route. Please check the URL entered")
-  http_logger(req, res, next)
-});
+  next()
+}, http_logger);
 
 //TODO - I do not like how the http_logger is being used here. This was the only way i can currently get the middleware to work. Will return to this later
 
