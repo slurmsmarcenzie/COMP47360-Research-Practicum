@@ -30,9 +30,6 @@ app.get('*', (req, res, next) => {
   next()
 }, http_logger);
 
-//TODO - I do not like how the http_logger is being used here. This was the only way i can currently get the middleware to work. Will return to this later
-
-
 
 //START SERVER
 app.listen(port, () => {
