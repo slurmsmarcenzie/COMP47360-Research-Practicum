@@ -1,4 +1,4 @@
-const {httpLogger} = require("../../logging/backend/express/logger")
+const httpLogger = require("../../logging/backend/express/httpLogger")
 
 const http_logger = (req, res, next) => {
     if (res.statusCode < 400){
