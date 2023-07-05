@@ -3,7 +3,7 @@ import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone}) {
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone, updateLayerColours, resetColours}) {
   
   const [Zone_ID, setZone_ID] = useState(null);
 
@@ -36,6 +36,8 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
                 Zone_ID={Zone_ID}
+                updateLayerColours={updateLayerColours}
+                resetColours={resetColours}
               />
             )
             : eventCards

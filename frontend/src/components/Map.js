@@ -14,7 +14,7 @@ import MapLegend from './MapLegend';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 // import neighborhoodscores from '../geodata/output.json'
-import events from '../geodata/events.json';
+// import events from '../geodata/events.json';
 import prunedEvents from '../geodata/prunedEvents.json'
 
 // Note: the following lines are important to create a production build that includes mapbox
@@ -49,6 +49,9 @@ function Map() {
   const originalLat = 40.7484;
   const originalLng = -73.9857;
   const zoom = 7;
+
+  // define a new function that will be used as the event listener
+  const updateLayerColoursAfterLoad = () => updateLayerColours(false);
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -266,7 +269,16 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
   }
 
-  const updateLayerColours = () => {
+  const resetColours = () => {
+
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+
+  }
+
+  const updateLayerColours = (isOriginalHashMap) => {
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
@@ -276,7 +288,7 @@ function Map() {
     layerIds.current.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessHashMap[layerId];
+        const score = isOriginalHashMap ? originalBusynessHashMap[layerId] : busynessHashMap[layerId]
         if (score !== undefined) { // Check if the score is defined before using it
           const newColour = colourScale(score);
           map.current.setPaintProperty(layerId, 'fill-color', newColour);
@@ -546,7 +558,7 @@ function Map() {
         renderEvents();
         initialiseMouseMapEvents();
         setTimeout(() => {
-          updateLayerColours()
+          updateLayerColours(false)
         }, 500);
       });
 
@@ -574,11 +586,11 @@ function Map() {
       if (map.current.isStyleLoaded()) {
         
         // Update the layer colours on the map
-        updateLayerColours();
+        updateLayerColours(false)
       } else {
         // If the map's style is not yet loaded, set up an event listener to
         // update the layer colours once the style is loaded
-        map.current.on('style.load', updateLayerColours);
+        map.current.on('style.load', updateLayerColoursAfterLoad);
       }
     }
   
@@ -591,7 +603,7 @@ function Map() {
         
         // Remove the event listener for the 'style.load' event to avoid
         // potential memory leaks
-        map.current.off('style.load', updateLayerColours);
+        map.current.off('style.load', updateLayerColoursAfterLoad);
       }
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
@@ -623,6 +635,7 @@ function Map() {
           setShowInfoBox={setShowInfoBox}
           setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
           setZone={setZone}
+          updateLayerColours={updateLayerColours}
           />
 
         <FloatingInfoBox
@@ -637,6 +650,8 @@ function Map() {
           calculateEventImpact={calculateEventImpact}
           colours={colourPairs[colourPairIndex]}
           highlightEventImpact={highlightEventImpact}
+          updateLayerColours={updateLayerColours}
+          resetColours={resetColours}
         />
 
       </div>

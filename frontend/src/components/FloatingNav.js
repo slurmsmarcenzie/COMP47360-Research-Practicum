@@ -1,8 +1,7 @@
 import React from 'react';
 import "../App.css";
-import { select } from 'd3';
 
-function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange, setShowNeighborhoodInfoBox, zone, setZone}) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, setShowNeighborhoodInfoBox, setZone}) {
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -34,7 +33,6 @@ function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floa
               {dropDownOptions}
             </select>
           </form>
-          <button className="floating-nav-cta-button" onClick={() => {simulateBusynessChange();}}>Change Busyness</button>
           <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
           <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
         </div>

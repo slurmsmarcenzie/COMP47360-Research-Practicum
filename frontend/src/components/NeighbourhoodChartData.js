@@ -3,10 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours}) {
 
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
+    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -120,7 +121,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     }, [showMostImpacted, hashMap]);
 
     const getGradientMostImpacted = (context) => {
-        const { chart, ctx, chartArea: { left, right } } = context;
+        const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
         gradientSegment.addColorStop(0, colours[1]);
         gradientSegment.addColorStop(1, colours[2]);
@@ -128,12 +129,18 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     };
 
     const getGradientLeastImpacted = (context) => {
-        const { chart, ctx, chartArea: { left, right } } = context;
+        const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
         gradientSegment.addColorStop(0, colours[1]);
         gradientSegment.addColorStop(1, colours[0]);
         return gradientSegment;
     }
+
+    const handleToggle = () => {
+        setUseOriginal(!useOriginal);
+        updateLayerColours(!useOriginal);
+        resetColours();
+      };
 
     return (
         <div className='parent-chart-container'> 
@@ -143,6 +150,9 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
             <div className='floating-infobox-box-button-container'>
                 <button className='floating-infobox-box-toggle-button'onClick={() => setShowMostImpacted(!showMostImpacted)}>
                     {showMostImpacted ? 'Show least impacted zones' : 'Show most impacted zones'}
+                </button>
+                <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
+                    {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
             </div>
         </div>
