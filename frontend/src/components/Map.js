@@ -7,9 +7,10 @@ import * as turf from '@turf/turf'; // Make sure to install this library using n
 
 // Components
 import FloatingNav from './FloatingNav';
-// import Navbar from './Navbar';
+import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
+import Modal from './Modal';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -37,6 +38,7 @@ function Map() {
   const [zone, setZone] = useState(null);
   const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
+
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -447,6 +449,8 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
+
+
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
@@ -605,6 +609,8 @@ function Map() {
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
         />
+
+        <Navbar />
 
         <FloatingNav 
           events = {events}
