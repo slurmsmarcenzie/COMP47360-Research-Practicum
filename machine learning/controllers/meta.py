@@ -15,7 +15,6 @@ def list_events():
         events = Event.query.all()
     except exc.SQLAlchemyError as er:
         general_logger.error("Issue retreiving from database: {error}".format(error=er.orig))
-        #http_logger.error("| {ip} | {method} '{url}' | {statusCode}".format())
         raise abort(500, "There was an error retrieving events from the Database")
     
     # Ensure data is in correct format
