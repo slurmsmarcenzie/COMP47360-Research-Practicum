@@ -477,7 +477,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
