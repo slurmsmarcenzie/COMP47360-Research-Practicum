@@ -227,6 +227,7 @@ body{
   align-items: center;
   padding: auto;
   margin-top: 12px;
+  gap: 12px;
 }
 
 .parent-chart-container{
