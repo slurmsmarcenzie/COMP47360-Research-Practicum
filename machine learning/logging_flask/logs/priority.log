@@ -1,1 +1,0 @@
-[ERROR] 2023-07-04 17:49:58,793 [baseline.py : baseline] Unable to read file [Errno 2] No such file or directory: 'static/MOCK_BASELINE.json'

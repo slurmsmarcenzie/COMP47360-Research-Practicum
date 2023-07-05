@@ -6,6 +6,7 @@ from controllers.baseline import baseline
 info = Blueprint("info", __name__)
 predict = Blueprint("predict", __name__)
 
+
 #ROUTES:
 info.route("/info/events")(list_events)
 

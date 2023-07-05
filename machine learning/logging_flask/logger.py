@@ -18,6 +18,7 @@ general_logger.addHandler(file_handler_priority)
 
 
 ## HTTP LOGGER
+
 http_logger = logging.getLogger("http_logger")
 http_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("[%(levelname)s] %(asctime)s %(message)s")

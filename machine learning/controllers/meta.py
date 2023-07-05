@@ -1,13 +1,12 @@
 from models.event import Event
 from models.metric import Metric
 from sqlalchemy import exc
-from flask import abort, request
-from logging_flask.logger import general_logger, http_logger
+from flask import abort
+from logging_flask.logger import general_logger
 
 # Query Database and get a list of Event dictionaries
 # "_sa_instance_state" is removed as only field names are needed
 def list_events():
-    print(request.remote_addr)
     events = []
     data = []
 
