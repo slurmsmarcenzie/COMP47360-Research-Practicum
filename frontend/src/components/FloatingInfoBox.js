@@ -5,11 +5,15 @@ import "../App.css";
 
 function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone, updateLayerColours, resetColours}) {
   
-  const [Zone_ID, setZone_ID] = useState(null);
+  const [zoneID, setZoneID] = useState(null);
+  const [eventName, setEventName] = useState(null);
+
+  // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   useEffect(() => {
     if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
-      setZone_ID(neighbourhoodEvents[0].Zone_ID);
+      setZoneID(neighbourhoodEvents[0].Zone_ID);
+      setEventName(neighbourhoodEvents[0].Event_Name);
     }
   }, [neighbourhoodEvents]);
 
@@ -27,7 +31,9 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
   return (
     (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
       <div className='floating-info-box'>
-        <h1 className='floating-info-box-zone-header'>{zone}</h1>
+        <h1 className='floating-info-box-zone-header'>
+          {showChartData ? eventName : zone}
+        </h1>
         {showingFloatingInfoBox
           ? showChartData
             ? (
@@ -35,7 +41,7 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
                 hashMap={hashMapOfDifference}
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
-                Zone_ID={Zone_ID}
+                zoneID={zoneID}
                 updateLayerColours={updateLayerColours}
                 resetColours={resetColours}
               />
