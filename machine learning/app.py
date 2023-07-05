@@ -10,7 +10,7 @@ app.register_blueprint(info)
 app.register_blueprint(predict)
 
 
-
+## After Request decorator is used to log every http request/response in the app.
 @app.after_request
 def log_request_response(response):
 
