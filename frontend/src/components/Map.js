@@ -14,7 +14,8 @@ import MapLegend from './MapLegend';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 // import neighborhoodscores from '../geodata/output.json'
-import events from '../geodata/events.json';
+// import events from '../geodata/events.json';
+import prunedEvents from '../geodata/prunedEvents.json'
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -37,6 +38,7 @@ function Map() {
   const [zone, setZone] = useState(null);
   const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
+  const [markers, setMarkers] = useState([]);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -48,6 +50,9 @@ function Map() {
   const originalLat = 40.7484;
   const originalLng = -73.9857;
   const zoom = 7;
+
+  // define a new function that will be used as the event listener
+  const updateLayerColoursAfterLoad = () => updateLayerColours(false);
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -182,27 +187,52 @@ function Map() {
     });
   }
 
+  // marker methods and customisation
+
   const renderEvents = () => {
 
-    events.forEach((event) =>{
+    const newMarkers = []; // array to hold our new markers
 
-      const marker = new mapboxgl.Marker().setLngLat([event.location.longitude, event.location.latitude]).addTo(map.current);
+    prunedEvents.forEach((event) =>{
+        const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map.current);
+        const markerElement = marker.getElement();
 
-      const markerElement = marker.getElement();
+        markerElement.addEventListener('click', () => {
+            console.log(event);
+        });
 
-      markerElement.addEventListener('click', () => {
-        console.log(event);
+        markerElement.addEventListener('mouseover', () => {
+            markerElement.style.cursor = 'pointer';
+        });
+
+        markerElement.addEventListener('mouseout', () => {
+            markerElement.style.cursor = 'default';
+        });
+
+        newMarkers.push(marker); // Push the marker to the array of new markers
       });
-  
-      markerElement.addEventListener('mouseover', () => {
-        markerElement.style.cursor = 'pointer';
 
-      });
-  
-      markerElement.addEventListener('mouseout', () => {
-        markerElement.style.cursor = 'default';
-      })
+      setMarkers(newMarkers); // Update the state with the new markers
+  };
+
+  const removeAllMarkers = () => {
+
+    markers.forEach((marker) => {
+        marker.remove(); // Remove the marker from the map
     });
+
+    setMarkers([]); // Clear the markers array
+  };
+
+  const removeAllButOneMarker = (keptEvent) => {
+
+    markers.forEach(({ event, marker }) => {
+      if (event !== keptEvent) {
+        marker.remove();
+      }
+    });
+
+    setMarkers(markers.filter(({ event }) => event === keptEvent));
   };
 
   // dynamic methods and interactive for our application to handle and set changes to our map
@@ -265,7 +295,16 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
   }
 
-  const updateLayerColours = () => {
+  const resetColours = () => {
+
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+
+  }
+
+  const updateLayerColours = (isOriginalHashMap) => {
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
@@ -275,7 +314,7 @@ function Map() {
     layerIds.current.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessHashMap[layerId];
+        const score = isOriginalHashMap ? originalBusynessHashMap[layerId] : busynessHashMap[layerId]
         if (score !== undefined) { // Check if the score is defined before using it
           const newColour = colourScale(score);
           map.current.setPaintProperty(layerId, 'fill-color', newColour);
@@ -310,7 +349,7 @@ function Map() {
 
                     const markerHeight = 10;
                     const markerRadius = 10;
-                    const linearOffset = 25;
+                    const linearOffset = 5;
                     const popupOffsets = {
                     'top': [0, 0],
                     'top-left': [0, 0],
@@ -385,7 +424,7 @@ function Map() {
           const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
-          const matchingEvents = eventsMap[firstFeature.id] || events.filter(event => event.location_id === firstFeature.id);
+          const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
 
           setNeighbourhoodEvents(matchingEvents);
 
@@ -438,7 +477,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
@@ -453,18 +492,19 @@ function Map() {
   
   }
 
-  const highlightEventImpact = (labels) => {
+  const highlightEventImpact = (Zone_ID, labels) => {
 
-    console.log('Labels inside the highlightEvent function:', labels);
-
-    layerIds.current.forEach((id) => {
-      let opacity = labels.includes(id) ? 0.9 : 0.4;
-      let line = labels.includes(id) ? 2 : 0;
-      map.current.setPaintProperty(id, 'fill-opacity', opacity);
-      map.current.setPaintProperty(id+'-line', 'line-width', line);
+    layerIds.current.forEach((layer) => {
+      let opacity = labels.includes(layer) ? 0.7 : 0.1;
+      let line = labels.includes(layer) ? 1 : 0;
+      map.current.setPaintProperty(layer, 'fill-opacity', opacity);
+      map.current.setPaintProperty(layer+'-line', 'line-width', line);
     });
-  }
 
+    map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
+    map.current.setPaintProperty(Zone_ID+'-line', 'line-width', 4);
+
+  }
 
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -542,21 +582,20 @@ function Map() {
         renderEvents();
         initialiseMouseMapEvents();
         setTimeout(() => {
-          updateLayerColours()
+          updateLayerColours(false)
         }, 500);
       });
 
       map.current.on('moveend', () => {
 
-        let zoom = map.current.getZoom();
-
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 11) {
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 10) {
           
           enableColours();
 
           setShowChartData(false);
 
         }
+        
       });
     }
   }, [scores]);  // This effect runs when scores is fetched
@@ -571,11 +610,11 @@ function Map() {
       if (map.current.isStyleLoaded()) {
         
         // Update the layer colours on the map
-        updateLayerColours();
+        updateLayerColours(false)
       } else {
         // If the map's style is not yet loaded, set up an event listener to
         // update the layer colours once the style is loaded
-        map.current.on('style.load', updateLayerColours);
+        map.current.on('style.load', updateLayerColoursAfterLoad);
       }
     }
   
@@ -588,49 +627,60 @@ function Map() {
         
         // Remove the event listener for the 'style.load' event to avoid
         // potential memory leaks
-        map.current.off('style.load', updateLayerColours);
+        map.current.off('style.load', updateLayerColoursAfterLoad);
       }
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
-    <div>
-        <Navbar />
 
-    <div ref={mapContainer} style={{ width: '100%', height: 'calc(100vh - 80px)' }}>
-      <MapLegend
-        colours={colourPairs[colourPairIndex]} 
-      />
+    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
 
-      <FloatingNav 
-        events = {events}
-        disableColours = {disableColours}
-        floatingNavZoomToLocation ={floatingNavZoomToLocation}
-        floatingNavSetLineWidth = {floatingNavSetLineWidth}
-        isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-        changeColourScheme={changeColourScheme}
-        enableColours={enableColours}
-        simulateBusynessChange = {simulateBusynessChange}
-        setNeighbourhoodEvents={setNeighbourhoodEvents}
-        setShowInfoBox={setShowInfoBox}
-        setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
+      <Navbar />
+
+
+      <div ref={mapContainer} style={{ width: '100%', height: '100%' }}>
+
+        <MapLegend
+          colours={colourPairs[colourPairIndex]} 
         />
 
-      <FloatingInfoBox
-        showingFloatingInfoBox={showInfoBox}
-        showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
-        neighbourhoodEvents={neighbourhoodEvents}
-        zone={zone}
-        hashMapOfDifference={hashMapOfDifference}
-        showChartData={showChartData}
-        setShowChartData={setShowChartData}
-        calculateEventImpact={calculateEventImpact}
-        colours={colourPairs[colourPairIndex]}
-        highlightEventImpact={highlightEventImpact}
-      />
+        <FloatingNav 
+          prunedEvents = {prunedEvents}
+          zone={zone}
+          disableColours = {disableColours}
+          floatingNavZoomToLocation ={floatingNavZoomToLocation}
+          floatingNavSetLineWidth = {floatingNavSetLineWidth}
+          isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+          changeColourScheme={changeColourScheme}
+          enableColours={enableColours}
+          simulateBusynessChange = {simulateBusynessChange}
+          setNeighbourhoodEvents={setNeighbourhoodEvents}
+          setShowInfoBox={setShowInfoBox}
+          setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
+          setZone={setZone}
+          updateLayerColours={updateLayerColours}
+          />
+
+        <FloatingInfoBox
+          showingFloatingInfoBox={showInfoBox}
+          showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
+          neighbourhoodEvents={neighbourhoodEvents}
+          zone={zone}
+          setZone={setZone}
+          hashMapOfDifference={hashMapOfDifference}
+          showChartData={showChartData}
+          setShowChartData={setShowChartData}
+          calculateEventImpact={calculateEventImpact}
+          colours={colourPairs[colourPairIndex]}
+          highlightEventImpact={highlightEventImpact}
+          updateLayerColours={updateLayerColours}
+          resetColours={resetColours}
+        />
+
+      </div>
 
     </div>
-    </div>  
 
   );
 };

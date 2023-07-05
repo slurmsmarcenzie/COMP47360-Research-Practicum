@@ -2,13 +2,12 @@ body{
   font-family: 'Inter', sans-serif;
 }
 
-
 .floating-nav{
   position: absolute;
   z-index: 1;
   min-width: 180px;
   max-width: 180px;
-  margin-top: 72px;
+  margin-top: 84px;
   margin-left: 72px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -24,11 +23,11 @@ body{
 }
 
 .navbar {
-  padding-left: 36px;
-  padding-right: 36px;
-  background-color: #000000;
-  height: 80px;
-  width: calc(100% - 72px);
+  position: absolute;
+  top: 12px;
+  left: 72px;
+  right: 72px;
+  height: 60px;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -36,10 +35,9 @@ body{
   z-index: 100;
 }
 
-
 .navbar img {
-  max-height: 100%;
-  max-width: 100%;
+  max-height: 36px;
+  max-width: 150px;
 }
 
 .floating-nav-cta-button{
@@ -88,9 +86,9 @@ body{
 .floating-info-box{
   position: absolute;
   z-index: 1;
-  min-width: 240px;
-  max-width: 240px;
-  margin-top: 72px;
+  min-width: 300px;
+  max-width: 300px;
+  margin-top: 84px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -192,9 +190,22 @@ body{
 .navbar-links {
   display: flex;
   gap: 30px;
+  padding: 6px 12px;
+  height: 32px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border-radius: 5px;
 }
 
-.navbar-links a {
+.navbar-links-wrapper {
+  display: flex;
+  align-items: center;
+  width: auto;
+}
+
+.navbar-links-wrapper a {
+  font-size: 14px;
   color: white;
   text-decoration: none;
   transition: color 0.3s ease;
@@ -205,6 +216,51 @@ body{
 }
 
 .floating-info-box-chart-container{
-  min-height: 400px;
-  max-height: 540px;  
+  height: 240px;
+}
+
+.floating-infobox-box-button-container{
+  display: flex;
+  height: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: auto;
+  margin-top: 12px;
+  gap: 12px;
+}
+
+.parent-chart-container{
+  gap: 12px;
+}
+
+.floating-infobox-box-toggle-button {
+  width: 100%;
+  max-width: 240px;
+  color: white;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.1); 
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.floating-infobox-box-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.2); 
+}
+
+.floating-infobox-box-toggle-button:active {
+  background-color: rgba(255, 255, 255, 0.3); 
+}
+
+.floating-infobox-box-toggle-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.floating-info-box-zone-header{
+  margin: auto;
+  padding: auto;
 }

@@ -7,6 +7,7 @@
             "latitude": 40.7580,
             "longitude": -73.9855
         },
+        "location_name": "Times Sq/Theatre District",
         "start_time": "2023-12-31T18:00:00",
         "end_time": "2024-01-01T01:00:00",
         "expected_attendees": 1000000,
@@ -20,6 +21,7 @@
             "latitude": 40.7128,
             "longitude": -74.0060
         },
+        "location_name": "TriBeCa/Civic Center",
         "start_time": "2023-07-04T20:00:00",
         "end_time": "2023-07-04T22:00:00",
         "expected_attendees": 3000000,
@@ -33,6 +35,7 @@
             "latitude": 40.7393,
             "longitude": -74.0083
         },
+        "location_name": "Meatpacking/West Village West",
         "start_time": "2023-06-30T12:00:00",
         "end_time": "2023-06-30T18:00:00",
         "expected_attendees": 2500000,
@@ -46,6 +49,7 @@
             "latitude": 40.750797,
             "longitude": -73.989578
         },
+        "location_name": "Garment District",
         "start_time": "2023-11-23T09:00:00",
         "end_time": "2023-11-23T12:00:00",
         "expected_attendees": 3500000,
@@ -59,6 +63,7 @@
             "latitude": 40.7957,
             "longitude": -73.9222
         },
+        "location_name": "Randalls Island",
         "start_time": "2023-09-01T12:00:00",
         "end_time": "2023-09-03T23:00:00",
         "expected_attendees": 85000,
@@ -72,6 +77,7 @@
             "latitude": 40.7163,
             "longitude": -74.0086
         },
+        "location_name": "TriBeCa/Civic Center",
         "start_time": "2023-04-19T09:00:00",
         "end_time": "2023-04-30T23:59:00",
         "expected_attendees": 120000,
@@ -85,6 +91,7 @@
             "latitude": 40.76061779087554,
             "longitude":  -73.98527960724417
         },
+        "location_name": "Times Sq/Theatre District",
         "start_time": "2023-10-05T10:00:00",
         "end_time": "2023-10-08T19:00:00",
         "expected_attendees": 200000,
@@ -98,6 +105,7 @@
             "latitude": 40.7570,
             "longitude": -74.0026
         },
+        "location_name": "West Chelsea/Hudson Yards",
         "start_time": "2023-04-14T10:00:00",
         "end_time": "2023-04-23T19:00:00",
         "expected_attendees": 1000000,
