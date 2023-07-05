@@ -38,6 +38,7 @@ function Map() {
   const [zone, setZone] = useState(null);
   const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
+  const [markers, setMarkers] = useState([]);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -188,26 +189,38 @@ function Map() {
 
   const renderEvents = () => {
 
+    const newMarkers = []; // array to hold our new markers
+
     prunedEvents.forEach((event) =>{
+        const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map.current);
+        const markerElement = marker.getElement();
 
-      const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map.current);
+        markerElement.addEventListener('click', () => {
+            console.log(event);
+        });
 
-      const markerElement = marker.getElement();
+        markerElement.addEventListener('mouseover', () => {
+            markerElement.style.cursor = 'pointer';
+        });
 
-      markerElement.addEventListener('click', () => {
-        console.log(event);
-      });
-  
-      markerElement.addEventListener('mouseover', () => {
-        markerElement.style.cursor = 'pointer';
+        markerElement.addEventListener('mouseout', () => {
+            markerElement.style.cursor = 'default';
+        });
 
-      });
-  
-      markerElement.addEventListener('mouseout', () => {
-        markerElement.style.cursor = 'default';
-      })
+        newMarkers.push(marker); // Push the marker to the array of new markers
     });
-  };
+
+    setMarkers(newMarkers); // Update the state with the new markers
+};
+
+const removeAllMarkers = () => {
+  markers.forEach((marker) => {
+      marker.remove(); // Remove the marker from the map
+  });
+
+  setMarkers([]); // Clear the markers array
+};
+
 
   // dynamic methods and interactive for our application to handle and set changes to our map
 
