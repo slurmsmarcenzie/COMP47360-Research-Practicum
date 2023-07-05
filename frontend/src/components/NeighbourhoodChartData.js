@@ -8,6 +8,8 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
+    const [labels, setLabels] = useState([]);
+    const [chartData, setChartData] = useState(null);
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -105,20 +107,21 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
         return {data, options};
     }
     
-
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
-
         const {labels, dataValues} = getImpactedZones();
+        setLabels(labels); // Set labels here
+        const newChartData = makeChartData(labels, dataValues);
+        setChartData(newChartData); // Set chartData here
+    }, [showMostImpacted, hashMap]);
 
-        const chartData = makeChartData(labels, dataValues);
-
+    const toggleChartData = () => {
         setTimeout(() => {
             highlightEventImpact(Zone_ID, labels);
             setRenderChart(chartData);
-        }, 300)
-
-    }, [showMostImpacted, hashMap]);
+        }, 300);
+        setShowMostImpacted(!showMostImpacted); // Toggle showMostImpacted state here
+    };
 
     const getGradientMostImpacted = (context) => {
         const {ctx, chartArea: { left, right } } = context;
@@ -148,7 +151,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
             </div>
             <div className='floating-infobox-box-button-container'>
-                <button className='floating-infobox-box-toggle-button'onClick={() => setShowMostImpacted(!showMostImpacted)}>
+                <button className='floating-infobox-box-toggle-button'onClick={toggleChartData}>
                     {showMostImpacted ? 'Show least impacted zones' : 'Show most impacted zones'}
                 </button>
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
