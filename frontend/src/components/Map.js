@@ -187,6 +187,8 @@ function Map() {
     });
   }
 
+  // marker methods and customisation
+
   const renderEvents = () => {
 
     const newMarkers = []; // array to hold our new markers
@@ -208,19 +210,30 @@ function Map() {
         });
 
         newMarkers.push(marker); // Push the marker to the array of new markers
+      });
+
+      setMarkers(newMarkers); // Update the state with the new markers
+  };
+
+  const removeAllMarkers = () => {
+
+    markers.forEach((marker) => {
+        marker.remove(); // Remove the marker from the map
     });
 
-    setMarkers(newMarkers); // Update the state with the new markers
-};
+    setMarkers([]); // Clear the markers array
+  };
 
-const removeAllMarkers = () => {
-  markers.forEach((marker) => {
-      marker.remove(); // Remove the marker from the map
-  });
+  const removeAllButOneMarker = (keptEvent) => {
 
-  setMarkers([]); // Clear the markers array
-};
+    markers.forEach(({ event, marker }) => {
+      if (event !== keptEvent) {
+        marker.remove();
+      }
+    });
 
+    setMarkers(markers.filter(({ event }) => event === keptEvent));
+  };
 
   // dynamic methods and interactive for our application to handle and set changes to our map
 
@@ -480,8 +493,6 @@ const removeAllMarkers = () => {
   }
 
   const highlightEventImpact = (Zone_ID, labels) => {
-
-    console.log('ID in the event impact function: ', Zone_ID)
 
     layerIds.current.forEach((layer) => {
       let opacity = labels.includes(layer) ? 0.7 : 0.1;
