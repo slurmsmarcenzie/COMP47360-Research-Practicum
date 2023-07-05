@@ -284,6 +284,7 @@ function Map() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
+    updateLayerColours(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -588,12 +589,10 @@ function Map() {
 
       map.current.on('moveend', () => {
 
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 10) {
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
           
           enableColours();
-
-          setShowChartData(false);
-
+          
         }
         
       });
