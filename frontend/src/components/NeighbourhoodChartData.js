@@ -164,8 +164,6 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
-                <button className='floating-infobox-box-toggle-button' onClick={handleToggle}> {useOriginal ? 'Show with Impact' : 'Show Baseline'}
-      </button>
             </div>
         </div>
     );
