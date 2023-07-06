@@ -24,13 +24,16 @@ body{
 }
 
 .navbar {
-  
+  position: absolute;
+  top: 24px;
+  left: 48px;
+  right: 48px;
+  height: 48px;
+  color: white;
   display: flex;
-  z-index:999;
-  position:fixed;
-  width:100%;
   justify-content: space-between;
-  
+  align-items: center;
+  z-index: 100;
 }
 
 .transparent-button {
@@ -374,8 +377,3 @@ body{
   background-color: #2a2727;
   color: blueviolet;
 }
-
-
-  
-  
-
