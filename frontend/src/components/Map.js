@@ -10,6 +10,7 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
+import Modal from './Modal';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -325,6 +326,7 @@ function Map() {
       }
     });
   };
+  
 
   const initialiseMouseMapEvents = () => {
 
@@ -448,7 +450,7 @@ function Map() {
       ...score,
       busyness_score: Math.random()  // this generates a random number between 0 and 1
     }));
-
+    console.log('New Scores:', newScores);
     // set the new scores array
     setScores(newScores);
 
@@ -471,6 +473,9 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
+    console.log('HashMap Difference:', temporaryHashMap);
+    console.log('Original HashMap:', originalBusynessHashMap);
+    console.log('Busyness HashMap:', busynessHashMap);
 
   };
 
@@ -478,12 +483,14 @@ function Map() {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
+
+
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
@@ -535,6 +542,7 @@ function Map() {
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
+        console.log(data);
       } 
       
       catch (err) {
@@ -632,17 +640,15 @@ function Map() {
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
+    <div>
+        
 
-    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-
-      <Navbar />
-
-
-      <div ref={mapContainer} style={{ width: '100%', height: '100%' }}>
-
+        <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
         />
+
+        <Navbar />
 
         <FloatingNav 
           prunedEvents = {prunedEvents}
@@ -676,6 +682,8 @@ function Map() {
           updateLayerColours={updateLayerColours}
           resetColours={resetColours}
         />
+
+        
 
       </div>
 
