@@ -304,6 +304,8 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
 
+    isNeighbourhoodClickedRef.current = false; // allow for on hover effects to be resumed
+
   }
 
   const updateLayerColours = (isOriginalHashMap) => {
@@ -450,7 +452,7 @@ function Map() {
       ...score,
       busyness_score: Math.random()  // this generates a random number between 0 and 1
     }));
-    console.log('New Scores:', newScores);
+
     // set the new scores array
     setScores(newScores);
 
@@ -473,10 +475,6 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
-    console.log('HashMap Difference:', temporaryHashMap);
-    console.log('Original HashMap:', originalBusynessHashMap);
-    console.log('Busyness HashMap:', busynessHashMap);
-
   };
 
   const calculateEventImpact = () => {
@@ -502,17 +500,88 @@ function Map() {
 
   const highlightEventImpact = (Zone_ID, labels) => {
 
-    layerIds.current.forEach((layer) => {
-      let opacity = labels.includes(layer) ? 0.7 : 0.1;
-      let line = labels.includes(layer) ? 1 : 0;
-      map.current.setPaintProperty(layer, 'fill-opacity', opacity);
-      map.current.setPaintProperty(layer+'-line', 'line-width', line);
-    });
-
+    console.log(labels)
+  
+    isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
+  
+    layerIds.current.forEach((layerId) => {
+      let opacity = labels.includes(layerId) ? 0.7 : 0.1;
+      let line = labels.includes(layerId) ? 1 : 0;
+      map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
+      map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+  
+      map.current.off('mousemove', layerId);
+      map.current.off('mouseleave', layerId);
+  
+      if (labels.includes(layerId)) {
+  
+        map.current.on('mousemove', layerId, (e) => {
+  
+          map.current.getCanvas().style.cursor = 'pointer';
+          map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+          map.current.setPaintProperty(layerId + '-line', 'line-width', 4);
+  
+          const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+  
+          if (features.length > 0) {
+  
+            if (!popup.current) {
+  
+              // code to allow the pop up to display a bit over our mouse interaction.
+  
+              const markerHeight = 10;
+              const markerRadius = 10;
+              const linearOffset = 5;
+              const popupOffsets = {
+              'top': [0, 0],
+              'top-left': [0, 0],
+              'top-right': [0, 0],
+              'bottom': [0, -markerHeight],
+              'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+              'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+              'left': [markerRadius, (markerHeight - markerRadius) * -1],
+              'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+              };
+  
+              // creating the popup object
+  
+              popup.current = new mapboxgl.Popup({
+                  offset: popupOffsets,
+                  closeButton: false,
+                  closeOnClick: false,
+              });
+            }
+  
+            const feature = features[0];
+            const zone = feature.properties.zone;
+  
+            popup.current.setLngLat(e.lngLat)
+                .setHTML(`${zone}, ${layerId}`)
+                .addTo(map.current);
+          }
+        }); // close the mousemove event block
+  
+        map.current.on('mouseleave', layerId, () => {
+          if (labels.includes(layerId)) {
+            map.current.getCanvas().style.cursor = '';
+            map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
+            map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+          }
+  
+          if (popup.current) {
+              popup.current.remove();
+              popup.current = null;
+          }
+        }); // close the mouseleave event block
+  
+      } // close the labels.includes(layerId) block
+  
+    }); // close the forEach block
+  
     map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
-    map.current.setPaintProperty(Zone_ID+'-line', 'line-width', 4);
-
-  }
+    map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
+  
+  }; 
 
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -599,7 +668,7 @@ function Map() {
 
         if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
           
-          enableColours();
+          // enableColours(); rewrite this function as currently crashes app.
           
         }
         
