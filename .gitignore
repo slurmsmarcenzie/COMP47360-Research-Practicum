@@ -1,2 +1,5 @@
 /node_modules
 /backend/.env
+**/__pycache__/
+*.pyc
+API tests

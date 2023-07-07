@@ -605,7 +605,6 @@ function Map() {
   }
   
   useEffect(() => {
-  
     const fetchScores = async () => {
   
       const formattedDate = new Date().toISOString().slice(0,10);

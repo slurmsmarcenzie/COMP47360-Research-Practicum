@@ -1,33 +1,37 @@
 const express = require('express')
 const app = express()
 const cors = require("cors");
-const path = require("path");
 const meta = require("./routes/meta")
 const prediction = require("./routes/prediction")
-//const mongoose = require("mongoose");
+const baseline = require("./routes/baseline")
+const port = process.env.PORT || 5000
+const http_logger = require("./middleware/http_logger");
 require("dotenv").config();
-const port = process.env.PORT || 5000;
-
 
 //Middleware:
 app.use(cors());
-app.use(express.json());
-//app.use(express.static(path.join(__dirname, "build")));
-//app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
+app.use(express.json())
+//Below is used to serve a build version of the React frontend application:
+//  app.use(express.static(path.join(__dirname, "build")));
+//  app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
+
+//I do not like how the http_logger is being used here. This was the only way i can currently get the middleware to work. Will return to this later
 
 //Routes:
-app.use("/api/meta", meta)
-app.use("/api/predict", prediction)
+app.use("/api/meta", meta, http_logger)
+app.use("/api/predict", prediction, http_logger)
+app.use("/api/baseline", baseline, http_logger)
 
-app.get('/', (req, res) => {
-  res.status(200).send("I will serve React App later :)")
+app.get('/', (req, res, next) => {
+  res.status(200).send("Home Page. I will serve React App later :)")
+  http_logger(req, res, next)
 });
 
-//CONNECT TO LOCAL MONGODB
-// const uri = process.env.ATLAS_URI;
-// mongoose.connect(uri, { useNewUrlParser: true }); //newUrlParser is just to avoid a depreciation warning
-// const connection = mongoose.connection
-// connection.once("open", () => {console.log("MongoDB connection established")});
+app.get('*', (req, res, next) => {
+  res.status(404).send("Unknown route. Please check the URL entered")
+  http_logger(req, res, next)
+});
+
 
 
 //START SERVER
