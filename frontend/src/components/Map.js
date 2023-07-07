@@ -328,7 +328,6 @@ function Map() {
       }
     });
   };
-  
 
   const initialiseMouseMapEvents = () => {
 
