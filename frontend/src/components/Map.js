@@ -10,13 +10,16 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
-import Modal from './Modal';
+import SplitViewMap from './SplitViewMap';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 // import neighborhoodscores from '../geodata/output.json'
 // import events from '../geodata/events.json';
 import prunedEvents from '../geodata/prunedEvents.json'
+
+// Wrapper
+import { MapProvider } from './SplitViewMapWrapper';
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -40,6 +43,7 @@ function Map() {
   const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [isSplitView, setSplitView] = useState(false);
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -51,6 +55,7 @@ function Map() {
   const originalLat = 40.7484;
   const originalLng = -73.9857;
   const zoom = 7;
+  const pitch = 30;
 
   // define a new function that will be used as the event listener
   const updateLayerColoursAfterLoad = () => updateLayerColours(false);
@@ -649,7 +654,8 @@ function Map() {
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/dark-v11',
         center: [originalLng, originalLat],
-        zoom: zoom
+        zoom: zoom,
+        pitch: 30
       });
 
       map.current.on('load', () => {
@@ -707,52 +713,71 @@ function Map() {
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
+  const toggleView = () => {
+    setSplitView(prevState => !prevState); // Function to toggle the map view
+  };
+
   return (
+
     <div>
         
-
         <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
-        <MapLegend
-          colours={colourPairs[colourPairIndex]} 
-        />
 
-        <Navbar />
+        {isSplitView ? (
+          <MapProvider>
+            <SplitViewMap 
+            isSplitView={isSplitView}
+            setSplitView={setSplitView}
+            neighbourhoods={neighbourhoods}
+            renderNeighbourhoods={renderNeighbourhoods}
+            />
+          </MapProvider>
+        ) : (
+          <>
 
-        <FloatingNav 
-          prunedEvents = {prunedEvents}
-          zone={zone}
-          disableColours = {disableColours}
-          floatingNavZoomToLocation ={floatingNavZoomToLocation}
-          floatingNavSetLineWidth = {floatingNavSetLineWidth}
-          isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-          changeColourScheme={changeColourScheme}
-          enableColours={enableColours}
-          simulateBusynessChange = {simulateBusynessChange}
-          setNeighbourhoodEvents={setNeighbourhoodEvents}
-          setShowInfoBox={setShowInfoBox}
-          setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
-          setZone={setZone}
-          updateLayerColours={updateLayerColours}
+          <Navbar />
+
+          <FloatingNav 
+            prunedEvents = {prunedEvents}
+            zone={zone}
+            disableColours = {disableColours}
+            floatingNavZoomToLocation ={floatingNavZoomToLocation}
+            floatingNavSetLineWidth = {floatingNavSetLineWidth}
+            isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+            changeColourScheme={changeColourScheme}
+            enableColours={enableColours}
+            simulateBusynessChange = {simulateBusynessChange}
+            setNeighbourhoodEvents={setNeighbourhoodEvents}
+            setShowInfoBox={setShowInfoBox}
+            setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
+            setZone={setZone}
+            updateLayerColours={updateLayerColours}
+            />
+
+          <FloatingInfoBox
+            showingFloatingInfoBox={showInfoBox}
+            showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
+            neighbourhoodEvents={neighbourhoodEvents}
+            zone={zone}
+            setZone={setZone}
+            hashMapOfDifference={hashMapOfDifference}
+            showChartData={showChartData}
+            setShowChartData={setShowChartData}
+            calculateEventImpact={calculateEventImpact}
+            colours={colourPairs[colourPairIndex]}
+            highlightEventImpact={highlightEventImpact}
+            updateLayerColours={updateLayerColours}
+            resetColours={resetColours}
+            isSplitView={isSplitView}
+            setSplitView={setSplitView}
           />
 
-        <FloatingInfoBox
-          showingFloatingInfoBox={showInfoBox}
-          showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
-          neighbourhoodEvents={neighbourhoodEvents}
-          zone={zone}
-          setZone={setZone}
-          hashMapOfDifference={hashMapOfDifference}
-          showChartData={showChartData}
-          setShowChartData={setShowChartData}
-          calculateEventImpact={calculateEventImpact}
-          colours={colourPairs[colourPairIndex]}
-          highlightEventImpact={highlightEventImpact}
-          updateLayerColours={updateLayerColours}
-          resetColours={resetColours}
-        />
+          <MapLegend
+            colours={colourPairs[colourPairIndex]} 
+          />
 
-        
-
+          </>
+        )}
       </div>
 
     </div>

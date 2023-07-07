@@ -3,7 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours, isSplitView, setSplitView}) {
 
     const [renderChart, setRenderChart] = useState(null);
     const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
@@ -163,6 +163,9 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 </button>
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
+                </button>
+                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                    {isSplitView ? 'Show Original' : 'Show Splitview'}
                 </button>
             </div>
         </div>

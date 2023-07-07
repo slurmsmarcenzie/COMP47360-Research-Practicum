@@ -3,7 +3,7 @@ import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 
-function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone, updateLayerColours, resetColours}) {
+function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculateEventImpact, hashMapOfDifference, showChartData, setShowChartData, colours, highlightEventImpact, showingNeighborHoodInfoBox, zone, updateLayerColours, resetColours, isSplitView, setSplitView}) {
   
   const [zoneID, setZoneID] = useState(null);
   const [eventName, setEventName] = useState(null);
@@ -17,7 +17,7 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
     }
   }, [neighbourhoodEvents]);
 
-  const eventCards = neighbourhoodEvents.map((item, i) =>{
+  const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
     return (
       <EventCard 
         key = {i}
@@ -26,7 +26,7 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
         setShowChartData={setShowChartData}
       />
       )
-  });
+  }) : null;
     
   return (
     (showingFloatingInfoBox || showingNeighborHoodInfoBox) && (
@@ -44,6 +44,8 @@ function FloatingInfoBox( {showingFloatingInfoBox, neighbourhoodEvents, calculat
                 zoneID={zoneID}
                 updateLayerColours={updateLayerColours}
                 resetColours={resetColours}
+                isSplitView={isSplitView}
+                setSplitView={setSplitView}
               />
             )
             : eventCards
