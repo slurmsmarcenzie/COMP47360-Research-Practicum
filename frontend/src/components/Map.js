@@ -10,6 +10,7 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
+import Modal from './Modal';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -284,6 +285,7 @@ function Map() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
+    updateLayerColours(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -301,6 +303,8 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
+
+    isNeighbourhoodClickedRef.current = false; // allow for on hover effects to be resumed
 
   }
 
@@ -324,6 +328,7 @@ function Map() {
       }
     });
   };
+  
 
   const initialiseMouseMapEvents = () => {
 
@@ -470,19 +475,20 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
-
   };
 
   const calculateEventImpact = () => {
 
     setNeighbourhoodEvents([]);
 
-    isNeighbourhoodClickedRef.current = true; // user has reset the select function so we reset the map to default state.
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
     neighbourhoods.features.forEach((neighbourhood) => {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
+
+
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
@@ -494,17 +500,88 @@ function Map() {
 
   const highlightEventImpact = (Zone_ID, labels) => {
 
-    layerIds.current.forEach((layer) => {
-      let opacity = labels.includes(layer) ? 0.7 : 0.1;
-      let line = labels.includes(layer) ? 1 : 0;
-      map.current.setPaintProperty(layer, 'fill-opacity', opacity);
-      map.current.setPaintProperty(layer+'-line', 'line-width', line);
-    });
-
+    console.log(labels)
+  
+    isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
+  
+    layerIds.current.forEach((layerId) => {
+      let opacity = labels.includes(layerId) ? 0.7 : 0.1;
+      let line = labels.includes(layerId) ? 1 : 0;
+      map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
+      map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+  
+      map.current.off('mousemove', layerId);
+      map.current.off('mouseleave', layerId);
+  
+      if (labels.includes(layerId)) {
+  
+        map.current.on('mousemove', layerId, (e) => {
+  
+          map.current.getCanvas().style.cursor = 'pointer';
+          map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
+          map.current.setPaintProperty(layerId + '-line', 'line-width', 4);
+  
+          const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+  
+          if (features.length > 0) {
+  
+            if (!popup.current) {
+  
+              // code to allow the pop up to display a bit over our mouse interaction.
+  
+              const markerHeight = 10;
+              const markerRadius = 10;
+              const linearOffset = 5;
+              const popupOffsets = {
+              'top': [0, 0],
+              'top-left': [0, 0],
+              'top-right': [0, 0],
+              'bottom': [0, -markerHeight],
+              'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+              'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+              'left': [markerRadius, (markerHeight - markerRadius) * -1],
+              'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+              };
+  
+              // creating the popup object
+  
+              popup.current = new mapboxgl.Popup({
+                  offset: popupOffsets,
+                  closeButton: false,
+                  closeOnClick: false,
+              });
+            }
+  
+            const feature = features[0];
+            const zone = feature.properties.zone;
+  
+            popup.current.setLngLat(e.lngLat)
+                .setHTML(`${zone}, ${layerId}`)
+                .addTo(map.current);
+          }
+        }); // close the mousemove event block
+  
+        map.current.on('mouseleave', layerId, () => {
+          if (labels.includes(layerId)) {
+            map.current.getCanvas().style.cursor = '';
+            map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
+            map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+          }
+  
+          if (popup.current) {
+              popup.current.remove();
+              popup.current = null;
+          }
+        }); // close the mouseleave event block
+  
+      } // close the labels.includes(layerId) block
+  
+    }); // close the forEach block
+  
     map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
-    map.current.setPaintProperty(Zone_ID+'-line', 'line-width', 4);
-
-  }
+    map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
+  
+  }; 
 
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -534,6 +611,7 @@ function Map() {
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
+        console.log(data);
       } 
       
       catch (err) {
@@ -588,12 +666,10 @@ function Map() {
 
       map.current.on('moveend', () => {
 
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 10) {
+        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
           
-          enableColours();
-
-          setShowChartData(false);
-
+          // enableColours(); rewrite this function as currently crashes app.
+          
         }
         
       });
@@ -633,17 +709,15 @@ function Map() {
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
+    <div>
+        
 
-    <div style={{ position: 'relative', width: '100%', height: '100vh' }}>
-
-      <Navbar />
-
-
-      <div ref={mapContainer} style={{ width: '100%', height: '100%' }}>
-
+        <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
         <MapLegend
           colours={colourPairs[colourPairIndex]} 
         />
+
+        <Navbar />
 
         <FloatingNav 
           prunedEvents = {prunedEvents}
@@ -677,6 +751,8 @@ function Map() {
           updateLayerColours={updateLayerColours}
           resetColours={resetColours}
         />
+
+        
 
       </div>
 
