@@ -5,8 +5,14 @@ import afterParty from '../images/after-party-logo-white.png';
 
 export default function Modal({ onClose }) {
 
+  const handleOutsideClick = (e) => {
+    if (e.target.id === 'modal') {
+      onClose();
+    }
+  };
+
   return (
-    <div className="modal-overlay">  
+    <div id="modal" className="modal-overlay" onClick={handleOutsideClick}>  
       <div className="modal-content">
         <button className="modal-close" onClick={onClose}>
           X

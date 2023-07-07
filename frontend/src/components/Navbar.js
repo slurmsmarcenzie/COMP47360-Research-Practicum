@@ -27,6 +27,7 @@ export default function Navbar() {
   const logoImage = isHovered ? afterPartyHover : afterParty;
 
   return (
+    
     <div className="navbar">
       <div className="navbar-links-wrapper">
       <button className="transparent-button" onClick={openModal}>
