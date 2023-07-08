@@ -1,0 +1,278 @@
+[
+    {
+        "location_id": "4",
+        "busyness_score": 0.547261438309214
+    },
+    {
+        "location_id": "24",
+        "busyness_score": 0.9540929119675713
+    },
+    {
+        "location_id": "12",
+        "busyness_score": 0.5441748798424865
+    },
+    {
+        "location_id": "13",
+        "busyness_score": 0.494766160278038
+    },
+    {
+        "location_id": "41",
+        "busyness_score": 0.3225883180290152
+    },
+    {
+        "location_id": "45",
+        "busyness_score": 0.004253573140582612
+    },
+    {
+        "location_id": "42",
+        "busyness_score": 0.5172881069316032
+    },
+    {
+        "location_id": "43",
+        "busyness_score": 0.8851406968875781
+    },
+    {
+        "location_id": "48",
+        "busyness_score": 0.9348295384087077
+    },
+    {
+        "location_id": "50",
+        "busyness_score": 0.5853867746704027
+    },
+    {
+        "location_id": "68",
+        "busyness_score": 0.6849448293797148
+    },
+    {
+        "location_id": "79",
+        "busyness_score": 0.016392473927431706
+    },
+    {
+        "location_id": "74",
+        "busyness_score": 0.7910812370755581
+    },
+    {
+        "location_id": "75",
+        "busyness_score": 0.1021077340688713
+    },
+    {
+        "location_id": "87",
+        "busyness_score": 0.7825612575381747
+    },
+    {
+        "location_id": "88",
+        "busyness_score": 0.2424413463979206
+    },
+    {
+        "location_id": "90",
+        "busyness_score": 0.5957395066542691
+    },
+    {
+        "location_id": "125",
+        "busyness_score": 0.06338723167604776
+    },
+    {
+        "location_id": "100",
+        "busyness_score": 0.4098923848156273
+    },
+    {
+        "location_id": "103",
+        "busyness_score": 0.7244860491162008
+    },
+    {
+        "location_id": "103",
+        "busyness_score": 0.11477037060065742
+    },
+    {
+        "location_id": "103",
+        "busyness_score": 0.1255650425762549
+    },
+    {
+        "location_id": "107",
+        "busyness_score": 0.1310524503311501
+    },
+    {
+        "location_id": "113",
+        "busyness_score": 0.30765046817263575
+    },
+    {
+        "location_id": "114",
+        "busyness_score": 0.6992659367028763
+    },
+    {
+        "location_id": "116",
+        "busyness_score": 0.26527949575884024
+    },
+    {
+        "location_id": "120",
+        "busyness_score": 0.43102772097258524
+    },
+    {
+        "location_id": "127",
+        "busyness_score": 0.7562042729638591
+    },
+    {
+        "location_id": "128",
+        "busyness_score": 0.5265367443884532
+    },
+    {
+        "location_id": "151",
+        "busyness_score": 0.565878723403397
+    },
+    {
+        "location_id": "140",
+        "busyness_score": 0.39297428821435243
+    },
+    {
+        "location_id": "137",
+        "busyness_score": 0.2060160934951537
+    },
+    {
+        "location_id": "141",
+        "busyness_score": 0.5120325147787534
+    },
+    {
+        "location_id": "142",
+        "busyness_score": 0.9545037016590685
+    },
+    {
+        "location_id": "152",
+        "busyness_score": 0.4092017915942292
+    },
+    {
+        "location_id": "143",
+        "busyness_score": 0.0794088709023747
+    },
+    {
+        "location_id": "144",
+        "busyness_score": 0.03383527395647368
+    },
+    {
+        "location_id": "148",
+        "busyness_score": 0.17516339189959118
+    },
+    {
+        "location_id": "153",
+        "busyness_score": 0.998834551744966
+    },
+    {
+        "location_id": "158",
+        "busyness_score": 0.16362695397970006
+    },
+    {
+        "location_id": "161",
+        "busyness_score": 0.43193469800606465
+    },
+    {
+        "location_id": "162",
+        "busyness_score": 0.23746174896084393
+    },
+    {
+        "location_id": "163",
+        "busyness_score": 0.8338211965956347
+    },
+    {
+        "location_id": "164",
+        "busyness_score": 0.665691301286689
+    },
+    {
+        "location_id": "170",
+        "busyness_score": 0.8530548174115152
+    },
+    {
+        "location_id": "166",
+        "busyness_score": 0.616105205608536
+    },
+    {
+        "location_id": "186",
+        "busyness_score": 0.9412339642528448
+    },
+    {
+        "location_id": "194",
+        "busyness_score": 0.025331866277428672
+    },
+    {
+        "location_id": "202",
+        "busyness_score": 0.35643653756975413
+    },
+    {
+        "location_id": "209",
+        "busyness_score": 0.8605574985865451
+    },
+    {
+        "location_id": "211",
+        "busyness_score": 0.6920375288988545
+    },
+    {
+        "location_id": "224",
+        "busyness_score": 0.9997086389838097
+    },
+    {
+        "location_id": "229",
+        "busyness_score": 0.04786130844280845
+    },
+    {
+        "location_id": "230",
+        "busyness_score": 0.048305249738245015
+    },
+    {
+        "location_id": "231",
+        "busyness_score": 0.36597956895208716
+    },
+    {
+        "location_id": "239",
+        "busyness_score": 0.53817231665512
+    },
+    {
+        "location_id": "232",
+        "busyness_score": 0.5569504137997422
+    },
+    {
+        "location_id": "233",
+        "busyness_score": 0.6533949765401528
+    },
+    {
+        "location_id": "234",
+        "busyness_score": 0.09189031312642615
+    },
+    {
+        "location_id": "236",
+        "busyness_score": 0.9336184772746706
+    },
+    {
+        "location_id": "237",
+        "busyness_score": 0.23891974928899373
+    },
+    {
+        "location_id": "238",
+        "busyness_score": 0.9898890685095737
+    },
+    {
+        "location_id": "263",
+        "busyness_score": 0.9408428084738522
+    },
+    {
+        "location_id": "243",
+        "busyness_score": 0.2723432803804785
+    },
+    {
+        "location_id": "244",
+        "busyness_score": 0.9063531425238529
+    },
+    {
+        "location_id": "246",
+        "busyness_score": 0.7813842268483833
+    },
+    {
+        "location_id": "249",
+        "busyness_score": 0.531107692044125
+    },
+    {
+        "location_id": "261",
+        "busyness_score": 0.33484591622859505
+    },
+    {
+        "location_id": "262",
+        "busyness_score": 0.41955151917001465
+    }
+]
