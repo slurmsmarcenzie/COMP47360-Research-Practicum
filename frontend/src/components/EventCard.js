@@ -5,9 +5,8 @@ function EventCard ({item, calculateEventImpact, setShowChartData}) {
 
     return (
         <div className='floating-info-box-event-card'>
-            <h2>Name: {item.Event_Name}</h2>
-            <h3>Event Type: {item.Event_Type}</h3>
-            <p>Expected Attendees: {item.expected_attendees}</p>
+            <h2>Area: {item.Zone_Name}</h2>
+            <h3>Expected Attendees: {item.expected_attendees}</h3>
             <p>{item.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
                 calculateEventImpact();

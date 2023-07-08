@@ -3,15 +3,21 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours, isSplitView, setSplitView}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours, showChart, setShowChart, isSplitView, setSplitView}) {
+
+    // This state holds the data and options that the chart component needs to create the chart on the page. 
+    // When this state changes, it triggers the chart to re-render with the new data and options.
 
     const [renderChart, setRenderChart] = useState(null);
+
+    // This state holds a separate copy of the data and options for a chart. 
+    // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
+    const [chartData, setChartData] = useState(null);
+
     const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [labels, setLabels] = useState([]);
-    const [chartData, setChartData] = useState(null);
-    const [showChart, setShowChart] = useState(false); 
-
+    
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -121,9 +127,8 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
         
         highlightEventImpact(Zone_ID, labels);
         setRenderChart(chartData);
+        setShowChart(true);
         setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-
-        setShowChart(true); 
 
     };
 
@@ -148,6 +153,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
         updateLayerColours(!useOriginal);
         resetColours();
         setShowChart(false); 
+        setShowMostImpactedZones(!showMostImpactedZones)
       };
 
     return (
@@ -164,9 +170,14 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
-                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Show Splitview'}
+                {showChart && (
+                <button className="floating-infobox-box-toggle-button" onClick={() => setShowChart(!showChart)}>
+                    Hide Chart
                 </button>
+                )}
+                {/* <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                    {isSplitView ? 'Show Original' : 'Show Splitview'}
+                </button> */}
             </div>
         </div>
     );

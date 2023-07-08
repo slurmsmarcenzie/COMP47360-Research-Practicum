@@ -32,18 +32,20 @@ const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api
 function Map() {
 
   const [colourPairIndex, setColourPairIndex] = useState(0);
-  const [showInfoBox, setShowInfoBox] = useState(false);
-  const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false);
   const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
   const [eventsMap, setEventsMap] = useState([]);
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
   const [zone, setZone] = useState(null);
-  const [showChartData, setShowChartData] = useState(false);
   const [error, setError] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [isSplitView, setSplitView] = useState(false);
+
+  const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
+  const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
+  const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
+  const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
   
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -286,10 +288,11 @@ function Map() {
 
   const enableColours = () => {
 
-    setShowChartData(false);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
+    setShowChartData(false);
     setNeighbourhoodEvents([]);
+
     updateLayerColours(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
@@ -491,8 +494,6 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
-
-
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
@@ -655,7 +656,7 @@ function Map() {
         style: 'mapbox://styles/mapbox/dark-v11',
         center: [originalLng, originalLat],
         zoom: zoom,
-        pitch: 30
+        pitch: pitch
       });
 
       map.current.on('load', () => {
@@ -752,6 +753,7 @@ function Map() {
             setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
             setZone={setZone}
             updateLayerColours={updateLayerColours}
+            setShowChartData={setShowChartData}
             />
 
           <FloatingInfoBox
@@ -768,6 +770,8 @@ function Map() {
             highlightEventImpact={highlightEventImpact}
             updateLayerColours={updateLayerColours}
             resetColours={resetColours}
+            showChart={showChart}
+            setShowChart={setShowChart}
             isSplitView={isSplitView}
             setSplitView={setSplitView}
           />

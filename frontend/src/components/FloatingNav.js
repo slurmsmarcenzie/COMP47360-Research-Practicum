@@ -1,7 +1,7 @@
 import React from 'react';
 import "../App.css";
 
-function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, setShowNeighborhoodInfoBox, setZone}) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, setShowNeighborhoodInfoBox, setZone, setShowChartData}) {
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -10,19 +10,25 @@ function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floa
   );
 
   const reviewEvent = (e) => {
-    const selectedEvent = JSON.parse(e.target.value);
 
+    const selectedEvent = JSON.parse(e.target.value);
     const latitude = selectedEvent.Event_Location.Latitude
     const longitude = selectedEvent.Event_Location.Longitude
+    
+    console.log('selected-event', selectedEvent)
 
-    setZone(selectedEvent.Zone_Name);
+    setZone(selectedEvent.Event_Name);
+    
     floatingNavZoomToLocation(longitude, latitude);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    isNeighbourhoodClickedRef.current = true;
     disableColours();
+
+    isNeighbourhoodClickedRef.current = true;
     setNeighbourhoodEvents([selectedEvent]);
     setShowInfoBox(true);
     setShowNeighborhoodInfoBox(true);
+    setShowChartData(false);
+    
   };
 
     return(
