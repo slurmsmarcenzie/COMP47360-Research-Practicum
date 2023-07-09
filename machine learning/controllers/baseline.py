@@ -11,7 +11,10 @@ def baseline(date):
 
     # Prevent invalid datetime:
     try:
-        datetime.fromisoformat(date)
+        # cannot use below format as it includes milliseconds
+        # datetime.fromisoformat(date)
+        # must use below to stop after seconds
+        datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError as err:
         print(err)
         #TODO - add to log

@@ -455,13 +455,30 @@ function Map() {
   
   const simulateBusynessChange = () => {
 
-    const newScores = scores.map(score => ({
-      ...score,
-      busyness_score: Math.random()  // this generates a random number between 0 and 1
-    }));
+    // write fetch request here to get scores from api/prediction
+    // this should be handled in a use effect with a dependency for a prediction
 
-    // set the new scores array
-    setScores(newScores);
+    const formattedDate = new Date().toISOString().slice(0,10);
+
+    fetch((`${BASE_API_URL}/predict/${formattedDate}`))
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => setScores(data))
+    .catch((error) => {
+      console.error('Issue with fetch request for prediction:', error);
+    });
+
+    // const newScores = scores.map(score => ({
+    //   ...score,
+    //   busyness_score: Math.random()  // this generates a random number between 0 and 1
+    // }));
+
+    // // set the new scores array
+    // setScores(newScores);
 
   };
 
@@ -505,11 +522,12 @@ function Map() {
 
   const highlightEventImpact = (Zone_ID, labels) => {
 
-    console.log(labels)
+    console.log('here are my labels', labels)
   
     isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
   
     layerIds.current.forEach((layerId) => {
+
       let opacity = labels.includes(layerId) ? 0.7 : 0.1;
       let line = labels.includes(layerId) ? 1 : 0;
       map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
@@ -586,7 +604,7 @@ function Map() {
     map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
     map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
   
-  }; 
+  };
 
   // Methods for children elements.
   const floatingNavZoomToLocation = (longitude, latitude) => {
@@ -606,12 +624,13 @@ function Map() {
   }
   
   useEffect(() => {
+
     const fetchScores = async () => {
   
       const formattedDate = new Date().toISOString().slice(0,10);
       
       try {
-        const response = await fetch(`${BASE_API_URL}/predict/${formattedDate}`);
+        const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
