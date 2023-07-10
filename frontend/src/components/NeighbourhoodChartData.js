@@ -3,7 +3,6 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
-import { MapContext } from './SplitViewMapWrapper';
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
@@ -183,9 +182,9 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
-                {/* <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Show Splitview'}
-                </button> */}
+                </button>
             </div>
         </div>
     );

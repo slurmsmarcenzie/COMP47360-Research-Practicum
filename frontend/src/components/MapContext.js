@@ -201,8 +201,6 @@ export const MapProvider = ({ children }) => {
     
         // Get the current map's style
         const style = map.getStyle();
-
-        console.log(layerIds)
       
         layerIds.forEach(layerId => {
 

@@ -21,8 +21,6 @@ import SplitViewMap from './SplitViewMap';
 // import events from '../geodata/events.json';
 // import prunedEvents from '../geodata/prunedEvents.json'
 
-// Wrapper
-import { MapProvider } from './SplitViewMapWrapper';
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -83,7 +81,7 @@ function Map() {
     setShowChartData(false);
     setShowChart(false);
     setNeighbourhoodEvents([]);
-    
+
     updateLayerColours(map.current, true, originalBusynessHashMap, busynessHashMap);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
@@ -148,22 +146,22 @@ function Map() {
     })
   }
 
-// Map Event Listeners for mouse
-const initialiseMouseMapEvents = () => {
+  // Map Event Listeners for mouse
+  const initialiseMouseMapEvents = (map) => {
 
     layerIds.forEach((layerId) => {
       const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
 
       // Mouseover event
-      map.current.on('mousemove', layerId, (e) => {
+      map.on('mousemove', layerId, (e) => {
         
           if (!isNeighbourhoodClickedRef.current) {
 
-              map.current.getCanvas().style.cursor = 'pointer';
-              map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-              map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+              map.getCanvas().style.cursor = 'pointer';
+              map.setPaintProperty(layerId, 'fill-opacity', 0.9);
+              map.setPaintProperty(lineLayerId, 'line-width', 4);
               
-              const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+              const features = map.queryRenderedFeatures(e.point, { layers: [layerId] });
 
               if (features.length > 0) {
 
@@ -199,17 +197,17 @@ const initialiseMouseMapEvents = () => {
                   
                   popup.current.setLngLat(e.lngLat)
                       .setHTML(`${zone}, ${layerId}`)
-                      .addTo(map.current);
+                      .addTo(map);
               }
           }
       });
   
       // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
-      map.current.on('mouseleave', layerId, () => {
+      map.on('mouseleave', layerId, () => {
         if (!isNeighbourhoodClickedRef.current) {
-            map.current.getCanvas().style.cursor = '';
-            map.current.setPaintProperty(layerId, 'fill-opacity', 0.6);
-            map.current.setPaintProperty(lineLayerId, 'line-width', 0);
+            map.getCanvas().style.cursor = '';
+            map.setPaintProperty(layerId, 'fill-opacity', 0.6);
+            map.setPaintProperty(lineLayerId, 'line-width', 0);
 
             if (popup.current) {
                 popup.current.remove();
@@ -218,11 +216,11 @@ const initialiseMouseMapEvents = () => {
           }
       });
 
-      map.current.on('click', (e) => {
+      map.on('click', (e) => {
 
         popup.current?.remove();
 
-        const features = map.current.queryRenderedFeatures(e.point);
+        const features = map.queryRenderedFeatures(e.point);
 
         if (features.length > 0 && features[0].id !== undefined) {
             
@@ -242,9 +240,9 @@ const initialiseMouseMapEvents = () => {
           const [lng, lat] = centroid.geometry.coordinates;
   
           // Fly to the centroid of the polygon
-          map.current.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+          map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
-          map.current.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+          map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
           const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
@@ -352,9 +350,6 @@ const getPredictionBusyness = () => {
     
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
-
-
-
 
   const highlightEventImpact = (Zone_ID, labels) => {
   
@@ -499,7 +494,7 @@ const getPredictionBusyness = () => {
         renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
         renderEvents(map.current);
-        initialiseMouseMapEvents();
+        initialiseMouseMapEvents(map.current);
         setTimeout(() => {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
         }, 800);
@@ -562,6 +557,9 @@ const getPredictionBusyness = () => {
 
         {isSplitView ? (
             <SplitViewMap 
+            originalBusynessHashMap={originalBusynessHashMap}
+            busynessHashMap={busynessHashMap}
+            initialiseMouseMapEvents={initialiseMouseMapEvents}
             />
         ) : (
           <>
