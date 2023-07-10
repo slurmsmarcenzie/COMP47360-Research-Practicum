@@ -1,12 +1,12 @@
 const axios = require("axios");
-const { generalLogger } = require("../../logging/backend/express/logger");
+const generalLogger = require("../logging/generalLogger")(module)
 
 //fetch prediction from ML:
 const queryPrediction = (req, res, next) => {
-    console.log("queryPrediction: ", res.req.ip);
+    res.req.ip
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`prediction requested for: ${req.params}`)
+    generalLogger.info(`prediction requested for: ${req.params.date}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
     const uri = `http://127.0.0.1:7000/predict/${date}` 

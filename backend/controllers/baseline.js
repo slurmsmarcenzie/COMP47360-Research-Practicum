@@ -1,12 +1,12 @@
 const axios = require("axios")
-const { generalLogger } = require("../../logging/backend/express/logger");
+const generalLogger = require("../logging/generalLogger")(module)
 
 //fetch baseline from ML:
 const queryBaseline = (req, res, next) => {
     res.req.ip //sets the object
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`baseline requested for: ${req.params}`)
+    generalLogger.info(`baseline requested for: ${req.params.date}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
     const uri = `http://127.0.0.1:7000/baseline/${date}` 
@@ -14,7 +14,7 @@ const queryBaseline = (req, res, next) => {
     axios.get(uri)
       .then(response => {
         if (response.data === null || response.data === undefined || response.data.length === 0){
-          generalLogger.warn("warning, baseline list is empty")
+          //generalLogger.warn("warning, baseline list is empty")
           res.status(200).json([]); //send empty JSON list if empty response received
           next()
         }

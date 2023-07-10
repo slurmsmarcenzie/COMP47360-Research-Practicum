@@ -1,13 +1,13 @@
 import json
 from flask import abort
 from datetime import datetime
+from logging_flask.logger import general_logger, http_logger
 
 # Get a prediction from the model with the datetime specified in URL
 # Currently uses static file "MOCK_DATA.json" to mimic the model
 # Return a JSON array of busyness/location scores 
 def prediction(date):
-    print("prediction quried for datetime:", date)
-    #TODO - add to log
+    general_logger.info("prediction quried for datetime: {date}".format(date=date))
 
     # Prevent invalid datetime:
     try:
@@ -16,18 +16,17 @@ def prediction(date):
         # must use below to stop after seconds
         datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError as err:
-        print(err)
-        #TODO - add to log
+        general_logger.error("Incorrect date format: {error}".format(error=err))
         raise abort(500, "Incorrect date format supplied, should be YYYY-MM-DD")
 
     # Handle file read error (later this will be handle model failure):
     try:
         file = open("static/MOCK_DATA.json") #temporary, will use the model lader
     except IOError as err:
-        print(err)
-        #TODO - add to log
+        general_logger.error("Unable to read file {error}".format(error=err))
         raise abort(500, "Unable to read file 'MOCK_DATA.json'")
 
+    general_logger.info("Reading file MOCK_DATA.json")
     return json.load(file)
 
 
