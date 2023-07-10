@@ -4,7 +4,7 @@ import { useMapContext } from './MapContext';
 
 function EventCard ({item, visualiseEventImpact}) {
 
-    const {setShowChartData} = useMapContext();
+    const {setShowChartData, removeAllMarkers} = useMapContext();
 
     return (
         <div className='floating-info-box-event-card'>
@@ -13,7 +13,8 @@ function EventCard ({item, visualiseEventImpact}) {
             <p>{item.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
                 visualiseEventImpact();
-                setShowChartData(true);
+                setShowChartData(true)
+                removeAllMarkers();
             }}>Visualise Event Impact</button>
         </div>
     )

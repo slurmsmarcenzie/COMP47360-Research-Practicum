@@ -147,30 +147,44 @@ export const MapProvider = ({ children }) => {
 
     const renderEvents = (map) => {
 
-    const newMarkers = []; // array to hold our new markers
+        const newMarkers = []; // array to hold our new markers
 
-    prunedEvents.forEach((event) =>{
+        prunedEvents.forEach((event) =>{
 
-        const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
-        const markerElement = marker.getElement();
+            const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+            const markerElement = marker.getElement();
 
-        markerElement.addEventListener('click', () => {
-            console.log(event);
+            markerElement.addEventListener('click', () => {
+                console.log(event);
+            });
+
+            markerElement.addEventListener('mouseover', () => {
+                markerElement.style.cursor = 'pointer';
+            });
+
+            markerElement.addEventListener('mouseout', () => {
+                markerElement.style.cursor = 'default';
+            });
+
+            newMarkers.push(marker); // Push the marker to the array of new markers
         });
-
-        markerElement.addEventListener('mouseover', () => {
-            markerElement.style.cursor = 'pointer';
-        });
-
-        markerElement.addEventListener('mouseout', () => {
-            markerElement.style.cursor = 'default';
-        });
-
-        newMarkers.push(marker); // Push the marker to the array of new markers
-      });
 
       setMarkers(newMarkers); // Update the state with the new markers
+    
     };
+
+    const showAllMarkers = (map) => {
+
+        const newMarkers = []; // array to hold our new markers
+
+        prunedEvents.forEach((event) => {
+            const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+            newMarkers.push(marker);
+        });
+    
+        setMarkers(newMarkers); // Update the state 
+
+    }
 
     const removeAllMarkers = () => {
 
@@ -239,6 +253,8 @@ export const MapProvider = ({ children }) => {
         renderNeighbourhoods,
         renderEvents,
         updateLayerColours,
+        removeAllMarkers,
+        showAllMarkers,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,

@@ -15,13 +15,6 @@ import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
 import SplitViewMap from './SplitViewMap';
 
-// Data
-// import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
-// import neighborhoodscores from '../geodata/output.json'
-// import events from '../geodata/events.json';
-// import prunedEvents from '../geodata/prunedEvents.json'
-
-
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -33,13 +26,16 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, neighbourhoods, prunedEvents, layerIds} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
+
+  // add arrays
+  const {neighbourhoods, prunedEvents, layerIds} = useMapContext();
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, neighbourhoodEvents, setNeighbourhoodEvents, eventsMap, setEventsMap, zone, setZone, error, setError, isSplitView, setSplitView} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setSplitView} = useMapContext();
   
   // states to conditional render components
-  const {showInfoBox, setShowInfoBox, showNeighborhoodInfoBox, setShowNeighborhoodInfoBox, showChart, setShowChart, showChartData, setShowChartData} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch } = useMapContext();
@@ -62,18 +58,6 @@ function Map() {
   const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   // Change of Colour Handling
-  const colourPairs = [
-    ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
-    ["#FFD700", "#9ACD32", "#008000"], // Green, Yellow Green, Yellow
-    ["#FF69B4", "#C71585", "#800080"], // Purple, Medium Violet Red, Hot Pink
-    ["#00BFFF", "#1E90FF", "#4169E1"], // Royal Blue, Dodger Blue, Deep Sky Blue
-    ["#32CD32", "#228B22", "#006400"], // Dark Green, Forest Green, Lime Green
-    ["#CD5C5C", "#B22222", "#8B0000"], // Dark Red, Firebrick, Indian Red
-    ["#A9A9A9", "#696969", "#2F4F4F"], // Dark Slate Gray, Dim Gray, Dark Gray
-    ["#BA55D3", "#9932CC", "#8B008B"], // Dark Magenta, Dark Orchid, Medium Orchid
-    ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
-  ];
-
   const enableColours = () => {
 
     setShowInfoBox(false);
@@ -81,6 +65,7 @@ function Map() {
     setShowChartData(false);
     setShowChart(false);
     setNeighbourhoodEvents([]);
+    showAllMarkers(map.current);
 
     updateLayerColours(map.current, true, originalBusynessHashMap, busynessHashMap);
 
@@ -92,6 +77,7 @@ function Map() {
     });
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
   }
 
   const disableColours = () => {
@@ -263,8 +249,8 @@ function Map() {
     });
   }
  
-// Fetch Request for Busyness Prediction 
-const getPredictionBusyness = () => {
+  // Fetch Request for Busyness Prediction 
+  const getPredictionBusyness = () => {
 
     // write fetch request here to get scores from api/prediction
     // this should be handled in a use effect with a dependency for a prediction
@@ -311,45 +297,6 @@ const getPredictionBusyness = () => {
     }, 600)
   
   }
-
-  const calculateHashMapDifference = () => {
-
-    if (!busynessHashMap || !originalBusynessHashMap) {
-      return;
-    }
-
-    let temporaryHashMap = {};
-  
-    for (let key in busynessHashMap) {
-      if (originalBusynessHashMap.hasOwnProperty(key)) {
-        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
-      } else {
-        temporaryHashMap[key] = busynessHashMap[key];
-      }
-    }
-  
-    setHashMapOfDifference(temporaryHashMap);
-  };
-
-  // Define a memoized value 'busynessMap', which depends on 'scores'
-  const busynessHashMap = useMemo(() => {
-
-    if (!scores) return {};  
-  
-    // 'reduce' is a function that transforms an array into a single value.
-    // In this case, it is transforming the 'scores' array into a single object
-    return scores.reduce((map, item) => {
-      
-      // For each 'item' in 'scores', add a property to 'map' with a key of
-      // 'item.location_id' and a value of 'item.busyness_score'
-      map[item.location_id] = item.busyness_score;
-      
-      // Return the updated 'map' to be used in the next iteration of 'reduce'
-      return map;
-    }, {});  
-    
-    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
-  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
   const highlightEventImpact = (Zone_ID, labels) => {
   
@@ -435,6 +382,45 @@ const getPredictionBusyness = () => {
   
   };
   
+  const calculateHashMapDifference = () => {
+
+    if (!busynessHashMap || !originalBusynessHashMap) {
+      return;
+    }
+
+    let temporaryHashMap = {};
+  
+    for (let key in busynessHashMap) {
+      if (originalBusynessHashMap.hasOwnProperty(key)) {
+        temporaryHashMap[key] = busynessHashMap[key] - originalBusynessHashMap[key];
+      } else {
+        temporaryHashMap[key] = busynessHashMap[key];
+      }
+    }
+  
+    setHashMapOfDifference(temporaryHashMap);
+  };
+
+  // Define a memoized value 'busynessMap', which depends on 'scores'
+  const busynessHashMap = useMemo(() => {
+
+    if (!scores) return {};  
+  
+    // 'reduce' is a function that transforms an array into a single value.
+    // In this case, it is transforming the 'scores' array into a single object
+    return scores.reduce((map, item) => {
+      
+      // For each 'item' in 'scores', add a property to 'map' with a key of
+      // 'item.location_id' and a value of 'item.busyness_score'
+      map[item.location_id] = item.busyness_score;
+      
+      // Return the updated 'map' to be used in the next iteration of 'reduce'
+      return map;
+    }, {});  
+    
+    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
+
   useEffect(() => {
 
     const fetchScores = async () => {

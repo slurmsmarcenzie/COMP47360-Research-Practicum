@@ -79,7 +79,7 @@ function SplitViewMap({originalBusynessHashMap, busynessHashMap, initialiseMouse
           onMoveStart={onLeftMoveStart}
           onMove={activeMap === 'left' ? onMove : undefined}
           style={LeftMapStyle}
-          mapStyle="mapbox://styles/mapbox/light-v9"
+          mapStyle='mapbox://styles/mapbox/dark-v11'
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
@@ -91,7 +91,7 @@ function SplitViewMap({originalBusynessHashMap, busynessHashMap, initialiseMouse
           onMoveStart={onRightMoveStart}
           onMove={activeMap === 'right' ? onMove : undefined}
           style={RightMapStyle}
-          mapStyle="mapbox://styles/mapbox/dark-v9"
+          mapStyle='mapbox://styles/mapbox/dark-v11'
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
