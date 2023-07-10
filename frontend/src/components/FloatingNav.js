@@ -1,22 +1,23 @@
 import React from 'react';
 import "../App.css";
 
-function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, simulateBusynessChange, setShowNeighborhoodInfoBox}) {
+function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, setShowNeighborhoodInfoBox, setZone}) {
 
-
-  const dropDownOptions = events.map((event, index) => 
+  const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
-      {event.name}  
+      {event.Event_Name}  
     </option>
   );
 
   const reviewEvent = (e) => {
     const selectedEvent = JSON.parse(e.target.value);
 
-    const {latitude, longitude} = selectedEvent.location;
+    const latitude = selectedEvent.Event_Location.Latitude
+    const longitude = selectedEvent.Event_Location.Longitude
 
+    setZone(selectedEvent.Zone_Name);
     floatingNavZoomToLocation(longitude, latitude);
-    floatingNavSetLineWidth(selectedEvent.location_id);
+    floatingNavSetLineWidth(selectedEvent.Zone_ID);
     isNeighbourhoodClickedRef.current = true;
     disableColours();
     setNeighbourhoodEvents([selectedEvent]);
@@ -32,7 +33,6 @@ function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, events, floatingNa
               {dropDownOptions}
             </select>
           </form>
-          <button className="floating-nav-cta-button" onClick={() => {simulateBusynessChange();}}>Change Busyness</button>
           <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
           <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
         </div>

@@ -3,22 +3,31 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
+function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours}) {
 
     const [renderChart, setRenderChart] = useState(null);
-    const [showMostImpacted, setShowMostImpacted] = useState(true);  // New state for the toggle
+    const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
+    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
+    const [labels, setLabels] = useState([]);
+    const [chartData, setChartData] = useState(null);
+    const [showChart, setShowChart] = useState(false); 
 
-    console.log('This is the hashmap in our graph function:', hashMap);
 
     // Get the impacted zones
     const getImpactedZones = () => {
+
+        // error handling to prevent that the hashmap is not empty
+        if (!hashMap) {
+            return {labels: [], dataValues: []};
+        }
+
         // Get an array of [key, value] pairs from the hashMap
         const entries = Object.entries(hashMap);
 
         let filteredEntries;
 
         // Check the state to see if we want to display the most or least impacted zones
-        if (showMostImpacted) {
+        if (showMostImpactedZones) {
             // Sort the array based on the impact
             entries.sort((a, b) => b[1] - a[1]);
             // Get only the top 5 most impacted areas
@@ -45,7 +54,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             labels: labels,
             datasets: [
                 { label: 'Busyness',
-                barThickness: 16,
+                barThickness: 24,
                 data: dataValues,
                 backgroundColor: (context) => {
                     const chart = context.chart;
@@ -54,9 +63,9 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
                         return null
                     }
                     if (context.dataIndex >= 0){
-                        return showMostImpacted ? getGradientMostImpacted(chart) : getGradientLeastImpacted(chart);
+                        return showMostImpactedZones ? getGradientMostImpacted(chart) : getGradientLeastImpacted(chart);
                     } else{
-                        return 'blue'
+                        return 'white'
                     }
                 },
                 borderWidth: 1,
@@ -70,6 +79,16 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
             responsive: true, // Enable responsiveness
             legend: {
                 display: false
+            },
+            plugins: {
+                legend: {
+                    display: false, // This should already remove the legend.
+                },
+                tooltip: {
+                    callbacks: {
+                        title: () => {}, // This removes the title in the tooltip.
+                    },
+                },
             },
             indexAxis: 'y',
             scales: {
@@ -90,22 +109,26 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
         return {data, options};
     }
     
-
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
-
         const {labels, dataValues} = getImpactedZones();
+        setLabels(labels); // Set labels here
+        const newChartData = makeChartData(labels, dataValues);
+        setChartData(newChartData); // Set chartData here
+    }, [showMostImpactedZones, hashMap]);
 
-        const chartData = makeChartData(labels, dataValues);
+    const toggleChartData = () => {
+        
+        highlightEventImpact(Zone_ID, labels);
+        setRenderChart(chartData);
+        setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
 
-        setTimeout(() => {
-            highlightEventImpact(labels);
-            setRenderChart(chartData);
-        }, 300)
-    }, [showMostImpacted, hashMap]);
+        setShowChart(true); 
+
+    };
 
     const getGradientMostImpacted = (context) => {
-        const { chart, ctx, chartArea: { left, right } } = context;
+        const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
         gradientSegment.addColorStop(0, colours[1]);
         gradientSegment.addColorStop(1, colours[2]);
@@ -113,19 +136,35 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact}) {
     };
 
     const getGradientLeastImpacted = (context) => {
-        const { chart, ctx, chartArea: { left, right } } = context;
+        const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
         gradientSegment.addColorStop(0, colours[1]);
         gradientSegment.addColorStop(1, colours[0]);
         return gradientSegment;
     }
 
+    const handleToggle = () => {
+        setUseOriginal(!useOriginal);
+        updateLayerColours(!useOriginal);
+        resetColours();
+        setShowChart(false); 
+      };
+
     return (
-        <div className='floating-info-box-chart-container'>
-            {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
-            <button className=''onClick={() => setShowMostImpacted(!showMostImpacted)}>
-                {showMostImpacted ? 'Show least impacted' : 'Show most impacted'}
-            </button>
+        <div className='parent-chart-container'> 
+            {showChart &&
+            <div className='floating-info-box-chart-container'>
+                {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
+            </div>
+            }
+            <div className='floating-infobox-box-button-container'>
+                <button className='floating-infobox-box-toggle-button'onClick={toggleChartData}>
+                    {showMostImpactedZones ? 'Highlight most impacted zones' : 'Highlight least impacted zones'}
+                </button>
+                <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
+                    {useOriginal ? 'Show with Impact' : 'Show Baseline'}
+                </button>
+            </div>
         </div>
     );
 }

@@ -11,7 +11,10 @@ def prediction(date):
 
     # Prevent invalid datetime:
     try:
-        datetime.fromisoformat(date)
+        # cannot use below format as it includes milliseconds
+        # datetime.fromisoformat(date)
+        # must use below to stop after seconds
+        datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError as err:
         general_logger.error("Incorrect date format: {error}".format(error=err))
         raise abort(500, "Incorrect date format supplied, should be YYYY-MM-DD")
