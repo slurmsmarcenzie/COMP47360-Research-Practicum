@@ -291,6 +291,7 @@ function Map() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
+    setShowChart(false);
     setNeighbourhoodEvents([]);
 
     updateLayerColours(true);

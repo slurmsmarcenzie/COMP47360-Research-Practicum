@@ -143,8 +143,8 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     const getGradientLeastImpacted = (context) => {
         const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
-        gradientSegment.addColorStop(0, colours[1]);
-        gradientSegment.addColorStop(1, colours[0]);
+        gradientSegment.addColorStop(0, colours[0]);
+        gradientSegment.addColorStop(1, colours[1]);
         return gradientSegment;
     }
 
@@ -161,6 +161,16 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
             {showChart &&
             <div className='floating-info-box-chart-container'>
                 {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
+                <button 
+                    className="floating-infobox-close-toggle-button" 
+                    onClick={() => {                     
+                    setShowChart(!showChart);
+                    setShowMostImpactedZones(!showMostImpactedZones)
+                    resetColours()
+                    }}
+                >
+                    X
+                </button>
             </div>
             }
             <div className='floating-infobox-box-button-container'>
@@ -170,11 +180,6 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
-                {showChart && (
-                <button className="floating-infobox-box-toggle-button" onClick={() => setShowChart(!showChart)}>
-                    Hide Chart
-                </button>
-                )}
                 {/* <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Show Splitview'}
                 </button> */}
