@@ -27,7 +27,7 @@ def list_events():
             data.append(event.__dict__)
 
     general_logger.info("Event data is OK. Sending")
-    return data
+    return data, 200
 
 # Query Database and get a list of Metric dictionaries
 # "_sa_instance_state" is removed as only field names are needed
@@ -52,7 +52,7 @@ def list_metrics():
             data.append(metric.__dict__)
 
     general_logger.info("Metric data is OK. Sending")
-    return data
+    return data, 200
 
     
     
