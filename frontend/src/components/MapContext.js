@@ -10,6 +10,9 @@ import prunedEvents from '../geodata/prunedEvents.json'
 // Create a new context
 const MapContext = createContext();
 
+const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+
 // Create a provider component
 export const MapProvider = ({ children }) => {
 
@@ -21,6 +24,8 @@ export const MapProvider = ({ children }) => {
     const [zone, setZone] = useState(null);
     const [error, setError] = useState(null);
     const [isSplitView, setSplitView] = useState(false);
+    const [isPredictionRetrieved, setPredictionRetrieved] = useState(false);
+    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -229,6 +234,9 @@ export const MapProvider = ({ children }) => {
     <MapContext.Provider
       value={{
 
+        MAPBOX_ACCESS_TOKEN,
+        BASE_API_URL,
+
         add3DBuildings,
         renderNeighbourhoods,
         renderEvents,
@@ -244,6 +252,7 @@ export const MapProvider = ({ children }) => {
         showNeighborhoodInfoBox, setShowNeighborhoodInfoBox,
         showChart, setShowChart,
         showChartData, setShowChartData,
+        useOriginal, setUseOriginal,
 
         neighbourhoods,
         prunedEvents,

@@ -4,7 +4,7 @@ import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 import { useMapContext } from './MapContext';
 
-function FloatingInfoBox( {map, calculateEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, zone, resetColours }) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, zone, resetColours }) {
   
   const [zoneID, setZoneID] = useState(null);
   const [eventName, setEventName] = useState(null);
@@ -25,7 +25,7 @@ function FloatingInfoBox( {map, calculateEventImpact, highlightEventImpact, orig
       <EventCard 
         key = {i}
         item={item}
-        calculateEventImpact={calculateEventImpact}
+        visualiseEventImpact={visualiseEventImpact}
       />
       )
   }) : null;

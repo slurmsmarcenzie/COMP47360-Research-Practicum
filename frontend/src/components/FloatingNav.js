@@ -5,7 +5,7 @@ import "../App.css";
 import { useMapContext } from './MapContext';
 
 
-function FloatingNav({map, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours}) {
+function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enableColours,  disableColours}) {
 
   const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone} = useMapContext();
 

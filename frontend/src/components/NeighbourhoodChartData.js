@@ -7,7 +7,7 @@ import { MapContext } from './SplitViewMapWrapper';
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
-    const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
+    const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
@@ -20,9 +20,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
     const [chartData, setChartData] = useState(null);
 
     const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
-    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
-    const [labels, setLabels] = useState([]);
-    
+    const [labels, setLabels] = useState([]);    
 
     // Get the impacted zones
     const getImpactedZones = () => {

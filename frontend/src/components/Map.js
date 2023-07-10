@@ -29,10 +29,10 @@ import { MapProvider } from './SplitViewMapWrapper';
 // eslint-disable-next-line import/no-webpack-loader-syntax
 // mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
-
 function Map() {
+
+  // foundations
+  const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
   const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, neighbourhoods, prunedEvents, layerIds} = useMapContext();
@@ -63,6 +63,7 @@ function Map() {
   // define a new function that will be used as the event listener
   const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
+  // Change of Colour Handling
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
     ["#FFD700", "#9ACD32", "#008000"], // Green, Yellow Green, Yellow
@@ -74,28 +75,51 @@ function Map() {
     ["#BA55D3", "#9932CC", "#8B008B"], // Dark Magenta, Dark Orchid, Medium Orchid
     ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
-  
-  // Define a memoized value 'busynessMap', which depends on 'scores'
-  const busynessHashMap = useMemo(() => {
 
-    if (!scores) return {};  
-  
-    // 'reduce' is a function that transforms an array into a single value.
-    // In this case, it is transforming the 'scores' array into a single object
-    return scores.reduce((map, item) => {
-      
-      // For each 'item' in 'scores', add a property to 'map' with a key of
-      // 'item.location_id' and a value of 'item.busyness_score'
-      map[item.location_id] = item.busyness_score;
-      
-      // Return the updated 'map' to be used in the next iteration of 'reduce'
-      return map;
-    }, {});  
+  const enableColours = () => {
+
+    setShowInfoBox(false);
+    setShowNeighborhoodInfoBox(false);
+    setShowChartData(false);
+    setShowChart(false);
+    setNeighbourhoodEvents([]);
     
-    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
-  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
+    updateLayerColours(map.current, true, originalBusynessHashMap, busynessHashMap);
 
-  // dynamic methods and interactive for our application to handle and set changes to our map
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+  
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+  }
+
+  const disableColours = () => {
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0);
+    });
+  }
+
+  const resetColours = () => {
+
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+
+    isNeighbourhoodClickedRef.current = false; // allow for on hover effects to be resumed
+
+  }
+
+  const changeColourScheme = () => {
+    setColourPairIndex(prevIndex => {
+      const newIndex = (prevIndex + 1) % colourPairs.length;
+      handleChangeColours(newIndex);
+      return newIndex;
+    });
+  }
 
   const handleChangeColours = (colourPairIndex) => {
 
@@ -124,52 +148,8 @@ function Map() {
     })
   }
 
-  const changeColourScheme = () => {
-    setColourPairIndex(prevIndex => {
-      const newIndex = (prevIndex + 1) % colourPairs.length;
-      handleChangeColours(newIndex);
-      return newIndex;
-    });
-  }
-
-  const disableColours = () => {
-    neighbourhoods.features.forEach((neighbourhood) => {
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0);
-    });
-  }
-
-  const enableColours = () => {
-
-    setShowInfoBox(false);
-    setShowNeighborhoodInfoBox(false);
-    setShowChartData(false);
-    setShowChart(false);
-    setNeighbourhoodEvents([]);
-
-    updateLayerColours((map.current, true, originalBusynessHashMap, busynessHashMap));
-
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
-  
-    neighbourhoods.features.forEach((neighbourhood) => {
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
-      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
-    });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-  }
-
-  const resetColours = () => {
-
-    neighbourhoods.features.forEach((neighbourhood) => {
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
-      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
-    });
-
-    isNeighbourhoodClickedRef.current = false; // allow for on hover effects to be resumed
-
-  }
-
-  const initialiseMouseMapEvents = () => {
+// Map Event Listeners for mouse
+const initialiseMouseMapEvents = () => {
 
     layerIds.forEach((layerId) => {
       const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
@@ -284,8 +264,9 @@ function Map() {
       });
     });
   }
-  
-  const getPredictionBusyness = () => {
+ 
+// Fetch Request for Busyness Prediction 
+const getPredictionBusyness = () => {
 
     // write fetch request here to get scores from api/prediction
     // this should be handled in a use effect with a dependency for a prediction
@@ -314,6 +295,25 @@ function Map() {
 
   };
 
+  const visualiseEventImpact = () => {
+
+    setNeighbourhoodEvents([]);
+
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+  
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+
+    setTimeout(() => {
+      getPredictionBusyness();
+    }, 600)
+  
+  }
+
   const calculateHashMapDifference = () => {
 
     if (!busynessHashMap || !originalBusynessHashMap) {
@@ -333,24 +333,28 @@ function Map() {
     setHashMapOfDifference(temporaryHashMap);
   };
 
-  const calculateEventImpact = () => {
+  // Define a memoized value 'busynessMap', which depends on 'scores'
+  const busynessHashMap = useMemo(() => {
 
-    setNeighbourhoodEvents([]);
+    if (!scores) return {};  
+  
+    // 'reduce' is a function that transforms an array into a single value.
+    // In this case, it is transforming the 'scores' array into a single object
+    return scores.reduce((map, item) => {
+      
+      // For each 'item' in 'scores', add a property to 'map' with a key of
+      // 'item.location_id' and a value of 'item.busyness_score'
+      map[item.location_id] = item.busyness_score;
+      
+      // Return the updated 'map' to be used in the next iteration of 'reduce'
+      return map;
+    }, {});  
+    
+    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+  }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
-    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
-  
-    neighbourhoods.features.forEach((neighbourhood) => {
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
-      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
-    });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
-    setTimeout(() => {
-      getPredictionBusyness();
-    }, 600)
-  
-  }
+
 
   const highlightEventImpact = (Zone_ID, labels) => {
   
@@ -557,10 +561,8 @@ function Map() {
         <div ref={mapContainer} style={{ width: '100%', height: '100vh' }}>
 
         {isSplitView ? (
-          <MapProvider>
             <SplitViewMap 
             />
-          </MapProvider>
         ) : (
           <>
 
@@ -576,27 +578,13 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
-            calculateEventImpact={calculateEventImpact}
+            visualiseEventImpact={visualiseEventImpact}
             highlightEventImpact={highlightEventImpact}
+            resetColours={resetColours}
             originalBusynessHashMap={originalBusynessHashMap}
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}
-            
-            updateLayerColours={updateLayerColours}
-
-            showingFloatingInfoBox={showInfoBox}
-            showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
-            neighbourhoodEvents={neighbourhoodEvents}
-            zone={zone}
-            setZone={setZone}
-            showChartData={showChartData}
-            setShowChartData={setShowChartData}
             colours={colourPairs[colourPairIndex]}
-            resetColours={resetColours}
-            showChart={showChart}
-            setShowChart={setShowChart}
-            isSplitView={isSplitView}
-            setSplitView={setSplitView}
           />
 
           <MapLegend
