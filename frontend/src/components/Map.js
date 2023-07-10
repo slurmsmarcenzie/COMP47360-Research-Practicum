@@ -533,10 +533,10 @@ function Map() {
       map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
       map.current.setPaintProperty(layerId + '-line', 'line-width', line);
   
-      map.current.off('mousemove', layerId);
-      map.current.off('mouseleave', layerId);
-  
       if (labels.includes(layerId)) {
+
+        map.current.off('mousemove', layerId);
+        map.current.off('mouseleave', layerId);
   
         map.current.on('mousemove', layerId, (e) => {
   
