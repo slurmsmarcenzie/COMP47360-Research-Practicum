@@ -5,6 +5,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
 import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
 
+// Context builder
+import { useMapContext } from './MapContext';
+
 // Components
 import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
@@ -13,10 +16,10 @@ import MapLegend from './MapLegend';
 import SplitViewMap from './SplitViewMap';
 
 // Data
-import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
+// import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 // import neighborhoodscores from '../geodata/output.json'
 // import events from '../geodata/events.json';
-import prunedEvents from '../geodata/prunedEvents.json'
+// import prunedEvents from '../geodata/prunedEvents.json'
 
 // Wrapper
 import { MapProvider } from './SplitViewMapWrapper';
@@ -31,36 +34,34 @@ const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api
 
 function Map() {
 
-  const [colourPairIndex, setColourPairIndex] = useState(0);
-  const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
-  const [eventsMap, setEventsMap] = useState([]);
+  // imported base functions
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, neighbourhoods, prunedEvents, layerIds} = useMapContext();
+
+  // import base states
+  const { colourPairIndex, setColourPairIndex, neighbourhoodEvents, setNeighbourhoodEvents, eventsMap, setEventsMap, zone, setZone, error, setError, isSplitView, setSplitView} = useMapContext();
+  
+  // states to conditional render components
+  const {showInfoBox, setShowInfoBox, showNeighborhoodInfoBox, setShowNeighborhoodInfoBox, showChart, setShowChart, showChartData, setShowChartData} = useMapContext();
+
+  // magic numbers
+  const { originalLat, originalLng, zoom, pitch } = useMapContext();
+
+  // map specific states
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
-  const [zone, setZone] = useState(null);
-  const [error, setError] = useState(null);
-  const [markers, setMarkers] = useState([]);
-  const [isSplitView, setSplitView] = useState(false);
 
-  const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
-  const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
-  const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
-  const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
-  
+  // objects for our map
   const mapContainer = useRef(null);
   const map = useRef(null);
   const popup = useRef(null);
-  const layerIds = useRef([]);
   const isNeighbourhoodClickedRef = useRef(false);
+  
+  // flimsy counter replace later
   const retryCount = useRef(0);
 
-  const originalLat = 40.7484;
-  const originalLng = -73.9857;
-  const zoom = 7;
-  const pitch = 30;
-
   // define a new function that will be used as the event listener
-  const updateLayerColoursAfterLoad = () => updateLayerColours(false);
+  const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   const colourPairs = [
     ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -74,10 +75,6 @@ function Map() {
     ["#4169E1", "#0000CD", "#191970"]  // Midnight Blue, Medium Blue, Royal Blue
   ];
   
-  const colourScale = useMemo(() => {
-    return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
-  }, [colourPairs, colourPairIndex]);
-
   // Define a memoized value 'busynessMap', which depends on 'scores'
   const busynessHashMap = useMemo(() => {
 
@@ -97,151 +94,6 @@ function Map() {
     
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
-  
-
-  // static methods for our application to load in all values
-
-  const add3DBuildings = () => {
-    map.current.addLayer({
-      'id': 'add-3d-buildings',
-      'source': 'composite',
-      'source-layer': 'building',
-      'filter': ['==', 'extrude', 'true'],
-      'type': 'fill-extrusion',
-      'minzoom': 15,
-      'paint': {
-        'fill-extrusion-color': '#aaa',
-        'fill-extrusion-height': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          15,
-          0,
-          15.05,
-          ['get', 'height']
-        ],
-        'fill-extrusion-base': [
-          'interpolate',
-          ['linear'],
-          ['zoom'],
-          15,
-          0,
-          15.05,
-          ['get', 'min_height']
-        ],
-        'fill-extrusion-opacity': 0.6
-      }
-    });
-  };
-
-  const renderNeighbourhoods = () => {
-
-    // loop over the neighborhoods and create a new layer for each
-    neighbourhoods.features.forEach((neighbourhood) => {
-
-      // construct the layer ID
-      const layerId = `${neighbourhood.properties.location_id}`;
-
-      // add new properties to our neighbourhood objects so that we can reuse them later (on hover effect)
-      neighbourhood.id = layerId;
-
-      // add the layer ID to our array so we can tell which neighbourhood/layer is being hovered etc.
-      layerIds.current.push(layerId);
-
-      // add new line id to our neighbourhood objects so that we can reuse them later (on hover effect)
-      const lineLayerId = layerId + '-line';
-
-      // add two distinct layer types:
-      // 1. Fill layer -> we will use this to colour in our boundaries
-      // 2. Line layer -> we will use this layer to highlight the borders of our boundaries on hover
-      
-      if (!map.current.getLayer(layerId)) {
-        map.current.addLayer({
-          id: layerId,
-          type: 'fill',
-          source: {
-            type: 'geojson',
-            data: neighbourhood
-          },
-          paint: {
-            'fill-color': '#888', // fill color
-            'fill-opacity-transition': { duration: 600 }, // .6 second transition
-            'fill-opacity': [
-              'case',
-              ['boolean', ['feature-state', 'hover'], false],
-              0.9,
-              0.6
-            ],
-          }
-        });
-      }
-
-      if (!map.current.getLayer(lineLayerId)) {
-
-        map.current.addLayer({
-          id: lineLayerId,
-          type: 'line',
-          source: {
-            type: 'geojson',
-            data: neighbourhood
-          },
-          paint: {  
-            'line-color': '#ffffff',
-            'line-width': 0,
-            'line-width-transition': { duration: 600 }, // .6 second transition
-          }
-        });
-      }    
-    });
-  }
-
-  // marker methods and customisation
-
-  const renderEvents = () => {
-
-    const newMarkers = []; // array to hold our new markers
-
-    prunedEvents.forEach((event) =>{
-        const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map.current);
-        const markerElement = marker.getElement();
-
-        markerElement.addEventListener('click', () => {
-            console.log(event);
-        });
-
-        markerElement.addEventListener('mouseover', () => {
-            markerElement.style.cursor = 'pointer';
-        });
-
-        markerElement.addEventListener('mouseout', () => {
-            markerElement.style.cursor = 'default';
-        });
-
-        newMarkers.push(marker); // Push the marker to the array of new markers
-      });
-
-      setMarkers(newMarkers); // Update the state with the new markers
-  };
-
-  const removeAllMarkers = () => {
-
-    markers.forEach((marker) => {
-        marker.remove(); // Remove the marker from the map
-    });
-
-    setMarkers([]); // Clear the markers array
-  };
-
-  const removeAllButOneMarker = (keptEvent) => {
-
-    markers.forEach(({ event, marker }) => {
-      if (event !== keptEvent) {
-        marker.remove();
-      }
-    });
-
-    setMarkers(markers.filter(({ event }) => event === keptEvent));
-  };
 
   // dynamic methods and interactive for our application to handle and set changes to our map
 
@@ -255,7 +107,7 @@ function Map() {
     // Get the current map's style
     const style = map.current.getStyle();
   
-    layerIds.current.forEach(layerId => {
+    layerIds.forEach(layerId => {
       // Check if the layer exists in the style before trying to update it
       if (style.layers.some(layer => layer.id === layerId)) {
         const score = busynessHashMap[layerId];
@@ -294,7 +146,7 @@ function Map() {
     setShowChart(false);
     setNeighbourhoodEvents([]);
 
-    updateLayerColours(true);
+    updateLayerColours((map.current, true, originalBusynessHashMap, busynessHashMap));
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -317,30 +169,9 @@ function Map() {
 
   }
 
-  const updateLayerColours = (isOriginalHashMap) => {
-  
-    if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
-  
-    // Get the current map's style
-    const style = map.current.getStyle();
-  
-    layerIds.current.forEach(layerId => {
-      // Check if the layer exists in the style before trying to update it
-      if (style.layers.some(layer => layer.id === layerId)) {
-        const score = isOriginalHashMap ? originalBusynessHashMap[layerId] : busynessHashMap[layerId]
-        if (score !== undefined) { // Check if the score is defined before using it
-          const newColour = colourScale(score);
-          map.current.setPaintProperty(layerId, 'fill-color', newColour);
-        }
-      } else {
-        console.warn(`Layer with ID ${layerId} doesn't exist`);
-      }
-    });
-  };
-
   const initialiseMouseMapEvents = () => {
 
-    layerIds.current.forEach((layerId) => {
+    layerIds.forEach((layerId) => {
       const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
 
       // Mouseover event
@@ -454,7 +285,7 @@ function Map() {
     });
   }
   
-  const simulateBusynessChange = () => {
+  const getPredictionBusyness = () => {
 
     // write fetch request here to get scores from api/prediction
     // this should be handled in a use effect with a dependency for a prediction
@@ -516,18 +347,16 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
     setTimeout(() => {
-      simulateBusynessChange();
+      getPredictionBusyness();
     }, 600)
   
   }
 
   const highlightEventImpact = (Zone_ID, labels) => {
-
-    console.log('here are my labels', labels)
   
     isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
   
-    layerIds.current.forEach((layerId) => {
+    layerIds.forEach((layerId) => {
 
       let opacity = labels.includes(layerId) ? 0.7 : 0.1;
       let line = labels.includes(layerId) ? 1 : 0;
@@ -606,23 +435,6 @@ function Map() {
     map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
   
   };
-
-  // Methods for children elements.
-  const floatingNavZoomToLocation = (longitude, latitude) => {
-    map.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 15, // specify your desired zoom level
-      essential: true
-    });
-  }
-
-  const floatingNavSetLineWidth = (zone) => {
-
-    const lineLayerId = zone + '-line';
-
-    map.current.setPaintProperty(lineLayerId, 'line-width', 4);
-
-  }
   
   useEffect(() => {
 
@@ -635,7 +447,6 @@ function Map() {
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
-        console.log(data);
       } 
       
       catch (err) {
@@ -668,6 +479,7 @@ function Map() {
     // retrieved by the fetch api before we create a map
     
     if (!map.current && scores) {
+
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
       map.current = new mapboxgl.Map({
@@ -680,13 +492,13 @@ function Map() {
 
       map.current.on('load', () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-        add3DBuildings();
-        renderNeighbourhoods();
-        renderEvents();
+        renderNeighbourhoods(map.current);
+        add3DBuildings(map.current);
+        renderEvents(map.current);
         initialiseMouseMapEvents();
         setTimeout(() => {
-          updateLayerColours(false)
-        }, 500);
+          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
+        }, 800);
       });
 
       map.current.on('moveend', () => {
@@ -698,6 +510,7 @@ function Map() {
         }
         
       });
+      
     }
   }, [scores]);  // This effect runs when scores is fetched
 
@@ -711,7 +524,7 @@ function Map() {
       if (map.current.isStyleLoaded()) {
         
         // Update the layer colours on the map
-        updateLayerColours(false)
+        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
       } else {
         // If the map's style is not yet loaded, set up an event listener to
         // update the layer colours once the style is loaded
@@ -746,10 +559,6 @@ function Map() {
         {isSplitView ? (
           <MapProvider>
             <SplitViewMap 
-            isSplitView={isSplitView}
-            setSplitView={setSplitView}
-            neighbourhoods={neighbourhoods}
-            renderNeighbourhoods={renderNeighbourhoods}
             />
           </MapProvider>
         ) : (
@@ -758,36 +567,31 @@ function Map() {
           <Navbar />
 
           <FloatingNav 
-            prunedEvents = {prunedEvents}
-            zone={zone}
+            map={map}
             disableColours = {disableColours}
-            floatingNavZoomToLocation ={floatingNavZoomToLocation}
-            floatingNavSetLineWidth = {floatingNavSetLineWidth}
             isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
             changeColourScheme={changeColourScheme}
             enableColours={enableColours}
-            simulateBusynessChange = {simulateBusynessChange}
-            setNeighbourhoodEvents={setNeighbourhoodEvents}
-            setShowInfoBox={setShowInfoBox}
-            setShowNeighborhoodInfoBox={setShowNeighborhoodInfoBox}
-            setZone={setZone}
-            updateLayerColours={updateLayerColours}
-            setShowChartData={setShowChartData}
             />
 
           <FloatingInfoBox
+            map={map}
+            calculateEventImpact={calculateEventImpact}
+            highlightEventImpact={highlightEventImpact}
+            originalBusynessHashMap={originalBusynessHashMap}
+            busynessHashMap={busynessHashMap}
+            hashMapOfDifference={hashMapOfDifference}
+            
+            updateLayerColours={updateLayerColours}
+
             showingFloatingInfoBox={showInfoBox}
             showingNeighborHoodInfoBox={showNeighborhoodInfoBox}
             neighbourhoodEvents={neighbourhoodEvents}
             zone={zone}
             setZone={setZone}
-            hashMapOfDifference={hashMapOfDifference}
             showChartData={showChartData}
             setShowChartData={setShowChartData}
-            calculateEventImpact={calculateEventImpact}
             colours={colourPairs[colourPairIndex]}
-            highlightEventImpact={highlightEventImpact}
-            updateLayerColours={updateLayerColours}
             resetColours={resetColours}
             showChart={showChart}
             setShowChart={setShowChart}

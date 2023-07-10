@@ -1,7 +1,10 @@
 import React from 'react';
 import "../App.css";
+import { useMapContext } from './MapContext';
 
-function EventCard ({item, calculateEventImpact, setShowChartData}) {
+function EventCard ({item, calculateEventImpact}) {
+
+    const {setShowChartData} = useMapContext();
 
     return (
         <div className='floating-info-box-event-card'>

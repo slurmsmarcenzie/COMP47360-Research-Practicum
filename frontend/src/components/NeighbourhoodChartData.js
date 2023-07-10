@@ -2,8 +2,13 @@ import React, {useState, useEffect} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
+import { useMapContext } from './MapContext';
+import { MapContext } from './SplitViewMapWrapper';
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours, showChart, setShowChart, isSplitView, setSplitView}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+
+    const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
+    const {updateLayerColours} = useMapContext()
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
@@ -150,7 +155,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
 
     const handleToggle = () => {
         setUseOriginal(!useOriginal);
-        updateLayerColours(!useOriginal);
+        updateLayerColours(map.current, !useOriginal, originalBusynessHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
