@@ -2,8 +2,10 @@ from flask import Flask, request
 from extensions.database import db
 from routes.blueprint import info, predict
 from logging_flask.logger import http_logger
+from extensions.limiter import limiter
 
 app = Flask(__name__)
+limiter.init_app(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///metainfo.db"
 db.init_app(app)
 app.register_blueprint(info)

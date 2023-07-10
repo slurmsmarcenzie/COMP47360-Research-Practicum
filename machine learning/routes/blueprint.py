@@ -2,9 +2,12 @@ from flask import Blueprint
 from controllers.meta import list_events, list_metrics
 from controllers.prediction import prediction
 from controllers.baseline import baseline
+from extensions.limiter import limiter
 
 info = Blueprint("info", __name__)
+limiter.limit("25/minute")(info)
 predict = Blueprint("predict", __name__)
+limiter.limit("10/minute")(predict)
 
 
 #ROUTES:
