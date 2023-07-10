@@ -11,8 +11,8 @@ const MapLegend = ({ colours }) => {
                 style={{ background: `linear-gradient(to right, ${gradient})` }} 
                 />
                 <div className="ticks-container">
-                    <p className="tick-label">Low</p>
-                    <p className="tick-label">High</p>
+                    <p className="tick-label">Not Busy</p>
+                    <p className="tick-label">Very Busy</p>
                 </div>
             </div>
         </div>

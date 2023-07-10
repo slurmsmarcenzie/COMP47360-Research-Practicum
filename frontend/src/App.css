@@ -205,7 +205,7 @@ body {
 .floating-map-legend-container-header-text {
   margin: auto;
   padding: auto;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   font-weight: 600;
   font-size: 14px;
 }
@@ -221,7 +221,7 @@ body {
 .tick-label  {
   font-size: 12px;
   font-weight: 400;
-  margin-top: 0px;
+  margin-top: 4%;
   margin-bottom: 0px;
 }
 

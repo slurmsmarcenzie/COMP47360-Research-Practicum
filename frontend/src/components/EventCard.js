@@ -1,7 +1,10 @@
 import React from 'react';
 import "../App.css";
+import { useMapContext } from './MapContext';
 
-function EventCard ({item, calculateEventImpact, setShowChartData}) {
+function EventCard ({item, visualiseEventImpact}) {
+
+    const {setShowChartData} = useMapContext();
 
     return (
         <div className='floating-info-box-event-card'>
@@ -9,9 +12,9 @@ function EventCard ({item, calculateEventImpact, setShowChartData}) {
             <h3>Expected Attendees: {item.expected_attendees}</h3>
             <p>{item.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
-                calculateEventImpact();
+                visualiseEventImpact();
                 setShowChartData(true);
-            }}>Calculate Event Impact</button>
+            }}>Visualise Event Impact</button>
         </div>
     )
 }

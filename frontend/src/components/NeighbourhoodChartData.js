@@ -2,8 +2,12 @@ import React, {useState, useEffect} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
+import { useMapContext } from './MapContext';
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours, showChart, setShowChart, isSplitView, setSplitView}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+
+    const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
+    const {updateLayerColours} = useMapContext()
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
@@ -15,9 +19,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     const [chartData, setChartData] = useState(null);
 
     const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
-    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
-    const [labels, setLabels] = useState([]);
-    
+    const [labels, setLabels] = useState([]);    
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -150,7 +152,7 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
 
     const handleToggle = () => {
         setUseOriginal(!useOriginal);
-        updateLayerColours(!useOriginal);
+        updateLayerColours(map.current, !useOriginal, originalBusynessHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
@@ -180,9 +182,9 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
-                {/* <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Show Splitview'}
-                </button> */}
+                </button>
             </div>
         </div>
     );
