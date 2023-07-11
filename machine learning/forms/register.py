@@ -4,10 +4,9 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from models.user import User
 
 class RegisterForm(FlaskForm):
-    recaptcha = RecaptchaField()
-
     username = StringField(validators=[InputRequired(), Length(min=6,max=20)], render_kw={"placeholder":"Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=6,max=20)], render_kw={"placeholder":"Password"})
+    recaptcha = RecaptchaField()
     submit = SubmitField("Register")
 
     def validate_username(self, username):
