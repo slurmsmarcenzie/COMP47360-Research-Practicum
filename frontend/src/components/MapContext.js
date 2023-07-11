@@ -24,8 +24,8 @@ export const MapProvider = ({ children }) => {
     const [zone, setZone] = useState(null);
     const [error, setError] = useState(null);
     const [isSplitView, setSplitView] = useState(false);
-    const [isPredictionRetrieved, setPredictionRetrieved] = useState(false);
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
+    const [isPredictionRetrieved, setPredictionRetrieved] = useState(false);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -154,6 +154,9 @@ export const MapProvider = ({ children }) => {
             const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
             const markerElement = marker.getElement();
 
+            // add our event id to our markers so that we can show/hide them based on their event ID value
+            marker.Event_ID = event.Event_ID;
+
             markerElement.addEventListener('click', () => {
                 console.log(event);
             });
@@ -169,9 +172,15 @@ export const MapProvider = ({ children }) => {
             newMarkers.push(marker); // Push the marker to the array of new markers
         });
 
-      setMarkers(newMarkers); // Update the state with the new markers
+        setMarkers(newMarkers); // Update the state with the new markers
     
     };
+
+    useEffect(() => {
+        
+        console.log(markers)
+
+      }, [markers]);
 
     const showAllMarkers = (map) => {
 
@@ -197,13 +206,17 @@ export const MapProvider = ({ children }) => {
     
     const removeAllButOneMarker = (keptEvent) => {
 
-        markers.forEach(({ event, marker }) => {
-            if (event !== keptEvent) {
+        markers.forEach((marker) => {
+
+            console.log(marker.Event_ID)
+            console.log(keptEvent)
+
+            if (marker.Event_ID !== keptEvent) {
                 marker.remove();
             }
         });
-    
-        setMarkers(markers.filter(({ event }) => event === keptEvent));
+        
+        setMarkers(markers.filter(marker => marker.Event_ID == keptEvent))
     
     };
 
@@ -255,6 +268,7 @@ export const MapProvider = ({ children }) => {
         updateLayerColours,
         removeAllMarkers,
         showAllMarkers,
+        removeAllButOneMarker,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,

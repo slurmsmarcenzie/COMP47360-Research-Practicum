@@ -26,7 +26,7 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, removeAllButOneMarker} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents, layerIds} = useMapContext();
@@ -294,7 +294,7 @@ function Map() {
 
     setTimeout(() => {
       getPredictionBusyness();
-    }, 600)
+    }, 900)
   
   }
 
