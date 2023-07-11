@@ -187,16 +187,16 @@ function Map() {
                   const textColour = colourScale(neighbourhood.busyness_score);
 
                   let richText;
-                  if (neighbourhood.score < 0.20) {
+                  if (neighbourhood.busyness_score < 0.29) {
                       richText = 'Not Very Busy';
-                  } else if (neighbourhood.score > 0.2 && neighbourhood.score < 0.4) {
+                  } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
                       richText = 'Busy';
-                  } else if (neighbourhood.score > 0.4 < neighbourhood.score < 0.7) {
+                  } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
                       richText = 'Very Busy';
                   } else {
                       richText = 'Extremely Busy';
                   }
-                  
+
                   // Set the HTML content of the popup with the colored text
                   popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
                 }
