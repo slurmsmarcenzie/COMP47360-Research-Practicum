@@ -192,7 +192,7 @@ function Map() {
                   } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
                       richText = 'Relatively Busy';
                   } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                      richText = 'Busy';
+                      richText = 'Very Busy';
                   } else {
                       richText = 'Extremely Busy';
                   }
