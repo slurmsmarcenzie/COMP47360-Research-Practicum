@@ -176,12 +176,6 @@ export const MapProvider = ({ children }) => {
     
     };
 
-    useEffect(() => {
-        
-        console.log(markers)
-
-      }, [markers]);
-
     const showAllMarkers = (map) => {
 
         const newMarkers = []; // array to hold our new markers
@@ -216,7 +210,6 @@ export const MapProvider = ({ children }) => {
         setMarkers(markers.filter(marker => marker.Event_ID == keptEvent))
     
     };
-
 
     // update the colours on the map
     const updateLayerColours = (map, isOriginalHashMap, originalBusynessHashMap, busynessHashMap) => {

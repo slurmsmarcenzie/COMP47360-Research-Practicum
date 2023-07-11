@@ -26,13 +26,13 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, removeAllButOneMarker} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents, layerIds} = useMapContext();
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setSplitView} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
@@ -527,10 +527,6 @@ function Map() {
       }
     }
   }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
-
-  const toggleView = () => {
-    setSplitView(prevState => !prevState); // Function to toggle the map view
-  };
 
   return (
 

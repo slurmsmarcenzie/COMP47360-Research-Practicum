@@ -1,11 +1,10 @@
 import React from 'react';
 import "../App.css";
 import { useMapContext } from './MapContext';
-import { type } from '@testing-library/user-event/dist/type';
 
 function EventCard ({item, visualiseEventImpact}) {
 
-    const {setShowChartData, removeAllMarkers, removeAllButOneMarker} = useMapContext();
+    const {setShowChartData, removeAllButOneMarker} = useMapContext();
 
     return (
         <div className='floating-info-box-event-card'>
