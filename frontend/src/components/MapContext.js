@@ -50,7 +50,7 @@ export const MapProvider = ({ children }) => {
       ];
       
     const colourScale = useMemo(() => {
-        return scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
+        return scaleLinear().domain([0, 0.4, 0.75]).range(colourPairs[colourPairIndex]);
     }, [colourPairs, colourPairIndex]);
     
     const add3DBuildings = (map) => {
@@ -107,7 +107,7 @@ export const MapProvider = ({ children }) => {
             
             if (!map.getLayer(layerId)) {
             map.addLayer({
-                id: layerId,
+                id: neighbourhood.id,
                 type: 'fill',
                 source: {
                 type: 'geojson',
@@ -129,7 +129,7 @@ export const MapProvider = ({ children }) => {
             if (!map.getLayer(lineLayerId)) {
 
             map.addLayer({
-                id: lineLayerId,
+                id: neighbourhood.id+'-line',
                 type: 'line',
                 source: {
                 type: 'geojson',
@@ -214,36 +214,37 @@ export const MapProvider = ({ children }) => {
     // update the colours on the map
     const updateLayerColours = (map, isOriginalHashMap, originalBusynessHashMap, busynessHashMap) => {
   
-        if (!map|| !busynessHashMap) return; // Added a check for busynessMap
+        if (!map|| !busynessHashMap || !neighbourhoods) return; // Added a check for busynessMap
     
         // Get the current map's style
         const style = map.getStyle();
       
-        layerIds.forEach(layerId => {
+        neighbourhoods.features.forEach(neighbourhood => {
 
             // Check if the layer exists in the style before trying to update it
-            if (style.layers.some(layer => layer.id === layerId)) {
-                const score = isOriginalHashMap ? originalBusynessHashMap[layerId] : busynessHashMap[layerId]
-            if (score !== undefined) { // Check if the score is defined before using it
-                const newColour = colourScale(score);
-                map.setPaintProperty(layerId, 'fill-color', newColour);
+            if (style.layers.some(layer => layer.id === neighbourhood.id)) {
+                const score = isOriginalHashMap ? originalBusynessHashMap[neighbourhood.id] : busynessHashMap[neighbourhood.id];
+                neighbourhood.busyness_score = score;
+                if (score !== undefined) { // Check if the score is defined before using it
+                    const newColour = colourScale(score);
+                    map.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
+                }
+            } else {
+                console.warn(`Layer with ID ${neighbourhood.id} doesn't exist`);
             }
-          } else {
-            console.warn(`Layer with ID ${layerId} doesn't exist`);
-          }
         });
     };
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        neighbourhoods.features.forEach((neighbourhood) => {
+    //     neighbourhoods.features.forEach((neighbourhood) => {
 
-            const layerId = `${neighbourhood.properties.location_id}`;
+    //         const layerId = `${neighbourhood.properties.location_id}`;
 
-            setLayerIds(prevLayerIds => [...prevLayerIds, layerId]);
-        })
+    //         setLayerIds(prevLayerIds => [...prevLayerIds, layerId]);
+    //     })
 
-      }, []);
+    //   }, []);
 
   return (
     <MapContext.Provider

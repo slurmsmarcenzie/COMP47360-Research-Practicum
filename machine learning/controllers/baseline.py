@@ -22,7 +22,7 @@ def baseline(date):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/MOCK_BASELINE.json") #temporary, will use the model lader
+        file = open("static/BASELINE_JUNE.json") #temporary, will use the model lader
     except IOError as err:
         print(err)
         #TODO - add to log

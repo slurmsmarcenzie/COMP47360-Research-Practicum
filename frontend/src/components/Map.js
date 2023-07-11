@@ -29,7 +29,7 @@ function Map() {
   const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
-  const {neighbourhoods, prunedEvents, layerIds} = useMapContext();
+  const {neighbourhoods, prunedEvents} = useMapContext();
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView} = useMapContext();
@@ -108,26 +108,26 @@ function Map() {
   const handleChangeColours = (colourPairIndex) => {
 
     // Create a new colourScale each time you handle the color change
-    const colourScale = scaleLinear().domain([0, 0.5, 1]).range(colourPairs[colourPairIndex]);
+    const colourScale = scaleLinear().domain([0, 0.4, 0.7]).range(colourPairs[colourPairIndex]);
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
     // Get the current map's style
     const style = map.current.getStyle();
   
-    layerIds.forEach(layerId => {
+    neighbourhoods.features.forEach(neighbourhood => {
       // Check if the layer exists in the style before trying to update it
-      if (style.layers.some(layer => layer.id === layerId)) {
-        const score = busynessHashMap[layerId];
+      if (style.layers.some(layer => layer.id === neighbourhood.id)) {
+        const score = busynessHashMap[neighbourhood.id];
         if (score !== undefined) { // Check if the score is defined before using it
           const newColour = colourScale(score);
-          map.current.setPaintProperty(layerId, 'fill-color', newColour);
+          map.current.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
         }
         else {
           console.warn(`Current layer does not have a score`);
         }
       } else {
-        console.warn(`Layer with ID ${layerId} doesn't exist`);
+        console.warn(`Layer with ID ${neighbourhood.id} doesn't exist`);
       }
     })
   }
@@ -135,19 +135,21 @@ function Map() {
   // Map Event Listeners for mouse
   const initialiseMouseMapEvents = (map) => {
 
-    layerIds.forEach((layerId) => {
-      const lineLayerId = layerId + '-line'; // Assuming each layerId has a corresponding line layer with '-line' appended to its id.
+    // Create a new colourScale each time you handle the color change
+    const colourScale = scaleLinear().domain([0, 0.4, 0.75]).range(colourPairs[colourPairIndex]);
+
+    neighbourhoods.features.forEach((neighbourhood) => {
 
       // Mouseover event
-      map.on('mousemove', layerId, (e) => {
+      map.on('mousemove', neighbourhood.id, (e) => {
         
           if (!isNeighbourhoodClickedRef.current) {
 
               map.getCanvas().style.cursor = 'pointer';
-              map.setPaintProperty(layerId, 'fill-opacity', 0.9);
-              map.setPaintProperty(lineLayerId, 'line-width', 4);
+              map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
+              map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 4);
               
-              const features = map.queryRenderedFeatures(e.point, { layers: [layerId] });
+              const features = map.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
 
               if (features.length > 0) {
 
@@ -181,19 +183,32 @@ function Map() {
                   const feature = features[0];
                   const zone = feature.properties.zone; 
                   
-                  popup.current.setLngLat(e.lngLat)
-                      .setHTML(`${zone}, ${layerId}`)
-                      .addTo(map);
-              }
+                  // Apply the busyness score to the color scale
+                  const textColour = colourScale(neighbourhood.busyness_score);
+
+                  let richText;
+                  if (neighbourhood.score < 0.20) {
+                      richText = 'Not Very Busy';
+                  } else if (neighbourhood.score > 0.2 && neighbourhood.score < 0.4) {
+                      richText = 'Busy';
+                  } else if (neighbourhood.score > 0.4 < neighbourhood.score < 0.7) {
+                      richText = 'Very Busy';
+                  } else {
+                      richText = 'Extremely Busy';
+                  }
+                  
+                  // Set the HTML content of the popup with the colored text
+                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
+                }
           }
       });
   
       // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
-      map.on('mouseleave', layerId, () => {
+      map.on('mouseleave', neighbourhood.id, () => {
         if (!isNeighbourhoodClickedRef.current) {
             map.getCanvas().style.cursor = '';
-            map.setPaintProperty(layerId, 'fill-opacity', 0.6);
-            map.setPaintProperty(lineLayerId, 'line-width', 0);
+            map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+            map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
 
             if (popup.current) {
                 popup.current.remove();
@@ -299,25 +314,25 @@ function Map() {
   
     isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
   
-    layerIds.forEach((layerId) => {
-
-      let opacity = labels.includes(layerId) ? 0.7 : 0.1;
-      let line = labels.includes(layerId) ? 1 : 0;
-      map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
-      map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+    neighbourhoods.features.forEach((neighbourhood) => {
+            
+      let opacity = labels.includes(neighbourhood.id) ? 0.7 : 0.1;
+      let line = labels.includes(neighbourhood.id) ? 1 : 0;
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
   
-      if (labels.includes(layerId)) {
+      if (labels.includes(neighbourhood.id)) {
 
-        map.current.off('mousemove', layerId);
-        map.current.off('mouseleave', layerId);
+        map.current.off('mousemove', neighbourhood.id);
+        map.current.off('mouseleave', neighbourhood.id);
   
-        map.current.on('mousemove', layerId, (e) => {
+        map.current.on('mousemove', neighbourhood.id, (e) => {
   
           map.current.getCanvas().style.cursor = 'pointer';
-          map.current.setPaintProperty(layerId, 'fill-opacity', 0.9);
-          map.current.setPaintProperty(layerId + '-line', 'line-width', 4);
+          map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
+          map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 4);
   
-          const features = map.current.queryRenderedFeatures(e.point, { layers: [layerId] });
+          const features = map.current.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
   
           if (features.length > 0) {
   
@@ -351,17 +366,15 @@ function Map() {
             const feature = features[0];
             const zone = feature.properties.zone;
   
-            popup.current.setLngLat(e.lngLat)
-                .setHTML(`${zone}, ${layerId}`)
-                .addTo(map.current);
+            popup.current.setLngLat(e.lngLat).setHTML(`${zone}, ${neighbourhood.id}`).addTo(map.current);
           }
         }); // close the mousemove event block
   
-        map.current.on('mouseleave', layerId, () => {
-          if (labels.includes(layerId)) {
+        map.current.on('mouseleave', neighbourhood.id, () => {
+          if (labels.includes(neighbourhood.id)) {
             map.current.getCanvas().style.cursor = '';
-            map.current.setPaintProperty(layerId, 'fill-opacity', opacity);
-            map.current.setPaintProperty(layerId + '-line', 'line-width', line);
+            map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
+            map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
           }
   
           if (popup.current) {
