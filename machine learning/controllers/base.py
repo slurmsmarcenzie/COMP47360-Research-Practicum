@@ -1,10 +1,11 @@
-from flask import redirect, render_template, url_for
+from flask import redirect, render_template, url_for, current_app
 from forms.login import LoginForm
 from flask_bcrypt import Bcrypt
 from forms.register import RegisterForm
 from models.user import User
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 from extensions.database import db
+import jwt
 
 bcrypt = Bcrypt()
 
@@ -53,9 +54,12 @@ def register():
 
     form = RegisterForm()
 
+
     if form.validate_on_submit():
+        key = current_app.config["SECRET_KEY"]
+        token = jwt.encode({"user": form.username.data}, key)
         hashed_pwd = bcrypt.generate_password_hash(form.password.data)
-        new_user = User(username=form.username.data, password = hashed_pwd, access_token="testtoken")
+        new_user = User(username=form.username.data, password = hashed_pwd, access_token=token)
         #access token should be created, above is just for testing
         db.session.add(new_user)
         db.session.commit()

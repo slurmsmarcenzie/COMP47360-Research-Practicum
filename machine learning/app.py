@@ -1,4 +1,4 @@
-from flask import Flask, request   
+from flask import Flask, request, make_response 
 from extensions.database import db
 from routes.blueprint import info, predict, base
 from logging_flask.logger import http_logger
@@ -23,6 +23,7 @@ app.register_blueprint(predict)
 app.register_blueprint(base)
 login_manager.init_app(app)
 
+
 ## After Request decorator is used to log every http request/response in the app.
 @app.after_request
 def log_request_response(response):
@@ -33,8 +34,6 @@ def log_request_response(response):
         http_logger.error(" | {ip} | {method} '{path}' | {status}".format(ip=request.remote_addr, method=request.method, path=request.path, status=response.status_code))
     
     return response
-
-
 
 
 if __name__ == "__main__":
