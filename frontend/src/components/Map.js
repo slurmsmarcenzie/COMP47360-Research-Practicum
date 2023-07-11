@@ -108,7 +108,7 @@ function Map() {
   const handleChangeColours = (colourPairIndex) => {
 
     // Create a new colourScale each time you handle the color change
-    const colourScale = scaleLinear().domain([0, 0.4, 0.7]).range(colourPairs[colourPairIndex]);
+    const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
   
     if (!map.current || !busynessHashMap) return; // Added a check for busynessMap
   
@@ -136,7 +136,7 @@ function Map() {
   const initialiseMouseMapEvents = (map) => {
 
     // Create a new colourScale each time you handle the color change
-    const colourScale = scaleLinear().domain([0, 0.4, 0.75]).range(colourPairs[colourPairIndex]);
+    const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
 
     neighbourhoods.features.forEach((neighbourhood) => {
 
@@ -192,13 +192,13 @@ function Map() {
                   } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
                       richText = 'Relatively Busy';
                   } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                      richText = 'Very Busy';
+                      richText = 'Busy';
                   } else {
                       richText = 'Extremely Busy';
                   }
 
                   // Set the HTML content of the popup with the colored text
-                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
+                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText} - ${Math.floor(neighbourhood.busyness_score * 100)}</span>`).addTo(map);
                 }
           }
       });

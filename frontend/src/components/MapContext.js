@@ -50,7 +50,7 @@ export const MapProvider = ({ children }) => {
       ];
       
     const colourScale = useMemo(() => {
-        return scaleLinear().domain([0, 0.4, 0.75]).range(colourPairs[colourPairIndex]);
+        return scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
     }, [colourPairs, colourPairIndex]);
     
     const add3DBuildings = (map) => {
