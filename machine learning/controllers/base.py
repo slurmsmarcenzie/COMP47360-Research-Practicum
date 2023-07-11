@@ -9,17 +9,22 @@ from extensions.database import db
 bcrypt = Bcrypt()
 
 login_manager = LoginManager()
-login_manager.login_view = "login"
+login_manager.login_view = "base.login"
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
 def home():
+    if current_user.is_authenticated:
+        return redirect(url_for("base.dashboard"))
     return render_template("home.html")
 
 
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("base.dashboard"))
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -43,6 +48,9 @@ def logout():
 
 
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("base.dashboard"))
+
     form = RegisterForm()
 
     if form.validate_on_submit():

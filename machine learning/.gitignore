@@ -6,3 +6,4 @@
 /routes/__pycache__
 /logging_flask/logs
 accesskeys.py
+.env
