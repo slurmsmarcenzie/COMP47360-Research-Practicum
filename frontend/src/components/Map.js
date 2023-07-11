@@ -250,13 +250,17 @@ function Map() {
   }
  
   // Fetch Request for Busyness Prediction 
-  const getPredictionBusyness = () => {
+  const getPredictionBusyness = (Event_ID) => {
 
     // write fetch request here to get scores from api/prediction
     // this should be handled in a use effect with a dependency for a prediction
 
     const formattedDate = new Date().toISOString().slice(0,10);
 
+    console.log('this is the EID being passed in', Event_ID)
+
+    // we are going to use date + ID as the argument
+    // fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
     fetch((`${BASE_API_URL}/predict/${formattedDate}`))
     .then((response) => {
       if (!response.ok) {
@@ -267,19 +271,12 @@ function Map() {
     .then((data) => setScores(data))
     .catch((error) => {
       console.error('Issue with fetch request for prediction:', error);
+      setError(error)
     });
-
-    // const newScores = scores.map(score => ({
-    //   ...score,
-    //   busyness_score: Math.random()  // this generates a random number between 0 and 1
-    // }));
-
-    // // set the new scores array
-    // setScores(newScores);
 
   };
 
-  const visualiseEventImpact = () => {
+  const visualiseEventImpact = (Event_ID) => {
 
     setNeighbourhoodEvents([]);
 
@@ -293,7 +290,7 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
     setTimeout(() => {
-      getPredictionBusyness();
+      getPredictionBusyness(Event_ID);
     }, 900)
   
   }

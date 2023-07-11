@@ -13,7 +13,7 @@ function EventCard ({item, visualiseEventImpact}) {
             <h3>Expected Attendees: {item.expected_attendees}</h3>
             <p>{item.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
-                visualiseEventImpact();
+                visualiseEventImpact(item.Event_ID);
                 setShowChartData(true)
                 // removeAllMarkers();
                 removeAllButOneMarker(item.Event_ID)
