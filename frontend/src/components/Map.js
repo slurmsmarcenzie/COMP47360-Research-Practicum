@@ -190,9 +190,9 @@ function Map() {
                   if (neighbourhood.busyness_score < 0.29) {
                       richText = 'Not Very Busy';
                   } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
-                      richText = 'Busy';
+                      richText = 'Relatively Busy';
                   } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                      richText = 'Very Busy';
+                      richText = 'Busy';
                   } else {
                       richText = 'Extremely Busy';
                   }
