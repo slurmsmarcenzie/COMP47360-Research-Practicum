@@ -6,10 +6,12 @@ from extensions.limiter import limiter
 from controllers.base import login_manager, bcrypt
 import os
 from dotenv import load_dotenv
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 limiter.init_app(app)
 bcrypt.init_app(app)
+csrf = CSRFProtect(app)
 load_dotenv()
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLDB")
 app.config["SECRET_KEY"] = os.getenv("SECRETKEY")
