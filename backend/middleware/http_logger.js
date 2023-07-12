@@ -1,6 +1,6 @@
 const httpLogger = require("../logging/httpLogger")
 
-const http_logger = (req, res) => {
+const http_logger = (req, res, next) => {
     if (res.statusCode < 400){
         httpLogger.info(res);
     } else {
