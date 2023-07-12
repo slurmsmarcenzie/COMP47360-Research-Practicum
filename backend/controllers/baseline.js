@@ -1,5 +1,6 @@
 const axios = require("axios")
 const generalLogger = require("../logging/generalLogger")(module)
+require("dotenv").config();
 
 //fetch baseline from ML:
 const queryBaseline = (req, res, next) => {
@@ -9,7 +10,7 @@ const queryBaseline = (req, res, next) => {
     generalLogger.info(`baseline requested for: ${req.params.date}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
-    const uri = `http://127.0.0.1:7000/baseline/${date}` 
+    const uri = `http://127.0.0.1:7000/baseline/${date}?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {
