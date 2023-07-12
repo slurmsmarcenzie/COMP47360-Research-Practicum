@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(helmet.frameguard())
 app.use(helmet.noSniff());
 app.use(helmet.contentSecurityPolicy())
-//app.use(rateLimiter)
+app.use(rateLimiter)
 //Below is used to serve a build version of the React frontend application:
 //  app.use(express.static(path.join(__dirname, "build")));
 //  app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
