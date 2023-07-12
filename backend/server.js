@@ -7,12 +7,16 @@ const baseline = require("./routes/baseline")
 const port = process.env.PORT || 5000
 const http_logger = require("./middleware/http_logger");
 const rateLimiter = require("./middleware/rate_limiter")
+const helmet = require('helmet')
 require("dotenv").config();
 
 //Middleware:
 app.use(cors());
 app.use(express.json())
-app.use(rateLimiter)
+app.use(helmet.frameguard())
+app.use(helmet.noSniff());
+app.use(helmet.contentSecurityPolicy())
+//app.use(rateLimiter)
 //Below is used to serve a build version of the React frontend application:
 //  app.use(express.static(path.join(__dirname, "build")));
 //  app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
@@ -33,6 +37,7 @@ app.get('*', (req, res, next) => {
 }, http_logger);
 
 
+app.disable('x-powered-by')
 //START SERVER
 app.listen(port, () => {
     console.log('server is listening on port', port)
