@@ -60,7 +60,7 @@ def baseline_event(date, event):
         extracted = []
 
         for item in original:
-            if item["Event_ID"] == eventID:
+            if item["Event_ID"] == eventID and item["time"] == 12:
                 extracted.append(item)
         
         outputjson = json.dumps(extracted)
