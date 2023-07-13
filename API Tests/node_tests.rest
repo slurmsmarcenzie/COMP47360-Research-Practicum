@@ -13,6 +13,9 @@ http://localhost:5000/api/meta/metrics
 http://localhost:5000/api/predict/1995-01-21
 
 ###
+http://localhost:5000/api/predict/1995-01-21/1
+
+###
 http://localhost:5000/api/baseline/1995-01-21
 
 ###
