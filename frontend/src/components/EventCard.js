@@ -1,18 +1,22 @@
 import React from 'react';
 import "../App.css";
+import { useMapContext } from './MapContext';
 
-function EventCard ({item, calculateEventImpact, setShowChartData}) {
+function EventCard ({item, visualiseEventImpact}) {
 
+    const {setShowChartData, removeAllButOneMarker} = useMapContext();
+    
     return (
         <div className='floating-info-box-event-card'>
-            <h2>Name: {item.Event_Name}</h2>
-            <h3>Event Type: {item.Event_Type}</h3>
-            <p>Expected Attendees: {item.expected_attendees}</p>
+            <h2>{item.Event_Name}</h2>
+            <h3>Expected Attendees: {item.expected_attendees}</h3>
             <p>{item.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
-                calculateEventImpact();
-                setShowChartData(true);
-            }}>Calculate Event Impact</button>
+                visualiseEventImpact(item.Event_ID);
+                setShowChartData(true)
+                // removeAllMarkers();
+                removeAllButOneMarker(item.Event_ID)
+            }}>Visualise Event Impact</button>
         </div>
     )
 }

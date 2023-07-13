@@ -11,7 +11,10 @@ def baseline(date):
 
     # Prevent invalid datetime:
     try:
-        datetime.fromisoformat(date)
+        # cannot use below format as it includes milliseconds
+        # datetime.fromisoformat(date)
+        # must use below to stop after seconds
+        datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError as err:
         print(err)
         #TODO - add to log
@@ -19,7 +22,7 @@ def baseline(date):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/MOCK_BASELINE.json") #temporary, will use the model lader
+        file = open("static/BASELINE_JUNE.json") #temporary, will use the model lader
     except IOError as err:
         print(err)
         #TODO - add to log

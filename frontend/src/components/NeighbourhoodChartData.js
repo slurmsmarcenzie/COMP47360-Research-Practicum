@@ -2,16 +2,24 @@ import React, {useState, useEffect} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
+import { useMapContext } from './MapContext';
 
-function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_ID, updateLayerColours, resetColours}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+
+    const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
+    const {updateLayerColours} = useMapContext()
+
+    // This state holds the data and options that the chart component needs to create the chart on the page. 
+    // When this state changes, it triggers the chart to re-render with the new data and options.
 
     const [renderChart, setRenderChart] = useState(null);
-    const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
-    const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
-    const [labels, setLabels] = useState([]);
-    const [chartData, setChartData] = useState(null);
-    const [showChart, setShowChart] = useState(false); 
 
+    // This state holds a separate copy of the data and options for a chart. 
+    // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
+    const [chartData, setChartData] = useState(null);
+
+    const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
+    const [labels, setLabels] = useState([]);    
 
     // Get the impacted zones
     const getImpactedZones = () => {
@@ -121,9 +129,8 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
         
         highlightEventImpact(Zone_ID, labels);
         setRenderChart(chartData);
+        setShowChart(true);
         setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-
-        setShowChart(true); 
 
     };
 
@@ -138,16 +145,17 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
     const getGradientLeastImpacted = (context) => {
         const {ctx, chartArea: { left, right } } = context;
         const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
-        gradientSegment.addColorStop(0, colours[1]);
-        gradientSegment.addColorStop(1, colours[0]);
+        gradientSegment.addColorStop(0, colours[0]);
+        gradientSegment.addColorStop(1, colours[1]);
         return gradientSegment;
     }
 
     const handleToggle = () => {
         setUseOriginal(!useOriginal);
-        updateLayerColours(!useOriginal);
+        updateLayerColours(map.current, !useOriginal, originalBusynessHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
+        setShowMostImpactedZones(!showMostImpactedZones)
       };
 
     return (
@@ -155,6 +163,16 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
             {showChart &&
             <div className='floating-info-box-chart-container'>
                 {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
+                <button 
+                    className="floating-infobox-close-toggle-button" 
+                    onClick={() => {                     
+                    setShowChart(!showChart);
+                    setShowMostImpactedZones(!showMostImpactedZones)
+                    resetColours()
+                    }}
+                >
+                    X
+                </button>
             </div>
             }
             <div className='floating-infobox-box-button-container'>
@@ -163,6 +181,9 @@ function NeighbourhoodChartData({ hashMap, colours, highlightEventImpact, Zone_I
                 </button>
                 <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
+                </button>
+                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                    {isSplitView ? 'Show Original' : 'Show Splitview'}
                 </button>
             </div>
         </div>
