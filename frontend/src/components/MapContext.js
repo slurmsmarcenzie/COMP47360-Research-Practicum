@@ -32,6 +32,10 @@ export const MapProvider = ({ children }) => {
     const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
 
+    // zone and event setters used in floating info box and elsewhere
+    const [zoneID, setZoneID] = useState(null);
+    const [eventName, setEventName] = useState(null);  
+
     const originalLat = 40.7484;
     const originalLng = -73.9857;
     const zoom = 7;
@@ -273,6 +277,9 @@ export const MapProvider = ({ children }) => {
         showChartData, setShowChartData,
         useOriginal, setUseOriginal,
         makePredictionRequest, setMakePredictionRequest,
+        zoneID, setZoneID,
+        eventName, setEventName,
+      
 
         neighbourhoods,
         prunedEvents,

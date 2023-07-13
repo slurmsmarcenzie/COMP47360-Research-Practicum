@@ -4,12 +4,11 @@ import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 import { useMapContext } from './MapContext';
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, zone, resetColours }) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours }) {
   
-  const [zoneID, setZoneID] = useState(null);
-  const [eventName, setEventName] = useState(null);
+  const {showInfoBox, showChartData, showNeighborhoodInfoBox, neighbourhoodEvents} = useMapContext();
 
-  const {showInfoBox, showChartData, showingNeighborHoodInfoBox, neighbourhoodEvents} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone} = useMapContext();
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
@@ -17,6 +16,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
       setZoneID(neighbourhoodEvents[0].Zone_ID);
       setEventName(neighbourhoodEvents[0].Event_Name);
+      setZone(neighbourhoodEvents[0].Zone_Name)
     }
   }, [neighbourhoodEvents]);
 
@@ -30,8 +30,12 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       )
   }) : null;
     
+
+  console.log('showInfoBox', showInfoBox)
+  console.log('showNeighborhoodInfoBox', showNeighborhoodInfoBox)
+
   return (
-    (showInfoBox || showingNeighborHoodInfoBox) && (
+    (showInfoBox || showNeighborhoodInfoBox) && (
       <div className='floating-info-box'>
         <h1 className='floating-info-box-zone-header'>
           {showChartData ? eventName : zone}
@@ -49,13 +53,14 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
                 zoneID={zoneID}
                 resetColours={resetColours}
               />
-            )
+              )
             : eventCards
-          : <p>There are no events in this zone.</p>
+          : null
         }
+        {showNeighborhoodInfoBox && <p>There are no events in this zone.</p>}
       </div>
     )
-  );
+  );  
 }
 
 export default FloatingInfoBox

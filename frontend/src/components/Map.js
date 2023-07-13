@@ -26,7 +26,7 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
@@ -244,6 +244,7 @@ function Map() {
           map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
           map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
           const zone = firstFeature.properties.zone;
 
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
@@ -252,13 +253,17 @@ function Map() {
           setNeighbourhoodEvents(matchingEvents);
 
           if (matchingEvents.length > 0) {
+
             setShowInfoBox(true);
+
             } else {
+              
               // Show the neighborhood info box since there are no matching events
               setShowNeighborhoodInfoBox(true);
             }
 
             setZone(zone);
+            
           }
       });
     });
