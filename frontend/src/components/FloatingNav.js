@@ -1,28 +1,53 @@
 import React from 'react';
 import "../App.css";
 
-function FloatingNav({setShowInfoBox, setNeighbourhoodEvents, prunedEvents, floatingNavZoomToLocation, floatingNavSetLineWidth, isNeighbourhoodClickedRef, disableColours, changeColourScheme, enableColours, setShowNeighborhoodInfoBox, setZone}) {
+// import context
+import { useMapContext } from './MapContext';
+
+
+function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enableColours,  disableColours}) {
+
+  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName} = useMapContext();
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
       {event.Event_Name}  
     </option>
   );
+  
+  const floatingNavZoomToLocation = (longitude, latitude) => {
+    map.current.flyTo({
+      center: [longitude, latitude],
+      zoom: 15, // specify your desired zoom level
+      essential: true
+    });
+  }
+  
+  const floatingNavSetLineWidth = (zone) => {
+      const lineLayerId = zone + '-line';
+      map.current.setPaintProperty(lineLayerId, 'line-width', 4);
+  } 
 
   const reviewEvent = (e) => {
-    const selectedEvent = JSON.parse(e.target.value);
 
+    const selectedEvent = JSON.parse(e.target.value);
     const latitude = selectedEvent.Event_Location.Latitude
     const longitude = selectedEvent.Event_Location.Longitude
-
-    setZone(selectedEvent.Zone_Name);
+    
+    setZone(selectedEvent.Zone_ID);
+    
     floatingNavZoomToLocation(longitude, latitude);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    isNeighbourhoodClickedRef.current = true;
     disableColours();
+
+    isNeighbourhoodClickedRef.current = true;
     setNeighbourhoodEvents([selectedEvent]);
     setShowInfoBox(true);
     setShowNeighborhoodInfoBox(true);
+    setShowChartData(false);
+
+    setEventName(selectedEvent.Event_Name)
+    
   };
 
     return(
