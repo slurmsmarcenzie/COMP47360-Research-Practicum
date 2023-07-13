@@ -25,7 +25,7 @@ def baseline(date):
     except IOError as err:
         print(err)
         general_logger.error("Unable to read file {error}".format(error=err))
-        raise abort(500, "Unable to read file 'MOCK_BASELINE.json'")
+        raise abort(500, "Unable to read file 'BASELINE_JUNE.json'")
 
-    general_logger.info("Reading file MOCK_BASELINE.json")
+    general_logger.info("Reading file BASELINE_JUNE.json")
     return json.load(file), 200
