@@ -27,7 +27,7 @@ def prediction(date):
         raise abort(500, "Unable to read file 'MOCK_DATA.json'")
 
     general_logger.info("Reading file MOCK_DATA.json")
-    return json.load(file)
+    return json.load(file), 200
 
 
     # Below will be left to users of the api

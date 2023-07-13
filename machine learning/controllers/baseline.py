@@ -1,7 +1,7 @@
 import json
 from flask import abort
 from datetime import datetime
-from logging_flask.logger import general_logger, http_logger
+from logging_flask.logger import general_logger
 
 # Get baseline busyness from the model with the datetime specified in URL
 # Currently uses static file ".json" to mimic the model
@@ -28,4 +28,4 @@ def baseline(date):
         raise abort(500, "Unable to read file 'MOCK_BASELINE.json'")
 
     general_logger.info("Reading file MOCK_BASELINE.json")
-    return json.load(file)
+    return json.load(file), 200
