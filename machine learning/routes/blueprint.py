@@ -1,7 +1,7 @@
 from flask import Blueprint
 from controllers.meta import list_events, list_metrics
 from controllers.prediction import prediction
-from controllers.baseline import baseline
+from controllers.baseline import baseline, baseline_event
 from controllers.base import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
@@ -22,7 +22,8 @@ info.route("/info/metrics")(list_metrics)
 info.before_request(check_token)
 
 predict.route("/baseline/<string:date>")(baseline)
-predict.route("/predict/<string:date>")(prediction)
+predict.route("/baseline/<string:date>/<string:event>")(baseline_event)
+predict.route("/predict/<string:date>/<string:event>")(prediction)
 predict.before_request(check_token)
 
 base.route("/")(home)

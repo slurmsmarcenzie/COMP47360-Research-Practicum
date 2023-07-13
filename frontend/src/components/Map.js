@@ -283,7 +283,7 @@ function Map() {
 
     // we are going to use date + ID as the argument
     // fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
-    fetch((`${BASE_API_URL}/predict/${formattedDate}`))
+    fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
