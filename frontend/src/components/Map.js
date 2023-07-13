@@ -43,6 +43,7 @@ function Map() {
   // map specific states
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
+  const [baselineEventBusynessHashMap, setBaselineEventBusynessHashMap] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
 
   // objects for our map
@@ -461,6 +462,7 @@ function Map() {
         const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
+        console.log(data);
         setScores(data);
       } 
       
