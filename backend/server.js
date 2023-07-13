@@ -10,7 +10,7 @@ const rateLimiter = require("./middleware/rate_limiter")
 const helmet = require('helmet')
 require("dotenv").config();
 
-console.log("HERE", process.env.PORT)
+
 
 //Middleware:
 app.use(cors());
