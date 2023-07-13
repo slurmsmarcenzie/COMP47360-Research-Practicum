@@ -181,17 +181,23 @@ export const MapProvider = ({ children }) => {
     };
 
     const showAllMarkers = (map) => {
-
+        
         const newMarkers = []; // array to hold our new markers
-
+    
         prunedEvents.forEach((event) => {
-            const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
-            newMarkers.push(marker);
+            const exists = markers.some(marker => 
+                marker.getLngLat().lng === event.Event_Location.Longitude && 
+                marker.getLngLat().lat === event.Event_Location.Latitude
+            );
+            if (!exists) {
+                const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+                newMarkers.push(marker);
+            }
         });
     
-        setMarkers(newMarkers); // Update the state 
-
+        setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
     }
+    
 
     const removeAllMarkers = () => {
 

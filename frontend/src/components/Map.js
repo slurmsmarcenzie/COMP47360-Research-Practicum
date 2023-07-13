@@ -35,7 +35,7 @@ function Map() {
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch } = useMapContext();
@@ -247,6 +247,8 @@ function Map() {
 
           const zone = firstFeature.properties.zone;
 
+          setZoneID(firstFeature.id)
+
           // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
           const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
 
@@ -257,7 +259,6 @@ function Map() {
             setShowInfoBox(true);
 
             } else {
-              
               // Show the neighborhood info box since there are no matching events
               setShowNeighborhoodInfoBox(true);
             }
@@ -325,6 +326,20 @@ function Map() {
       let line = labels.includes(neighbourhood.id) ? 1 : 0;
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
+
+      console.log(neighbourhood)
+
+      if (neighbourhood.id == Zone_ID){
+
+        let isHighlighted = false;
+
+        const intervalId = setInterval(() => {
+          isHighlighted = !isHighlighted;
+          
+          map.current.setPaintProperty(Zone_ID, 'fill-opacity', isHighlighted ? 0.9 : 0.3);
+
+        }, 500);
+      }
   
       if (labels.includes(neighbourhood.id)) {
 

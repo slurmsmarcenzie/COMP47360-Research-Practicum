@@ -141,7 +141,6 @@ body {
   gap: 12px;
 }
 
-
 .floating-info-tertiary-button {
   width: 100%;
   color: white;
@@ -323,6 +322,12 @@ body {
 }
 
 .floating-info-box-zone-header {
+  margin: auto;
+  margin-bottom: 12px;
+  padding: auto;
+}
+
+.floating-info-box-zone-busyness-sub-header{
   margin: auto;
   padding: auto;
 }
