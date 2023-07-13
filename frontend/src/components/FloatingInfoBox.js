@@ -43,7 +43,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     setRichText(text);
   }, [colourPairs, colourPairIndex, busynessHashMap, originalBusynessHashMap, zoneID]);
   
-
   const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
     return (
       <EventCard 

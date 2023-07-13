@@ -237,7 +237,10 @@ body {
 
 .navbar-logo  {
   transition: opacity 0.7s ease;
-  
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border-radius: 5px;
 }
 
 .navbar-logo.hovered {
@@ -250,11 +253,11 @@ body {
 
 .floating-info-box-chart-container {
   position: relative;
-  height: 240px;
+  height: 270px;
 }
 
 .floating-info-box-chart-container > :first-child {
-  padding-top: 12px;
+  padding-top: 30px;
 }
 
 .floating-infobox-close-toggle-button {

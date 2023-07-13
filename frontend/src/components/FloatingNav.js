@@ -43,7 +43,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
     isNeighbourhoodClickedRef.current = true;
     setNeighbourhoodEvents([selectedEvent]);
     setShowInfoBox(true);
-    setShowNeighborhoodInfoBox(true);
+    setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
 
     setEventName(selectedEvent.Event_Name)

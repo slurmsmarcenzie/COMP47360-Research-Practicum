@@ -256,17 +256,15 @@ function Map() {
           setNeighbourhoodEvents(matchingEvents);
 
           if (matchingEvents.length > 0) {
-
             setShowInfoBox(true);
-
-            } else {
-              // Show the neighborhood info box since there are no matching events
-              setShowNeighborhoodInfoBox(true);
-            }
-
-            setZone(zone);
-            
+          } else {
+            // Show the neighborhood info box since there are no matching events
+            setShowNeighborhoodInfoBox(true);
           }
+
+          setZone(zone);
+          
+        }
       });
     });
   }
