@@ -25,14 +25,14 @@ def prediction(date, event):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/EVENTS_IMPACT.json") #temporary, will use the model lader
+        file = open("static/impact_events.json") #temporary, will use the model lader
     except IOError as err:
         general_logger.error("Unable to read file {error}".format(error=err))
-        raise abort(500, "Unable to read file 'EVENTS_IMPACT.json'")
+        raise abort(500, "Unable to read file 'impact_events.json'")
 
-    general_logger.info("Reading file EVENTS_IMPACT.json")
+    general_logger.info("Reading file impact_events.json")
 
-    #Extract relevant event from EVENTS_IMPACT:
+    #Extract relevant event from impact_events:
     eventID = int(event)
 
     try:
@@ -45,8 +45,8 @@ def prediction(date, event):
         
         outputjson = json.dumps(extracted)
     except Exception as exc:
-        general_logger.error("There was an error filtering events impact {error}".format(error=err))
-        raise abort(500, "Unable to filter 'EVENTS_IMPACT.json'")
+        general_logger.error("There was an error filtering events impact {error}".format(error=exc))
+        raise abort(500, "Unable to filter 'impact_events.json'")
 
     return outputjson, 200
 

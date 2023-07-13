@@ -21,13 +21,13 @@ def baseline(date):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/GENERAL_BASELINE_JUNE.json") #temporary, will use the model lader
+        file = open("static/BASELINE_JUNE.json") #temporary, will use the model lader
     except IOError as err:
         print(err)
         general_logger.error("Unable to read file {error}".format(error=err))
-        raise abort(500, "Unable to read file 'GENERAL_BASELINE_JUNE.json'")
+        raise abort(500, "Unable to read file 'BASELINE_JUNE.json'")
 
-    general_logger.info("Reading file GENERAL_BASELINE_JUNE.json")
+    general_logger.info("Reading file BASELINE_JUNE.json")
     return json.load(file), 200
 
 def baseline_event(date, event):
@@ -45,14 +45,14 @@ def baseline_event(date, event):
 
     # Handle file read error (later this will be handle model failure):
     try:
-        file = open("static/EVENTS_BASELINE.json") #temporary, will use the model lader
+        file = open("static/baseline_events.json") #temporary, will use the model lader
     except IOError as err:
         general_logger.error("Unable to read file {error}".format(error=err))
-        raise abort(500, "Unable to read file 'EVENTS_BASELINE.json'")
+        raise abort(500, "Unable to read file 'baseline_events.json'")
 
-    general_logger.info("Reading file EVENTS_BASELINE.json")
+    general_logger.info("Reading file baseline_events.json")
 
-    #Extract relevant event from EVENTS_IMPACT:
+    #Extract relevant event from baseline_events:
     eventID = int(event)
 
     try:
@@ -65,7 +65,7 @@ def baseline_event(date, event):
         
         outputjson = json.dumps(extracted)
     except Exception as exc:
-        general_logger.error("There was an error filtering events baseline {error}".format(error=err))
-        raise abort(500, "Unable to filter 'EVENTS_BASELINE.json'")
+        general_logger.error("There was an error filtering events baseline {error}".format(error=exc))
+        raise abort(500, "Unable to filter 'baseline_events.json'")
 
     return outputjson, 200
