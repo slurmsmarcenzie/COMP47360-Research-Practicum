@@ -5,7 +5,7 @@ import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours }) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours }) {
   
   const {showInfoBox, showChartData, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
 
@@ -27,7 +27,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   useEffect(() => {
     const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
-    const neighbourhoodBusyness = useOriginal ? originalBusynessHashMap[zoneID] : busynessHashMap[zoneID]
+    const neighbourhoodBusyness = useOriginal ? eventBaselineHashMap[zoneID] : busynessHashMap[zoneID]
     const colour = colourScale(neighbourhoodBusyness);
     setTextColour(colour);
     let text;
@@ -41,7 +41,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         text = 'Extremely Busy';
     }
     setRichText(text);
-  }, [colourPairs, colourPairIndex, busynessHashMap, originalBusynessHashMap, zoneID]);
+  }, [colourPairs, colourPairIndex, busynessHashMap, eventBaselineHashMap, zoneID]);
   
   const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
     return (
@@ -67,7 +67,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
                 map={map}
                 hashMap={hashMapOfDifference}
                 busynessHashMap={busynessHashMap}
-                originalBusynessHashMap={originalBusynessHashMap}
+                eventBaselineHashMap={eventBaselineHashMap}
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
                 zoneID={zoneID}

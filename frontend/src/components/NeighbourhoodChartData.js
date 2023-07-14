@@ -4,7 +4,7 @@ import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
 
-function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
     const {neighbourhoods} = useMapContext();
     const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
@@ -170,7 +170,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
 
     const handleToggle = () => {
         setUseOriginal(!useOriginal);
-        updateLayerColours(map.current, !useOriginal, originalBusynessHashMap, busynessHashMap);
+        updateLayerColours(map.current, !useOriginal, eventBaselineHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)

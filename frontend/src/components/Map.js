@@ -43,7 +43,7 @@ function Map() {
   // map specific states
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
-  const [baselineEventBusynessHashMap, setBaselineEventBusynessHashMap] = useState(null);
+  const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
 
   // objects for our map
@@ -294,6 +294,18 @@ function Map() {
       setError(error)
     });
 
+    fetch((`${BASE_API_URL}/baseline/${formattedDate}/${Event_ID}`))
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => setEventBaselineScores(data))
+    .catch((error) => {
+      console.error('Issue with fetch request for prediction:', error);
+      setError(error)
+    });
   };
 
   const visualiseEventImpact = (Event_ID) => {
@@ -328,20 +340,6 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
 
-      console.log(neighbourhood)
-
-      if (neighbourhood.id == Zone_ID){
-
-        let isHighlighted = false;
-
-        const intervalId = setInterval(() => {
-          isHighlighted = !isHighlighted;
-          
-          map.current.setPaintProperty(Zone_ID, 'fill-opacity', isHighlighted ? 0.9 : 0.3);
-
-        }, 500);
-      }
-  
       if (labels.includes(neighbourhood.id)) {
 
         map.current.off('mousemove', neighbourhood.id);
@@ -443,6 +441,7 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
+
   };
 
   // Define a memoized value 'busynessMap', which depends on 'scores'
@@ -465,6 +464,21 @@ function Map() {
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
+
+  // same implementation as above
+  const eventBaselineHashMap = useMemo(() => {
+
+    if (!eventBaselineScores) return {};  
+
+    return eventBaselineScores.reduce((map, item) => {
+      
+      map[item.location_id] = item.busyness_score;
+      
+      return map;
+    }, {});  
+    
+  }, [eventBaselineScores]);  
+
   useEffect(() => {
 
     const fetchScores = async () => {
@@ -475,7 +489,6 @@ function Map() {
         const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
-        console.log(data);
         setScores(data);
       } 
       
@@ -584,6 +597,7 @@ function Map() {
 
         {isSplitView ? (
             <SplitViewMap 
+            eventBaselineHashMap={eventBaselineHashMap}
             originalBusynessHashMap={originalBusynessHashMap}
             busynessHashMap={busynessHashMap}
             initialiseMouseMapEvents={initialiseMouseMapEvents}
@@ -606,7 +620,7 @@ function Map() {
             visualiseEventImpact={visualiseEventImpact}
             highlightEventImpact={highlightEventImpact}
             resetColours={resetColours}
-            originalBusynessHashMap={originalBusynessHashMap}
+            eventBaselineHashMap={eventBaselineHashMap}
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}
             colours={colourPairs[colourPairIndex]}
