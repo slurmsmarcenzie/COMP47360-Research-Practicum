@@ -174,6 +174,8 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMap
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
 
+        <div className="split-view-map-label" style={{top: '18px', left: '64px'}}>Baseline Event Map</div>
+
         <Map
           id="right-map"
           {...viewState}
@@ -185,6 +187,8 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMap
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
+
+        <div className="split-view-map-label" style={{top: '18px', right: '64px'}}>Impact Event Map</div>
 
         <SplitViewController
           isSplitView={isSplitView}

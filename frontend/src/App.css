@@ -425,19 +425,47 @@ body {
 .split-view-controller  {
   position: absolute;
   z-index: 10;
-  min-width: 180px;
-  max-width: 180px;
-  margin-top: 120px;
-  margin-left: 92px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(18, 19, 22, 0.3);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.125);
+  background-color: rgba(18, 19, 22, 0);
   color: white;
-  padding: 24px 18px;
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  left: 50%; /* Position from the left half of the parent element */
+  top: 18px; /* Position from the bottom of the parent element */
+  transform: translateX(-50%); /* Move the element half its width to the left */
+}
+
+.split-view-controller-toggle-button {
+  background-color: rgba(18, 19, 22, 0.3);; /* Green background */
+  border: none; /* No border */
+  color: white; /* White text */
+  padding: 8px 12px; /* Some padding */
+  text-align: center; /* Centered text */
+  text-decoration: none; /* No underline */
+  display: inline-block;
+  font-size: 15px;
+  margin: 4px 2px;
+  cursor: pointer; /* Mouse pointer on hover */
+  border-radius: 5px; /* Rounded corners */
+  transition-duration: 0.4s; /* Transition */
+}
+
+.split-view-controller-toggle-button:hover {
+  background-color: rgba(18, 19, 22, 0.5);; /* Green background */
+  color: white; /* White text on hover */
+}
+
+.split-view-map-label {
+  position: absolute;
+  z-index: 1;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  padding: 10px;
+  border-radius: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
 }
