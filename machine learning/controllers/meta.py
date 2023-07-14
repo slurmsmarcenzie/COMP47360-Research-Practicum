@@ -2,6 +2,7 @@ from models.event import Event
 from models.metric import Metric
 from sqlalchemy import exc
 from flask import abort
+from logging_flask.logger import general_logger
 
 # Query Database and get a list of Event dictionaries
 # "_sa_instance_state" is removed as only field names are needed
@@ -13,8 +14,7 @@ def list_events():
     try:
         events = Event.query.all()
     except exc.SQLAlchemyError as er:
-        print(er)
-        #TODO - add to log
+        general_logger.error("Issue retreiving from database: {error}".format(error=er.orig))
         raise abort(500, "There was an error retrieving events from the Database")
     
     # Ensure data is in correct format
@@ -26,8 +26,8 @@ def list_events():
                 event.__dict__.pop("_sa_instance_state")
             data.append(event.__dict__)
 
-
-    return data
+    general_logger.info("Event data is OK. Sending")
+    return data, 200
 
 # Query Database and get a list of Metric dictionaries
 # "_sa_instance_state" is removed as only field names are needed
@@ -39,8 +39,7 @@ def list_metrics():
     try:
         metrics = Metric.query.all()
     except exc.SQLAlchemyError as er:
-        print(er)
-        #TODO - add to log
+        general_logger.error("Issue retreiving from database: {error}".format(error=er.orig))
         raise abort(500, "There was an error retrieving metrics from the Database")
 
     # Ensure data is in correct format:
@@ -51,7 +50,9 @@ def list_metrics():
             if "_sa_instance_state" in metric.__dict__:
                 metric.__dict__.pop("_sa_instance_state")
             data.append(metric.__dict__)
-    return data
+
+    general_logger.info("Metric data is OK. Sending")
+    return data, 200
 
     
     
