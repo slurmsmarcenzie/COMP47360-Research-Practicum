@@ -40,7 +40,7 @@ def prediction(date, event):
         extracted = []
 
         for item in original:
-            if item["Event_ID"] == eventID and item["time"] == 12:
+            if item["Event_ID"] == eventID and item["time"] == 18:
                 extracted.append(item)
         
         outputjson = json.dumps(extracted)
