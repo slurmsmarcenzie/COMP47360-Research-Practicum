@@ -316,6 +316,8 @@ function Map() {
   }
 
   const highlightEventImpact = (Zone_ID, labels) => {
+
+    const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
   
     isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
   
@@ -384,8 +386,21 @@ function Map() {
   
             const feature = features[0];
             const zone = feature.properties.zone;
+
+            const textColour = colourScale(neighbourhood.busyness_score);
+
+            let richText;
+            if (neighbourhood.busyness_score < 0.29) {
+                richText = 'Not Very Busy';
+            } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
+                richText = 'Relatively Busy';
+            } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
+                richText = 'Busy';
+            } else {
+                richText = 'Extremely Busy';
+            }
   
-            popup.current.setLngLat(e.lngLat).setHTML(`${zone}, ${neighbourhood.id}`).addTo(map.current);
+            popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map.current);
           }
         }); // close the mousemove event block
   
