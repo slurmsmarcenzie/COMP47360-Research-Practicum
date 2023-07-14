@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
+import EventAnalysis from './EventAnalysis';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
@@ -9,7 +10,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
-  const {showInfoBox, showChartData, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
+  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
 
@@ -86,7 +87,13 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         <h1 className='floating-info-box-zone-header'>
           {showChartData ? eventName : zone}
         </h1>
-        {showChartData ? null : <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>}
+        {
+        showChartData 
+        ? (showChart 
+            ? null
+            : <EventAnalysis />) 
+        : <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>
+        }
         {showInfoBox
           ? showChartData
             ? (
