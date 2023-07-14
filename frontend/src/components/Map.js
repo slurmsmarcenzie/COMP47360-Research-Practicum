@@ -617,9 +617,11 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
+            updateLayerColours={updateLayerColours}
             visualiseEventImpact={visualiseEventImpact}
             highlightEventImpact={highlightEventImpact}
             resetColours={resetColours}
+            originalBusynessHashMap={originalBusynessHashMap}
             eventBaselineHashMap={eventBaselineHashMap}
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}

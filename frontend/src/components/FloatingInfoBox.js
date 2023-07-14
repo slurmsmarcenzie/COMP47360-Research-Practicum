@@ -4,17 +4,36 @@ import NeighbourhoodChartData from './NeighbourhoodChartData';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours }) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours }) {
   
   const {showInfoBox, showChartData, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
 
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
+
+  const {neighbourhoods, originalLat, originalLng} = useMapContext();
+
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
+
+  const resetMap = (map) => {
+    setShowInfoBox(false);
+    setShowNeighborhoodInfoBox(false);
+    setShowChartData(false);
+    setShowChart(false);
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    updateLayerColours(map.current, true, originalBusynessHashMap, busynessHashMap);
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+  }
 
   useEffect(() => {
     if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
@@ -56,6 +75,11 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, even
   return (
     (showInfoBox || showNeighborhoodInfoBox) && (
       <div className='floating-info-box'>
+        <button className='floating-info-box-back-button' onClick={() => {
+          resetMap(map);
+        }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Go Back
+        </button>
         <h1 className='floating-info-box-zone-header'>
           {showChartData ? eventName : zone}
         </h1>

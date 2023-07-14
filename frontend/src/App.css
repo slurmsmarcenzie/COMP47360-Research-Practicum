@@ -4,6 +4,7 @@ body {
 }
 
 .floating-nav {
+  gap: 12px;
   position: absolute;
   z-index: 1;
   min-width: 180px;
@@ -20,7 +21,6 @@ body {
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .navbar  {
@@ -138,7 +138,6 @@ body {
   align-items: left;
   display: flex;
   flex-direction: column;
-  gap: 12px;
 }
 
 .floating-info-tertiary-button {
@@ -150,6 +149,24 @@ body {
   border-radius: 5px;
   border: none;
   cursor: pointer;
+}
+
+.floating-info-box-back-button {
+  margin-bottom: 12px;
+  width: 50%;
+  color: white;
+  text-align: left;
+  padding-left: 12px;
+  font-weight: 500;
+  background-color: rgba(18, 19, 22, 0);
+  height: 28px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+}
+
+.floating-info-box-back-button:active {
+  background-color: rgba(18, 19, 22, 0.3);
 }
 
 /* Customise our pop up without having to add a class */
@@ -324,15 +341,14 @@ body {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
 }
 
-.floating-info-box-zone-header {
-  margin: auto;
-  margin-bottom: 12px;
-  padding: auto;
-}
-
-.floating-info-box-zone-busyness-sub-header{
-  margin: auto;
-  padding: auto;
+.floating-info-box-zone-header,
+.floating-info-box-zone-busyness-sub-header {
+  text-align: left;
+  width: fit-content;
+  margin-bottom: 16px;
+  margin-top: 0px;
+  /* margin: auto;
+  padding: auto; */
 }
 
 .modal-overlay  {
