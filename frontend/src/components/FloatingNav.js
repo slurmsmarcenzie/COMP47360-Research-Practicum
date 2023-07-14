@@ -41,6 +41,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
     disableColours();
 
     isNeighbourhoodClickedRef.current = true;
+    
     setNeighbourhoodEvents([selectedEvent]);
     setShowInfoBox(true);
     setShowNeighborhoodInfoBox(false);

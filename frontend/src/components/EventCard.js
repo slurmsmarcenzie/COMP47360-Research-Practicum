@@ -14,7 +14,6 @@ function EventCard ({item, visualiseEventImpact}) {
             <button className='floating-nav-cta-button' onClick={() => {
                 visualiseEventImpact(item.Event_ID);
                 setShowChartData(true)
-                // removeAllMarkers();
                 removeAllButOneMarker(item.Event_ID)
             }}>Visualise Event Impact</button>
         </div>
