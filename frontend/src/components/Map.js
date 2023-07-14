@@ -617,6 +617,7 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
+            isNeighbourhoodClickedRef={isNeighbourhoodClickedRef}
             updateLayerColours={updateLayerColours}
             visualiseEventImpact={visualiseEventImpact}
             highlightEventImpact={highlightEventImpact}
