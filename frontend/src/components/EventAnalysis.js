@@ -1,5 +1,4 @@
 import React from 'react';
-import { useMapContext } from './MapContext';
 import "../App.css";
 
 function EventAnalysis({ eventForAnalysisComponent }) {

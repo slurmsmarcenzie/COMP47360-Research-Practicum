@@ -18,8 +18,8 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers} = useMapContext();
 
-  const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
-
+  const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
+  
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 

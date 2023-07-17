@@ -40,6 +40,9 @@ function Map() {
   // magic numbers
   const { originalLat, originalLng, zoom, pitch } = useMapContext();
 
+  // swapping styles
+  const {mapStyle, getMapStyle} = useMapContext();
+
   // map specific states
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
@@ -520,25 +523,53 @@ function Map() {
 
   useEffect(() => {
 
-    // check that there is no map and that the scores have been successfully 
-    // retrieved by the fetch api before we create a map
-    
     if (!map.current) {
       if (!scores) {
         return; // Exit early if scores are not available
       }
-
+  
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
-
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
+  
+      const initializeMap = () => {
+        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+      renderNeighbourhoods(map.current);
+        add3DBuildings(map.current);
+        renderEvents(map.current);
+        initialiseMouseMapEvents(map.current);
+        setTimeout(() => {
+          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
+        }, 800);
+      }
+  
+      if (!map.current) {
+        // Initialize map
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+        style: mapStyle,
         center: [originalLng, originalLat],
         zoom: zoom,
-        pitch: pitch
-      });
+          pitch: pitch
+        });
+  
+        map.current.on('load', initializeMap);
+      
+        map.current.on('moveend', () => {
+          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
+            // enableColours(); rewrite this function as currently crashes app.
+          }
+        });
+      } 
+    }
+  }, [scores, mapStyle]); // This effect runs when scores is fetched
+    
+  // Separate useEffect for handling mapStyle changes
+  useEffect(() => {
+    if (map.current) {
+      // Change the style
+      map.current.setStyle(mapStyle);
 
-      map.current.on('load', () => {
+      // Re-initialize map on style load
+      map.current.once('style.load', () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
         renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
@@ -548,19 +579,8 @@ function Map() {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
         }, 800);
       });
-
-      map.current.on('moveend', () => {
-
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
-          
-          // enableColours(); rewrite this function as currently crashes app.
-          
-        }
-        
-      });
-      
     }
-  }, [scores]);  // This effect runs when scores is fetched
+  }, [mapStyle]); // This effect runs when mapStyle changes
 
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {

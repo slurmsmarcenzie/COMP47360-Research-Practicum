@@ -201,7 +201,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                     {useOriginal ? 'Show with Impact' : 'Show Baseline'}
                 </button>
                 <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Show Splitview'}
+                    Show Splitview
                 </button>
             </div>
         </div>

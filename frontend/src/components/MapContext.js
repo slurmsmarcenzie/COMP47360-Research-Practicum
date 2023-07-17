@@ -27,6 +27,8 @@ export const MapProvider = ({ children }) => {
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
     const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
+    const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -199,7 +201,6 @@ export const MapProvider = ({ children }) => {
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
     }
     
-
     const removeAllMarkers = () => {
 
         markers.forEach((marker) => {
@@ -246,17 +247,6 @@ export const MapProvider = ({ children }) => {
         });
     };
 
-    // useEffect(() => {
-
-    //     neighbourhoods.features.forEach((neighbourhood) => {
-
-    //         const layerId = `${neighbourhood.properties.location_id}`;
-
-    //         setLayerIds(prevLayerIds => [...prevLayerIds, layerId]);
-    //     })
-
-    //   }, []);
-
   return (
     <MapContext.Provider
       value={{
@@ -286,8 +276,9 @@ export const MapProvider = ({ children }) => {
         makePredictionRequest, setMakePredictionRequest,
         zoneID, setZoneID,
         eventName, setEventName,
+        eventForAnalysisComponent, setEventForAnalysisComponent,
+        mapStyle, setMapStyle,
       
-
         neighbourhoods,
         prunedEvents,
         colourPairs,

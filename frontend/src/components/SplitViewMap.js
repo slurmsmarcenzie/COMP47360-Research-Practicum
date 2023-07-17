@@ -6,10 +6,10 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 
-const LeftMapStyle = {
-    position: 'absolute',
-    width: '50%',
-    height: '100vh'
+  const LeftMapStyle = {
+      position: 'absolute',
+      width: '50%',
+      height: '100vh'
   };
   
   const RightMapStyle = {
@@ -19,9 +19,9 @@ const LeftMapStyle = {
     height: '100vh'
   };
   
-function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMapEvents}) {
+function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
 
-  const {MAPBOX_ACCESS_TOKEN, isSplitView, setSplitView, renderNeighbourhoods} = useMapContext();
+  const {MAPBOX_ACCESS_TOKEN, isSplitView, setSplitView, renderNeighbourhoods, markers, mapStyle} = useMapContext();
 
   const {updateLayerColours} = useMapContext();
 
@@ -158,10 +158,11 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMap
     handleSplitScreenMouseInteractions(map, busynessHashMap)
   }, [renderNeighbourhoods]);
 
+  console.log('logging the markers in the splitview map', markers)
+
   return (
     <>
       <div style={{position: 'relative', height: '100vh'}}>
-
         <Map
           id="left-map"
           {...viewState}
@@ -169,13 +170,11 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMap
           onMoveStart={onLeftMoveStart}
           onMove={activeMap === 'left' ? onMove : undefined}
           style={LeftMapStyle}
-          mapStyle='mapbox://styles/mapbox/dark-v11'
+          mapStyle={mapStyle}
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
-
         <div className="split-view-map-label" style={{top: '18px', left: '64px'}}>Baseline Event Map</div>
-
         <Map
           id="right-map"
           {...viewState}
@@ -183,18 +182,15 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, initialiseMouseMap
           onMoveStart={onRightMoveStart}
           onMove={activeMap === 'right' ? onMove : undefined}
           style={RightMapStyle}
-          mapStyle='mapbox://styles/mapbox/dark-v11'
+          mapStyle={mapStyle}
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
-
         <div className="split-view-map-label" style={{top: '18px', right: '64px'}}>Impact Event Map</div>
-
         <SplitViewController
           isSplitView={isSplitView}
           setSplitView={setSplitView}
         />
-
       </div>
     </>
   );
