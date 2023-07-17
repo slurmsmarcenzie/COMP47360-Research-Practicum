@@ -487,6 +487,7 @@ function Map() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
+        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -495,9 +496,10 @@ function Map() {
       catch (err) {
         if (retryCount.current < 3) {
           retryCount.current++;
-          setTimeout(() => {fetchScores()}, 10000);
+          setTimeout(() => {fetchScores()}, 3000);
         } else {
           setError('Failed to fetch scores after three attempts');
+          setScores([])
         }
       }
     };
@@ -521,7 +523,10 @@ function Map() {
     // check that there is no map and that the scores have been successfully 
     // retrieved by the fetch api before we create a map
     
-    if (!map.current && scores) {
+    if (!map.current) {
+      if (!scores) {
+        return; // Exit early if scores are not available
+      }
 
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
 
