@@ -18,6 +18,8 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers} = useMapContext();
 
+  const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
+
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
@@ -44,6 +46,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       setZoneID(neighbourhoodEvents[0].Zone_ID);
       setEventName(neighbourhoodEvents[0].Event_Name);
       setZone(neighbourhoodEvents[0].Zone_Name)
+      setEventForAnalysisComponent(neighbourhoodEvents[0])
     }
     
   }, [neighbourhoodEvents]);
@@ -66,55 +69,85 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     setRichText(text);
   }, [colourPairs, colourPairIndex, busynessHashMap, eventBaselineHashMap, zoneID]);
   
-  const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
+  const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((event, i) =>{
     return (
       <EventCard 
         key = {i}
-        item={item}
+        event={event}
         visualiseEventImpact={visualiseEventImpact}
       />
       )
   }) : null;
 
+  function renderHeader() {
+    return (
+      <button className='floating-info-box-back-button' onClick={() => {
+        resetMap(map);
+      }}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Go Back
+      </button>
+    );
+  }
+  
+  function renderZoneInfo() {
+    return (
+      <h1 className='floating-info-box-zone-header'>
+        {showChartData ? eventName : zone}
+      </h1>
+    );
+  }
+  
+  function renderChartOrAnalysis() {
+
+    console.log('renderChartOrAnalysis is being called');
+  
+    if (!showChartData) {
+      return <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>;
+    }
+  
+    return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
+  }
+  
+  
+  function renderInfoBoxContent() {
+    if (!showInfoBox) {
+      return null;
+    }
+  
+    if (showChartData) {
+      return (
+        <NeighbourhoodChartData 
+          map={map}
+          hashMap={hashMapOfDifference}
+          busynessHashMap={busynessHashMap}
+          eventBaselineHashMap={eventBaselineHashMap}
+          colours={colours}
+          highlightEventImpact={highlightEventImpact}
+          zoneID={zoneID}
+          resetColours={resetColours}
+        />
+      );
+    }
+  
+    return eventCards;
+
+  }
+  
+  function renderNeighborhoodMessage() {
+    return showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>;
+  }
+  
   return (
     (showInfoBox || showNeighborhoodInfoBox) && (
       <div className='floating-info-box'>
-        <button className='floating-info-box-back-button' onClick={() => {
-          resetMap(map);
-        }}>
-          <FontAwesomeIcon icon={faArrowLeft} /> Go Back
-        </button>
-        <h1 className='floating-info-box-zone-header'>
-          {showChartData ? eventName : zone}
-        </h1>
-        {
-        showChartData 
-        ? (showChart 
-            ? null
-            : <EventAnalysis />) 
-        : <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>
-        }
-        {showInfoBox
-          ? showChartData
-            ? (
-              <NeighbourhoodChartData 
-                map={map}
-                hashMap={hashMapOfDifference}
-                busynessHashMap={busynessHashMap}
-                eventBaselineHashMap={eventBaselineHashMap}
-                colours={colours}
-                highlightEventImpact={highlightEventImpact}
-                zoneID={zoneID}
-                resetColours={resetColours}
-              />
-              )
-            : eventCards
-          : null
-        }
-        {showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>}
+        {renderHeader()}
+        {renderZoneInfo()}
+        {renderChartOrAnalysis()}
+        {renderInfoBoxContent()}
+        {renderNeighborhoodMessage()}
       </div>
     )
-  );  
+  );
 }
 
 export default FloatingInfoBox

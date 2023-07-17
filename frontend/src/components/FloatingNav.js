@@ -3,6 +3,7 @@ import "../App.css";
 
 // import context
 import { useMapContext } from './MapContext';
+import { select } from 'd3';
 
 
 function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enableColours,  disableColours}) {
@@ -35,7 +36,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
     const longitude = selectedEvent.Event_Location.Longitude
     
     setZone(selectedEvent.Zone_ID);
-    
+
     floatingNavZoomToLocation(longitude, latitude);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
     disableColours();
