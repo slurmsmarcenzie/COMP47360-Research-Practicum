@@ -43,6 +43,10 @@ export const MapProvider = ({ children }) => {
     const originalLng = -73.9857;
     const zoom = 7;
     const pitch = 30;
+    const boundary = [
+        [-74.255591, 40.477388],
+        [-73.698697, 40.983697]
+    ]
 
     const colourPairs = [
         ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -288,7 +292,8 @@ export const MapProvider = ({ children }) => {
         originalLat,
         originalLng,
         zoom,
-        pitch
+        pitch,
+        boundary
       }}
     >
       {children}

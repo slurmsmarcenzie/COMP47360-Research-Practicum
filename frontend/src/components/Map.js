@@ -38,10 +38,10 @@ function Map() {
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID} = useMapContext();
 
   // magic numbers
-  const { originalLat, originalLng, zoom, pitch } = useMapContext();
+  const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
 
   // swapping styles
-  const {mapStyle, getMapStyle} = useMapContext();
+  const {mapStyle} = useMapContext();
 
   // map specific states
   const [scores, setScores] = useState(null);
@@ -530,9 +530,9 @@ function Map() {
   
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
   
-      const initializeMap = () => {
+      const initialiseMap = () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
-      renderNeighbourhoods(map.current);
+        renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
         renderEvents(map.current);
         initialiseMouseMapEvents(map.current);
@@ -545,13 +545,14 @@ function Map() {
         // Initialize map
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
-        style: mapStyle,
-        center: [originalLng, originalLat],
-        zoom: zoom,
-          pitch: pitch
+          style: mapStyle,
+          center: [originalLng, originalLat],
+          zoom: zoom,
+          pitch: pitch,
+          maxBounds: boundary
         });
   
-        map.current.on('load', initializeMap);
+        map.current.on('load', initialiseMap);
       
         map.current.on('moveend', () => {
           if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
