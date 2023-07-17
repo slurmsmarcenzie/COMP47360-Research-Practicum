@@ -43,7 +43,7 @@ function Map() {
   // map specific states
   const [scores, setScores] = useState(null);
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
-  const [baselineEventBusynessHashMap, setBaselineEventBusynessHashMap] = useState(null);
+  const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
 
   // objects for our map
@@ -199,7 +199,7 @@ function Map() {
                   }
 
                   // Set the HTML content of the popup with the colored text
-                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText} - ${Math.floor(neighbourhood.busyness_score * 100)}</span>`).addTo(map);
+                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
                 }
           }
       });
@@ -256,17 +256,15 @@ function Map() {
           setNeighbourhoodEvents(matchingEvents);
 
           if (matchingEvents.length > 0) {
-
             setShowInfoBox(true);
-
-            } else {
-              // Show the neighborhood info box since there are no matching events
-              setShowNeighborhoodInfoBox(true);
-            }
-
-            setZone(zone);
-            
+          } else {
+            // Show the neighborhood info box since there are no matching events
+            setShowNeighborhoodInfoBox(true);
           }
+
+          setZone(zone);
+          
+        }
       });
     });
   }
@@ -283,7 +281,7 @@ function Map() {
 
     // we are going to use date + ID as the argument
     // fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
-    fetch((`${BASE_API_URL}/predict/${formattedDate}`))
+    fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -296,6 +294,18 @@ function Map() {
       setError(error)
     });
 
+    fetch((`${BASE_API_URL}/baseline/${formattedDate}/${Event_ID}`))
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => setEventBaselineScores(data))
+    .catch((error) => {
+      console.error('Issue with fetch request for prediction:', error);
+      setError(error)
+    });
   };
 
   const visualiseEventImpact = (Event_ID) => {
@@ -318,6 +328,8 @@ function Map() {
   }
 
   const highlightEventImpact = (Zone_ID, labels) => {
+
+    const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
   
     isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
   
@@ -328,20 +340,6 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
 
-      console.log(neighbourhood)
-
-      if (neighbourhood.id == Zone_ID){
-
-        let isHighlighted = false;
-
-        const intervalId = setInterval(() => {
-          isHighlighted = !isHighlighted;
-          
-          map.current.setPaintProperty(Zone_ID, 'fill-opacity', isHighlighted ? 0.9 : 0.3);
-
-        }, 500);
-      }
-  
       if (labels.includes(neighbourhood.id)) {
 
         map.current.off('mousemove', neighbourhood.id);
@@ -386,8 +384,21 @@ function Map() {
   
             const feature = features[0];
             const zone = feature.properties.zone;
+
+            const textColour = colourScale(neighbourhood.busyness_score);
+
+            let richText;
+            if (neighbourhood.busyness_score < 0.29) {
+                richText = 'Not Very Busy';
+            } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
+                richText = 'Relatively Busy';
+            } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
+                richText = 'Busy';
+            } else {
+                richText = 'Extremely Busy';
+            }
   
-            popup.current.setLngLat(e.lngLat).setHTML(`${zone}, ${neighbourhood.id}`).addTo(map.current);
+            popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map.current);
           }
         }); // close the mousemove event block
   
@@ -430,6 +441,7 @@ function Map() {
     }
   
     setHashMapOfDifference(temporaryHashMap);
+
   };
 
   // Define a memoized value 'busynessMap', which depends on 'scores'
@@ -452,6 +464,21 @@ function Map() {
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
+
+  // same implementation as above
+  const eventBaselineHashMap = useMemo(() => {
+
+    if (!eventBaselineScores) return {};  
+
+    return eventBaselineScores.reduce((map, item) => {
+      
+      map[item.location_id] = item.busyness_score;
+      
+      return map;
+    }, {});  
+    
+  }, [eventBaselineScores]);  
+
   useEffect(() => {
 
     const fetchScores = async () => {
@@ -462,7 +489,6 @@ function Map() {
         const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
-        console.log(data);
         setScores(data);
       } 
       
@@ -571,6 +597,7 @@ function Map() {
 
         {isSplitView ? (
             <SplitViewMap 
+            eventBaselineHashMap={eventBaselineHashMap}
             originalBusynessHashMap={originalBusynessHashMap}
             busynessHashMap={busynessHashMap}
             initialiseMouseMapEvents={initialiseMouseMapEvents}
@@ -590,10 +617,13 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
+            isNeighbourhoodClickedRef={isNeighbourhoodClickedRef}
+            updateLayerColours={updateLayerColours}
             visualiseEventImpact={visualiseEventImpact}
             highlightEventImpact={highlightEventImpact}
             resetColours={resetColours}
             originalBusynessHashMap={originalBusynessHashMap}
+            eventBaselineHashMap={eventBaselineHashMap}
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}
             colours={colourPairs[colourPairIndex]}

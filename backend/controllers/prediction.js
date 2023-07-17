@@ -5,12 +5,13 @@ require("dotenv").config();
 //fetch prediction from ML:
 const queryPrediction = (req, res, next) => {
     res.req.ip
+    let eventID = req.params.event
     // get date from params and fix it to be the correct format
     let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`prediction requested for: ${req.params.date}`)
+    generalLogger.info(`prediction requested for: ${date}, of event ${eventID}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
-    const uri = `http://127.0.0.1:7000/predict/${date}?key=${process.env.FLASK_API_KEY}` 
+    const uri = `http://127.0.0.1:7000/predict/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {

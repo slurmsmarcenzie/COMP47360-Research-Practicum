@@ -26,6 +26,7 @@ export const MapProvider = ({ children }) => {
     const [isSplitView, setSplitView] = useState(false);
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
+    const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area

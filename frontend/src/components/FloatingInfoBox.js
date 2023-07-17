@@ -1,20 +1,43 @@
 import React, {useState, useEffect} from 'react';
 import EventCard from './EventCard';
 import NeighbourhoodChartData from './NeighbourhoodChartData';
+import EventAnalysis from './EventAnalysis';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours }) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
-  const {showInfoBox, showChartData, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
+  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
+
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
+
+  const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers} = useMapContext();
 
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
+
+  const resetMap = (map) => {
+    setShowInfoBox(false);
+    setShowNeighborhoodInfoBox(false);
+    setShowChartData(false);
+    setShowChart(false);
+    setNeighbourhoodEvents([]);
+    showAllMarkers(map.current);
+    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    updateLayerColours(map.current, true, originalBusynessHashMap, busynessHashMap);
+    neighbourhoods.features.forEach((neighbourhood) => {
+      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+    });
+    isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
+  }
 
   useEffect(() => {
     if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
@@ -27,7 +50,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   useEffect(() => {
     const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
-    const neighbourhoodBusyness = useOriginal ? originalBusynessHashMap[zoneID] : busynessHashMap[zoneID]
+    const neighbourhoodBusyness = useOriginal ? eventBaselineHashMap[zoneID] : busynessHashMap[zoneID]
     const colour = colourScale(neighbourhoodBusyness);
     setTextColour(colour);
     let text;
@@ -41,9 +64,8 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         text = 'Extremely Busy';
     }
     setRichText(text);
-  }, [colourPairs, colourPairIndex, busynessHashMap, originalBusynessHashMap, zoneID]);
+  }, [colourPairs, colourPairIndex, busynessHashMap, eventBaselineHashMap, zoneID]);
   
-
   const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
     return (
       <EventCard 
@@ -57,10 +79,21 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   return (
     (showInfoBox || showNeighborhoodInfoBox) && (
       <div className='floating-info-box'>
+        <button className='floating-info-box-back-button' onClick={() => {
+          resetMap(map);
+        }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> Go Back
+        </button>
         <h1 className='floating-info-box-zone-header'>
           {showChartData ? eventName : zone}
         </h1>
-        <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>
+        {
+        showChartData 
+        ? (showChart 
+            ? null
+            : <EventAnalysis />) 
+        : <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>
+        }
         {showInfoBox
           ? showChartData
             ? (
@@ -68,7 +101,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
                 map={map}
                 hashMap={hashMapOfDifference}
                 busynessHashMap={busynessHashMap}
-                originalBusynessHashMap={originalBusynessHashMap}
+                eventBaselineHashMap={eventBaselineHashMap}
                 colours={colours}
                 highlightEventImpact={highlightEventImpact}
                 zoneID={zoneID}
