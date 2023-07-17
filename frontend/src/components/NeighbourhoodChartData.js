@@ -4,8 +4,9 @@ import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
 
-function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynessHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
+    const {neighbourhoods} = useMapContext();
     const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
 
@@ -54,12 +55,21 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
         const labels = filteredHashMap ? Object.keys(filteredHashMap) : [];
         const dataValues = filteredHashMap ? Object.values(filteredHashMap) : [];
 
-        return {labels, dataValues}
+        const names = labels.map(label => {
+            // Find the corresponding object in the array
+            const matchingObject = neighbourhoods.features.find(neighbourhood => neighbourhood.id === label);
+          
+            // If a matching object was found, return its name. Otherwise, return null.
+            return matchingObject ? matchingObject.properties.zone : null;
+          });
+
+        return {names, labels, dataValues}
     }
 
-    const makeChartData = (labels, dataValues) => {
+    const makeChartData = (names, dataValues) => {
+
         const data = {
-            labels: labels,
+            labels: names,
             datasets: [
                 { label: 'Busyness',
                 barThickness: 24,
@@ -88,6 +98,12 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
             legend: {
                 display: false
             },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0
+                }
+            },
             plugins: {
                 legend: {
                     display: false, // This should already remove the legend.
@@ -98,17 +114,20 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
                     },
                 },
             },
-            indexAxis: 'y',
+            indexAxis: 'x', // Changed from 'y' to 'x'
             scales: {
-                y: {
+                x: { // This was 'y'
                     beginAtZero: true,
                     ticks: {
-                        color : '#fefefe'
+                        color : '#fefefe',
+                        align: 'start' // This will align the labels to the start (top for a horizontal axis)
                     }
                 },
-                x: {
+                y: { // This was 'x'
                     ticks: {
-                        color : '#fefefe'
+                        color : '#fefefe',
+                        align: 'start', // This will align the labels to the start (left for a vertical axis)
+                        display: false // This will hide the labels on the y-axis
                     }
                 }
             }
@@ -119,40 +138,39 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, originalBusynes
     
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
-        const {labels, dataValues} = getImpactedZones();
+        const {names, labels, dataValues} = getImpactedZones();
         setLabels(labels); // Set labels here
-        const newChartData = makeChartData(labels, dataValues);
+        const newChartData = makeChartData(names, dataValues);
         setChartData(newChartData); // Set chartData here
     }, [showMostImpactedZones, hashMap]);
 
     const toggleChartData = () => {
-        
         highlightEventImpact(Zone_ID, labels);
         setRenderChart(chartData);
         setShowChart(true);
         setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-
     };
 
     const getGradientMostImpacted = (context) => {
-        const {ctx, chartArea: { left, right } } = context;
-        const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
-        gradientSegment.addColorStop(0, colours[1]);
-        gradientSegment.addColorStop(1, colours[2]);
+        const {ctx, chartArea: { top, bottom } } = context;
+        const gradientSegment = ctx.createLinearGradient(0, top, 0, bottom);
+        gradientSegment.addColorStop(0, colours[2]);
+        gradientSegment.addColorStop(1, colours[1]);
         return gradientSegment;
     };
+    
 
     const getGradientLeastImpacted = (context) => {
-        const {ctx, chartArea: { left, right } } = context;
-        const gradientSegment = ctx.createLinearGradient(left, 0, right, 0);
-        gradientSegment.addColorStop(0, colours[0]);
-        gradientSegment.addColorStop(1, colours[1]);
+        const {ctx, chartArea: { top, bottom } } = context;
+        const gradientSegment = ctx.createLinearGradient(0, top, 0, bottom);
+        gradientSegment.addColorStop(0, colours[1]);
+        gradientSegment.addColorStop(1, colours[0]);
         return gradientSegment;
     }
 
     const handleToggle = () => {
         setUseOriginal(!useOriginal);
-        updateLayerColours(map.current, !useOriginal, originalBusynessHashMap, busynessHashMap);
+        updateLayerColours(map.current, !useOriginal, eventBaselineHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
