@@ -2,6 +2,7 @@ import React from 'react';
 import "../App.css";
 
 // import context
+import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 import { select } from 'd3';
 
@@ -51,6 +52,8 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
     setEventName(selectedEvent.Event_Name)
     
   };
+
+  const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
     return(
         <div className='floating-nav'>

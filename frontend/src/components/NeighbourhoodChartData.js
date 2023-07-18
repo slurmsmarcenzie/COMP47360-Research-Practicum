@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
+import { useToggleSlider }  from "react-toggle-slider";
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
@@ -12,8 +13,9 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
-
+    const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
     const [renderChart, setRenderChart] = useState(null);
+    const [toggleHighlightSlider, highlightActive] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
@@ -176,6 +178,14 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setShowMostImpactedZones(!showMostImpactedZones)
       };
 
+      useEffect(() => {
+        handleToggle();
+      }, [active]);
+
+      useEffect(() => {
+        toggleChartData();
+      }, [highlightActive]);
+
     return (
         <div className='parent-chart-container'> 
             {showChart &&
@@ -194,13 +204,14 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
-                <button className='floating-infobox-box-toggle-button'onClick={toggleChartData}>
+                {/* <button className='floating-infobox-box-toggle-button'onClick={toggleChartData}>
                     {showMostImpactedZones ? 'Highlight most impacted zones' : 'Highlight least impacted zones'}
-                </button>
-                <button className='floating-infobox-box-toggle-button' onClick={handleToggle}>
-                    {useOriginal ? 'Show with Impact' : 'Show Baseline'}
-                </button>
-                <button className='floating-infobox-box-toggle-button' onClick={() => setSplitView(!isSplitView)}>
+                </button> */}
+                { toggleHighlightSlider }
+                Show {highlightActive ? 'Least Impacted' : 'Most Impacted'}
+                { toggleSlider }
+                Show {active ? 'Impact' : 'Baseline'}
+                <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Show Splitview'}
                 </button>
             </div>

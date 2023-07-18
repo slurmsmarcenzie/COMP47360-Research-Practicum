@@ -87,6 +87,7 @@ body {
   border-radius: 5px;
   border: none;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .floating-nav-cta-button:hover {
@@ -106,7 +107,7 @@ body {
 }
 
 .floating-nav-dropdown {
-  appearance: none;
+  /* appearance: none; */
   color:white;
   background-color: #12131640;
   border: 1px solid rgba(255, 255, 255, 0.125);
@@ -115,7 +116,21 @@ body {
   border-radius: 5px;
   padding-left: 1rem;
   padding-right: 1rem !important;
+  position:relative;
 }
+
+.floating-nav-dropdown::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 20px; 
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px; 
+  border-color: white transparent transparent transparent; 
+} 
 
 .floating-nav-form {
   width: 100%;
