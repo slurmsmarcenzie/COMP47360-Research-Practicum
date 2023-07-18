@@ -3,6 +3,17 @@ body {
   background-color: rgb(43, 43, 45);
 }
 
+.dot {
+  width: 3%;
+  height: 100%;
+  background-color: white;
+  position: relative;
+  transition: left 0.5s cubic-bezier(0.5, 0, 0.8, 1); 
+  border-radius: 2px;
+}
+
+
+
 .floating-nav {
   gap: 12px;
   position: absolute;
