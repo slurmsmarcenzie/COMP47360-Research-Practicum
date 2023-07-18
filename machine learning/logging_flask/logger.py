@@ -5,11 +5,11 @@ general_logger = logging.getLogger("general_logger")
 general_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("[%(levelname)s] %(asctime)s [%(filename)s : %(funcName)s] %(message)s")
 
-file_handler = logging.FileHandler("logging_flask\logs\general.log")
+file_handler = logging.FileHandler("logging_flask/logs/general.log")
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 
-file_handler_priority = logging.FileHandler("logging_flask\logs\priority.log")
+file_handler_priority = logging.FileHandler("logging_flask/logs/priority.log")
 file_handler_priority.setLevel(logging.WARN)
 file_handler_priority.setFormatter(formatter)
 
