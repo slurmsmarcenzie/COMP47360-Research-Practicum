@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.c297eb6a.css",
-    "main.js": "/static/js/main.5dfa6d60.js",
+    "main.js": "/static/js/main.5b9875a6.js",
     "static/js/mapbox-gl-csp-worker.9ab40586.worker.js": "/static/js/mapbox-gl-csp-worker.9ab40586.worker.js",
     "static/media/after-party-logo-violet.png": "/static/media/after-party-logo-violet.41f979d380f9f4778451.png",
     "index.html": "/index.html",
     "main.c297eb6a.css.map": "/static/css/main.c297eb6a.css.map",
-    "main.5dfa6d60.js.map": "/static/js/main.5dfa6d60.js.map"
+    "main.5b9875a6.js.map": "/static/js/main.5b9875a6.js.map"
   },
   "entrypoints": [
     "static/css/main.c297eb6a.css",
-    "static/js/main.5dfa6d60.js"
+    "static/js/main.5b9875a6.js"
   ]
 }
