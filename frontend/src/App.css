@@ -272,7 +272,7 @@ body {
 
 .floating-info-box-chart-container {
   position: relative;
-  height: 270px;
+  height: 300px;
 }
 
 .floating-info-box-chart-container > :first-child {

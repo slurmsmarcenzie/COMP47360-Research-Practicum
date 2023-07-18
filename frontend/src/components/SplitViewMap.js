@@ -121,7 +121,12 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           }
 
           // Set the HTML content of the popup with the colored text
-          popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
+          popup.current.setLngLat(e.lngLat)
+          .setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>
+          <br>
+          Busyness Score:  <span style="color: ${textColour}">${Math.floor(score * 100)}</span>
+          `)
+          .addTo(map);
         }
 
       });
@@ -157,8 +162,6 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
     updateLayerColours(map, false, eventBaselineHashMap, busynessHashMap)
     handleSplitScreenMouseInteractions(map, busynessHashMap)
   }, [renderNeighbourhoods]);
-
-  console.log('logging the markers in the splitview map', markers)
 
   return (
     <>

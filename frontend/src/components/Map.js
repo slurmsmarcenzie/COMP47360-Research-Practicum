@@ -202,7 +202,12 @@ function Map() {
                   }
 
                   // Set the HTML content of the popup with the colored text
-                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
+                  popup.current.setLngLat(e.lngLat)
+                  .setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>
+                  <br>
+                  Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
+                  `)
+                  .addTo(map);
                 }
           }
       });
@@ -333,39 +338,46 @@ function Map() {
   const highlightEventImpact = (Zone_ID, labels) => {
 
     const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
+    isNeighbourhoodClickedRef.current = true;
   
-    isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
+    const setNeighbourhoodProperties = (neighbourhoodId, opacity, lineWidth) => {
+      map.current.setPaintProperty(neighbourhoodId, 'fill-opacity', opacity);
+      map.current.setPaintProperty(neighbourhoodId + '-line', 'line-width', lineWidth);
+    };
+  
+    const determineRichText = (score) => {
+      switch(true) {
+        case score < 0.29:
+          return 'Not Very Busy';
+        case score >= 0.29 && score < 0.4:
+          return 'Relatively Busy';
+        case score >= 0.4 && score < 0.7:
+          return 'Busy';
+        default:
+          return 'Extremely Busy';
+      }
+    };
   
     neighbourhoods.features.forEach((neighbourhood) => {
-            
-      let opacity = labels.includes(neighbourhood.id) ? 0.7 : 0.1;
-      let line = labels.includes(neighbourhood.id) ? 1 : 0;
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
-      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
-
-      if (labels.includes(neighbourhood.id)) {
-
+      const isLabelPresent = labels.includes(neighbourhood.id);
+      let opacity = isLabelPresent ? 0.7 : 0.1;
+      let line = isLabelPresent ? 1 : 0;
+  
+      setNeighbourhoodProperties(neighbourhood.id, opacity, line);
+  
+      if (isLabelPresent) {
         map.current.off('mousemove', neighbourhood.id);
         map.current.off('mouseleave', neighbourhood.id);
   
         map.current.on('mousemove', neighbourhood.id, (e) => {
-  
           map.current.getCanvas().style.cursor = 'pointer';
-          map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
-          map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 4);
-  
-          const features = map.current.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
-  
-          if (features.length > 0) {
-  
-            if (!popup.current) {
-  
-              // code to allow the pop up to display a bit over our mouse interaction.
-  
-              const markerHeight = 10;
-              const markerRadius = 10;
-              const linearOffset = 5;
-              const popupOffsets = {
+          setNeighbourhoodProperties(neighbourhood.id, 0.9, 4);
+
+          if (!popup.current) {
+            const markerHeight = 10;
+            const markerRadius = 10;
+            const linearOffset = 5;
+            const popupOffsets = {
               'top': [0, 0],
               'top-left': [0, 0],
               'top-right': [0, 0],
@@ -374,57 +386,44 @@ function Map() {
               'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
               'left': [markerRadius, (markerHeight - markerRadius) * -1],
               'right': [-markerRadius, (markerHeight - markerRadius) * -1]
-              };
+            };
+          
+            popup.current = new mapboxgl.Popup({
+              offset: popupOffsets,
+              closeButton: false,
+              closeOnClick: false,
+            });
+          }          
   
-              // creating the popup object
+          const features = map.current.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
   
-              popup.current = new mapboxgl.Popup({
-                  offset: popupOffsets,
-                  closeButton: false,
-                  closeOnClick: false,
-              });
-            }
-  
+          if (features.length > 0) {
             const feature = features[0];
             const zone = feature.properties.zone;
-
+  
             const textColour = colourScale(neighbourhood.busyness_score);
-
-            let richText;
-            if (neighbourhood.busyness_score < 0.29) {
-                richText = 'Not Very Busy';
-            } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
-                richText = 'Relatively Busy';
-            } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                richText = 'Busy';
-            } else {
-                richText = 'Extremely Busy';
-            }
+            let richText = determineRichText(neighbourhood.busyness_score);
   
             popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map.current);
           }
-        }); // close the mousemove event block
+        });
   
         map.current.on('mouseleave', neighbourhood.id, () => {
-          if (labels.includes(neighbourhood.id)) {
+          if (isLabelPresent) {
             map.current.getCanvas().style.cursor = '';
-            map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
-            map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
+            setNeighbourhoodProperties(neighbourhood.id, opacity, line);
           }
   
           if (popup.current) {
-              popup.current.remove();
-              popup.current = null;
+            popup.current.remove();
+            popup.current = null;
           }
-        }); // close the mouseleave event block
+        });
+      }
+    });
   
-      } // close the labels.includes(layerId) block
-  
-    }); // close the forEach block
-  
-    map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
-    map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
-  
+    setNeighbourhoodProperties(Zone_ID, 0.7, 4);
+
   };
   
   const calculateHashMapDifference = () => {
@@ -553,12 +552,7 @@ function Map() {
         });
   
         map.current.on('load', initialiseMap);
-      
-        map.current.on('moveend', () => {
-          if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
-            // enableColours(); rewrite this function as currently crashes app.
-          }
-        });
+
       } 
     }
   }, [scores, mapStyle]); // This effect runs when scores is fetched

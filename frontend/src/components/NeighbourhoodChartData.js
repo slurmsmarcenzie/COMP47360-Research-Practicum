@@ -53,7 +53,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
         // Get the keys and values from the filtered hashMap
         const labels = filteredHashMap ? Object.keys(filteredHashMap) : [];
-        const dataValues = filteredHashMap ? Object.values(filteredHashMap) : [];
+        const dataValues = filteredHashMap ? Object.values(filteredHashMap): [];
 
         const names = labels.map(label => {
             // Find the corresponding object in the array
@@ -67,72 +67,73 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     }
 
     const makeChartData = (names, dataValues) => {
-
+    
         const data = {
             labels: names,
             datasets: [
-                { label: 'Busyness',
-                barThickness: 24,
-                data: dataValues,
-                backgroundColor: (context) => {
-                    const chart = context.chart;
-                    const {ctx, chartArea} = chart;
-                    if (!chartArea){
-                        return null
-                    }
-                    if (context.dataIndex >= 0){
-                        return showMostImpactedZones ? getGradientMostImpacted(chart) : getGradientLeastImpacted(chart);
-                    } else{
-                        return 'white'
-                    }
-                },
-                borderWidth: 1,
-                borderRadius: 2,   
+                { 
+                    label: 'Change in Busyness',
+                    barThickness: 24,
+                    data: dataValues,
+                    backgroundColor: (context) => {
+                        const chart = context.chart;
+                        const {chartArea} = chart;
+                        if (!chartArea){
+                            return null
+                        }
+                        if (context.dataIndex >= 0){
+                            return showMostImpactedZones ? getGradientMostImpacted(chart) : getGradientLeastImpacted(chart);
+                        } else{
+                            return 'white'
+                        }
+                    },
                 },
             ],
         };
-      
+    
         const options = {
-            maintainAspectRatio: false, // Set to false to control the canvas size manually
-            responsive: true, // Enable responsiveness
-            legend: {
-                display: false
-            },
-            layout: {
-                padding: {
-                    left: 0,
-                    right: 0
+            maintainAspectRatio: false,
+            responsive: true,
+            indexAxis: 'x',
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 10,
+                        },
+                        maxRotation: 45,
+                        minRotation: 45
+                    },
+                    grid: {
+                        display: false // hides gridlines along the x-axis
+                    },
+                },
+                y: { 
+                    display: false, // hides the y-axis
+                    grid: {
+                        display: false // hides gridlines along the y-axis
+                    }
                 }
             },
             plugins: {
                 legend: {
-                    display: false, // This should already remove the legend.
+                    display: false,
                 },
-                tooltip: {
-                    callbacks: {
-                        title: () => {}, // This removes the title in the tooltip.
+                tooltip: {},
+                title: {
+                    display: true,
+                    text: 'Change in Busyness',
+                    color: 'white',  // Set title color
+                    font: {
+                        size: 14,  // Set font size
+                        family: 'Arial'  // Set font family
                     },
-                },
+                    align: 'center'  // center alignment
             },
-            indexAxis: 'x', // Changed from 'y' to 'x'
-            scales: {
-                x: { // This was 'y'
-                    beginAtZero: true,
-                    ticks: {
-                        color : '#fefefe',
-                        align: 'start' // This will align the labels to the start (top for a horizontal axis)
-                    }
-                },
-                y: { // This was 'x'
-                    ticks: {
-                        color : '#fefefe',
-                        align: 'start', // This will align the labels to the start (left for a vertical axis)
-                        display: false // This will hide the labels on the y-axis
-                    }
-                }
-            }
-        };
-    
+        },
+    };
         return {data, options};
     }
     
@@ -145,10 +146,10 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     }, [showMostImpactedZones, hashMap]);
 
     const toggleChartData = () => {
-        highlightEventImpact(Zone_ID, labels);
+        setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
         setRenderChart(chartData);
         setShowChart(true);
-        setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
+        highlightEventImpact(Zone_ID, labels);
     };
 
     const getGradientMostImpacted = (context) => {
