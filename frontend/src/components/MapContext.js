@@ -35,6 +35,7 @@ export const MapProvider = ({ children }) => {
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
     const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
+    const [showMatchingEvent, setShowMatchingEvent] = useState(true);
 
     // zone and event setters used in floating info box and elsewhere
     const [zoneID, setZoneID] = useState(null);
@@ -284,6 +285,7 @@ export const MapProvider = ({ children }) => {
         eventForAnalysisComponent, setEventForAnalysisComponent,
         mapStyle, setMapStyle,
         isResetShowing, setIsResetShowing,
+        showMatchingEvent, setShowMatchingEvent,
       
         neighbourhoods,
         prunedEvents,

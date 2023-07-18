@@ -3,10 +3,8 @@ import "../App.css";
 
 // import context
 import { useMapContext } from './MapContext';
-import { select } from 'd3';
 
-
-function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enableColours,  disableColours}) {
+function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
 
   const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing} = useMapContext();
 
@@ -63,7 +61,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
             </select>
           </form>
           {isResetShowing &&
-          <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
+          <button className="floating-nav-outline-button" onClick={enableColours}>Reset Map</button>
           }
         </div>
     )
