@@ -35,7 +35,7 @@ function Map() {
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
@@ -64,6 +64,7 @@ function Map() {
   // Change of Colour Handling
   const enableColours = () => {
 
+    setIsResetShowing(false);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
@@ -271,7 +272,8 @@ function Map() {
           }
 
           setZone(zone);
-          
+          setIsResetShowing(true)
+
         }
       });
     });

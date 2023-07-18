@@ -29,6 +29,7 @@ export const MapProvider = ({ children }) => {
     const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
     const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
+    const [isResetShowing, setIsResetShowing] = useState(false)
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -282,6 +283,7 @@ export const MapProvider = ({ children }) => {
         eventName, setEventName,
         eventForAnalysisComponent, setEventForAnalysisComponent,
         mapStyle, setMapStyle,
+        isResetShowing, setIsResetShowing,
       
         neighbourhoods,
         prunedEvents,
