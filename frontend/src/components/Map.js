@@ -187,7 +187,7 @@ function Map() {
 
                   const feature = features[0];
                   const zone = feature.properties.zone; 
-                  
+                
                   // Apply the busyness score to the color scale
                   const textColour = colourScale(neighbourhood.busyness_score);
 
@@ -202,13 +202,21 @@ function Map() {
                       richText = 'Extremely Busy';
                   }
 
+                  const matchingEvent = prunedEvents.find(event => event.Zone_ID === feature.id);
+                  console.log(matchingEvent);
+                  const eventInfo = matchingEvent
+                    ? `Upcoming event: ${matchingEvent.Event_Name}`
+                    : '';
+                  
                   // Set the HTML content of the popup with the colored text
                   popup.current.setLngLat(e.lngLat)
-                  .setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>
-                  <br>
-                  Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
-                  `)
-                  .addTo(map);
+                    .setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>
+                    <br>
+                    Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
+                    <br>
+                    ${eventInfo}
+                    `)
+                    .addTo(map);
                 }
           }
       });
