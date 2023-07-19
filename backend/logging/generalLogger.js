@@ -19,9 +19,9 @@ const generalLogger = function(callingModule){
         transports: [
             //TODO - In future, error logs should go to email/slack etc
             // Write all logs with priority of `warn` or more to `priority.log`
-            new transports.File({filename: "logging/logs/priority.log", level: "warn"}),
+            new transports.File({filename: "logs/priority.log", level: "warn"}),
             // Write all logs with priority of debug or more to `general.log`
-            new transports.File({filename: "logging/logs/general.log"})
+            new transports.File({filename: "logs/general.log"})
         ],
         format:  format.combine(
             format.errors({ stack: true }),
