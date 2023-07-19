@@ -49,6 +49,7 @@ function Map() {
   const [originalBusynessHashMap, setOriginalBusynessHashMap] = useState(null);
   const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
+  const [hoveredZoneScore, setHoveredZoneScore] = useState(null);
 
   // objects for our map
   const mapContainer = useRef(null);
@@ -57,6 +58,7 @@ function Map() {
   
   // flimsy counter replace later
   const retryCount = useRef(0);
+
 
   // define a new function that will be used as the event listener
   const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
@@ -229,7 +231,7 @@ function Map() {
   //                 const eventInfo = matchingEvent && !isNeighbourhoodClickedRef.current
   //                 ? `Upcoming event: ${matchingEvent.Event_Name}`
   //                   : '';
-                  
+                 
   //                 // Set the HTML content of the popup with the colored text
   //                 popup.current.setLngLat(e.lngLat)
   //                   .setHTML(`${zone} is <span style="color: ${textColour}">${richText}</span>
@@ -356,6 +358,7 @@ function Map() {
         
           // Apply the busyness score to the color scale
           const textColour = colourScale(neighbourhood.busyness_score);
+          setHoveredZoneScore(neighbourhood.busyness_score);
 
           let richText;
           if (neighbourhood.busyness_score < 0.29) {
@@ -652,6 +655,7 @@ function Map() {
     
   }, [eventBaselineScores]);  
 
+
   useEffect(() => {
 
     const fetchScores = async () => {
@@ -822,6 +826,7 @@ function Map() {
 
           <MapLegend
             colours={colourPairs[colourPairIndex]} 
+            hoveredZoneScore={hoveredZoneScore}
           />
 
           </>

@@ -2,6 +2,7 @@ import React from 'react';
 import "../App.css";
 
 // import context
+import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 
 function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
@@ -50,6 +51,8 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
     setIsResetShowing(true)
     
   };
+
+  const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
     return(
         <div className='floating-nav'>
