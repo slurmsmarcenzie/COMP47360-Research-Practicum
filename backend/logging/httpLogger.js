@@ -10,7 +10,7 @@ const httpFormat = format.printf(({ level, timestamp, message}) => {
 const httpLogger = winston.createLogger({
     level: "debug",
     transports: [
-        new transports.File({filename: "logs\http.log"})
+        new transports.File({filename: "logging/logs/http.log"})
     ],
     format:  format.combine(
         format.errors({ stack: true }),
