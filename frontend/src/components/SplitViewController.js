@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useMapContext } from './MapContext';
 
 function SplitViewController ({ isSplitView, setSplitView }) {
 
-    const {setEventForAnalysisComponent} = useMapContext();
+    const { setEventForAnalysisComponent, setShowChart, neighbourhoodEvents} = useMapContext();
+    
+    useEffect(() => {
+        if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
+          setEventForAnalysisComponent(neighbourhoodEvents[0])
+        }
+      }, [neighbourhoodEvents]);
 
     return (
         <div className="split-view-controller">
             <button className='split-view-controller-toggle-button' onClick={() => {
+                setShowChart(false);
                 setSplitView(!isSplitView);
-                setEventForAnalysisComponent([]);
             }}>
                 {isSplitView ? 'Return to Single Map View' : 'Show Splitview'}
             </button>

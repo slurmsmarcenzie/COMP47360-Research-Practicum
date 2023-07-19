@@ -121,7 +121,12 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           }
 
           // Set the HTML content of the popup with the colored text
-          popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
+          popup.current.setLngLat(e.lngLat)
+          .setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>
+          <br>
+          Busyness Score:  <span style="color: ${textColour}">${Math.floor(score * 100)}</span>
+          `)
+          .addTo(map);
         }
 
       });
@@ -158,8 +163,6 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
     handleSplitScreenMouseInteractions(map, busynessHashMap)
   }, [renderNeighbourhoods]);
 
-  console.log('logging the markers in the splitview map', markers)
-
   return (
     <>
       <div style={{position: 'relative', height: '100vh'}}>
@@ -174,7 +177,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', left: '64px'}}>Baseline Event Map</div>
+        <div className="split-view-map-label" style={{top: '18px', left: '128px'}}>Baseline Event Map</div>
         <Map
           id="right-map"
           {...viewState}
@@ -186,7 +189,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', right: '64px'}}>Impact Event Map</div>
+        <div className="split-view-map-label" style={{top: '18px', right: '128px'}}>Impact Event Map</div>
         <SplitViewController
           isSplitView={isSplitView}
           setSplitView={setSplitView}

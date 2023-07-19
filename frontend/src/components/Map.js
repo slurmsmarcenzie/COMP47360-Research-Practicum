@@ -164,6 +164,155 @@ function Map() {
     })
   }
 
+  // // Map Event Listeners for mouse
+  // const initialiseMouseMapEvents = (map) => {
+
+  //   // Create a new colourScale each time you handle the color change
+  //   const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
+
+  //   neighbourhoods.features.forEach((neighbourhood) => {
+
+  //     // Mouseover event
+  //     map.on('mousemove', neighbourhood.id, (e) => {
+        
+  //         if (!isNeighbourhoodClickedRef.current) {
+
+  //             map.getCanvas().style.cursor = 'pointer';
+  //             map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
+  //             map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 4);
+              
+  //             const features = map.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
+
+  //             if (features.length > 0) {
+
+  //                 if (!popup.current) {
+
+  //                   // code to allow the pop up to display a bit over our mouse interaction.
+
+  //                   const markerHeight = 10;
+  //                   const markerRadius = 10;
+  //                   const linearOffset = 5;
+  //                   const popupOffsets = {
+  //                   'top': [0, 0],
+  //                   'top-left': [0, 0],
+  //                   'top-right': [0, 0],
+  //                   'bottom': [0, -markerHeight],
+  //                   'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+  //                   'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+  //                   'left': [markerRadius, (markerHeight - markerRadius) * -1],
+  //                   'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+  //                   };
+
+  //                   // creating the popup object
+
+  //                   popup.current = new mapboxgl.Popup({
+  //                       offset: popupOffsets,
+  //                       closeButton: false,
+  //                       closeOnClick: false,
+  //                   });
+  //                 }
+
+  //                 const feature = features[0];
+  //                 const zone = feature.properties.zone; 
+                
+  //                 // Apply the busyness score to the color scale
+  //                 const textColour = colourScale(neighbourhood.busyness_score);
+
+  //                 let richText;
+  //                 if (neighbourhood.busyness_score < 0.29) {
+  //                     richText = 'Not Very Busy';
+  //                 } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
+  //                     richText = 'Relatively Busy';
+  //                 } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
+  //                     richText = 'Busy';
+  //                 } else {
+  //                     richText = 'Extremely Busy';
+  //                 }
+
+  //                 const matchingEvent = prunedEvents.find(event => event.Zone_ID === feature.id);
+  //                 const eventInfo = matchingEvent && !isNeighbourhoodClickedRef.current
+  //                 ? `Upcoming event: ${matchingEvent.Event_Name}`
+  //                   : '';
+                 
+  //                 // Set the HTML content of the popup with the colored text
+  //                 popup.current.setLngLat(e.lngLat)
+  //                   .setHTML(`${zone} is <span style="color: ${textColour}">${richText}</span>
+  //                   <br>
+  //                   Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
+  //                   <br>
+  //                   ${eventInfo}
+  //                   `)
+  //                   .addTo(map);
+  //               }
+  //         }
+  //     });
+  
+  //     // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
+  //     map.on('mouseleave', neighbourhood.id, () => {
+  //       if (!isNeighbourhoodClickedRef.current) {
+  //           map.getCanvas().style.cursor = '';
+  //           map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+  //           map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
+
+  //           if (popup.current) {
+  //               popup.current.remove();
+  //               popup.current = null;
+  //           }
+  //         }
+  //     });
+
+  //     map.on('click', (e) => {
+
+  //       popup.current?.remove();
+
+  //       const features = map.queryRenderedFeatures(e.point);
+
+  //       if (features.length > 0 && features[0].id !== undefined) {
+            
+  //         isNeighbourhoodClickedRef.current = true;  
+            
+  //         disableColours();
+
+  //         const [firstFeature] = features;
+            
+  //         // Create a GeoJSON feature object from the clicked feature
+  //         const geojsonFeature = turf.feature(firstFeature.geometry);
+  
+  //         // Use turf to calculate the centroid of the feature
+  //         const centroid = turf.centroid(geojsonFeature);
+  
+  //         // Get the coordinates of the centroid
+  //         const [lng, lat] = centroid.geometry.coordinates;
+  
+  //         // Fly to the centroid of the polygon
+  //         map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+
+  //         map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
+  //         const zone = firstFeature.properties.zone;
+
+  //         setZoneID(firstFeature.id)
+
+  //         // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
+  //         const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
+
+  //         setNeighbourhoodEvents(matchingEvents);
+
+  //         if (matchingEvents.length > 0) {
+  //           setShowInfoBox(true);
+  //         } else {
+  //           // Show the neighborhood info box since there are no matching events
+  //           setShowNeighborhoodInfoBox(true);
+  //         }
+
+  //         setZone(zone);
+  //         setIsResetShowing(true)
+
+  //       }
+  //     });
+  //   });
+  // }
+
   // Map Event Listeners for mouse
   const initialiseMouseMapEvents = (map) => {
 
@@ -393,15 +542,7 @@ function Map() {
       setNeighbourhoodProperties(neighbourhood.id, opacity, line);
   
       if (isLabelPresent) {
-        console.log(labels)
-        console.log(neighbourhood.id)
-        console.log(isLabelPresent)
-
-        // we pass in two labels
-        // most impacted
-        // least impacted
-        // if of the 10 labels are hovered they evaluate to true
-
+        
         map.current.off('mousemove', neighbourhood.id);
         map.current.off('mouseleave', neighbourhood.id);
   
