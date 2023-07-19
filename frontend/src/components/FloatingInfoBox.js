@@ -10,7 +10,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
-  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
+  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
 
@@ -84,6 +84,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   function renderHeader() {
     return (
       <button className='floating-info-box-back-button' onClick={() => {
+        removeAntline(map.current)
         resetMap(map);
       }}>
         <FontAwesomeIcon icon={faArrowLeft} /> Go Back

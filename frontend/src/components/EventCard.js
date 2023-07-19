@@ -6,7 +6,7 @@ import antline from '../geodata/antline.geo.json'
 //comment
 function EventCard ({event, visualiseEventImpact, map}) {
 
-    const {setShowChartData, removeAllButOneMarker, addAntline} = useMapContext();
+    const {setShowChartData, removeAllButOneMarker, addAntline, removeAntline} = useMapContext();
     const findAntlineEventById = (eventId) => {
         return antline.features.find((feature) => feature.properties.event_id === eventId);
       };
@@ -17,6 +17,7 @@ function EventCard ({event, visualiseEventImpact, map}) {
             <h3>Expected Attendees: {event.expected_attendees}</h3>
             <p>{event.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
+                removeAntline(map.current)
                 visualiseEventImpact(event.Event_ID);
                 setShowChartData(true)
                 removeAllButOneMarker(event.Event_ID)

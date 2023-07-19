@@ -350,11 +350,11 @@ export const MapProvider = ({ children }) => {
 
     const removeAntline = (map) => {
         
-        map.removeLayer('line-background');
-        map.removeLayer('line-dashed');
-    
-        map.removeSource('line');
-
+        if (map.getLayer('line-background')){
+            map.removeLayer('line-background');
+            map.removeLayer('line-dashed');
+            map.removeSource('line');
+        }
     };
 
   return (
