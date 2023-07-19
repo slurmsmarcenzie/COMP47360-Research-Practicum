@@ -16,7 +16,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
-  const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers} = useMapContext();
+  const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers, setShowMatchingEvent} = useMapContext();
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
   
@@ -26,6 +26,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
+    setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
@@ -75,6 +76,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         key = {i}
         event={event}
         visualiseEventImpact={visualiseEventImpact}
+        map={map}
       />
       )
   }) : null;
@@ -98,8 +100,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   }
   
   function renderChartOrAnalysis() {
-
-    console.log('renderChartOrAnalysis is being called');
   
     if (!showChartData) {
       return <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>;

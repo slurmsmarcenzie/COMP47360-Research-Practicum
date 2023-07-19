@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import prunedEvents from '../geodata/prunedEvents.json'
+import antline from '../geodata/antline.geo.json'
 
 // Create a new context
 const MapContext = createContext();
@@ -29,11 +30,13 @@ export const MapProvider = ({ children }) => {
     const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
     const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
+    const [isResetShowing, setIsResetShowing] = useState(false)
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
     const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
+    const [showMatchingEvent, setShowMatchingEvent] = useState(true);
 
     // zone and event setters used in floating info box and elsewhere
     const [zoneID, setZoneID] = useState(null);
@@ -251,6 +254,81 @@ export const MapProvider = ({ children }) => {
         });
     };
 
+    const addAntline = (map, event) => {
+
+        map.addSource('line', {
+            type: 'geojson',
+            data: antline
+        });
+
+        map.addLayer({
+                type: 'line',
+                source: 'line',
+                id: 'line-background',
+                paint: {
+                'line-color': 'yellow',
+                'line-width': 6,
+                'line-opacity': 0.4
+                }
+            });
+             
+            // add a line layer with line-dasharray set to the first value in dashArraySequence
+            map.addLayer({
+                type: 'line',
+                source: 'line',
+                id: 'line-dashed',
+                paint: {
+                'line-color': 'yellow',
+                'line-width': 6,
+                'line-dasharray': [0, 4, 3]
+                }
+            });
+             
+            // technique based on https://jsfiddle.net/2mws8y3q/
+            // an array of valid line-dasharray values, specifying the lengths of the alternating dashes and gaps that form the dash pattern
+            const dashArraySequence = [
+                [0, 4, 3],
+                [0.5, 4, 2.5],
+                [1, 4, 2],
+                [1.5, 4, 1.5],
+                [2, 4, 1],
+                [2.5, 4, 0.5],
+                [3, 4, 0],
+                [0, 0.5, 3, 3.5],
+                [0, 1, 3, 3],
+                [0, 1.5, 3, 2.5],
+                [0, 2, 3, 2],
+                [0, 2.5, 3, 1.5],
+                [0, 3, 3, 1],
+                [0, 3.5, 3, 0.5]
+            ];
+             
+            let step = 0;
+             
+            function animateDashArray(timestamp) {
+            // Update line-dasharray using the next value in dashArraySequence. The
+            // divisor in the expression `timestamp / 50` controls the animation speed.
+                const newStep = parseInt(
+                    (timestamp / 50) % dashArraySequence.length
+            );
+             
+            if (newStep !== step) {
+                map.setPaintProperty(
+                'line-dashed',
+                'line-dasharray',
+                dashArraySequence[step]
+              );
+                step = newStep;
+            }
+             
+            // Request the next frame of the animation.
+            requestAnimationFrame(animateDashArray);
+            }
+             
+            // start the animation
+            animateDashArray(0);
+    }
+
   return (
     <MapContext.Provider
       value={{
@@ -265,6 +343,7 @@ export const MapProvider = ({ children }) => {
         removeAllMarkers,
         showAllMarkers,
         removeAllButOneMarker,
+        addAntline,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,
@@ -282,6 +361,8 @@ export const MapProvider = ({ children }) => {
         eventName, setEventName,
         eventForAnalysisComponent, setEventForAnalysisComponent,
         mapStyle, setMapStyle,
+        isResetShowing, setIsResetShowing,
+        showMatchingEvent, setShowMatchingEvent,
       
         neighbourhoods,
         prunedEvents,

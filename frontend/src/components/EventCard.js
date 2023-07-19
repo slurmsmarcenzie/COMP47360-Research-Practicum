@@ -2,9 +2,11 @@ import React from 'react';
 import "../App.css";
 import { useMapContext } from './MapContext';
 
-function EventCard ({event, visualiseEventImpact}) {
+function EventCard ({event, visualiseEventImpact, map}) {
 
-    const {setShowChartData, removeAllButOneMarker} = useMapContext();
+    console.log(map)
+
+    const {setShowChartData, removeAllButOneMarker, addAntline} = useMapContext();
     
     return (
         <div className='floating-info-box-event-card'>
@@ -15,6 +17,9 @@ function EventCard ({event, visualiseEventImpact}) {
                 visualiseEventImpact(event.Event_ID);
                 setShowChartData(true)
                 removeAllButOneMarker(event.Event_ID)
+                // setTimeout(() => {addAntline(map.current)
+                //     },
+                // 1000)
             }}>Visualise Event Impact</button>
         </div>
     )
