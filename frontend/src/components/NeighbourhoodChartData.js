@@ -214,12 +214,16 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
-                { toggleHighlightSlider }
-                Show {highlightActive ? 'Most Impacted' : 'Least Impacted'}
-                <ToggleSlider barBackgroundColorActive= {"#8a2be2"} onToggle={state => setActive(state)}/>
-                Show {active ? "Impact" : "Baseline"}
+                <div className='flex-direction-infobox'>
+                    Show {highlightActive ? 'Most Impacted Zones' : 'Least Impacted Zones'}
+                    { toggleHighlightSlider }
+                </div>
+                <div className='flex-direction-infobox'>
+                    Showing {active ? "Event's Impact on Manhattan" : "Baseline Busyness in Manhattan"}
+                    <ToggleSlider barBackgroundColorActive= {"#8a2be2"} onToggle={state => setActive(state)}/>
+                </div>
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Show Splitview'}
+                    {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}
                 </button>
             </div>
         </div>
