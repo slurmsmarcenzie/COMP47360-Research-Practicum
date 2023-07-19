@@ -7,7 +7,7 @@ import { useMapContext } from './MapContext';
 
 function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
 
-  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing} = useMapContext();
+  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline} = useMapContext();
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -64,7 +64,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
             </select>
           </form>
           {isResetShowing &&
-          <button className="floating-nav-outline-button" onClick={enableColours}>Reset Map</button>
+          <button className="floating-nav-outline-button" onClick={() => { removeAntline(map.current); enableColours(); }}>Reset Map</button>
           }
         </div>
     )

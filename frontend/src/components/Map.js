@@ -42,6 +42,7 @@ function Map() {
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
 
   const {addAntline} = useMapContext();
+  const {removeAntline} = useMapContext();
 
   // swapping styles
   const {mapStyle} = useMapContext();
@@ -715,7 +716,6 @@ function Map() {
         initialiseMouseMapEvents(map.current);
         setTimeout(() => {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-          // addAntline(map.current);
         }, 900);
       }
   

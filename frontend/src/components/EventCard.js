@@ -1,12 +1,15 @@
 import React from 'react';
 import "../App.css";
 import { useMapContext } from './MapContext';
+import antline from '../geodata/antline.geo.json'
+
 
 function EventCard ({event, visualiseEventImpact, map}) {
 
-    console.log(map)
-
     const {setShowChartData, removeAllButOneMarker, addAntline} = useMapContext();
+    const findAntlineEventById = (eventId) => {
+        return antline.features.find((feature) => feature.properties.event_id === eventId);
+      };
     
     return (
         <div className='floating-info-box-event-card'>
@@ -17,9 +20,12 @@ function EventCard ({event, visualiseEventImpact, map}) {
                 visualiseEventImpact(event.Event_ID);
                 setShowChartData(true)
                 removeAllButOneMarker(event.Event_ID)
-                // setTimeout(() => {addAntline(map.current)
-                //     },
-                // 1000)
+
+                const antlineEvent = findAntlineEventById(event.Event_ID);
+
+                setTimeout(() => {addAntline(map.current, antlineEvent)
+                    },
+                1000)
             }}>Visualise Event Impact</button>
         </div>
     )

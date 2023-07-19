@@ -256,9 +256,29 @@ export const MapProvider = ({ children }) => {
 
     const addAntline = (map, event) => {
 
+        const colourMap1 = {
+            1: '#996236',
+            2: '#FFA500',
+            3: '#035606',
+            4: '#E50000',
+            6: '#CC232A',
+            7: '#2B4593',
+        };
+
+        const colourMap2 = {
+            1: '#F8B12C',
+            2: '#000000',
+            3: '#FFFFFF',
+            4: '#770088',
+            6: '#F5AC27',
+            7: '#FEFEFE'
+        }
+
+        console.log(colourMap1[event.properties.event_id])
+
         map.addSource('line', {
             type: 'geojson',
-            data: antline
+            data: event
         });
 
         map.addLayer({
@@ -266,19 +286,18 @@ export const MapProvider = ({ children }) => {
                 source: 'line',
                 id: 'line-background',
                 paint: {
-                'line-color': 'yellow',
+                'line-color': colourMap1[event.properties.event_id],
                 'line-width': 6,
                 'line-opacity': 0.4
                 }
             });
-             
             // add a line layer with line-dasharray set to the first value in dashArraySequence
             map.addLayer({
                 type: 'line',
                 source: 'line',
                 id: 'line-dashed',
                 paint: {
-                'line-color': 'yellow',
+                'line-color': colourMap2[event.properties.event_id],
                 'line-width': 6,
                 'line-dasharray': [0, 4, 3]
                 }
@@ -329,6 +348,15 @@ export const MapProvider = ({ children }) => {
             animateDashArray(0);
     }
 
+    const removeAntline = (map) => {
+        
+        map.removeLayer('line-background');
+        map.removeLayer('line-dashed');
+    
+        map.removeSource('line');
+
+    };
+
   return (
     <MapContext.Provider
       value={{
@@ -344,6 +372,7 @@ export const MapProvider = ({ children }) => {
         showAllMarkers,
         removeAllButOneMarker,
         addAntline,
+        removeAntline,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,
