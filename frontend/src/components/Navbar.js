@@ -3,8 +3,11 @@ import '../App.css';
 import afterParty from '../images/after-party-logo-white.png';
 import afterPartyHover from '../images/after-party-logo-violet.png';
 import Modal from './Modal';
+import { useMapContext } from './MapContext';
 
 export default function Navbar() {
+
+  const {mapStyle, setMapStyle} = useMapContext();
 
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -27,10 +30,9 @@ export default function Navbar() {
   const logoImage = isHovered ? afterPartyHover : afterParty;
 
   return (
-    
     <div className="navbar">
       <div className="navbar-links-wrapper">
-      <button className="transparent-button" onClick={openModal}>
+        <button className="transparent-button" onClick={openModal}>
           <img
             src={logoImage}
             className={`navbar-logo ${isHovered ? 'hovered' : ''}`}
@@ -41,12 +43,22 @@ export default function Navbar() {
         </button>
       </div>
       <div className="navbar-links">
-        <button className="transparent-button" onClick={openModal}>About Us</button>
+        <div className="button-group">
+          <button className="transparent-button" onClick={openModal}>About Us</button>
+          <button 
+          className='navbar-toggle-dark-mode-button'
+          onClick={() => {
+            setMapStyle(mapStyle => mapStyle === 'mapbox://styles/mapbox/dark-v11' 
+              ? 'mapbox://styles/mapbox/light-v11' 
+              : 'mapbox://styles/mapbox/dark-v11');
+          }}>
+          {mapStyle === 'mapbox://styles/mapbox/dark-v11' ? 'Light Mode 🌞' : 'Dark Mode 🌙'}
+        </button>
         </div>
-        {showModal && (
-          <Modal onClose={closeModal} />
+      </div>
+      {showModal && (
+        <Modal onClose={closeModal} />
       )}
-      
     </div>
   );
 }

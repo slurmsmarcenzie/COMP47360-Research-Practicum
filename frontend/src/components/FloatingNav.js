@@ -4,12 +4,10 @@ import "../App.css";
 // import context
 import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
-import { select } from 'd3';
 
+function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
 
-function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enableColours,  disableColours}) {
-
-  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName} = useMapContext();
+  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing} = useMapContext();
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -50,6 +48,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
     setShowChartData(false);
 
     setEventName(selectedEvent.Event_Name)
+    setIsResetShowing(true)
     
   };
 
@@ -57,14 +56,16 @@ function FloatingNav({map, isNeighbourhoodClickedRef, changeColourScheme, enable
 
     return(
         <div className='floating-nav'>
+          <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>
           <form className='floating-nav-form'>
             <select className='floating-nav-dropdown' onChange={reviewEvent}>
               <option value="" disabled selected>Select an event</option>
               {dropDownOptions}
             </select>
           </form>
-          <button className="floating-nav-outline-button" onClick={enableColours}>Reset</button>
-          <button className="floating-nav-outline-button" onClick={changeColourScheme}>Change Colours</button>
+          {isResetShowing &&
+          <button className="floating-nav-outline-button" onClick={enableColours}>Reset Map</button>
+          }
         </div>
     )
 }

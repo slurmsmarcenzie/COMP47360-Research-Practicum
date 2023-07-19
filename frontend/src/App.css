@@ -13,13 +13,12 @@ body {
 }
 
 
-
 .floating-nav {
   gap: 12px;
   position: absolute;
   z-index: 1;
   min-width: 180px;
-  max-width: 180px;
+  max-width: 240px;
   margin-top: 120px;
   margin-left: 92px;
   backdrop-filter: blur(16px) saturate(180%);
@@ -32,6 +31,13 @@ body {
   align-items: center;
   display: flex;
   flex-direction: column;
+}
+
+.floating-nav-header-text{
+  font-size: 16px;
+  margin: auto;
+  padding: auto;
+  text-align: center;
 }
 
 .navbar  {
@@ -79,15 +85,15 @@ body {
   padding:10px;
 }
 
-.navbar-links:hover  {
-  background-color: rgb(215, 215, 220);
-
-}
 .navbar img  {
   max-height: 36px;
   max-width: 150px;
 }
 
+.button-group{
+  display: flex;
+  gap: 24px;
+}
 
 .floating-nav-cta-button {
   width: 100%;
@@ -198,11 +204,15 @@ body {
 /* Customise our pop up without having to add a class */
 .mapboxgl-popup-content  {
   color: white;
-  font-weight: 800;
+  font-weight: 600;
   border: 1px solid rgba(255, 255, 255, 0.125);
   background-color: rgba(18, 19, 22, 1);
   border-radius: 5px;
   box-shadow: 0px 2px 4px 2px rgba(0,0,0,.1);
+  white-space: nowrap;
+  min-width: 100%;
+  margin: auto;
+  padding: auto;
 }
 
 /* This removes the tail at the bottom of our tooltip */
@@ -296,7 +306,7 @@ body {
 
 .floating-info-box-chart-container {
   position: relative;
-  height: 270px;
+  height: 300px;
 }
 
 .floating-info-box-chart-container > :first-child {
@@ -510,4 +520,73 @@ body {
   font-size: 18px;
   font-weight: bold;
   color: white;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.navbar-toggle-dark-mode-button {
+  width: 120px;
+  color: white;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(137, 43, 226, 0);
+  height: 100%;
+  cursor: pointer;
+  border: none;
 }

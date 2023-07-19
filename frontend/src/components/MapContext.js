@@ -27,12 +27,15 @@ export const MapProvider = ({ children }) => {
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
     const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
-    
+    const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
+    const [isResetShowing, setIsResetShowing] = useState(false)
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
     const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
+    const [showMatchingEvent, setShowMatchingEvent] = useState(true);
 
     // zone and event setters used in floating info box and elsewhere
     const [zoneID, setZoneID] = useState(null);
@@ -42,6 +45,10 @@ export const MapProvider = ({ children }) => {
     const originalLng = -73.9857;
     const zoom = 7;
     const pitch = 30;
+    const boundary = [
+        [-74.255591, 40.477388],
+        [-73.698697, 40.983697]
+    ]
 
     const colourPairs = [
         ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -200,7 +207,6 @@ export const MapProvider = ({ children }) => {
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
     }
     
-
     const removeAllMarkers = () => {
 
         markers.forEach((marker) => {
@@ -247,17 +253,6 @@ export const MapProvider = ({ children }) => {
         });
     };
 
-    // useEffect(() => {
-
-    //     neighbourhoods.features.forEach((neighbourhood) => {
-
-    //         const layerId = `${neighbourhood.properties.location_id}`;
-
-    //         setLayerIds(prevLayerIds => [...prevLayerIds, layerId]);
-    //     })
-
-    //   }, []);
-
   return (
     <MapContext.Provider
       value={{
@@ -287,8 +282,11 @@ export const MapProvider = ({ children }) => {
         makePredictionRequest, setMakePredictionRequest,
         zoneID, setZoneID,
         eventName, setEventName,
+        eventForAnalysisComponent, setEventForAnalysisComponent,
+        mapStyle, setMapStyle,
+        isResetShowing, setIsResetShowing,
+        showMatchingEvent, setShowMatchingEvent,
       
-
         neighbourhoods,
         prunedEvents,
         colourPairs,
@@ -298,7 +296,8 @@ export const MapProvider = ({ children }) => {
         originalLat,
         originalLng,
         zoom,
-        pitch
+        pitch,
+        boundary
       }}
     >
       {children}

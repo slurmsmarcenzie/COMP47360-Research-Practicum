@@ -3,6 +3,7 @@ import React, { useEffect, useRef,useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
+import { throttle } from 'lodash';
 import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
 
 // Context builder
@@ -32,13 +33,16 @@ function Map() {
   const {neighbourhoods, prunedEvents} = useMapContext();
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, neighbourhoodEvents} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
 
   // magic numbers
-  const { originalLat, originalLng, zoom, pitch } = useMapContext();
+  const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
+
+  // swapping styles
+  const {mapStyle} = useMapContext();
 
   // map specific states
   const [scores, setScores] = useState(null);
@@ -50,7 +54,6 @@ function Map() {
   // objects for our map
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const popup = useRef(null);
   const isNeighbourhoodClickedRef = useRef(false);
   
   // flimsy counter replace later
@@ -60,9 +63,33 @@ function Map() {
   // define a new function that will be used as the event listener
   const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
+  // Pop up properties  
+  const markerHeight = 10;
+  const markerRadius = 10;
+  const linearOffset = 5;
+
+  const popupOffsets = {
+    'top': [0, 0],
+    'top-left': [0, 0],
+    'top-right': [0, 0],
+    'bottom': [0, -markerHeight],
+    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+    'left': [markerRadius, (markerHeight - markerRadius) * -1],
+    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+  };
+
+  // Instantiate popup once and reuse it
+  const popup = useRef(new mapboxgl.Popup({
+    offset: popupOffsets,
+    closeButton: false,
+    closeOnClick: false,
+  }));
+  
   // Change of Colour Handling
   const enableColours = () => {
 
+    setIsResetShowing(false);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
@@ -135,143 +162,295 @@ function Map() {
     })
   }
 
+  // // Map Event Listeners for mouse
+  // const initialiseMouseMapEvents = (map) => {
+
+  //   // Create a new colourScale each time you handle the color change
+  //   const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
+
+  //   neighbourhoods.features.forEach((neighbourhood) => {
+
+  //     // Mouseover event
+  //     map.on('mousemove', neighbourhood.id, (e) => {
+        
+  //         if (!isNeighbourhoodClickedRef.current) {
+
+  //             map.getCanvas().style.cursor = 'pointer';
+  //             map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
+  //             map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 4);
+              
+  //             const features = map.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
+
+  //             if (features.length > 0) {
+
+  //                 if (!popup.current) {
+
+  //                   // code to allow the pop up to display a bit over our mouse interaction.
+
+  //                   const markerHeight = 10;
+  //                   const markerRadius = 10;
+  //                   const linearOffset = 5;
+  //                   const popupOffsets = {
+  //                   'top': [0, 0],
+  //                   'top-left': [0, 0],
+  //                   'top-right': [0, 0],
+  //                   'bottom': [0, -markerHeight],
+  //                   'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+  //                   'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+  //                   'left': [markerRadius, (markerHeight - markerRadius) * -1],
+  //                   'right': [-markerRadius, (markerHeight - markerRadius) * -1]
+  //                   };
+
+  //                   // creating the popup object
+
+  //                   popup.current = new mapboxgl.Popup({
+  //                       offset: popupOffsets,
+  //                       closeButton: false,
+  //                       closeOnClick: false,
+  //                   });
+  //                 }
+
+  //                 const feature = features[0];
+  //                 const zone = feature.properties.zone; 
+                
+  //                 // Apply the busyness score to the color scale
+  //                 const textColour = colourScale(neighbourhood.busyness_score);
+
+  //                 let richText;
+  //                 if (neighbourhood.busyness_score < 0.29) {
+  //                     richText = 'Not Very Busy';
+  //                 } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
+  //                     richText = 'Relatively Busy';
+  //                 } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
+  //                     richText = 'Busy';
+  //                 } else {
+  //                     richText = 'Extremely Busy';
+  //                 }
+
+  //                 const matchingEvent = prunedEvents.find(event => event.Zone_ID === feature.id);
+  //                 const eventInfo = matchingEvent && !isNeighbourhoodClickedRef.current
+  //                 ? `Upcoming event: ${matchingEvent.Event_Name}`
+  //                   : '';
+                 
+  //                 // Set the HTML content of the popup with the colored text
+  //                 popup.current.setLngLat(e.lngLat)
+  //                   .setHTML(`${zone} is <span style="color: ${textColour}">${richText}</span>
+  //                   <br>
+  //                   Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
+  //                   <br>
+  //                   ${eventInfo}
+  //                   `)
+  //                   .addTo(map);
+  //               }
+  //         }
+  //     });
+  
+  //     // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
+  //     map.on('mouseleave', neighbourhood.id, () => {
+  //       if (!isNeighbourhoodClickedRef.current) {
+  //           map.getCanvas().style.cursor = '';
+  //           map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+  //           map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
+
+  //           if (popup.current) {
+  //               popup.current.remove();
+  //               popup.current = null;
+  //           }
+  //         }
+  //     });
+
+  //     map.on('click', (e) => {
+
+  //       popup.current?.remove();
+
+  //       const features = map.queryRenderedFeatures(e.point);
+
+  //       if (features.length > 0 && features[0].id !== undefined) {
+            
+  //         isNeighbourhoodClickedRef.current = true;  
+            
+  //         disableColours();
+
+  //         const [firstFeature] = features;
+            
+  //         // Create a GeoJSON feature object from the clicked feature
+  //         const geojsonFeature = turf.feature(firstFeature.geometry);
+  
+  //         // Use turf to calculate the centroid of the feature
+  //         const centroid = turf.centroid(geojsonFeature);
+  
+  //         // Get the coordinates of the centroid
+  //         const [lng, lat] = centroid.geometry.coordinates;
+  
+  //         // Fly to the centroid of the polygon
+  //         map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+
+  //         map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
+  //         const zone = firstFeature.properties.zone;
+
+  //         setZoneID(firstFeature.id)
+
+  //         // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
+  //         const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
+
+  //         setNeighbourhoodEvents(matchingEvents);
+
+  //         if (matchingEvents.length > 0) {
+  //           setShowInfoBox(true);
+  //         } else {
+  //           // Show the neighborhood info box since there are no matching events
+  //           setShowNeighborhoodInfoBox(true);
+  //         }
+
+  //         setZone(zone);
+  //         setIsResetShowing(true)
+
+  //       }
+  //     });
+  //   });
+  // }
+
   // Map Event Listeners for mouse
   const initialiseMouseMapEvents = (map) => {
 
-    // Create a new colourScale each time you handle the color change
+    neighbourhoods.features.forEach((neighbourhood) => {
+      // Mouseover event
+      map.on('mousemove', neighbourhood.id, (e) => handleMouseMove(neighbourhood, map, e));
+    
+      // Mouseleave event
+      map.on('mouseleave', neighbourhood.id, () => handleMouseLeave(neighbourhood, map));
+
+      // On click event
+      map.on('click', (e) => handleClick(map, e));
+    });
+  };
+
+  // Define the mousemove handler outside of the initialiseMouseMapEvents function
+  const handleMouseMove = throttle((neighbourhood, map, e) => {
+
+    // Create a new colourScale outside the loop
     const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
 
-    neighbourhoods.features.forEach((neighbourhood) => {
+    if (!isNeighbourhoodClickedRef.current) {
 
-      // Mouseover event
-      map.on('mousemove', neighbourhood.id, (e) => {
+      map.getCanvas().style.cursor = 'pointer';
+      map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
+      map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 4);
+      
+      const features = map.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
+
+      if (features.length > 0) {
+
+          if (!popup.current) {
+
+            // creating the popup object
+
+            popup.current = new mapboxgl.Popup({
+                offset: popupOffsets,
+                closeButton: false,
+                closeOnClick: false,
+            });
+          }
+
+          const feature = features[0];
+          const zone = feature.properties.zone; 
         
-          if (!isNeighbourhoodClickedRef.current) {
+          // Apply the busyness score to the color scale
+          const textColour = colourScale(neighbourhood.busyness_score);
+          setHoveredZoneScore(neighbourhood.busyness_score);
 
-              map.getCanvas().style.cursor = 'pointer';
-              map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
-              map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 4);
-              
-              const features = map.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
-
-              if (features.length > 0) {
-
-                  if (!popup.current) {
-
-                    // code to allow the pop up to display a bit over our mouse interaction.
-
-                    const markerHeight = 10;
-                    const markerRadius = 10;
-                    const linearOffset = 5;
-                    const popupOffsets = {
-                    'top': [0, 0],
-                    'top-left': [0, 0],
-                    'top-right': [0, 0],
-                    'bottom': [0, -markerHeight],
-                    'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                    'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-                    'left': [markerRadius, (markerHeight - markerRadius) * -1],
-                    'right': [-markerRadius, (markerHeight - markerRadius) * -1]
-                    };
-
-                    // creating the popup object
-
-                    popup.current = new mapboxgl.Popup({
-                        offset: popupOffsets,
-                        closeButton: false,
-                        closeOnClick: false,
-                    });
-                  }
-
-                  const feature = features[0];
-                  const zone = feature.properties.zone; 
-                  
-                  // Apply the busyness score to the color scale
-                  const textColour = colourScale(neighbourhood.busyness_score);
-                  setHoveredZoneScore(neighbourhood.busyness_score);
-
-                  let richText;
-                  if (neighbourhood.busyness_score < 0.29) {
-                      richText = 'Not Very Busy';
-                  } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
-                      richText = 'Relatively Busy';
-                  } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                      richText = 'Busy';
-                  } else {
-                      richText = 'Extremely Busy';
-                  }
-
-                  // Set the HTML content of the popup with the colored text
-                  popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map);
-                }
-          }
-      });
-  
-      // Mouseleave event: this will be fired whenever the mouse leaves a feature in the specified layer.
-      map.on('mouseleave', neighbourhood.id, () => {
-        if (!isNeighbourhoodClickedRef.current) {
-            map.getCanvas().style.cursor = '';
-            map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
-            map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
-
-            if (popup.current) {
-                popup.current.remove();
-                popup.current = null;
-            }
-          }
-      });
-
-      map.on('click', (e) => {
-
-        popup.current?.remove();
-
-        const features = map.queryRenderedFeatures(e.point);
-
-        if (features.length > 0 && features[0].id !== undefined) {
-            
-          isNeighbourhoodClickedRef.current = true;  
-            
-          disableColours();
-
-          const [firstFeature] = features;
-            
-          // Create a GeoJSON feature object from the clicked feature
-          const geojsonFeature = turf.feature(firstFeature.geometry);
-  
-          // Use turf to calculate the centroid of the feature
-          const centroid = turf.centroid(geojsonFeature);
-  
-          // Get the coordinates of the centroid
-          const [lng, lat] = centroid.geometry.coordinates;
-  
-          // Fly to the centroid of the polygon
-          map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
-
-          map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
-
-          const zone = firstFeature.properties.zone;
-
-          setZoneID(firstFeature.id)
-
-          // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
-          const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
-
-          setNeighbourhoodEvents(matchingEvents);
-
-          if (matchingEvents.length > 0) {
-            setShowInfoBox(true);
+          let richText;
+          if (neighbourhood.busyness_score < 0.29) {
+              richText = 'Not Very Busy';
+          } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
+              richText = 'Relatively Busy';
+          } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
+              richText = 'Busy';
           } else {
-            // Show the neighborhood info box since there are no matching events
-            setShowNeighborhoodInfoBox(true);
+              richText = 'Extremely Busy';
           }
 
-          setZone(zone);
-          
+          const matchingEvent = prunedEvents.find(event => event.Zone_ID === feature.id);
+          const eventInfo = matchingEvent && !isNeighbourhoodClickedRef.current
+            ? `Upcoming event: ${matchingEvent.Event_Name}`
+            : '';
+                    
+          // Set the HTML content of the popup with the colored text
+          popup.current.setLngLat(e.lngLat)
+          .setHTML(`${zone} is <span style="color: ${textColour}">${richText}</span>
+          <br>
+          Busyness Score:  <span style="color: ${textColour}">${Math.floor(neighbourhood.busyness_score * 100)}</span>
+          <br>
+          ${eventInfo}
+          `)
+          .addTo(map);
         }
-      });
-    });
-  }
- 
+      }  
+  }, 10); // The function will not execute more than once every 200ms
+  
+  const handleMouseLeave = (neighbourhood, map) => {
+    if (!isNeighbourhoodClickedRef.current) {
+      map.getCanvas().style.cursor = '';
+      map.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
+      map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
+
+      if (popup.current) {
+        popup.current.remove();
+        popup.current = null;
+      }
+    }
+  };
+
+  const handleClick = (map, e) => {
+
+    popup.current?.remove();
+
+    const features = map.queryRenderedFeatures(e.point);
+
+    if (features.length > 0 && features[0].id !== undefined) {
+
+      isNeighbourhoodClickedRef.current = true;  
+
+      disableColours();
+
+      const [firstFeature] = features;
+
+      // Create a GeoJSON feature object from the clicked feature
+      const geojsonFeature = turf.feature(firstFeature.geometry);
+
+      // Use turf to calculate the centroid of the feature
+      const centroid = turf.centroid(geojsonFeature);
+
+      // Get the coordinates of the centroid
+      const [lng, lat] = centroid.geometry.coordinates;
+
+      // Fly to the centroid of the polygon
+      map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+
+      map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+
+      const zone = firstFeature.properties.zone;
+
+      setZoneID(firstFeature.id)
+
+      // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
+      const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
+
+      setNeighbourhoodEvents(matchingEvents);
+
+      if (matchingEvents.length > 0) {
+        setShowInfoBox(true);
+      } else {
+        // Show the neighborhood info box since there are no matching events
+        setShowNeighborhoodInfoBox(true);
+      }
+
+      setZone(zone);
+      setIsResetShowing(true)
+    }
+  };
+
   // Fetch Request for Busyness Prediction 
   const getPredictionBusyness = (Event_ID) => {
 
@@ -333,39 +512,46 @@ function Map() {
   const highlightEventImpact = (Zone_ID, labels) => {
 
     const colourScale = scaleLinear().domain([0, 0.4, 0.8]).range(colourPairs[colourPairIndex]);
+    isNeighbourhoodClickedRef.current = true;
   
-    isNeighbourhoodClickedRef.current = true; // disable on hover and write replacement code below for on highlight impact
+    const setNeighbourhoodProperties = (neighbourhoodId, opacity, lineWidth) => {
+      map.current.setPaintProperty(neighbourhoodId, 'fill-opacity', opacity);
+      map.current.setPaintProperty(neighbourhoodId + '-line', 'line-width', lineWidth);
+    };
+  
+    const determineRichText = (score) => {
+      switch(true) {
+        case score < 0.29:
+          return 'Not Very Busy';
+        case score >= 0.29 && score < 0.4:
+          return 'Relatively Busy';
+        case score >= 0.4 && score < 0.7:
+          return 'Busy';
+        default:
+          return 'Extremely Busy';
+      }
+    };
   
     neighbourhoods.features.forEach((neighbourhood) => {
-            
-      let opacity = labels.includes(neighbourhood.id) ? 0.7 : 0.1;
-      let line = labels.includes(neighbourhood.id) ? 1 : 0;
-      map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
-      map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
-
-      if (labels.includes(neighbourhood.id)) {
-
+      const isLabelPresent = labels.includes(neighbourhood.id);
+      let opacity = isLabelPresent ? 0.7 : 0.1;
+      let line = isLabelPresent ? 1 : 0;
+  
+      setNeighbourhoodProperties(neighbourhood.id, opacity, line);
+  
+      if (isLabelPresent) {
         map.current.off('mousemove', neighbourhood.id);
         map.current.off('mouseleave', neighbourhood.id);
   
         map.current.on('mousemove', neighbourhood.id, (e) => {
-  
           map.current.getCanvas().style.cursor = 'pointer';
-          map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.9);
-          map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 4);
-  
-          const features = map.current.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
-  
-          if (features.length > 0) {
-  
-            if (!popup.current) {
-  
-              // code to allow the pop up to display a bit over our mouse interaction.
-  
-              const markerHeight = 10;
-              const markerRadius = 10;
-              const linearOffset = 5;
-              const popupOffsets = {
+          setNeighbourhoodProperties(neighbourhood.id, 0.9, 4);
+
+          if (!popup.current) {
+            const markerHeight = 10;
+            const markerRadius = 10;
+            const linearOffset = 5;
+            const popupOffsets = {
               'top': [0, 0],
               'top-left': [0, 0],
               'top-right': [0, 0],
@@ -374,57 +560,44 @@ function Map() {
               'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
               'left': [markerRadius, (markerHeight - markerRadius) * -1],
               'right': [-markerRadius, (markerHeight - markerRadius) * -1]
-              };
+            };
+          
+            popup.current = new mapboxgl.Popup({
+              offset: popupOffsets,
+              closeButton: false,
+              closeOnClick: false,
+            });
+          }          
   
-              // creating the popup object
+          const features = map.current.queryRenderedFeatures(e.point, { layers: [neighbourhood.id] });
   
-              popup.current = new mapboxgl.Popup({
-                  offset: popupOffsets,
-                  closeButton: false,
-                  closeOnClick: false,
-              });
-            }
-  
+          if (features.length > 0) {
             const feature = features[0];
             const zone = feature.properties.zone;
-
+  
             const textColour = colourScale(neighbourhood.busyness_score);
-
-            let richText;
-            if (neighbourhood.busyness_score < 0.29) {
-                richText = 'Not Very Busy';
-            } else if (neighbourhood.busyness_score >= 0.29 && neighbourhood.busyness_score < 0.4) {
-                richText = 'Relatively Busy';
-            } else if (neighbourhood.busyness_score >= 0.4 && neighbourhood.busyness_score < 0.7) {
-                richText = 'Busy';
-            } else {
-                richText = 'Extremely Busy';
-            }
+            let richText = determineRichText(neighbourhood.busyness_score);
   
             popup.current.setLngLat(e.lngLat).setHTML(`${zone}: <span style="color: ${textColour}">${richText}</span>`).addTo(map.current);
           }
-        }); // close the mousemove event block
+        });
   
         map.current.on('mouseleave', neighbourhood.id, () => {
-          if (labels.includes(neighbourhood.id)) {
+          if (isLabelPresent) {
             map.current.getCanvas().style.cursor = '';
-            map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', opacity);
-            map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', line);
+            setNeighbourhoodProperties(neighbourhood.id, opacity, line);
           }
   
           if (popup.current) {
-              popup.current.remove();
-              popup.current = null;
+            popup.current.remove();
+            popup.current = null;
           }
-        }); // close the mouseleave event block
+        });
+      }
+    });
   
-      } // close the labels.includes(layerId) block
-  
-    }); // close the forEach block
-  
-    map.current.setPaintProperty(Zone_ID, 'fill-opacity', 0.7);
-    map.current.setPaintProperty(Zone_ID + '-line', 'line-width', 4);
-  
+    setNeighbourhoodProperties(Zone_ID, 0.7, 4);
+
   };
   
   const calculateHashMapDifference = () => {
@@ -491,6 +664,7 @@ function Map() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
+        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -499,9 +673,10 @@ function Map() {
       catch (err) {
         if (retryCount.current < 3) {
           retryCount.current++;
-          setTimeout(() => {fetchScores()}, 10000);
+          setTimeout(() => {fetchScores()}, 3000);
         } else {
           setError('Failed to fetch scores after three attempts');
+          setScores([])
         }
       }
     };
@@ -522,22 +697,49 @@ function Map() {
 
   useEffect(() => {
 
-    // check that there is no map and that the scores have been successfully 
-    // retrieved by the fetch api before we create a map
-    
-    if (!map.current && scores) {
-
+    if (!map.current) {
+      if (!scores) {
+        return; // Exit early if scores are not available
+      }
+  
       mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN;
+  
+      const initialiseMap = () => {
+        map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+        renderNeighbourhoods(map.current);
+        add3DBuildings(map.current);
+        renderEvents(map.current);
+        initialiseMouseMapEvents(map.current);
+        setTimeout(() => {
+          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
+        }, 900);
+      }
+  
+      if (!map.current) {
+        // Initialize map
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: mapStyle,
+          center: [originalLng, originalLat],
+          zoom: zoom,
+          pitch: pitch,
+          maxBounds: boundary
+        });
+  
+        map.current.on('load', initialiseMap);
 
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: [originalLng, originalLat],
-        zoom: zoom,
-        pitch: pitch
-      });
+      } 
+    }
+  }, [scores, mapStyle]); // This effect runs when scores is fetched
+    
+  // Separate useEffect for handling mapStyle changes
+  useEffect(() => {
+    if (map.current) {
+      // Change the style
+      map.current.setStyle(mapStyle);
 
-      map.current.on('load', () => {
+      // Re-initialize map on style load
+      map.current.once('style.load', () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
         renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
@@ -547,19 +749,8 @@ function Map() {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
         }, 800);
       });
-
-      map.current.on('moveend', () => {
-
-        if (isNeighbourhoodClickedRef.current === true && map.current.getZoom() < 12) {
-          
-          // enableColours(); rewrite this function as currently crashes app.
-          
-        }
-        
-      });
-      
     }
-  }, [scores]);  // This effect runs when scores is fetched
+  }, [mapStyle]); // This effect runs when mapStyle changes
 
   // Define an effect that runs when the 'scores' prop changes
   useEffect(() => {
