@@ -184,8 +184,8 @@
       "Event_Location_Text": " EAST  115 STREET between PARK AVENUE and MADISON AVENUE,  EAST  106 STREET between PARK AVENUE and 3 AVENUE,  EAST  106 STREET between 5 AVENUE and PARK AVENUE,  3 AVENUE between EAST  106 STREET and EAST  116 STREET,  EAST  116 STREET between 3 AVENUE and PARK AVENUE,  PARK AVENUE between EAST  116 STREET and EAST  115 STREET",
       "Event_Location_Start_Coordinates": "[40.7989778691995, -73.94463769065234]",
       "Event_Location": {
-       "Latitude": 40.7989778691995,
-       "Longitude": -73.94463769065234
+       "Latitude": 40.7930550804651,
+       "Longitude": -73.95200584670602
        },
       "Event_Street_Side": "Both",
       "Street_Closure_Type": "Full Street Closure ",
@@ -212,8 +212,8 @@
       "Event_Location_Text": "East River Walk: East River Esplanade",
       "Event_Location_Start_Coordinates": "[40.71599281291161, -73.97536662439524]",
       "Event_Location": {
-       "Latitude": 40.71599281291161,
-       "Longitude": -73.97536662439524
+       "Latitude": 40.73513251962613,
+       "Longitude": -73.97489999621705
        },
       "Event_Street_Side": "",
       "Street_Closure_Type": "",

@@ -32,6 +32,7 @@ export const MapProvider = ({ children }) => {
     const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
     const [isResetShowing, setIsResetShowing] = useState(false)
+    const [lastMarkers, setLastMarkers] = useState([]);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -202,12 +203,16 @@ export const MapProvider = ({ children }) => {
             );
             if (!exists) {
                 const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+                
+                marker.Event_ID = event.Event_ID;
                 newMarkers.push(marker);
             }
         });
     
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
-    }
+        
+        };
+    
     
     const removeAllMarkers = () => {
 
@@ -220,10 +225,12 @@ export const MapProvider = ({ children }) => {
     
     const removeAllButOneMarker = (keptEvent) => {
 
+
         markers.forEach((marker) => {
 
             if (marker.Event_ID !== keptEvent) {
                 marker.remove();
+                
             }
         });
         
@@ -354,6 +361,18 @@ export const MapProvider = ({ children }) => {
         }
     };
 
+    const addMarker = (map, coordinates) => {
+        const marker = new mapboxgl.Marker({ color: 'red' }).setLngLat(coordinates).addTo(map);
+        lastMarkers.push(marker);
+      };
+
+    const removeMarker = () => {
+        lastMarkers.forEach((marker) => {
+            marker.remove(); // Remove each marker from the map
+          });
+          setLastMarkers([]);
+    }
+
   return (
     <MapContext.Provider
       value={{
@@ -370,6 +389,8 @@ export const MapProvider = ({ children }) => {
         removeAllButOneMarker,
         addAntline,
         removeAntline,
+        removeMarker,
+        addMarker,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,
