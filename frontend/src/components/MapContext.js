@@ -11,7 +11,7 @@ import prunedEvents from '../geodata/prunedEvents.json'
 const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://137.43.49.37/api';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
 
 // Create a provider component
 export const MapProvider = ({ children }) => {

@@ -5,12 +5,9 @@ require("dotenv").config();
 //fetch baseline from ML:
 const queryBaseline = (req, res, next) => {
     res.req.ip //sets the object
-    // get date from params and fix it to be the correct format
-    let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`baseline requested for: ${req.params.date}`)
-    generalLogger.info(`converted to ISOString: ${date}`);
+    generalLogger.info(`baseline requested`)
 
-    const uri = `http://127.0.0.1:7000/baseline/${date}?key=${process.env.FLASK_API_KEY}` 
+    const uri = `http://127.0.0.1:7000/baseline/?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {

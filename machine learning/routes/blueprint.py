@@ -21,7 +21,7 @@ info.route("/info/events")(list_events)
 info.route("/info/metrics")(list_metrics)
 info.before_request(check_token)
 
-predict.route("/baseline/<string:date>")(baseline)
+predict.route("/baseline/")(baseline)
 predict.route("/baseline/<string:date>/<string:event>")(baseline_event)
 predict.route("/predict/<string:date>/<string:event>")(prediction)
 predict.before_request(check_token)

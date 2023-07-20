@@ -455,11 +455,9 @@ function Map() {
   useEffect(() => {
 
     const fetchScores = async () => {
-  
-      const formattedDate = new Date().toISOString().slice(0,10);
       
       try {
-        const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
+        const response = await fetch(`${BASE_API_URL}/baseline/`);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         console.log(data);

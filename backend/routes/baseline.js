@@ -3,6 +3,6 @@ const router = express.Router();
 const {queryBaseline, queryEventBaseline} = require("../controllers/baseline");
 
 router.route("/:date/:event").get(queryEventBaseline)
-router.route("/:date").get(queryBaseline);
+router.route("").get(queryBaseline);
 
 module.exports = router;
