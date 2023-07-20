@@ -25,43 +25,37 @@ def generate_model_input(date):
     month = date.month
     day = date.isoweekday()
     weekend = 1 if day > 5 else 0 
-    #Note with datetime, Monday = 1. Below i make it suits our model (ie 0)
-
-    #Declare Day of Week (dow) Mon(0) to Sunday (6)
-    dow0, dow1, dow2, dow3, dow4, dow5, dow6 = 0, 0, 0, 0, 0, 0, 0
-
-    #Declare Time of Day (tod) Afternoon, Evening, Morning, Night
-    todA, todE, todM, todN = 0, 0, 0, 0
+    
+    input_data = dict.fromkeys(col_names, 0)
+    input_data.update({"Hour": hour, "DayOfMonth": dayOfMonth, "Month": month, "Weekend": weekend})
 
     match day:
         case 1:
-            dow0 = 1
+            input_data["DayOfWeek0"] = 1
         case 2:
-            dow1 = 1
+            input_data["DayOfWeek1"] = 1
         case 3:
-            dow2 = 1
+            input_data["DayOfWeek2"] = 1
         case 4: 
-            dow3 = 1
+            input_data["DayOfWeek3"] = 1
         case 5:
-            dow4 = 1
+            input_data["DayOfWeek4"] = 1
         case 6:
-            dow5 = 1
+            input_data["DayOfWeek5"] = 1
         case 7:
-            dow6 = 1
+            input_data["DayOfWeek6"] = 1
 
     if hour >= 0 and hour < 6:
-        todN = 1
+        input_data["TimeOfDay_Night"] = 1
     elif hour < 12:
-        todM = 1
+        input_data["TimeOfDay_Morining"] = 1
     elif hour < 17:
-        todA = 1
+        input_data["TimeOfDay_Afternoon"] = 1
     elif hour < 22:
-        todE = 1
+        input_data["TimeOfDay_Evening"] = 1
     elif hour < 24:
-        todN = 1
+        input_data["TimeOfDay_Night"] = 1
 
-    return [0, hour, dayOfMonth, month, weekend,
-                  todA,todE,todM,todN,
-                  dow0, dow1, dow2, dow3, dow4, dow5, dow6]
+    return input_data
 
 
