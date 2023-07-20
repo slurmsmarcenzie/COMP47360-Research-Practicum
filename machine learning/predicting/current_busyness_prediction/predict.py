@@ -5,7 +5,8 @@ col_names = ['DOLocationID', 'Hour', 'DayOfMonth', 'Month', 'Weekend', 'TimeOfDa
 
 location_ids = [236, 42, 166, 68, 163, 87, 152, 141, 229, 90, 113, 79, 140, 151, 107, 263, 43, 24, 233, 238, 237, 249, 186, 262, 74, 4, 45, 48, 142, 170, 137, 261, 246, 41, 239, 148, 243, 153, 231, 114, 211, 164, 144, 13, 161, 125, 50, 162, 234, 202, 224, 244, 158, 232, 88, 75, 127, 143, 116, 100, 209, 120, 230, 12, 194, 128, 105]
 
-
+# Passes input to the chosen model
+# returns a list of location:busyness pairs
 def general_prediction(date):
     pickled_model = pickle.load(open('predicting/models/xgb_non_normalised_merged_model.pkl', 'rb'))
     data = []
@@ -21,17 +22,20 @@ def general_prediction(date):
 
     return normalised_data
 
+# Parses the date to suit our models input
+# Returns a dictionary of features and their values
 def generate_model_input(date):
-    print(date)
     hour = date.hour
     dayOfMonth = date.day
     month = date.month
     day = date.isoweekday()
     weekend = 1 if day > 5 else 0 
     
+    # Dictionary of features & their values
     input_data = dict.fromkeys(col_names, 0)
     input_data.update({"Hour": hour, "DayOfMonth": dayOfMonth, "Month": month, "Weekend": weekend})
 
+    # Set the relevant day of week to 1 (i.e. True)
     match day:
         case 1:
             input_data["DayOfWeek_0"] = 1
@@ -48,6 +52,7 @@ def generate_model_input(date):
         case 7:
             input_data["DayOfWeek_6"] = 1
 
+    # Set the relevant time of day to 1 (i.e. True)
     if hour >= 0 and hour < 6:
         input_data["TimeOfDay_Night"] = 1
     elif hour < 12:
@@ -61,6 +66,8 @@ def generate_model_input(date):
 
     return input_data
 
+# Normalises the busyness scores to a value between 0 and 1.
+# Returns the normalised data (now ready for client)
 def normalise_and_format(data):
     #get min and max for normalisation formula:
     min, max = 0, 0
