@@ -6,7 +6,7 @@ import antline from '../geodata/antline.geo.json'
 //comment
 function EventCard ({event, visualiseEventImpact, map}) {
 
-    const {setShowChartData, removeAllButOneMarker, addAntline, removeAntline} = useMapContext();
+    const {setShowChartData, removeAllButOneMarker, addAntline, removeAntline, addMarker} = useMapContext();
     const findAntlineEventById = (eventId) => {
         return antline.features.find((feature) => feature.properties.event_id === eventId);
       };
@@ -27,6 +27,9 @@ function EventCard ({event, visualiseEventImpact, map}) {
                 setTimeout(() => {addAntline(map.current, antlineEvent)
                     },
                 1000)
+                
+                const lastCoordinates = antlineEvent.geometry.coordinates[antlineEvent.geometry.coordinates.length - 1];
+                addMarker(map.current, lastCoordinates);
             }}>Visualise Event Impact</button>
         </div>
     )

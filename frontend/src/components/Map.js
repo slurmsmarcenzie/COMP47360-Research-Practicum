@@ -42,9 +42,6 @@ function Map() {
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
 
-  const {addAntline} = useMapContext();
-  const {removeAntline} = useMapContext();
-
   // swapping styles
   const {mapStyle} = useMapContext();
 
