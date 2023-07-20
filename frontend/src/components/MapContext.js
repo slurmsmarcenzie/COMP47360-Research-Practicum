@@ -13,6 +13,7 @@ const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+let animationID = null;
 
 // Create a provider component
 export const MapProvider = ({ children }) => {
@@ -274,8 +275,6 @@ export const MapProvider = ({ children }) => {
             7: '#FEFEFE'
         }
 
-        console.log(colourMap1[event.properties.event_id])
-
         map.addSource('line', {
             type: 'geojson',
             data: event
@@ -340,8 +339,8 @@ export const MapProvider = ({ children }) => {
                 step = newStep;
             }
              
-            // Request the next frame of the animation.
-            requestAnimationFrame(animateDashArray);
+                // Request the next frame of the animation.
+                animationID = requestAnimationFrame(animateDashArray);
             }
              
             // start the animation
@@ -354,6 +353,11 @@ export const MapProvider = ({ children }) => {
             map.removeLayer('line-background');
             map.removeLayer('line-dashed');
             map.removeSource('line');
+        }
+
+        if(animationID){
+            cancelAnimationFrame(animationID);
+            animationID = null;
         }
     };
 

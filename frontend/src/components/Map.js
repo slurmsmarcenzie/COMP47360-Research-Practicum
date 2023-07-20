@@ -241,7 +241,7 @@ function Map() {
           .addTo(map);
         }
       }  
-  }, 10); // The function will not execute more than once every 200ms
+  }, 5); // The function will not execute more than once every 200ms
   
   const handleMouseLeave = (neighbourhood, map) => {
     if (!isNeighbourhoodClickedRef.current) {
@@ -333,7 +333,6 @@ function Map() {
       setError(error);
     }
   };
-  
 
   const visualiseEventImpact = (Event_ID) => {
 
@@ -428,7 +427,6 @@ function Map() {
     }, {});  
     
   }, [eventBaselineScores]);  
-
 
   useEffect(() => {
 
