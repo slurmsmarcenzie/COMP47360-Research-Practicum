@@ -210,14 +210,9 @@ export const MapProvider = ({ children }) => {
         });
     
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
-        console.log('markers at the end of show all markers:',markers);
-        console.log('new markers:',newMarkers);
         
         };
     
-        useEffect(() => {
-            console.log('markers updated:', markers);
-          }, [markers]);
     
     const removeAllMarkers = () => {
 
@@ -230,20 +225,17 @@ export const MapProvider = ({ children }) => {
     
     const removeAllButOneMarker = (keptEvent) => {
 
-        console.log('start of remove all but one:', markers);
 
         markers.forEach((marker) => {
             console.log(marker.Event_ID)
 
             if (marker.Event_ID !== keptEvent) {
                 marker.remove();
-                console.log('removed markers:', marker.Event_ID);
                 
             }
         });
         
         setMarkers(markers.filter(marker => marker.Event_ID == keptEvent))
-        console.log('markers at the end of remove alll but one:' , markers);
     
     };
 
