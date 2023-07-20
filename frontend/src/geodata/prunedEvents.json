@@ -24,7 +24,8 @@
       "Community_Board": "64, ",
       "Police Precinct": "22, ",
       "expected_attendees": 500000,
-      "description": "The 92nd Annual Macy's Thanksgiving Day Parade is a special event organized by the Parks Department. It takes place in Manhattan's Central Park and features various floats, balloons, and performances. Thousands of people are expected to attend."
+      "description": "The Thanksgiving Day Parade is a special event organized by the Parks Department. It takes place in Manhattan's Central Park and features various floats, balloons, and performances. Thousands of people are expected to attend.",
+      "Event_Impact_Analysis" : "The Macy's Thanksgiving Day Parade significantly invigorates Manhattan's cityscape. Streets along the parade route, primarily Central Park West and 6th Avenue, experience heightened foot traffic, with families, tourists, and locals flooding in to partake in the iconic celebration. Retail and dining sectors benefit from the increased visitor influx, while public transport and ride-hailing services observe elevated demand due to temporary road closures. Despite any minor inconveniences, the event adds a distinctive charm to the city, turning Manhattan into a vibrant tableau of festivity."
    },
     {
       "Event_ID": 2,
@@ -51,7 +52,8 @@
       "Community_Board": "1, ",
       "Police Precinct": "1, ",
       "expected_attendees": 10000,
-      "description": "The Halloween Parade and Party is a festive parade organized by the Police Department in Manhattan. It takes place on Greenwich Street and features participants dressed in Halloween costumes. The event is expected to attract a crowd of around 10,000 people."
+      "description": "The Halloween Parade and Party is a festive parade organized by the Police Department in Manhattan. It takes place on Greenwich Street and features participants dressed in Halloween costumes. The event is expected to attract a crowd of around 10,000 people.",
+      "Event_Impact_Analysis" : "Manhattan's Village Halloween Parade considerably animates the city's atmosphere. The parade route along 6th Avenue is transformed into a thrilling hub of creativity and entertainment, attracting large crowds. Local businesses, particularly party supply stores, costume shops, and hospitality venues, flourish from the increased activity. The temporary reshaping of transportation routes augments public transit usage and ride-hailing services. Although the impact may cause brief disruptions, the event enhances the city's vivacious spirit."
    },
     {
       "Event_ID": 3,
@@ -78,7 +80,8 @@
       "Community_Board": "64, ",
       "Police Precinct": "22, ",
       "expected_attendees": 250000,
-      "description": "The NYC Saint Patrick's Day Parade is a special event organized by the Parks Department. It takes place on the Fifth Avenue sidewalks, spanning from 60th Street to 65th Street. The parade celebrates Irish culture and heritage and is expected to draw a crowd of around 250,000 attendees."
+      "description": "The NYC Saint Patrick's Day Parade is a special event organized by the Parks Department. It takes place on the Fifth Avenue sidewalks, spanning from 60th Street to 65th Street. The parade celebrates Irish culture and heritage and is expected to draw a crowd of around 250,000 attendees.",
+      "Event_Impact_Analysis" : "St. Patrick's Day significantly increases Manhattan's activity levels. The parade route along Fifth Avenue becomes a major hub, swelling foot traffic and boosting local businesses, especially hospitality venues. Road closures alter transportation patterns, intensifying usage of public transit and ride-hailing services. Cultural events across neighborhoods add to the overall buzz. However, the impact varies by area and can cause temporary disruptions to normal routines. In essence, St. Patrick's Day transforms Manhattan into an even more bustling hub of festivity and commerce."
    },
     {
       "Event_ID": 4,
@@ -105,7 +108,8 @@
       "Community_Board": "2, 4, 5, ",
       "Police Precinct": "10, 13, 14, 6, ",
       "expected_attendees": 2000000,
-      "description": "The NYC Pride March is a large-scale parade celebrating LGBTQ+ pride organized by the Police Department. It takes place in Manhattan, with street closures along West 19th Street, West 18th Street, West 17th Street, West 16th Street, West 15th Street, 7th Avenue, Christopher Street, Greenwich Avenue, and West 8th Street. The march is expected to attract a massive crowd of approximately 2 million attendees."
+      "description": "The NYC Pride March is a large-scale parade celebrating LGBTQ+ pride organized by the Police Department. It takes place in Manhattan, with street closures along West 19th Street, West 18th Street, West 17th Street, West 16th Street, West 15th Street, 7th Avenue, Christopher Street, Greenwich Avenue, and West 8th Street. The march is expected to attract a massive crowd of approximately 2 million attendees.",
+      "Event_Impact_Analysis" : "The NYC Pride March considerably boosts the dynamism of Manhattan. The parade route, often passing through Fifth Avenue and Greenwich Village, attracts vast crowds celebrating love and equality. This uplifts local businesses, especially those in the hospitality sector. Changes in road accessibility increase the demand for public transportation and ride services. While the influence can disrupt daily life, it results in a significant city-wide surge of pride, unity, and festivity."
    },
     {
       "Event_ID": 5,
@@ -132,7 +136,8 @@
       "Community_Board": "5, ",
       "Police Precinct": "18, ",
       "expected_attendees": 100000,
-      "description": "The Times Square Ball event is a special event organized by the Parks Department. It takes place at Father Duffy Square in Manhattan and marks the New Year's Eve celebration. Thousands of people gather in Times Square to witness the iconic ball drop, and the event is expected to attract around 100,000 attendees."
+      "description": "The Times Square Ball event is a special event organized by the Parks Department. It takes place at Father Duffy Square in Manhattan and marks the New Year's Eve celebration. Thousands of people gather in Times Square to witness the iconic ball drop, and the event is expected to attract around 100,000 attendees.",
+      "Event_Impact_Analysis" : "The Times Square Ball Drop on New Year's Eve significantly heightens activity levels in Manhattan. Times Square transforms into a global hotspot, with increased foot traffic and boosted local commerce, particularly in the hospitality and retail sectors. Road closures alter transportation patterns, increasing usage of public transit and ride-hailing services. Despite temporary disruptions, the event ushers in the new year, making Manhattan an iconic symbol of new beginnings worldwide."
    },
     {
       "Event_ID": 6,
@@ -159,7 +164,8 @@
       "Community_Board": "2, 3, ",
       "Police Precinct": "5, ",
       "expected_attendees": 150000,
-      "description": "The 19th Lunar New Year Parade is a vibrant parade celebrating the Lunar New Year organized by the Police Department. It takes place in Manhattan, featuring colorful floats and traditional performances. The parade route includes Mott Street, East Broadway, Eldridge Street, Hester Street, Forsyth Street, and Broome Street. The event is expected to attract a crowd of approximately 150,000 attendees."
+      "description": "The Lunar New Year Parade is a vibrant parade celebrating the Lunar New Year organized by the Police Department. It takes place in Manhattan, featuring colorful floats and traditional performances. The parade route includes Mott Street, East Broadway, Eldridge Street, Hester Street, Forsyth Street, and Broome Street. The event is expected to attract a crowd of approximately 150,000 attendees.",
+      "Event_Impact_Analysis" : "The Lunar New Year Parade in Chinatown revitalizes Manhattan's spirit. Streets along the parade route witness increased foot traffic, significantly benefiting local businesses, especially eateries and souvenir shops. Road closures necessitate adjustments in transportation patterns, intensifying usage of public transit. Despite potential disturbances to routine, the event, with its colorful processions and cultural performances, adds a distinctive vibrancy to the city's multicultural fabric"
    },
     {
       "Event_ID": 7,
@@ -186,7 +192,8 @@
       "Community_Board": "11, ",
       "Police Precinct": "23, 25, ",
       "expected_attendees": 50000,
-      "description": "The 41st Annual Three Kings Day Parade is a joyful parade celebrating the Christian feast of the Epiphany organized by the Police Department. It takes place in Manhattan, with the parade route spanning East 115th Street, East 106th Street, 3rd Avenue, and Park Avenue. The event is expected to attract a crowd of approximately 50,000 attendees."
+      "description": "The Annual Three Kings Day Parade is a joyful parade celebrating the Christian feast of the Epiphany organized by the Police Department. It takes place in Manhattan, with the parade route spanning East 115th Street, East 106th Street, 3rd Avenue, and Park Avenue. The event is expected to attract a crowd of approximately 50,000 attendees.",
+      "Event_Impact_Analysis" : "The Three Kings Day Parade, primarily in East Harlem, significantly invigorates Manhattan's atmosphere. Increased pedestrian traffic along the parade route benefits local businesses, particularly those offering traditional Latin food and merchandise. Road closures reroute regular transportation, leading to heightened usage of public transit and ride-hailing services. While it can cause minor disruptions, the event significantly boosts the cultural richness and diversity of Manhattan."
    },
     {
       "Event_ID": 8,
@@ -213,7 +220,8 @@
       "Community_Board": "",
       "Police Precinct": "",
       "expected_attendees": 3000000,
-      "description": "Macy's 4th of July Fireworks is a grand fireworks display held in Manhattan along the East River Esplanade. It is a highly anticipated event celebrating Independence Day. The spectacular fireworks show is expected to attract a massive crowd of around 3 million attendees."
+      "description": "The 4th of July Fireworks is a grand fireworks display held in Manhattan along the East River Esplanade. It is a highly anticipated event celebrating Independence Day. The spectacular fireworks show is expected to attract a massive crowd of around 3 million attendees.",
+      "Event_Impact_Analysis" : "The 4th of July fireworks significantly amplify Manhattan's activity levels. Public spaces and rooftop venues become hotspots for spectators, increasing patronage for surrounding businesses, particularly in the hospitality sector. Road closures and heightened security measures alter transportation patterns, leading to increased use of public transit and ride-hailing services. Despite any temporary disruptions, the event fills Manhattan with patriotic fervor and a spirit of unity, underlining its iconic status as a symbol of American liberty."
    }
 ]
    

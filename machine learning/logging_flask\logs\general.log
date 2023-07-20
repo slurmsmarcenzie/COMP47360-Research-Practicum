@@ -1,430 +1,482 @@
-[INFO] 2023-07-14 13:45:34,690 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:45:34,695 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:45:34,724 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:45:34,724 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:47:58,064 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:47:58,067 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:47:58,076 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:47:58,077 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:48:03,046 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 3
-[INFO] 2023-07-14 13:48:03,047 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 13:51:13,959 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 13:51:13,960 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 13:51:47,703 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:51:47,704 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:51:47,720 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:51:47,720 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:52:03,952 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:52:03,953 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:52:03,959 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:52:03,959 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:55:02,711 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:55:02,720 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:55:02,731 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:55:02,731 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:56:25,960 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:56:25,961 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:56:40,146 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:56:40,146 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:56:50,287 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:56:50,288 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:57:16,373 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:57:16,374 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:57:34,053 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:57:34,053 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:57:55,283 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:57:55,283 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:02,371 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:02,372 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:09,641 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:09,641 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:12,060 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:12,060 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:14,914 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:14,917 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:16,987 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:16,987 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:46,492 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:46,492 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:48,355 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:48,356 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:48,364 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:58:48,364 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 13:58:54,216 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 13:58:54,218 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 13:59:51,666 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 13:59:51,667 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:00:07,660 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:00:07,661 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:00:09,655 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:00:09,655 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:00:57,668 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:00:57,669 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:00:57,678 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:00:57,679 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:01:04,957 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:01:04,957 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:01:04,964 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:01:04,965 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:01:11,326 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 4
-[INFO] 2023-07-14 14:01:11,327 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:01:25,501 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:01:25,502 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:02:41,659 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:02:41,660 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:02:51,650 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:02:51,651 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:02:51,658 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:02:51,658 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:02:59,088 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 2
-[INFO] 2023-07-14 14:02:59,088 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:03:12,898 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:03:12,898 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:03:16,096 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:03:16,096 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:03:16,106 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:03:16,107 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:03:25,386 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:03:25,387 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:05:38,647 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:05:38,647 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:05:51,637 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:05:51,638 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:05:54,459 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:05:54,459 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:05:54,472 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:05:54,472 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:05:58,069 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 4
-[INFO] 2023-07-14 14:05:58,069 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:06:34,117 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:06:34,117 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:06:37,901 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:06:37,901 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:06:37,909 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:06:37,910 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:08:39,745 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:08:39,746 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:08:39,808 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:08:39,808 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:02,640 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:02,641 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:02,651 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:02,651 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:11,633 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:11,633 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:11,640 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:11,640 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:37,408 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:37,410 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:37,420 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:37,420 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:09:48,508 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:09:48,509 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:10:03,167 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:10:03,167 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:10:03,827 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:10:03,827 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:10:07,306 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:10:07,306 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:10:07,317 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:10:07,317 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:10:11,745 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:10:11,745 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:10:45,797 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:10:45,798 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:13:22,046 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:13:22,057 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:13:22,083 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:13:22,083 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:13:36,550 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:13:36,550 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:14:54,125 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:14:54,127 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:15:01,650 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:15:01,650 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:15:38,607 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:15:38,608 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:15:44,065 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:15:44,067 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:15:44,078 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:15:44,079 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:12,812 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:12,813 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:13,781 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:13,781 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:13,852 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:13,852 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:43,030 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:43,031 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:46,164 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:46,164 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:52,140 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:52,141 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:52,189 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:16:52,189 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:16:55,819 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:16:55,819 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:17:13,582 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:17:13,583 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:17:14,925 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:17:14,925 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:17:35,981 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:17:35,981 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:17:38,635 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:17:38,636 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:18:34,602 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:18:34,603 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:18:45,805 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:18:45,806 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:18:45,835 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:18:45,836 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:18:49,663 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 3
-[INFO] 2023-07-14 14:18:49,663 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:18:57,485 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 14:18:57,485 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:19:18,446 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:19:18,446 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:22:36,229 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 7
-[INFO] 2023-07-14 14:22:36,230 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:25:30,341 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:25:30,343 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:26:11,702 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 3
-[INFO] 2023-07-14 14:26:11,703 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:27:17,484 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:27:17,485 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:27:19,292 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:27:19,292 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:27:22,536 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:27:22,537 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:27:23,941 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:27:23,941 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:27:23,970 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:27:23,970 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:28:31,237 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:28:31,237 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:28:31,253 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:28:31,253 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:28:53,065 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:28:53,065 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:28:53,103 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:28:53,103 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:28:58,193 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 4
-[INFO] 2023-07-14 14:28:58,193 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:30:42,489 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:30:42,492 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:30:42,524 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:30:42,524 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:39:34,456 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:39:34,462 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:39:34,472 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:39:34,472 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:39:39,303 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:39:39,305 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:39:39,305 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:39:39,305 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:41:34,769 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:41:34,772 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:41:34,788 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:41:34,788 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:43:24,398 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:43:24,400 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:43:25,231 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:43:25,233 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:43:25,262 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:43:25,262 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:43:29,444 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:43:29,444 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:43:29,446 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:43:29,446 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:44:36,343 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:44:36,343 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:44:45,826 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:44:45,826 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:44:47,123 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:44:47,123 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:44:48,410 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:44:48,410 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:44:48,419 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:44:48,419 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:44:52,880 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 4
-[INFO] 2023-07-14 14:44:52,881 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 4
-[INFO] 2023-07-14 14:44:52,882 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:44:52,882 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:45:39,089 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:45:39,090 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:08,725 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:08,726 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:35,536 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:35,537 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:35,542 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:35,542 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:48,467 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:48,468 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:48,477 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:48,477 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:46:52,225 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:46:52,225 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:03,789 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:03,790 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:05,326 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:05,327 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:08,593 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:08,594 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:20,779 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:20,780 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:28,647 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:28,647 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:33,796 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:33,796 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:50,148 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:50,148 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:47:50,154 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:47:50,154 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:15,630 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:15,630 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:15,635 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:15,635 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:34,358 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:34,358 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:39,043 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:39,043 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:39,058 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:39,058 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:42,864 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:42,864 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:42,876 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:42,876 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:57,688 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:57,688 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:48:59,916 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:48:59,917 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:05,724 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:05,725 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:11,274 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:11,275 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:19,561 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:19,561 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:34,840 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:34,841 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:36,956 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:36,956 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:38,867 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:38,867 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:46,168 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:46,169 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:49:51,997 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:49:51,997 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:50:02,088 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:50:02,089 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:50:04,355 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:50:04,355 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:50:06,538 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:50:06,540 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:50:24,449 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:50:24,449 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:50:35,202 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:50:35,202 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:51:17,992 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:51:17,993 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:51:18,000 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:51:18,000 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:51:59,840 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:51:59,841 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:51:59,847 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:51:59,847 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:52:08,020 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 2
-[INFO] 2023-07-14 14:52:08,021 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 2
-[INFO] 2023-07-14 14:52:08,021 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:52:08,021 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:52:26,543 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:52:26,545 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:52:26,545 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:52:26,545 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:53:03,942 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:53:03,943 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:53:04,039 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:53:04,039 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:53:07,759 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:53:07,759 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 14:53:07,759 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:53:07,759 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:53:30,895 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:53:30,897 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:53:30,897 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:53:30,897 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:55:37,953 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:55:37,954 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:55:37,999 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:55:38,000 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:55:42,155 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:55:42,156 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:55:42,166 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:55:42,167 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:55:51,320 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 14:55:51,321 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 14:55:51,321 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 14:55:51,321 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:56:12,636 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:56:12,638 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:56:12,720 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 14:56:12,721 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 14:56:22,906 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:56:22,906 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 14:56:22,906 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 14:56:22,906 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:02:26,476 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:02:26,478 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:02:26,484 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:02:26,484 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:02:31,140 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:02:31,141 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:02:31,142 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:02:31,163 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:02:59,021 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:02:59,021 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:02:59,027 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:02:59,027 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:03:06,723 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:03:06,724 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:03:06,724 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:03:06,725 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:03:59,779 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:03:59,780 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:03:59,786 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:03:59,786 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:04:03,295 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 15:04:03,296 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 6
-[INFO] 2023-07-14 15:04:03,296 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:04:03,296 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:06:09,583 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:06:09,584 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:06:09,588 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:06:09,588 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:06:14,267 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:06:14,269 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:06:14,269 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:06:14,269 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:09:09,341 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:09:09,342 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:09:09,345 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:09:09,346 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:09:13,742 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 15:09:13,743 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 15:09:13,744 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:09:13,744 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:19:45,870 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:19:45,871 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:19:45,877 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:19:45,878 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:20:06,506 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:20:06,507 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 8
-[INFO] 2023-07-14 15:20:06,507 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:20:06,507 [baseline.py : baseline_event] Reading file baseline_events.json
-[INFO] 2023-07-14 15:21:01,460 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:21:01,462 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:21:01,467 [baseline.py : baseline] baseline quried for datetime: 2023-07-14T00:00:00.000Z
-[INFO] 2023-07-14 15:21:01,468 [baseline.py : baseline] Reading file BASELINE_JUNE.json
-[INFO] 2023-07-14 15:21:08,349 [prediction.py : prediction] prediction quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 15:21:08,350 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-14T00:00:00.000Z, of event: 5
-[INFO] 2023-07-14 15:21:08,350 [prediction.py : prediction] Reading file impact_events.json
-[INFO] 2023-07-14 15:21:08,350 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 16:06:24,998 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 16:06:25,019 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 16:06:25,130 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 16:06:25,131 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 16:06:52,020 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 16:06:52,028 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 16:06:52,033 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 16:06:52,114 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 17:32:10,689 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:32:10,691 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:32:10,813 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:32:10,814 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:35:48,450 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:35:48,451 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:35:48,486 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:35:48,487 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:38:38,993 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:38:38,994 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:38:39,063 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:38:39,063 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:40:15,622 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:40:15,623 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 17:40:16,037 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 17:40:16,038 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:46:12,706 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:46:12,707 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:46:12,729 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:46:12,729 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:54:29,822 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:54:29,823 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:54:29,836 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:54:29,837 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:54:56,132 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:54:56,133 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:54:56,149 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:54:56,149 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:55:15,612 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 18:55:15,613 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 18:55:15,614 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 18:55:15,614 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 18:56:08,062 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 18:56:08,063 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 18:56:08,063 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 18:56:08,063 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 18:56:25,207 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:56:25,207 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 18:56:25,335 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 18:56:25,335 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:16:24,135 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:16:24,139 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:16:24,167 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:16:24,168 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:16:40,826 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 19:16:40,826 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 19:16:40,828 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 19:16:40,828 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 19:17:22,169 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:17:22,170 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:17:22,184 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:17:22,185 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:17:42,648 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 8
+[INFO] 2023-07-17 19:17:42,649 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 19:17:42,650 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 8
+[INFO] 2023-07-17 19:17:42,650 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 19:18:38,154 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:18:38,155 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 19:18:38,174 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 19:18:38,174 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 20:10:48,370 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 20:10:48,381 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 20:10:48,526 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 20:10:48,527 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 20:12:58,962 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 20:12:58,964 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 20:12:58,965 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 20:12:58,966 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 21:01:17,374 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 21:01:17,379 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 21:01:17,379 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 21:01:17,380 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 21:12:03,788 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 21:12:03,789 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 21:12:03,858 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 21:12:03,858 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 21:12:19,857 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 21:12:19,858 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 21:12:19,858 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 21:12:19,858 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 21:12:43,628 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 21:12:43,629 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 21:12:43,629 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 21:12:43,629 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 21:14:13,568 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 21:14:13,568 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 21:14:13,569 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 21:14:13,569 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 21:16:15,716 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 21:16:15,717 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 21:16:15,717 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 21:16:15,717 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:26:11,458 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:26:11,458 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:26:11,471 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:26:11,471 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:27:06,466 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:27:06,467 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:27:06,564 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:27:06,568 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:29:18,575 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:29:18,576 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:29:18,576 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:29:18,576 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:31:49,721 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 23:31:49,721 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 5
+[INFO] 2023-07-17 23:31:49,722 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:31:49,722 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:34:57,286 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:34:57,286 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:34:57,286 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:34:57,287 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:37:30,452 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 23:37:30,453 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-17 23:37:30,454 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:37:30,454 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:38:05,309 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:38:05,309 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-17 23:38:05,310 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:38:05,310 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:46:49,538 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:46:49,539 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 2
+[INFO] 2023-07-17 23:46:49,539 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-17 23:46:49,540 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-17 23:58:02,701 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 23:58:02,718 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-17 23:58:02,750 [baseline.py : baseline] baseline quried for datetime: 2023-07-17T00:00:00.000Z
+[INFO] 2023-07-17 23:58:02,751 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-18 00:01:01,287 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-18 00:01:01,288 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 4
+[INFO] 2023-07-18 00:01:01,289 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-18 00:01:01,289 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-18 00:01:33,449 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-18 00:01:33,449 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 3
+[INFO] 2023-07-18 00:01:33,449 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-18 00:01:33,449 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-18 00:02:11,899 [prediction.py : prediction] prediction quried for datetime: 2023-07-17T00:00:00.000Z, of event: 1
+[INFO] 2023-07-18 00:02:11,900 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-17T00:00:00.000Z, of event: 1
+[INFO] 2023-07-18 00:02:11,900 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-18 00:02:11,900 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-18 10:59:21,475 [baseline.py : baseline] baseline quried for datetime: 2023-07-18T00:00:00.000Z
+[INFO] 2023-07-18 10:59:21,482 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-18 10:59:21,528 [baseline.py : baseline] baseline quried for datetime: 2023-07-18T00:00:00.000Z
+[INFO] 2023-07-18 10:59:21,529 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-18 11:05:28,948 [prediction.py : prediction] prediction quried for datetime: 2023-07-18T00:00:00.000Z, of event: 6
+[INFO] 2023-07-18 11:05:28,949 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-18T00:00:00.000Z, of event: 6
+[INFO] 2023-07-18 11:05:28,949 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-18 11:05:28,950 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:00:09,324 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:00:09,332 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:00:09,379 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:00:09,379 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:01:31,645 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:01:31,646 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:01:31,650 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:01:31,651 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:03:46,509 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:03:46,510 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:03:46,514 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:03:46,514 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:06:28,901 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:06:28,902 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:08:03,631 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:08:03,632 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:08:03,655 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:08:03,656 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:08:14,813 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:08:14,813 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:08:14,814 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:08:14,814 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:16:18,745 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:18,746 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:18,772 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:18,773 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:19,536 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:19,537 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:19,555 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:19,555 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:21,815 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:21,815 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:21,855 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:21,855 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:33,931 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:33,932 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:33,948 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:16:33,949 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:16:44,586 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:16:44,590 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:16:44,590 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:16:44,591 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:18:31,613 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:18:31,613 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:18:31,632 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:18:31,722 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:18:49,618 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:18:49,618 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:18:49,619 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:18:49,620 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:22:56,038 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:22:56,039 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:22:56,073 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:22:56,073 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:23:15,832 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:23:15,834 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 14:23:15,834 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:23:15,834 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:23:54,982 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:23:54,983 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:23:55,021 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:23:55,021 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:25:00,086 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:25:00,087 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:25:00,089 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:25:00,090 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:29:24,863 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:29:24,863 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:29:24,876 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:29:24,877 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:30:02,141 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:30:02,143 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:30:02,143 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:30:02,144 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:31:47,377 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:31:47,378 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:31:47,419 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:31:47,419 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:32:07,465 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:32:07,466 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:32:07,467 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:32:07,468 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:52:23,034 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:52:23,036 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:52:23,071 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:52:23,072 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:52:37,133 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:52:37,134 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:52:37,135 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:52:37,135 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:52:47,838 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:52:47,839 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:52:47,843 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:52:47,884 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:54:09,922 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:54:09,923 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:54:09,980 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 14:54:09,984 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 14:54:30,159 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:54:30,160 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:54:30,165 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:54:30,227 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:54:40,155 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 14:54:40,155 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 14:54:40,156 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:54:40,156 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:54:51,655 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:54:51,656 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 14:54:51,656 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 14:54:51,657 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:55:03,343 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:55:03,346 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 14:55:03,347 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 14:55:03,348 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:03:21,880 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:03:21,880 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:03:21,899 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:03:21,899 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:03:35,872 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:03:35,876 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:03:35,908 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:03:35,909 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:04:31,016 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:04:31,018 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:04:31,019 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:04:31,019 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:04:58,873 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:04:58,873 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:04:58,895 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:04:58,895 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:05:28,164 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:05:28,165 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:05:28,187 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:05:28,187 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:05:41,055 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:05:41,057 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:05:41,058 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:05:41,058 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:06:06,536 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:06:06,536 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:06:06,774 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:06:06,775 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:06:23,976 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:06:23,976 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:06:23,978 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:06:24,044 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:06:39,881 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 7
+[INFO] 2023-07-19 15:06:39,882 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:06:39,932 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 7
+[INFO] 2023-07-19 15:06:39,933 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:06:51,142 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:06:51,143 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:06:51,145 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:06:51,146 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:06:59,676 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:06:59,677 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:06:59,678 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:06:59,679 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:18,806 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:18,806 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:18,808 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:18,808 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:07:29,011 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:07:29,013 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:07:29,013 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:29,013 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:07:36,724 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:36,725 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:36,725 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:36,726 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:07:47,952 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:07:47,953 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:47,955 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:07:47,956 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:07:54,796 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:54,797 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:07:54,797 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:07:54,798 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:12:23,864 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:12:23,864 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:12:23,878 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:12:23,879 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:12:26,870 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:12:26,871 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:12:26,883 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:12:26,884 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:13:05,069 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:13:05,070 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:13:05,089 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:13:05,089 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:13:24,997 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:13:24,998 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:13:25,037 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:13:25,039 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:13:46,480 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:13:46,480 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:13:46,482 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:13:46,482 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:13:53,625 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:13:53,626 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:13:53,632 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:13:53,633 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:16:06,699 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:16:06,700 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:16:06,722 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:16:06,723 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:16:33,065 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:16:33,066 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:16:33,099 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:16:33,099 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:16:42,903 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:16:42,904 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:16:42,906 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:16:42,906 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:19:59,845 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:19:59,845 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:19:59,884 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:19:59,885 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:20:03,470 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:20:03,471 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:20:03,493 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:20:03,494 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:20:14,680 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:20:14,681 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:20:14,681 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:20:14,681 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:20:28,004 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:20:28,004 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:20:28,004 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:20:28,005 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:21:12,557 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:21:12,557 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:21:12,584 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:21:12,585 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:21:32,393 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:21:32,395 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:21:32,395 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:21:32,395 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:22:26,122 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:22:26,123 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:22:26,152 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:22:26,152 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:22:43,222 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:22:43,223 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:22:43,234 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:22:43,235 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:23:26,410 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:23:26,410 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:23:26,441 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:23:26,442 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:23:34,698 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:23:34,699 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:23:34,910 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:23:34,910 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:25:17,002 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:25:17,002 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:25:17,016 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:25:17,017 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:25:24,584 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:25:24,585 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:25:24,712 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:25:24,713 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:25:37,335 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:25:37,337 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:25:37,337 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:25:37,338 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:26:00,140 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:26:00,140 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:26:00,187 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:26:00,188 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:26:15,512 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:26:15,513 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:26:15,514 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:26:15,515 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:27:19,457 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:27:19,457 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:27:19,489 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:27:19,489 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:27:36,157 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:27:36,158 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:27:36,159 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:27:36,159 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:27:51,013 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:27:51,013 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:27:51,144 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:27:51,146 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:28:11,641 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:28:11,642 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:28:11,676 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:28:11,676 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:28:48,044 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:28:48,045 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:28:48,047 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 2
+[INFO] 2023-07-19 15:28:48,047 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:29:13,853 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:29:13,853 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:29:13,854 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:29:13,854 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:29:21,870 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:29:21,871 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:29:21,871 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:29:21,872 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:29:38,587 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:29:38,589 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 6
+[INFO] 2023-07-19 15:29:38,590 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:29:38,590 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:29:47,626 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 7
+[INFO] 2023-07-19 15:29:47,627 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 7
+[INFO] 2023-07-19 15:29:47,627 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:29:47,627 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:30:48,285 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:30:48,286 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:30:48,311 [baseline.py : baseline] baseline quried for datetime: 2023-07-19T00:00:00.000Z
+[INFO] 2023-07-19 15:30:48,312 [baseline.py : baseline] Reading file BASELINE_JUNE.json
+[INFO] 2023-07-19 15:31:06,781 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:31:06,782 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:31:06,783 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 1
+[INFO] 2023-07-19 15:31:06,784 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:31:26,953 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:31:26,954 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 3
+[INFO] 2023-07-19 15:31:26,955 [prediction.py : prediction] Reading file impact_events.json
+[INFO] 2023-07-19 15:31:26,956 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:31:53,057 [baseline.py : baseline_event] baseline quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:31:53,058 [prediction.py : prediction] prediction quried for datetime: 2023-07-19T00:00:00.000Z, of event: 4
+[INFO] 2023-07-19 15:31:53,058 [baseline.py : baseline_event] Reading file baseline_events.json
+[INFO] 2023-07-19 15:31:53,058 [prediction.py : prediction] Reading file impact_events.json

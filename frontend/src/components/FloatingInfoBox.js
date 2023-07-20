@@ -10,20 +10,23 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
-  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex} = useMapContext();
+  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
-  const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers} = useMapContext();
+  const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers, setShowMatchingEvent} = useMapContext();
 
+  const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
+  
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
+    setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
@@ -44,6 +47,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       setZoneID(neighbourhoodEvents[0].Zone_ID);
       setEventName(neighbourhoodEvents[0].Event_Name);
       setZone(neighbourhoodEvents[0].Zone_Name)
+      setEventForAnalysisComponent(neighbourhoodEvents[0])
     }
     
   }, [neighbourhoodEvents]);
@@ -66,55 +70,85 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     setRichText(text);
   }, [colourPairs, colourPairIndex, busynessHashMap, eventBaselineHashMap, zoneID]);
   
-  const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((item, i) =>{
+  const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((event, i) =>{
     return (
       <EventCard 
         key = {i}
-        item={item}
+        event={event}
         visualiseEventImpact={visualiseEventImpact}
+        map={map}
       />
       )
   }) : null;
 
+  function renderHeader() {
+    return (
+      <button className='floating-info-box-back-button' onClick={() => {
+        removeAntline(map.current)
+        resetMap(map);
+      }}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Go Back
+      </button>
+    );
+  }
+  
+  function renderZoneInfo() {
+    return (
+      <h1 className='floating-info-box-zone-header'>
+        {showChartData ? eventName : zone}
+      </h1>
+    );
+  }
+  
+  function renderChartOrAnalysis() {
+  
+    if (!showChartData) {
+      return <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>;
+    }
+  
+    return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
+  }
+  
+  
+  function renderInfoBoxContent() {
+    if (!showInfoBox) {
+      return null;
+    }
+  
+    if (showChartData) {
+      return (
+        <NeighbourhoodChartData 
+          map={map}
+          hashMap={hashMapOfDifference}
+          busynessHashMap={busynessHashMap}
+          eventBaselineHashMap={eventBaselineHashMap}
+          colours={colours}
+          highlightEventImpact={highlightEventImpact}
+          zoneID={zoneID}
+          resetColours={resetColours}
+        />
+      );
+    }
+  
+    return eventCards;
+
+  }
+  
+  function renderNeighborhoodMessage() {
+    return showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>;
+  }
+  
   return (
     (showInfoBox || showNeighborhoodInfoBox) && (
       <div className='floating-info-box'>
-        <button className='floating-info-box-back-button' onClick={() => {
-          resetMap(map);
-        }}>
-          <FontAwesomeIcon icon={faArrowLeft} /> Go Back
-        </button>
-        <h1 className='floating-info-box-zone-header'>
-          {showChartData ? eventName : zone}
-        </h1>
-        {
-        showChartData 
-        ? (showChart 
-            ? null
-            : <EventAnalysis />) 
-        : <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>
-        }
-        {showInfoBox
-          ? showChartData
-            ? (
-              <NeighbourhoodChartData 
-                map={map}
-                hashMap={hashMapOfDifference}
-                busynessHashMap={busynessHashMap}
-                eventBaselineHashMap={eventBaselineHashMap}
-                colours={colours}
-                highlightEventImpact={highlightEventImpact}
-                zoneID={zoneID}
-                resetColours={resetColours}
-              />
-              )
-            : eventCards
-          : null
-        }
-        {showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>}
+        {renderHeader()}
+        {renderZoneInfo()}
+        {renderChartOrAnalysis()}
+        {renderInfoBoxContent()}
+        {renderNeighborhoodMessage()}
       </div>
     )
-  );  
+  );
 }
 
 export default FloatingInfoBox
