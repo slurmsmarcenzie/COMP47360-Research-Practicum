@@ -6,6 +6,7 @@ from controllers.base import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
 
+#Associate routes with Blueprint and set rate limiters:
 info = Blueprint("info", __name__)
 limiter.limit("25/minute")(info)
 
