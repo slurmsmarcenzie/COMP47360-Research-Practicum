@@ -227,7 +227,6 @@ export const MapProvider = ({ children }) => {
 
 
         markers.forEach((marker) => {
-            console.log(marker.Event_ID)
 
             if (marker.Event_ID !== keptEvent) {
                 marker.remove();
