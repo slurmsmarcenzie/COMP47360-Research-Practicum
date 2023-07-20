@@ -6,12 +6,14 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import prunedEvents from '../geodata/prunedEvents.json'
+import antline from '../geodata/antline.geo.json'
 
 // Create a new context
 const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+let animationID = null;
 
 // Create a provider component
 export const MapProvider = ({ children }) => {
@@ -27,11 +29,16 @@ export const MapProvider = ({ children }) => {
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
     const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
+    const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
+    const [isResetShowing, setIsResetShowing] = useState(false)
+    const [lastMarkers, setLastMarkers] = useState([]);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
     const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
+    const [showMatchingEvent, setShowMatchingEvent] = useState(true);
 
     // zone and event setters used in floating info box and elsewhere
     const [zoneID, setZoneID] = useState(null);
@@ -41,6 +48,10 @@ export const MapProvider = ({ children }) => {
     const originalLng = -73.9857;
     const zoom = 7;
     const pitch = 30;
+    const boundary = [
+        [-74.255591, 40.477388],
+        [-73.698697, 40.983697]
+    ]
 
     const colourPairs = [
         ["#008000", "#FFBF00", "#FF0000"], // Green, Amber, Red
@@ -192,14 +203,17 @@ export const MapProvider = ({ children }) => {
             );
             if (!exists) {
                 const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+                
+                marker.Event_ID = event.Event_ID;
                 newMarkers.push(marker);
             }
         });
     
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
-    }
+        
+        };
     
-
+    
     const removeAllMarkers = () => {
 
         markers.forEach((marker) => {
@@ -211,10 +225,12 @@ export const MapProvider = ({ children }) => {
     
     const removeAllButOneMarker = (keptEvent) => {
 
+
         markers.forEach((marker) => {
 
             if (marker.Event_ID !== keptEvent) {
                 marker.remove();
+                
             }
         });
         
@@ -246,16 +262,116 @@ export const MapProvider = ({ children }) => {
         });
     };
 
-    // useEffect(() => {
+    const addAntline = (map, event) => {
 
-    //     neighbourhoods.features.forEach((neighbourhood) => {
+        const colourMap = {
+            1: ['#996236','#F8B12C'],
+            2: ['#FFA500', '#000000'],
+            3: ['#035606', '#FFFFFF'],
+            4: ['#E50000', '#770088'],
+            5: ['#a9a5AA', '#FCFCFC'],
+            6: ['#CC232A', '#F5AC27'],
+            7: ['#2B4593', '#FEFEFE'],
+            8: ['#3B3B6D', '#B32134']
+        };
 
-    //         const layerId = `${neighbourhood.properties.location_id}`;
+        map.addSource('line', {
+            type: 'geojson',
+            data: event
+        });
 
-    //         setLayerIds(prevLayerIds => [...prevLayerIds, layerId]);
-    //     })
+        map.addLayer({
+                type: 'line',
+                source: 'line',
+                id: 'line-background',
+                paint: {
+                'line-color': colourMap[event.properties.event_id][0],
+                'line-width': 6,
+                'line-opacity': 0.4
+                }
+            });
+            // add a line layer with line-dasharray set to the first value in dashArraySequence
+            map.addLayer({
+                type: 'line',
+                source: 'line',
+                id: 'line-dashed',
+                paint: {
+                'line-color': colourMap[event.properties.event_id][1],
+                'line-width': 6,
+                'line-dasharray': [0, 4, 3]
+                }
+            });
+             
+            // technique based on https://jsfiddle.net/2mws8y3q/
+            // an array of valid line-dasharray values, specifying the lengths of the alternating dashes and gaps that form the dash pattern
+            const dashArraySequence = [
+                [0, 4, 3],
+                [0.5, 4, 2.5],
+                [1, 4, 2],
+                [1.5, 4, 1.5],
+                [2, 4, 1],
+                [2.5, 4, 0.5],
+                [3, 4, 0],
+                [0, 0.5, 3, 3.5],
+                [0, 1, 3, 3],
+                [0, 1.5, 3, 2.5],
+                [0, 2, 3, 2],
+                [0, 2.5, 3, 1.5],
+                [0, 3, 3, 1],
+                [0, 3.5, 3, 0.5]
+            ];
+             
+            let step = 0;
+             
+            function animateDashArray(timestamp) {
+            // Update line-dasharray using the next value in dashArraySequence. The
+            // divisor in the expression `timestamp / 50` controls the animation speed.
+                const newStep = parseInt(
+                    (timestamp / 50) % dashArraySequence.length
+            );
+             
+            if (newStep !== step) {
+                map.setPaintProperty(
+                'line-dashed',
+                'line-dasharray',
+                dashArraySequence[step]
+              );
+                step = newStep;
+            }
+             
+                // Request the next frame of the animation.
+                animationID = requestAnimationFrame(animateDashArray);
+            }
+             
+            // start the animation
+            animateDashArray(0);
+    }
 
-    //   }, []);
+    const removeAntline = (map) => {
+        
+        if (map.getLayer('line-background')){
+            map.removeLayer('line-background');
+            map.removeLayer('line-dashed');
+            map.removeSource('line');
+        }
+
+        if(animationID){
+            cancelAnimationFrame(animationID);
+            animationID = null;
+        }
+    };
+
+    const addMarker = (map, coordinates) => {
+        const marker = new mapboxgl.Marker({ color: 'red' }).setLngLat(coordinates).addTo(map);
+        lastMarkers.push(marker);
+      };
+
+    const removeMarker = () => {
+        lastMarkers.forEach((marker) => {
+            marker.remove(); // Remove each marker from the map
+          });
+          setLastMarkers([]);
+    }
 
   return (
     <MapContext.Provider
@@ -271,6 +387,10 @@ export const MapProvider = ({ children }) => {
         removeAllMarkers,
         showAllMarkers,
         removeAllButOneMarker,
+        addAntline,
+        removeAntline,
+        removeMarker,
+        addMarker,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,
@@ -286,8 +406,11 @@ export const MapProvider = ({ children }) => {
         makePredictionRequest, setMakePredictionRequest,
         zoneID, setZoneID,
         eventName, setEventName,
+        eventForAnalysisComponent, setEventForAnalysisComponent,
+        mapStyle, setMapStyle,
+        isResetShowing, setIsResetShowing,
+        showMatchingEvent, setShowMatchingEvent,
       
-
         neighbourhoods,
         prunedEvents,
         colourPairs,
@@ -297,7 +420,8 @@ export const MapProvider = ({ children }) => {
         originalLat,
         originalLng,
         zoom,
-        pitch
+        pitch,
+        boundary
       }}
     >
       {children}
