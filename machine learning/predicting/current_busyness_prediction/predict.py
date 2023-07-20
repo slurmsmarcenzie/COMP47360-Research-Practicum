@@ -24,20 +24,14 @@ def generate_model_input(date):
     dayOfMonth = date.day
     month = date.month
     day = date.isoweekday()
-    weekend = 1 if day > 5 else 0 #Note with datetime, Monday = 1. Below i make it suit our model (ie 0)
+    weekend = 1 if day > 5 else 0 
+    #Note with datetime, Monday = 1. Below i make it suits our model (ie 0)
 
-    dow0 = 0
-    dow1 = 0
-    dow2 = 0
-    dow3 = 0
-    dow4 = 0 
-    dow5 = 0 
-    dow6 = 0
+    #Declare Day of Week (dow) Mon(0) to Sunday (6)
+    dow0, dow1, dow2, dow3, dow4, dow5, dow6 = 0, 0, 0, 0, 0, 0, 0
 
-    todA = 0
-    todE = 0
-    todM = 0
-    todN = 0
+    #Declare Time of Day (tod) Afternoon, Evening, Morning, Night
+    todA, todE, todM, todN = 0, 0, 0, 0
 
     match day:
         case 1:
