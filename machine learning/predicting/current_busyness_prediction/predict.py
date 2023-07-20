@@ -7,7 +7,7 @@ location_ids = [236, 42, 166, 68, 163, 87, 152, 141, 229, 90, 113, 79, 140, 151,
 
 
 def general_prediction(date):
-    pickled_model = pickle.load(open('predicting/models/equal_weighted  _merged_model.pkl', 'rb'))
+    pickled_model = pickle.load(open('predicting/models/equal_weighted_merged_model.pkl', 'rb'))
     data = []
     input_data = generate_model_input(date)
 
