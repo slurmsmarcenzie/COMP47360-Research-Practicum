@@ -16,9 +16,8 @@ base = Blueprint("base", __name__)
 limiter.limit("10/minute")(base)
 
 
-#ROUTES:
+#INFO route for Event information:
 info.route("/info/events")(list_events)
-info.route("/info/metrics")(list_metrics)
 info.before_request(check_token)
 
 predict.route("/baseline/")(baseline)
@@ -26,6 +25,7 @@ predict.route("/baseline/<string:date>/<string:event>")(baseline_event)
 predict.route("/predict/<string:date>/<string:event>")(prediction)
 predict.before_request(check_token)
 
+# BASE routes for clients to login and create/view their API key
 base.route("/")(home)
 base.route("/login", methods=("GET", "POST"))(login)
 base.route("/logout")(logout)
