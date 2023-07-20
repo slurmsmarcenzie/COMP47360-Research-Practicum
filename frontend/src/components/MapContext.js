@@ -257,23 +257,16 @@ export const MapProvider = ({ children }) => {
 
     const addAntline = (map, event) => {
 
-        const colourMap1 = {
-            1: '#996236',
-            2: '#FFA500',
-            3: '#035606',
-            4: '#E50000',
-            6: '#CC232A',
-            7: '#2B4593',
+        const colourMap = {
+            1: ['#996236','#F8B12C'],
+            2: ['#FFA500', '#000000'],
+            3: ['#035606', '#FFFFFF'],
+            4: ['#E50000', '#770088'],
+            5: ['#a9a5AA', '#FCFCFC'],
+            6: ['#CC232A', '#F5AC27'],
+            7: ['#2B4593', '#FEFEFE'],
+            8: ['#3B3B6D', '#B32134']
         };
-
-        const colourMap2 = {
-            1: '#F8B12C',
-            2: '#000000',
-            3: '#FFFFFF',
-            4: '#770088',
-            6: '#F5AC27',
-            7: '#FEFEFE'
-        }
 
         map.addSource('line', {
             type: 'geojson',
@@ -285,7 +278,7 @@ export const MapProvider = ({ children }) => {
                 source: 'line',
                 id: 'line-background',
                 paint: {
-                'line-color': colourMap1[event.properties.event_id],
+                'line-color': colourMap[event.properties.event_id][0],
                 'line-width': 6,
                 'line-opacity': 0.4
                 }
@@ -296,7 +289,7 @@ export const MapProvider = ({ children }) => {
                 source: 'line',
                 id: 'line-dashed',
                 paint: {
-                'line-color': colourMap2[event.properties.event_id],
+                'line-color': colourMap[event.properties.event_id][1],
                 'line-width': 6,
                 'line-dasharray': [0, 4, 3]
                 }
