@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controllers.meta import list_events, list_metrics
+from controllers.meta import list_events
 from controllers.prediction import prediction
 from controllers.baseline import baseline, baseline_event
 from controllers.base import home, login, logout, register, dashboard
