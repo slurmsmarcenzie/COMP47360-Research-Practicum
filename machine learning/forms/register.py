@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from models.user import User
 
+# A form that allows clients to register with the API to get their Access Key
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(min=6,max=20)], render_kw={"placeholder":"Username"})
     password = PasswordField(validators=[InputRequired(), Length(min=6,max=20)], render_kw={"placeholder":"Password"})
