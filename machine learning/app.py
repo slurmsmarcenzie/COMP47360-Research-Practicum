@@ -11,20 +11,21 @@ import os
 # Enables reading of .env files
 load_dotenv()
 
-# Initialize app and its features
+# Initialize app
 app = Flask(__name__)
-db.init_app(app)
-limiter.init_app(app)
-login_manager.init_app(app)
-bcrypt.init_app(app)
-csrf = CSRFProtect(app)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLDB")
 app.config["SECRET_KEY"] = os.getenv("SECRETKEY")
 app.config["RECAPTCHA_PUBLIC_KEY"] = os.getenv("RECAPTCHA_PUBLIC")
 app.config["RECAPTCHA_PRIVATE_KEY"] = os.getenv("RECAPTCHA_PRIVATE")
 # app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 # app.config["SESSION_COOKIE_HTTPONLY"] = True
+
+# Initialize features
+db.init_app(app)
+limiter.init_app(app)
+login_manager.init_app(app)
+bcrypt.init_app(app)
+csrf = CSRFProtect(app)
 
 # Register app blueprints/routes
 app.register_blueprint(info)
