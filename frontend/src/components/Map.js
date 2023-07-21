@@ -282,8 +282,7 @@ function Map() {
     console.log('this is the EID being passed in', Event_ID)
 
     // we are going to use date + ID as the argument
-    // fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
-    fetch((`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`))
+    fetch((`${BASE_API_URL}/prediction/${formattedDate}/${Event_ID}`))
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
