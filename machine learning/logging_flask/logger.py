@@ -1,7 +1,7 @@
 import logging
 
 ## GENERAL LOGGER
-# General Logger is called as neeced to log application events
+# General Logger is called as needed to log application events
 general_logger = logging.getLogger("general_logger")
 general_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("[%(levelname)s] %(asctime)s [%(filename)s : %(funcName)s] %(message)s")
