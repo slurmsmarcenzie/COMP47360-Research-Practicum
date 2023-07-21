@@ -38,7 +38,7 @@ app.get('*', (req, res, next) => {
 }, http_logger);
 
 
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 80
 //START SERVER
 app.listen(port, () => {
     console.log('server is listening on port', port)
