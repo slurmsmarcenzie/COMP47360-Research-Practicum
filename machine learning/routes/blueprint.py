@@ -21,6 +21,8 @@ limiter.limit("10/minute")(base)
 info.route("/info/events")(list_events)
 info.before_request(check_token)
 
+# PREDICT routes for model predictions and baseline
+# Note: These will likely seen be renamed and reformatted
 predict.route("/baseline/")(baseline)
 predict.route("/baseline/<string:date>/<string:event>")(baseline_event)
 predict.route("/predict/<string:date>/<string:event>")(prediction)

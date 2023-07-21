@@ -8,8 +8,10 @@ from logging_flask.logger import http_logger
 from dotenv import load_dotenv
 import os
 
+# Enables reading of .env files
 load_dotenv()
 
+# Initialize app and its features
 app = Flask(__name__)
 db.init_app(app)
 limiter.init_app(app)
@@ -24,6 +26,7 @@ app.config["RECAPTCHA_PRIVATE_KEY"] = os.getenv("RECAPTCHA_PRIVATE")
 # app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 # app.config["SESSION_COOKIE_HTTPONLY"] = True
 
+# Register app blueprints/routes
 app.register_blueprint(info)
 app.register_blueprint(predict)
 app.register_blueprint(base)
@@ -41,9 +44,10 @@ def set_headers(response):
 ## After Request decorator is used to log every http request/response in the app.
 @app.after_request
 def log_request_response(response):
-
+    # Log success:
     if response.status_code < 400:
         http_logger.info(" | {ip} | {method} '{path}' | {status}".format(ip=request.remote_addr, method=request.method, path=request.path, status=response.status_code))
+    # Log error:
     else:
         http_logger.error(" | {ip} | {method} '{path}' | {status}".format(ip=request.remote_addr, method=request.method, path=request.path, status=response.status_code))
     
