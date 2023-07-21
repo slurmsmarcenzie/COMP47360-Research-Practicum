@@ -1,9 +1,6 @@
 import pickle
 import pandas as pd
-
-col_names = ['DOLocationID', 'Hour', 'DayOfMonth', 'Month', 'Weekend', 'TimeOfDay_Afternoon', 'TimeOfDay_Evening', 'TimeOfDay_Morning', 'TimeOfDay_Night', 'DayOfWeek_0', 'DayOfWeek_1', 'DayOfWeek_2', 'DayOfWeek_3', 'DayOfWeek_4', 'DayOfWeek_5', 'DayOfWeek_6']
-
-location_ids = [236, 42, 166, 68, 163, 87, 152, 141, 229, 90, 113, 79, 140, 151, 107, 263, 43, 24, 233, 238, 237, 249, 186, 262, 74, 4, 45, 48, 142, 170, 137, 261, 246, 41, 239, 148, 243, 153, 231, 114, 211, 164, 144, 13, 161, 125, 50, 162, 234, 202, 224, 244, 158, 232, 88, 75, 127, 143, 116, 100, 209, 120, 230, 12, 194, 128, 105]
+from data import col_names, location_ids
 
 # Passes input to the chosen model
 # returns a list of location:busyness pairs
@@ -12,18 +9,22 @@ def general_prediction(date):
     data = []
     input_data = generate_model_input(date)
 
+    # Create a row of input for each individual location
+    # Create a dataframe from rows and pass to the model
     for loc in location_ids:
         input_data["DOLocationID"] = loc
         df = pd.DataFrame(input_data, index=[0])
         score = pickled_model.predict(df)
         data.append({"location_id":loc, "busyness_score":score[0]})
     
+    # Normalise the busyness scores so they are relative to eachother and in the range 0-1
     normalised_data = normalise_and_format(data) 
 
     return normalised_data
 
 # Parses the date to suit our models input
 # Returns a dictionary of features and their values
+# Note: in future the following may be achieved using numpy/pandas. For now, simplicity is better
 def generate_model_input(date):
     hour = date.hour
     dayOfMonth = date.day
@@ -77,7 +78,8 @@ def normalise_and_format(data):
         elif item["busyness_score"] > max:
             max = item["busyness_score"]
 
-    #Normalise and format:
+    # Normalise and format:
+    # busyness score is stringified to better suit JSON later
     for item in data:
         item["busyness_score"] = str((item["busyness_score"] - min) / (max - min))
 
