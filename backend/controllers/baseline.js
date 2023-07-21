@@ -7,7 +7,7 @@ const queryBaseline = (req, res, next) => {
     res.req.ip //sets the object
     generalLogger.info(`baseline requested`)
 
-    const uri = `http://127.0.0.1:7000/api/baseline/?key=${process.env.FLASK_API_KEY}` 
+    const uri = `${process.env.FLASK_API_URL}/baseline/?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {
@@ -47,7 +47,7 @@ const queryEventBaseline = (req, res, next) => {
   generalLogger.info(`baseline requested for: ${date}, of event ${eventID}`)
   generalLogger.info(`converted to ISOString: ${date}`);
 
-  const uri = `http://127.0.0.1:7000/api/baseline/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
+  const uri = `${process.env.FLASK_API_URL}/baseline/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
 
   axios.get(uri)
     .then(response => {

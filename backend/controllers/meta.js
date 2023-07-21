@@ -2,20 +2,22 @@ const axios = require("axios")
 const generalLogger = require("../logging/generalLogger")(module)
 require("dotenv").config();
 
+// Controller to fetch Events information from Flask API and dent to client
+// Validates and ensures correct format of response
+// Responds contains list of JSON Objects (id, location, name, size)
 const getEvents = (req, res, next) => {
     res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
-    //fetch events from ML API
-    const uri = `http://127.0.0.1:7000/api/info/events?key=${process.env.FLASK_API_KEY}`
+    const uri = `${process.env.FLASK_API_URL}/info/events?key=${process.env.FLASK_API_KEY}`
 
     axios.get(uri)
       .then(response => {
+          // Handle empty/null API result:
           if (response.data === null || response.data === undefined || response.data.length === 0){
             generalLogger.warn("warning, event list is empty")
-            res.status(200).json([]); //send empty JSON list if bad response received
-            next()
+            res.status(200).json([]);
           } 
           else {
-            //make sure response has correct format [id, location, name, size]:
+            //Ensure correct format of API result:
             const data = []
             for (item of response.data){
               if ("id" && "location" && "name"  && "size" in item){
@@ -25,11 +27,12 @@ const getEvents = (req, res, next) => {
                 generalLogger.warn("warning: event skipped (incorrect format)");
               }
             }
-            generalLogger.info("response is OK and contains data")
+            generalLogger.info("response is OK")
             res.status(200).json(data)
             next()
           }
       })
+      // If error, respond 500 and log error message
       .catch(error => {
           generalLogger.error(`error getting events: ${error}`)
           res.status(500).json({"error": error})
@@ -37,40 +40,4 @@ const getEvents = (req, res, next) => {
       });
 }
 
-const getMetrics = (req, res, next) => {
-    res.req.ip
-    //fetch metrics from ML API
-    const uri = `http://127.0.0.1:7000/api/info/metrics?key=${process.env.FLASK_API_KEY}`
-
-    axios.get(uri)
-      .then(response => {
-        if (response.data === null || response.data === undefined || response.data.length === 0){
-          generalLogger.warn("warning, metric list is empty")
-          res.status(200).json([]); //send empty JSON list if bad response received
-          next()
-        }
-        else {
-          //make sure response has correct format [id, name]:
-          const data = []
-            for (item of response.data){
-              if ("id" && "name" in item){
-                data.push(item);
-              }
-              else {
-                generalLogger.warn("warning: metric skipped (incorrect format)");
-              }
-            }
-            generalLogger.info("response is OK and contains data")
-            res.status(200).json(data)
-            next()
-        }
-      })
-      .catch(error => {
-        generalLogger.error(`error getting metrics: ${error}`)
-        res.status(500).json({"error": error})
-        next()
-      });
-
-}
-
-module.exports = {getEvents, getMetrics};
+module.exports = {getEvents};
