@@ -5,7 +5,7 @@ require("dotenv").config();
 const getEvents = (req, res, next) => {
     res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
     //fetch events from ML API
-    const uri = `http://127.0.0.1:7000/info/events?key=${process.env.FLASK_API_KEY}`
+    const uri = `http://127.0.0.1:7000/api/info/events?key=${process.env.FLASK_API_KEY}`
 
     axios.get(uri)
       .then(response => {
@@ -40,7 +40,7 @@ const getEvents = (req, res, next) => {
 const getMetrics = (req, res, next) => {
     res.req.ip
     //fetch metrics from ML API
-    const uri = `http://127.0.0.1:7000/info/metrics?key=${process.env.FLASK_API_KEY}`
+    const uri = `http://127.0.0.1:7000/api/info/metrics?key=${process.env.FLASK_API_KEY}`
 
     axios.get(uri)
       .then(response => {
