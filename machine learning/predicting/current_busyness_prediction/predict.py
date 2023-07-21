@@ -1,6 +1,6 @@
 import pickle
 import pandas as pd
-from data import col_names, location_ids
+from predicting.current_busyness_prediction.data import col_names, location_ids
 
 # Passes input to the chosen model
 # returns a list of location:busyness pairs
