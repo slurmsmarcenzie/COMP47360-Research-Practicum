@@ -1,6 +1,7 @@
 import logging
 
 ## GENERAL LOGGER
+# General Logger is called as neeced to log application events
 general_logger = logging.getLogger("general_logger")
 general_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("[%(levelname)s] %(asctime)s [%(filename)s : %(funcName)s] %(message)s")
@@ -18,7 +19,7 @@ general_logger.addHandler(file_handler_priority)
 
 
 ## HTTP LOGGER
-
+# Http Logger is called from app.py after every request to log http information
 http_logger = logging.getLogger("http_logger")
 http_logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter("[%(levelname)s] %(asctime)s %(message)s")
