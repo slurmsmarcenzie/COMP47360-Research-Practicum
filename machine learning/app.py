@@ -2,8 +2,8 @@ from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect
 from extensions.database import db
 from extensions.limiter import limiter
-from routes.blueprint import info, predict, base
-from controllers.base import login_manager, bcrypt
+from routes.blueprint import info, predict, portal
+from controllers.portal import login_manager, bcrypt
 from logging_flask.logger import http_logger
 from dotenv import load_dotenv
 import os
@@ -30,7 +30,7 @@ csrf = CSRFProtect(app)
 # Register app blueprints/routes
 app.register_blueprint(info)
 app.register_blueprint(predict)
-app.register_blueprint(base)
+app.register_blueprint(portal)
 
 @app.after_request
 def set_headers(response):
