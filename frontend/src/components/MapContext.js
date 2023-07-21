@@ -12,7 +12,7 @@ import antline from '../geodata/antline.geo.json'
 const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/app/v1';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8080/app/v1';
 let animationID = null;
 
 // Create a provider component
