@@ -22,14 +22,19 @@ app.disable('x-powered-by')
 // app.use(helmet.contentSecurityPolicy())
 
 // Serve React App Build:
-app.use(express.static(path.join(__dirname, "build")));
-app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
+// app.use(express.static(path.join(__dirname, "build")));
+// app.get("/", function(req, res) {res.sendFile(path.join(__dirname, "build", "index.html"))})
 
 //Routes:
 app.use("/app/v1/meta", meta, http_logger)
 app.use("/app/v1/prediction", prediction, http_logger)
 app.use("/app/v1/baseline", baseline, http_logger)
 // In future: potentially more routes for filtering/sorting results
+
+app.get('/', (req, res, next) => {
+  res.status(200).send("DEV mode. In production, REACT APP will be served here")
+  next()
+}, http_logger);
 
 // Handle bad routes
 app.get('*', (req, res, next) => {
