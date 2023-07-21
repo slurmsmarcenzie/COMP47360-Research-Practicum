@@ -11,7 +11,7 @@ const queryPrediction = (req, res, next) => {
     generalLogger.info(`prediction requested for: ${date}, of event ${eventID}`)
     generalLogger.info(`converted to ISOString: ${date}`);
 
-    const uri = `http://127.0.0.1:7000/predict/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
+    const uri = `${process.env.FLASK_API_URL}/prediction/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {

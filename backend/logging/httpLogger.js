@@ -2,11 +2,13 @@ const winston = require("winston");
 const {transports, format} = winston;
 
 //Format for logging http  request/respons
+// [level] 'datetime' | 'request IP' | 'request method' 'URL requested' | 'status code'
 const httpFormat = format.printf(({ level, timestamp, message}) => {
     return `[${level}] ${timestamp} | ${message.req.ip} | ${message.req.method} '${message.req.originalUrl}' | ${message.statusCode}`;
 });
 
-
+// A logger built with Winston to log http request and response info
+// Automatically creates http.log file in logging folder and transports new logs there
 const httpLogger = winston.createLogger({
     level: "debug",
     transports: [

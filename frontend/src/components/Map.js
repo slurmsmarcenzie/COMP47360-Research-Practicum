@@ -20,7 +20,7 @@ const SplitViewMap = lazy(() => import('./SplitViewMap'));
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-// mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 function Map() {
 
@@ -428,11 +428,9 @@ function Map() {
   useEffect(() => {
 
     const fetchScores = async () => {
-  
-      const formattedDate = new Date().toISOString().slice(0,10);
       
       try {
-        const response = await fetch(`${BASE_API_URL}/baseline/${formattedDate}`);
+        const response = await fetch(`${BASE_API_URL}/baseline/`);
         console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();

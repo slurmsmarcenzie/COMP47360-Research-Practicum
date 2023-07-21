@@ -1,8 +1,4 @@
 /env
 /__pycache__
-/controllers/__pycache__
-/extensions/__pycache__
-/models/__pycache__
-/routes/__pycache__
 /logging_flask/logs
 .env

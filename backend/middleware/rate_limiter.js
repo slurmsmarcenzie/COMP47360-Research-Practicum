@@ -1,8 +1,9 @@
 const rateLimit = require("express-rate-limit")
 
+// Middleware function to limit the amount of requests from a given IP
 const rateLimiter = rateLimit({
 	windowMs: 1 * 60 * 1000, // 1 min
-	max: 10, // Limit to 10 requests per minute
+	max: 30, // Limit to 30 requests per 1 min
 	standardHeaders: true,
 	legacyHeaders: false
 })
