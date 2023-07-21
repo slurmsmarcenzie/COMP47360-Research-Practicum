@@ -307,7 +307,7 @@ function Map() {
     const formattedDate = new Date().toISOString().slice(0,10);
   
     try {
-      const predictionResponse = await fetch(`${BASE_API_URL}/predict/${formattedDate}/${Event_ID}`);
+      const predictionResponse = await fetch(`${BASE_API_URL}/prediction/${formattedDate}/${Event_ID}`);
       if (!predictionResponse.ok) {
         throw new Error('Network response was not ok');
       }
