@@ -302,31 +302,32 @@ function Map() {
     }
   };
 
-  // Fetch Request for Busyness Prediction 
-  const getPredictionBusyness = async (Event_ID) => {
-    const formattedDate = new Date().toISOString().slice(0,10);
+  // Fetch Request for Historic Busyness
+  const getHistoricBusyness = async (Event_ID) => {
   
     try {
-      const predictionResponse = await fetch(`${BASE_API_URL}/prediction/${formattedDate}/${Event_ID}`);
-      if (!predictionResponse.ok) {
+      const impactResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/impact`);
+      if (!impactResponse.ok) {
         throw new Error('Network response was not ok');
       }
-      const predictionData = await predictionResponse.json();
-      setScores(predictionData);
+      const impactData = await impactResponse.json();
+      console.log("IMPACT DATA", impactData)
+      setScores(impactData);
     } catch (error) {
-      console.error('Issue with fetch request for prediction:', error);
+      console.error('Issue with fetch request for event impact:', error);
       setError(error);
     }
   
     try {
-      const baselineResponse = await fetch(`${BASE_API_URL}/baseline/${formattedDate}/${Event_ID}`);
+      const baselineResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/baseline`);
       if (!baselineResponse.ok) {
         throw new Error('Network response was not ok');
       }
       const baselineData = await baselineResponse.json();
+      console.log("BASELINE DATA", baselineData)
       setEventBaselineScores(baselineData);
     } catch (error) {
-      console.error('Issue with fetch request for baseline:', error);
+      console.error('Issue with fetch request for event baseline:', error);
       setError(error);
     }
   };
@@ -345,7 +346,7 @@ function Map() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
     setTimeout(() => {
-      getPredictionBusyness(Event_ID);
+      getHistoricBusyness(Event_ID);
     }, 900)
   
   }
@@ -430,7 +431,7 @@ function Map() {
     const fetchScores = async () => {
       
       try {
-        const response = await fetch(`${BASE_API_URL}/baseline/`);
+        const response = await fetch(`${BASE_API_URL}/prediction/current`);
         console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();

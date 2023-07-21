@@ -2,8 +2,8 @@ import json
 from flask import abort
 from logging_flask.logger import general_logger
 
-def event_impact(event):
-    general_logger.info("event impact quried for event: {event}".format(event=event))
+def event_impact(eventID):
+    general_logger.info("event impact quried for event: {event}".format(event=eventID))
 
     try:
         file = open("static/impact_events.json")
@@ -14,7 +14,7 @@ def event_impact(event):
     general_logger.info("Reading file impact_events.json")
 
     #Extract relevant event from impact_events:
-    eventID = int(event)
+    eventID = int(eventID)
 
     try:
         original = json.load(file)
@@ -31,8 +31,8 @@ def event_impact(event):
 
     return outputjson, 200
 
-def event_baseline(event):
-    general_logger.info("event baseline quried for event: {event}".format(devent=event))
+def event_baseline(eventID):
+    general_logger.info("event baseline quried for event: {event}".format(event=eventID))
 
     # Handle file read error (later this will be handle model failure):
     try:
@@ -44,14 +44,14 @@ def event_baseline(event):
     general_logger.info("Reading file baseline_events.json")
 
     #Extract relevant event from baseline_events:
-    eventID = int(event)
+    eventID = int(eventID)
 
     try:
         original = json.load(file)
         extracted = []
 
         for item in original:
-            if item["Event_ID"] == eventID and item["time"] == 18:
+            if item["Event_ID"] == eventID and item["time"] == 12:
                 extracted.append(item)
         
         outputjson = json.dumps(extracted)
