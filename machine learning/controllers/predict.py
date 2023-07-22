@@ -9,7 +9,7 @@ from predicting.current_busyness_prediction.predict import general_prediction
 def current():
    
     datetimeNY = datetime.now(tz=ZoneInfo("America/New_York"))
-    general_logger.info("baseline quried for datetime: {date}".format(date=datetimeNY))
+    general_logger.info("prediction quried for datetime: {date}".format(date=datetimeNY))
 
     #TODO - Implement try catch later
     data = general_prediction(datetimeNY)

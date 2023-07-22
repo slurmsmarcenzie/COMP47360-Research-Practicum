@@ -311,7 +311,6 @@ function Map() {
         throw new Error('Network response was not ok');
       }
       const impactData = await impactResponse.json();
-      console.log("IMPACT DATA", impactData)
       setScores(impactData);
     } catch (error) {
       console.error('Issue with fetch request for event impact:', error);
@@ -324,7 +323,6 @@ function Map() {
         throw new Error('Network response was not ok');
       }
       const baselineData = await baselineResponse.json();
-      console.log("BASELINE DATA", baselineData)
       setEventBaselineScores(baselineData);
     } catch (error) {
       console.error('Issue with fetch request for event baseline:', error);
@@ -395,15 +393,12 @@ function Map() {
   const busynessHashMap = useMemo(() => {
 
     if (!scores) return {};  
-  
     // 'reduce' is a function that transforms an array into a single value.
     // In this case, it is transforming the 'scores' array into a single object
     return scores.reduce((map, item) => {
-      
       // For each 'item' in 'scores', add a property to 'map' with a key of
       // 'item.location_id' and a value of 'item.busyness_score'
       map[item.location_id] = item.busyness_score;
-      
       // Return the updated 'map' to be used in the next iteration of 'reduce'
       return map;
     }, {});  
@@ -414,13 +409,10 @@ function Map() {
 
   // same implementation as above
   const eventBaselineHashMap = useMemo(() => {
-
     if (!eventBaselineScores) return {};  
-
     return eventBaselineScores.reduce((map, item) => {
       
       map[item.location_id] = item.busyness_score;
-      
       return map;
     }, {});  
     
