@@ -53,6 +53,7 @@ def event_baseline(eventID):
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
+        
     except Exception as exc:
         general_logger.error("There was an error filtering events baseline {error}".format(error=exc))
         raise abort(500, "Unable to filter 'baseline_events.json'")
