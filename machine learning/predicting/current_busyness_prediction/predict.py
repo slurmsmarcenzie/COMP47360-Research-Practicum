@@ -1,30 +1,48 @@
 import pickle
 import pandas as pd
+from flask import abort
+from logging_flask.logger import general_logger
 from predicting.current_busyness_prediction.data import col_names, location_ids
+from custom_exceptions.model_error import ModelError
 
 # Passes input to the chosen model
 # returns a list of location:busyness pairs
 def general_prediction(date):
-    pickled_model = pickle.load(open('predicting/models/xgb_non_normalised_merged_model.pkl', 'rb'))
-    data = []
-    input_data = generate_model_input(date)
+    try:
+        pickled_model = pickle.load(open('predicting/models/xgb_non_normalised_merged_model.pkl', 'rb'))
+        general_logger.info("Successfully loaded pickled model")
+    except pickle.PickleError as err:
+        raise ModelError("Error loading pickled model: {err}".format(err=err))
+    
+    try:
+        data = []
+        input_data = generate_model_input(date)
+        general_logger.info("Successfully generated model input")
+    except Exception as exc:
+        raise ModelError("Problem generating model input: {exc}".format(exc=exc))
 
     # Create a row of input for each individual location
     # Create a dataframe from rows and pass to the model
-    for loc in location_ids:
-        input_data["DOLocationID"] = loc
-        df = pd.DataFrame(input_data, index=[0])
-        score = pickled_model.predict(df)
-        data.append({"location_id":loc, "busyness_score":score[0]})
+    try:
+        for loc in location_ids:
+            input_data["DOLocationID"] = loc
+            df = pd.DataFrame(input_data, index=[0])
+            score = pickled_model.predict(df)
+            data.append({"location_id":loc, "busyness_score":score[0]})
+    except Exception as exc:
+        raise ModelError("Could not generate model results: {exc}".format(exc=exc))
     
     # Normalise the busyness scores so they are relative to eachother and in the range 0-1
-    normalised_data = normalise_and_format(data) 
-
+    try:
+        normalised_data = normalise_and_format(data) 
+        general_logger.info("Normalising model results")
+    except Exception as exc:
+        raise ModelError("Problem normalising model results: {exc}".format(exc=exc))
+    
     return normalised_data
 
 # Parses the date to suit our models input
 # Returns a dictionary of features and their values
-# Note: in future the following may be achieved using numpy/pandas. For now, simplicity is better
 def generate_model_input(date):
     hour = date.hour
     dayOfMonth = date.day

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const {queryPrediction} = require("../controllers/prediction");
+const {current} = require("../controllers/prediction");
 
-// Router for 'app/v1/prediction/$date/$event'
-router.route("/:date/:event").get(queryPrediction);
+// Router for 'app/v1/prediction/current'
+router.route("/current").get(current);
 
 module.exports = router;

@@ -2,7 +2,7 @@ from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect
 from extensions.database import db
 from extensions.limiter import limiter
-from routes.blueprint import info, predict, portal
+from routes.blueprint import info, prediction, historic, portal
 from controllers.portal import login_manager, bcrypt
 from logging_flask.logger import http_logger
 from dotenv import load_dotenv
@@ -29,7 +29,8 @@ csrf = CSRFProtect(app)
 
 # Register app blueprints/routes
 app.register_blueprint(info)
-app.register_blueprint(predict)
+app.register_blueprint(prediction)
+app.register_blueprint(historic)
 app.register_blueprint(portal)
 
 @app.after_request

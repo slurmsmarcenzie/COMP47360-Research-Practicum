@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const meta = require("./routes/meta")
 const prediction = require("./routes/prediction")
-const baseline = require("./routes/baseline")
+const historic = require("./routes/historic")
 const http_logger = require("./middleware/http_logger");
 const rateLimiter = require("./middleware/rate_limiter")
 const helmet = require('helmet')
@@ -28,7 +28,7 @@ app.disable('x-powered-by')
 //Routes:
 app.use("/app/v1/meta", meta, http_logger)
 app.use("/app/v1/prediction", prediction, http_logger)
-app.use("/app/v1/baseline", baseline, http_logger)
+app.use("/app/v1/historic", historic, http_logger)
 // In future: potentially more routes for filtering/sorting results
 
 app.get('/', (req, res, next) => {
