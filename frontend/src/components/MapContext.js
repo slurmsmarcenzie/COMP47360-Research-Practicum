@@ -33,6 +33,7 @@ export const MapProvider = ({ children }) => {
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
     const [isResetShowing, setIsResetShowing] = useState(false)
     const [lastMarkers, setLastMarkers] = useState([]);
+    const [isNavVisible, setIsNavVisible] = useState(false);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -211,7 +212,7 @@ export const MapProvider = ({ children }) => {
     
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
         
-        };
+    };
     
     
     const removeAllMarkers = () => {
@@ -410,6 +411,7 @@ export const MapProvider = ({ children }) => {
         mapStyle, setMapStyle,
         isResetShowing, setIsResetShowing,
         showMatchingEvent, setShowMatchingEvent,
+        isNavVisible, setIsNavVisible,
       
         neighbourhoods,
         prunedEvents,

@@ -12,8 +12,8 @@ body {
   border-radius: 2px;
 }
 
-
 .floating-nav {
+  margin-top: 10px; /* Adjust as needed */
   gap: 12px;
   position: absolute;
   z-index: 1;
@@ -272,6 +272,7 @@ body {
 
 .tick-label  {
   font-size: 12px;
+  color: #D3D3D3;
   font-weight: 400;
   margin-top: 4%;
   margin-bottom: 0px;
@@ -600,4 +601,171 @@ input:checked + .slider:before {
   text-align: left;
   gap: 24px;
   margin-bottom: 12px;
+}
+
+
+/* mobile specific css for navbar */
+@media screen and (max-width: 540px) {
+  
+  .navbar {
+    top: 12px;
+    left: 6px;
+    right: 6px;
+    height: 36px;
+  }
+
+  .navbar-links {
+    padding: 0px;
+    margin: 6px;
+    font-size: medium;
+  }
+
+  .navbar-links button {
+    font-size: 12px;
+  }
+
+  .navbar-links-wrapper {
+    margin: 20px;
+    padding: 5px;
+  }
+
+  .navbar img {
+    max-height: 36px;
+    max-width: 100px;
+  }
+
+  .button-group{
+    gap: 8px;
+  }
+
+  .navbar-toggle-dark-mode-button {
+    width: 36px;
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    background-color: rgba(137, 43, 226, 0);
+    height: 100%;
+    cursor: pointer;
+    border: none;
+  }
+}
+
+/* mobile specific css for legend */
+
+@media screen and (max-width: 540px) {
+
+  .floating-map-legend-container {
+    min-width: 24px;
+    max-width: 24px; /* Change to desired width for mobile */
+    top: 64px; /* Adjust to desired distance from top for mobile */
+    right: 10px; /* Adjust to desired distance from right for mobile */
+    height: 120px;
+    padding: 6px
+  };
+
+  .colour-scale-legend{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  .gradient  {
+    width: 12px;
+    height: 100%;
+    border-radius: 2px;
+  }
+  
+}
+
+/* mobile specific css for floating navbar */
+
+@media screen and (max-width: 540px) {
+
+  .floating-nav {
+    margin-top: 10px; /* Adjust as needed */
+    position: fixed;
+    bottom: 0px;
+    min-width: 96.5%;
+    margin: auto;
+    padding: 12px 6px;
+    border-radius: 5px;
+    height: 180px;
+  }
+
+  .floating-nav-header-text{
+    text-align: left;
+    font-size: 3vw;
+    margin: 0;
+  }
+}
+
+/* mobile specific css for native mapbox css */
+
+@media screen and (max-width: 540px) {
+
+  .mapboxgl-ctrl-bottom-right{
+    display: none;
+    }
+
+  .mapboxgl-ctrl-bottom-left{
+    display: none;
+  }
+
+}
+
+.floating-nav-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 12px; /* adjust this value to change the spacing between tiles */
+}
+
+.floating-nav-tile {
+  width: 36px;
+  height: 36px;
+  background-color: #12131640;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  color: white;
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.floating-nav-tile:hover {
+  background-color: #121316;
+}
+
+.floating-nav-tile:active {
+  background-color: #0a0a0a;
+}
+
+.floating-search-icon-container {
+  z-index: 999;
+  min-width: 24px;
+  max-width: 24px; /* Change to desired width for mobile */
+  margin-top: 206px; /* Adjust to desired distance from top for mobile */
+  right: 16px; /* Adjust to desired distance from right for mobile */
+  height: 36px;
+  padding: 6px;
+  position: absolute;   
+}
+
+.floating-search-icon-container-button {
+  width: 36px;
+  color: white;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(137, 43, 226, 0.6);
+  height: 100%;
+  cursor: pointer;
+  border: none;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border-radius: 5px;
 }
