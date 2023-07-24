@@ -1,7 +1,7 @@
 from flask import Blueprint
 from controllers.meta import list_events
-from controllers.prediction import prediction
-from controllers.baseline import baseline, baseline_event
+from controllers.predict import current
+from controllers.historic import event_baseline, event_impact
 from controllers.portal import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
@@ -10,8 +10,11 @@ from extensions.check_token import check_token
 info = Blueprint("info", __name__)
 limiter.limit("25/minute")(info)
 
-predict = Blueprint("predict", __name__)
-limiter.limit("10/minute")(predict)
+prediction = Blueprint("prediction", __name__)
+limiter.limit("10/minute")(prediction)
+
+historic = Blueprint("historic", __name__)
+limiter.limit("10/minute")(historic)
 
 portal = Blueprint("portal", __name__)
 limiter.limit("10/minute")(portal)
@@ -21,14 +24,16 @@ limiter.limit("10/minute")(portal)
 info.route("/api/info/events")(list_events)
 info.before_request(check_token) # This checks if key is valid before allowing a success response
 
-# PREDICT routes for model predictions and baseline
-# Note: These will likely seen be renamed and reformatted
-predict.route("/api/baseline/")(baseline)
-predict.route("/api/baseline/<string:date>/<string:event>")(baseline_event) # TODO change later
-predict.route("/api/prediction/<string:date>/<string:event>")(prediction) # TODO change later
-predict.before_request(check_token)
+#PREDICT route for model predictions
+prediction.route("/api/prediction/current")(current)
+prediction.before_request(check_token)
 
-# BASE routes for clients to login and create/view their API key
+#HISTORIC route for baselines and impact
+historic.route("/api/historic/<string:eventID>/baseline")(event_baseline)
+historic.route("/api/historic/<string:eventID>/impact")(event_impact)
+historic.before_request(check_token)
+
+# PORTAL routes for clients to login and create/view their API key
 portal.route("/portal")(home)
 portal.route("/portal/login", methods=("GET", "POST"))(login)
 portal.route("/portal/logout")(logout)

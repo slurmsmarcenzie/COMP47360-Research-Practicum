@@ -17,7 +17,7 @@ const getEvents = (req, res, next) => {
             res.status(200).json([]);
           } 
           else {
-            //Ensure correct format of API result:
+            // Ensure correct format of API result:
             const data = []
             for (item of response.data){
               if ("id" && "location" && "name"  && "size" in item){
