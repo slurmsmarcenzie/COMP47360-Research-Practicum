@@ -487,7 +487,7 @@ function MobileMap() {
         initialiseMouseMapEvents(map.current);
         setTimeout(() => {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 1200);
+        }, 900);
       }
   
       if (!map.current) {
@@ -507,23 +507,24 @@ function MobileMap() {
     }
   }, [scores]); // This effect runs when scores is fetched
     
+
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
-
     if (map.current) {
       // Change the style
       map.current.setStyle(mapStyle);
 
-      // Re-initialize map on style load
+      // Only fly to the location and update colours on style load
       map.current.once('style.load', () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+        
         renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
-        renderEvents(map.current);
-        initialiseMouseMapEvents(map.current);
+
         setTimeout(() => {
+          
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 1200);
+        }, 900);
       });
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
