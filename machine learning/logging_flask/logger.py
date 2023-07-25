@@ -1,5 +1,10 @@
 import logging
 
+## Create log files
+http_file = open('/logs/http.log', 'a')
+general_file = open('/logs/general.log', 'a')
+priority_file = open('/logs/priority.log', 'a')
+
 ## GENERAL LOGGER
 # General Logger is called as needed to log application events
 general_logger = logging.getLogger("general_logger")
