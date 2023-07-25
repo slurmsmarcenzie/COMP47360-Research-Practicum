@@ -19,6 +19,7 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
       reviewEvent(event);
       setIsNavVisible(!isNavVisible);
       setIsThereALiveInfoBox(true);
+      setIsMobileTileOpen(false);
     }}
     >
     {event.Event_ID}
@@ -62,10 +63,9 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
 
     const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
-    const {isMobileTileOpen} =useMapContext()
+    const {isMobileTileOpen, setIsMobileTileOpen} =useMapContext()
 
     return (
-        
         <div className={`floating-nav ${isMobileTileOpen ? "open" : ""}`}>
           <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>
           <div className='floating-nav-tiles'>
