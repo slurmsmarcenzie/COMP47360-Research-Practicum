@@ -1,4 +1,0 @@
-//Important. If you want to use these tests, install the rest extension (vscode)
-
-###
-http://localhost:7000/api/historic/1/impact?key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2ZWxvcGVyIn0.IF_FDOmKtZ_HAJnJj-ZN05GSTzqlrUgVg_I9M1Vfh24

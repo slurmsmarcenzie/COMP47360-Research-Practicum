@@ -1,8 +1,7 @@
 import pickle
 import pandas as pd
-from flask import abort
 from logging_flask.logger import general_logger
-from predicting.current_busyness_prediction.data import col_names, location_ids
+from predicting.data import col_names, location_ids
 from custom_exceptions.model_error import ModelError
 
 # Passes input to the chosen model

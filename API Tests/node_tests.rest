@@ -1,7 +1,0 @@
-//Important. If you want to use these tests, install the rest extension (vscode)
-
-###
-http://localhost:8000
-
-###
-http://localhost:8000/app/v1/historic/1/impact
