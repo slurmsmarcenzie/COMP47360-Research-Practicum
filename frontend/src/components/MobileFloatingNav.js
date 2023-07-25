@@ -7,7 +7,7 @@ import { useMapContext } from './MapContext';
 
 function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
 
-  const {isNavVisible, setIsNavVisible} = useMapContext();
+  const {isNavVisible, setIsNavVisible, setIsThereALiveInfoBox} = useMapContext();
 
   const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
 
@@ -15,8 +15,12 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
   <div 
     key={index}
     className="floating-nav-tile"
-    onClick={() => reviewEvent(event)} // pass the event directly to your reviewEvent function
-  >
+    onClick={() => {
+      reviewEvent(event);
+      setIsNavVisible(!isNavVisible);
+      setIsThereALiveInfoBox(true);
+    }}
+    >
     {event.Event_ID}
   </div>
 );

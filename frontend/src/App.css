@@ -769,3 +769,57 @@ input:checked + .slider:before {
   background-color: rgba(18, 19, 22, 0.3);
   border-radius: 5px;
 }
+
+.floating-eye-icon-container{
+  z-index: 999;
+  min-width: 24px;
+  max-width: 24px; /* Change to desired width for mobile */
+  margin-top: 260px; /* Adjust to desired distance from top for mobile */
+  right: 16px; /* Adjust to desired distance from right for mobile */
+  height: 36px;
+  padding: 6px;
+  position: absolute;   
+}
+
+@media screen and (max-width: 540px) {
+
+  .floating-info-box {
+    position: absolute;
+    z-index: 1;
+    min-width: 240px;
+    max-width: 240px;
+    margin-top: 64px;
+    left: 0;
+    margin-left: 12px;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(18, 19, 22, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.125);
+    color: white;
+    padding: 24px 18px;
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    
+    /* Initial position off-screen */
+    transform: translateX(-100%);
+    
+    /* Transition for smooth animation */
+    transition: transform 0.3s ease-out;
+  }
+
+  .floating-info-box.open {
+    /* Slide in */
+    transform: translateX(0);
+  }
+
+  .floating-info-box-back-button{
+    width: auto;
+    align-content: flex-start;
+    padding: 0;
+    margin-right: 24px;
+    height: 24px;
+  }
+  
+}

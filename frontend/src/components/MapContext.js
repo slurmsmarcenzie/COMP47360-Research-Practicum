@@ -34,6 +34,8 @@ export const MapProvider = ({ children }) => {
     const [isResetShowing, setIsResetShowing] = useState(false)
     const [lastMarkers, setLastMarkers] = useState([]);
     const [isNavVisible, setIsNavVisible] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const [isThereALiveInfoBox, setIsThereALiveInfoBox] = useState(false);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -422,6 +424,8 @@ export const MapProvider = ({ children }) => {
         isResetShowing, setIsResetShowing,
         showMatchingEvent, setShowMatchingEvent,
         isNavVisible, setIsNavVisible,
+        isDrawerOpen, setIsDrawerOpen,
+        isThereALiveInfoBox, setIsThereALiveInfoBox,
       
         neighbourhoods,
         prunedEvents,

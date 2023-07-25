@@ -11,9 +11,10 @@ import { useMapContext } from './MapContext';
 // Components
 import MobileFloatingNav from './MobileFloatingNav';
 import MobileNavbar from './MobileNavbar';
-import FloatingInfoBox from './FloatingInfoBox';
+import MobileFloatingInfoBox from './MobileFloatingInfoBox';
 import MobileMapLegend from './MobileMapLegend';
 import MobileSearchIcon from './MobileSearchIcon';
+import MobileShowInfoBoxIcon from './MobileShowInfoBoxIcon';
 
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
@@ -28,7 +29,7 @@ function MobileMap() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName, isThereALiveInfoBox, setIsThereALiveInfoBox} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
@@ -299,6 +300,7 @@ function MobileMap() {
 
       setZone(zone);
       setIsResetShowing(true)
+      setIsThereALiveInfoBox(true);
     }
   };
 
@@ -551,6 +553,8 @@ function MobileMap() {
 
           <MobileSearchIcon />
 
+          <MobileShowInfoBoxIcon />
+
           <MobileFloatingNav 
             map={map}
             disableColours = {disableColours}
@@ -559,7 +563,7 @@ function MobileMap() {
             enableColours={enableColours}
             />
 
-          <FloatingInfoBox
+          <MobileFloatingInfoBox
             map={map}
             isNeighbourhoodClickedRef={isNeighbourhoodClickedRef}
             updateLayerColours={updateLayerColours}

@@ -507,7 +507,6 @@ function Map() {
     }
   }, [scores]); // This effect runs when scores is fetched
     
-
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
     if (map.current) {

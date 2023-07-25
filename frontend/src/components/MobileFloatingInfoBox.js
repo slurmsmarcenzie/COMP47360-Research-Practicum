@@ -7,10 +7,11 @@ import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { useMap } from 'react-map-gl';
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
+function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
-  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
+  const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline, setIsThereALiveInfoBox} = useMapContext();
 
   const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
 
@@ -26,6 +27,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
+    setIsThereALiveInfoBox(false)
     setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
@@ -83,27 +85,24 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   function renderHeader() {
     return (
-      <button className='floating-info-box-back-button' onClick={() => {
-        removeAntline(map.current)
-        resetMap(map);
-      }}>
-        <FontAwesomeIcon icon={faArrowLeft} /> Go Back
-      </button>
-    );
-  }
-  
-  function renderZoneInfo() {
-    return (
-      <h1 className='floating-info-box-zone-header'>
-        {showChartData ? eventName : zone}
-      </h1>
+      <div style={{display: 'flex', alignItems: 'left'}}>
+        <button className='floating-info-box-back-button' onClick={() => {
+          removeAntline(map.current)
+          resetMap(map);
+        }}>
+          <FontAwesomeIcon icon={faArrowLeft} />
+        </button>
+        <h2 className='floating-info-box-zone-header'>
+            {showChartData ? eventName : zone}
+        </h2>
+      </div>
     );
   }
   
   function renderChartOrAnalysis() {
   
     if (!showChartData) {
-      return <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>;
+      return <h4 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
     }
   
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
@@ -111,7 +110,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   
   
   function renderInfoBoxContent() {
-
     if (!showInfoBox) {
       return null;
     }
@@ -136,17 +134,15 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   }
   
   function renderNeighborhoodMessage() {
-
     return showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>;
- 
   }
   
-  return (
+  const {isDrawerOpen} = useMapContext();
 
+  return (
     (showInfoBox || showNeighborhoodInfoBox) && (
-      <div className='floating-info-box'>
+      <div className={`floating-info-box ${isDrawerOpen ? "open" : ""}`}>
         {renderHeader()}
-        {renderZoneInfo()}
         {renderChartOrAnalysis()}
         {renderInfoBoxContent()}
         {renderNeighborhoodMessage()}
@@ -155,4 +151,4 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   );
 }
 
-export default FloatingInfoBox
+export default MobileFloatingInfoBox;
