@@ -4,6 +4,8 @@ import afterParty from '../images/after-party-logo-white.png';
 import afterPartyHover from '../images/after-party-logo-violet.png';
 import Modal from './Modal';
 import { useMapContext } from './MapContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
 export default function Navbar() {
 
@@ -52,7 +54,7 @@ export default function Navbar() {
               ? 'mapbox://styles/mapbox/light-v11' 
               : 'mapbox://styles/mapbox/dark-v11');
           }}>
-          {mapStyle === 'mapbox://styles/mapbox/dark-v11' ? 'Light Mode 🌞' : 'Dark Mode 🌙'}
+          {mapStyle === 'mapbox://styles/mapbox/dark-v11' ? <FontAwesomeIcon icon={faSun} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faMoon} style={{color:'#D3D3D3'}}/>}
         </button>
         </div>
       </div>

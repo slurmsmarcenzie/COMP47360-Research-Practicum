@@ -14,7 +14,7 @@ export default function MobileSearchIcon() {
                 onClick={() => {
                     setIsNavVisible(!isNavVisible);
                 }}>
-                <FontAwesomeIcon icon={faSearch} />
+                <FontAwesomeIcon icon={faSearch} style={{color:'#D3D3D3'}}/>
             </button>   
         </div>
     );

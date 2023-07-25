@@ -343,9 +343,7 @@ function MobileMap() {
   
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
-    setTimeout(() => {
-      getHistoricBusyness(Event_ID);
-    }, 900)
+    getHistoricBusyness(Event_ID);
   
   }
 
@@ -369,6 +367,24 @@ function MobileMap() {
 
   };
   
+  // Define an effect that will run every time 'scores' or 'eventBaselineScores' changes
+  useEffect(() => {
+    // If 'scores' and 'eventBaselineScores' have been fetched
+    if (scores && eventBaselineScores) {
+      // Start a timeout that will delay the execution of the next function
+      const timeoutId = setTimeout(() => {
+        // After a delay of 2000 ms, update the colors of the layers on the map
+        updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+      }, 900); // Delay of 2000 ms
+
+      // Return a cleanup function that will run when the component unmounts, or before this effect runs again
+      return () => {
+        // If the component unmounts before the timeout finishes, cancel the timeout to prevent a potential memory leak
+        clearTimeout(timeoutId);
+      }
+    }
+  }, [scores, eventBaselineScores]); // Dependencies of this effect: 'scores' and 'eventBaselineScores'
+
   const calculateHashMapDifference = () => {
 
     if (!busynessHashMap || !originalBusynessHashMap) {
@@ -405,7 +421,6 @@ function MobileMap() {
     
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
-
 
   // same implementation as above
   const eventBaselineHashMap = useMemo(() => {
@@ -472,7 +487,7 @@ function MobileMap() {
         initialiseMouseMapEvents(map.current);
         setTimeout(() => {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 900);
+        }, 1200);
       }
   
       if (!map.current) {
@@ -490,10 +505,11 @@ function MobileMap() {
 
       } 
     }
-  }, [scores, mapStyle]); // This effect runs when scores is fetched
+  }, [scores]); // This effect runs when scores is fetched
     
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
+
     if (map.current) {
       // Change the style
       map.current.setStyle(mapStyle);
@@ -507,42 +523,10 @@ function MobileMap() {
         initialiseMouseMapEvents(map.current);
         setTimeout(() => {
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 800);
+        }, 1200);
       });
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
-
-  // Define an effect that runs when the 'scores' prop changes
-  useEffect(() => {
-
-    // If the 'current' property of 'map' is defined (i.e., the map instance exists)
-    if (map.current) {
-      
-      // If the map's style is already loaded
-      if (map.current.isStyleLoaded()) {
-        
-        // Update the layer colours on the map
-        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-      } else {
-        // If the map's style is not yet loaded, set up an event listener to
-        // update the layer colours once the style is loaded
-        map.current.on('style.load', updateLayerColoursAfterLoad);
-      }
-    }
-  
-    // Define a cleanup function that will run when the component unmounts, or
-    // before this effect runs again
-    return () => {
-      
-      // If the 'current' property of 'map' is defined
-      if (map.current) {
-        
-        // Remove the event listener for the 'style.load' event to avoid
-        // potential memory leaks
-        map.current.off('style.load', updateLayerColoursAfterLoad);
-      }
-    }
-  }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
 
   return (
 

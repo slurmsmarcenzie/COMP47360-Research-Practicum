@@ -239,29 +239,39 @@ export const MapProvider = ({ children }) => {
     
     };
 
-    // update the colours on the map
+    // Function to update the color of each layer in a map, based on a 'busyness' score
     const updateLayerColours = (map, isOriginalHashMap, originalBusynessHashMap, busynessHashMap) => {
   
-        if (!map|| !busynessHashMap || !neighbourhoods) return; // Added a check for busynessMap
-    
-        // Get the current map's style
+        // If the map, busynessHashMap, or neighbourhoods are not defined, end the function
+        if (!map|| !busynessHashMap || !neighbourhoods) return; 
+
+        // Get the current style object from the map
         const style = map.getStyle();
       
+        // Iterate over each neighbourhood in the 'neighbourhoods' array
         neighbourhoods.features.forEach(neighbourhood => {
 
-            // Check if the layer exists in the style before trying to update it
+            // Check if a layer with the current neighbourhood's id exists in the map's style
             if (style.layers.some(layer => layer.id === neighbourhood.id)) {
+
+                // Based on the 'isOriginalHashMap' flag, select the appropriate 'busyness' score
                 const score = isOriginalHashMap ? originalBusynessHashMap[neighbourhood.id] : busynessHashMap[neighbourhood.id];
+
+                // Assign this score to the 'busyness_score' property of the neighbourhood
                 neighbourhood.busyness_score = score;
-                if (score !== undefined) { // Check if the score is defined before using it
+
+                // If the score is defined, use it to calculate a new color and set the 'fill-color' property of the neighbourhood's layer
+                if (score !== undefined) {
                     const newColour = colourScale(score);
                     map.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
                 }
             } else {
+                // If a layer with the current neighbourhood's id does not exist in the map's style, log a warning to the console
                 console.warn(`Layer with ID ${neighbourhood.id} doesn't exist`);
             }
         });
     };
+
 
     const addAntline = (map, event) => {
 

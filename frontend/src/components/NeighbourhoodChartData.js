@@ -181,7 +181,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
-      };
+    };
 
       useEffect(() => {
         handleToggle();

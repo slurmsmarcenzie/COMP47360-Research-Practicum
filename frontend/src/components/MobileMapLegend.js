@@ -1,4 +1,4 @@
-const MobileMapLegend = ({ colours, hoveredZoneScore}) => {
+const MobileMapLegend = ({ colours }) => {
 
     const gradient = colours.join(', ');
 
