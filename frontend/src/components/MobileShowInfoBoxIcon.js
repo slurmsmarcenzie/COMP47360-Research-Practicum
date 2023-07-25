@@ -20,7 +20,7 @@ export default function MobileShowInfoBoxIcon() {
             <div className='floating-eye-icon-container'>
                 <button className='floating-search-icon-container-button'
                     onClick={() => {
-                        setShowInfoBox(!showInfoBox);
+                        // setShowInfoBox(!showInfoBox);
                         handleToggle();
                     }}>
                     {isDrawerOpen ? <FontAwesomeIcon icon={faEye} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faEyeSlash} style={{color:'#D3D3D3'}}/>}

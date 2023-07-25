@@ -29,7 +29,7 @@ function MobileMap() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName, isThereALiveInfoBox, setIsThereALiveInfoBox} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName, isThereALiveInfoBox, setIsThereALiveInfoBox, setIsDrawerOpen} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
@@ -346,6 +346,8 @@ function MobileMap() {
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
 
     getHistoricBusyness(Event_ID);
+
+    setIsDrawerOpen(false);
   
   }
 
