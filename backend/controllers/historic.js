@@ -22,7 +22,7 @@ const eventImpact = (req, res, next) => {
         // Ensure correct format of API result:
         const data = []
           for (item of response.data){
-            if ("busyness_score" && "location_id" in item){
+            if ("busyness_score" && "location_id" && "time" in item){
               data.push(item);
             }
             else {
