@@ -842,7 +842,7 @@ input:checked + .slider:before {
   width: 392px;
   height: 48px;
   position: fixed;
-  z-index: 100;
+  z-index: 1;
   bottom: 96px;
   left: 0;
   right: 0;
@@ -857,7 +857,7 @@ input:checked + .slider:before {
 .timelapse-button {
   margin-right: 8px;
   width: 120px;
-  z-index: 101;
+  z-index: 1;
 	font-family: inherit;
 	transition: all 0.1s ease-in;
 	display: flex;
