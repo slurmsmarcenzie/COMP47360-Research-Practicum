@@ -217,7 +217,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         }
     }, [highlightActive]);
 
-
     return (
         <div className='parent-chart-container'> 
             {showChart &&

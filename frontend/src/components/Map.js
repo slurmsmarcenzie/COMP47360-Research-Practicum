@@ -14,6 +14,7 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
+import Timelapse from './Timelapse';
 
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
@@ -573,6 +574,13 @@ function Map() {
           <MapLegend
             colours={colourPairs[colourPairIndex]} 
             hoveredZoneScore={hoveredZoneScore}
+          />
+
+          <Timelapse
+            map={map}
+            originalBusynessHashMap={originalBusynessHashMap}
+            eventBaselineHashMap={eventBaselineHashMap}
+            busynessHashMap={busynessHashMap}
           />
 
           </>
