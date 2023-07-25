@@ -20,7 +20,7 @@ def event_impact(eventID):
         filtered = []
 
         for item in original:
-            if item["Event_ID"] == eventID and item["time"] == 18:
+            if item["Event_ID"]:
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
