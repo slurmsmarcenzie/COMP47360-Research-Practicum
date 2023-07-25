@@ -5,7 +5,7 @@ require("dotenv").config();
 //fetch event impact from ML API:
 const eventImpact = (req, res, next) => {
   res.req.ip //sets the object
-  let eventID = req.params.event
+  let eventID = req.params.eventID
   generalLogger.info(`impact requested for event: ${eventID}`)
 
   const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/impact?key=${process.env.FLASK_API_KEY}` 
@@ -46,7 +46,7 @@ const eventImpact = (req, res, next) => {
 
 const eventBaseline = (req, res, next) => {
   res.req.ip //sets the object
-  let eventID = req.params.event
+  let eventID = req.params.eventID
   generalLogger.info(`baseline requested for event: ${eventID}`)
 
   const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/baseline?key=${process.env.FLASK_API_KEY}` 
