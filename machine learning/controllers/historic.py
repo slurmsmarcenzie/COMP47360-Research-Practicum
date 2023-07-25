@@ -20,7 +20,7 @@ def event_impact(eventID):
         filtered = []
 
         for item in original:
-            if item["Event_ID"]:
+            if item["Event_ID"] == eventID:
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
