@@ -8,6 +8,8 @@ import { ToggleSlider }  from "react-toggle-slider";
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
+    console.log('this is our hashmap of difference', hashMap)
+
     const {neighbourhoods} = useMapContext();
     const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
@@ -16,60 +18,75 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     // When this state changes, it triggers the chart to re-render with the new data and options.
     
     const [renderChart, setRenderChart] = useState(null);
+    const [selectedValues, setSelectedValues] = useState([]);
     
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
     const [chartData, setChartData] = useState(null);
 
-    const [showMostImpactedZones, setShowMostImpactedZones] = useState(true);  // New state for the toggle
+    const [showMostImpactedZones, setShowMostImpactedZones] = useState(false);  // New state for the toggle
     const [labels, setLabels] = useState([]);    
 
     const [active, setActive] = useState(false);
     const [toggleHighlightSlider, highlightActive] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
     const [initialRender, setInitialRender] = useState(true);
 
-    // Get the impacted zones
-    const getImpactedZones = () => {
-
-        // error handling to prevent that the hashmap is not empty
+    // This function will handle sorting and extraction of names and data values
+    const getImpactedZonesForChart = () => {
         if (!hashMap) {
-            return {labels: [], dataValues: []};
+        return {names: [], dataValues: []};
+        }
+    
+        const entries = Object.entries(hashMap);
+        let filteredEntries;
+    
+        if (showMostImpactedZones) {
+        entries.sort((a, b) => b[1] - a[1]);
+        filteredEntries = entries.slice(0, 5);
+        } else {
+        entries.sort((a, b) => a[1] - b[1]);
+        filteredEntries = entries.slice(0, 5);
+        }
+    
+        const filteredHashMap = Object.fromEntries(filteredEntries);
+        const dataValues = filteredHashMap ? Object.values(filteredHashMap): [];
+    
+        const names = filteredEntries.map(([key]) => {
+        const matchingObject = neighbourhoods.features.find(neighbourhood => neighbourhood.id === key);
+        return matchingObject ? matchingObject.properties.zone : null;
+        });
+    
+        return {names, dataValues};
+    }
+  
+    // This function will handle extraction of labels
+    const getImpactedZonesForHighlight = () => {
+
+        if (!hashMap) {
+            return [];
         }
 
-        // Get an array of [key, value] pairs from the hashMap
         const entries = Object.entries(hashMap);
-
         let filteredEntries;
 
-        // Check the state to see if we want to display the most or least impacted zones
         if (showMostImpactedZones) {
-            // Sort the array based on the impact
             entries.sort((a, b) => b[1] - a[1]);
+            // Filter only entries with a change greater than or equal to 0.2
+            filteredEntries = entries.filter((entry) => entry[1] >= 0.25);
             // Get only the top 5 most impacted areas
-            filteredEntries = entries.slice(0, 5);
+            // filteredEntries = filteredEntries.slice(0, 5);
         } else {
-            // Sort in ascending order
             entries.sort((a, b) => a[1] - b[1]);
+            // Filter only entries with a change less than 0.2
+            filteredEntries = entries.filter((entry) => entry[1] < 0.2);
             // Get only the bottom 5 least impacted areas
-            filteredEntries = entries.slice(0, 5);
+            filteredEntries = filteredEntries.slice(0, 5);
         }
 
-        // Create a new hashMap with only these filtered entries
         const filteredHashMap = Object.fromEntries(filteredEntries);
+        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
 
-        // Get the keys and values from the filtered hashMap
-        const labels = filteredHashMap ? Object.keys(filteredHashMap) : [];
-        const dataValues = filteredHashMap ? Object.values(filteredHashMap): [];
-
-        const names = labels.map(label => {
-            // Find the corresponding object in the array
-            const matchingObject = neighbourhoods.features.find(neighbourhood => neighbourhood.id === label);
-          
-            // If a matching object was found, return its name. Otherwise, return null.
-            return matchingObject ? matchingObject.properties.zone : null;
-          });
-
-        return {names, labels, dataValues}
+        return selectedValues
     }
 
     const makeChartData = (names, dataValues) => {
@@ -143,9 +160,14 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         return {data, options};
     }
     
+    useEffect(() => {
+        setSelectedValues(getImpactedZonesForHighlight());
+    }, [hashMap, showMostImpactedZones]);
+    
+    
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
-        const {names, labels, dataValues} = getImpactedZones();
+        const {names, dataValues} = getImpactedZonesForChart();
         setLabels(labels); // Set labels here
         const newChartData = makeChartData(names, dataValues);
         setChartData(newChartData); // Set chartData here
@@ -183,17 +205,17 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setShowMostImpactedZones(!showMostImpactedZones)
     };
 
-      useEffect(() => {
+    useEffect(() => {
         handleToggle();
-      }, [active]);
+    }, [active]);
 
-      useEffect(() => {
+    useEffect(() => {
         if (!initialRender) {
-          toggleChartData();
+            toggleChartData();
         } else {
-          setInitialRender(false);
+            setInitialRender(false);
         }
-      }, [highlightActive]);
+    }, [highlightActive]);
 
 
     return (
@@ -225,6 +247,18 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}
                 </button>
+                <button className='floating-nav-cta-button' onClick={() => {
+                    setShowMostImpactedZones(true)
+                    highlightEventImpact(Zone_ID, selectedValues)}
+                    }>
+                  Highlight most impacted zones
+                </button>
+                {/* <button className='floating-nav-cta-button' onClick={() => {
+                    setShowMostImpactedZones(false)
+                    highlightEventImpact(Zone_ID, selectedValues)}
+                    }>
+                  Highlight least impacted zones
+                </button> */}
             </div>
         </div>
     );
