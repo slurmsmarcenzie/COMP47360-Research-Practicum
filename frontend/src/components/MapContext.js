@@ -6,7 +6,6 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import prunedEvents from '../geodata/prunedEvents.json'
-import antline from '../geodata/antline.geo.json'
 
 // Create a new context
 const MapContext = createContext();
@@ -36,6 +35,7 @@ export const MapProvider = ({ children }) => {
     const [isNavVisible, setIsNavVisible] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(true);
     const [isThereALiveInfoBox, setIsThereALiveInfoBox] = useState(false);
+    const [isMobileTileOpen, setIsMobileTileOpen] = useState(false); 
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -426,6 +426,7 @@ export const MapProvider = ({ children }) => {
         isNavVisible, setIsNavVisible,
         isDrawerOpen, setIsDrawerOpen,
         isThereALiveInfoBox, setIsThereALiveInfoBox,
+        isMobileTileOpen, setIsMobileTileOpen,
       
         neighbourhoods,
         prunedEvents,

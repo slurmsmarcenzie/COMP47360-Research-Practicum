@@ -62,9 +62,11 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
 
     const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
+    const {isMobileTileOpen} =useMapContext()
+
     return (
-      isNavVisible && (
-        <div className='floating-nav'>
+        
+        <div className={`floating-nav ${isMobileTileOpen ? "open" : ""}`}>
           <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>
           <div className='floating-nav-tiles'>
             {tileOptions}
@@ -73,7 +75,6 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
             <button className="floating-nav-outline-button" onClick={() => { removeAntline(map.current); enableColours(); removeMarker();}}>Reset Map</button>
           }
         </div>
-      )
     );
 }
 

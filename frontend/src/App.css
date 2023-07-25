@@ -692,6 +692,12 @@ input:checked + .slider:before {
     padding: 12px 6px;
     border-radius: 5px;
     height: 180px;
+
+    /* Initial position off-screen */
+    transform: translateY(100%);
+
+    /* Transition for smooth animation */
+    transition: transform 0.3s ease-out;
   }
 
   .floating-nav-header-text{
@@ -699,6 +705,13 @@ input:checked + .slider:before {
     font-size: 3vw;
     margin: 0;
   }
+
+  .floating-nav.open {
+    /* Slide in */
+    transform: translateY(0);
+  }
+
+
 }
 
 /* mobile specific css for native mapbox css */

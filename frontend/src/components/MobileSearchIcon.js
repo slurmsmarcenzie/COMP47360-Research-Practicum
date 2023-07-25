@@ -7,12 +7,14 @@ import { useMapContext } from './MapContext';
 export default function MobileSearchIcon() {
 
     const {isNavVisible, setIsNavVisible} = useMapContext();
+    const {isMobileTileOpen, setIsMobileTileOpen} =useMapContext()
 
     return (
         <div className='floating-search-icon-container'>
             <button className='floating-search-icon-container-button'
                 onClick={() => {
-                    setIsNavVisible(!isNavVisible);
+                    // setIsNavVisible(!isNavVisible);
+                    setIsMobileTileOpen(!isMobileTileOpen);
                 }}>
                 <FontAwesomeIcon icon={faSearch} style={{color:'#D3D3D3'}}/>
             </button>   
