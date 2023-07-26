@@ -27,8 +27,8 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     const [showMostImpactedZones, setShowMostImpactedZones] = useState(false);  // New state for the toggle
     const [labels, setLabels] = useState([]);    
 
-    const [active, setActive] = useState(false);
-    const [toggleHighlightSlider, highlightActive] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
+    const [active, setActive] = useState(true);
+    const [highlightActive, setHighlightActive] = useState(null);
     const [initialRender, setInitialRender] = useState(true);
 
     // This function will handle sorting and extraction of names and data values
@@ -217,6 +217,14 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         }
     }, [highlightActive]);
 
+    const handleOptionChange = (event) => {
+        setActive(event.target.value === 'eventImpact'); 
+      };
+
+      const handleImpactOptionChange = (event) => {
+        setHighlightActive(event.target.value === 'most'); 
+      };
+
 
     return (
         <div className='parent-chart-container'> 
@@ -236,14 +244,58 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
-                <div className='flex-direction-infobox'>
-                    Show {highlightActive ? 'Most Impacted Zones' : 'Least Impacted Zones'}
-                    { toggleHighlightSlider }
+            <div className="radio-button">
+                
+                <input
+                    type="radio"
+                    name="chartDataOption"
+                    value="eventImpact"
+                    id="eventImpact"
+                    checked={active}
+                    onChange={handleOptionChange}
+                />
+                <label for="eventImpact">
+                Impact
+                </label>
+                <input
+                    type="radio"
+                    name="chartDataOption"
+                    value="baselineBusyness"
+                    id="baselineBusyness"
+                    checked={!active}
+                    onChange={handleOptionChange}
+                />
+                <label for="baselineBusyness">
+                Baseline
+                </label>
+            </div>
+                
+            {/* {!active ? null : <div className='flex-direction-infobox'>
+            <div className="radio-button">
+                
+                <input
+                    type="radio"
+                    value="most"
+                    id="most"
+                    checked={highlightActive}
+                    onChange={handleImpactOptionChange}
+                />
+                <label for="most">
+                Most
+                </label>
+                <input
+                    type="radio"
+                    value="least"
+                    id="least"
+                    checked={!highlightActive}
+                    onChange={handleImpactOptionChange}
+                />
+                <label for="least">
+                Least
+                </label>
                 </div>
-                <div className='flex-direction-infobox'>
-                    Showing {active ? "Event's Impact on Manhattan" : "Baseline Busyness in Manhattan"}
-                    <ToggleSlider barBackgroundColorActive= {"#8a2be2"} onToggle={state => setActive(state)}/>
-                </div>
+                </div>} */}
+
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}
                 </button>

@@ -340,8 +340,8 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    
+    map.current.flyTo({zoom: 11.5, essential: true, center: [-73.929712, 40.763947]});
 
     getHistoricBusyness(Event_ID);
   
@@ -375,7 +375,7 @@ function Map() {
       const timeoutId = setTimeout(() => {
         // After a delay of 2000 ms, update the colors of the layers on the map
         updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
-      }, 900); // Delay of 2000 ms
+      }, 700); // Delay of 2000 ms
 
       // Return a cleanup function that will run when the component unmounts, or before this effect runs again
       return () => {

@@ -5,10 +5,10 @@
       "Zone_ID": 239,
       "Zone_Name": "Upper West Side South",
       "Start_Date": {
-         "Time": "11/22/2022 12:01:00 AM"
+         "Time": "11/24/2022 9:00:00 AM"
       },
       "End Date": {
-         "Time": "11/22/2022 11:59:00 PM"
+         "Time": "11/24/2022 12:00:00 PM"
       },
       "Event_Agency": "Parks Department",
       "Event_Type": "Special Event",
@@ -33,10 +33,10 @@
       "Zone_ID": 231,
       "Zone_Name": "TriBeCa",
       "Start_Date": {
-         "Time": "10/28/2022 12:50:00 PM"
+         "Time": "10/31/2022 7:00:00 PM"
       },
       "End Date": {
-         "Time": "10/28/2022 01:20:00 PM"
+         "Time": "10/31/2022 01:20:00 PM"
       },
       "Event_Agency": "Police Department",
       "Event_Type": "Parade",
@@ -61,10 +61,10 @@
       "Zone_ID": 237,
       "Zone_Name": "Upper East Side South",
       "Start_Date": {
-         "Time": "03/17/2022 08:00:00 AM"
+         "Time": "03/17/2022 11:00:00 AM"
       },
       "End Date": {
-         "Time": "03/17/2022 06:57:00 PM"
+         "Time": "03/17/2022 04:30:00 PM"
       },
       "Event_Agency": "Parks Department",
       "Event_Type": "Special Event",
@@ -117,10 +117,10 @@
       "Zone_ID": 230,
       "Zone_Name": "Times Square",
       "Start_Date": {
-         "Time": "12/31/2022 12:00:00 AM"
+         "Time": "12/31/2022 6:00:00 PM"
       },
       "End Date": {
-         "Time": "12/31/2022 11:59:00 PM"
+         "Time": "01/01/2023 12:30:00 AM"
       },
       "Event_Agency": "Parks Department",
       "Event_Type": "Special Event",
@@ -173,10 +173,10 @@
       "Zone_ID": 74,
       "Zone_Name": "East Harlem North",
       "Start_Date": {
-         "Time": "1/5/2022 11:00"
+         "Time": "01/05/2022 11:00:00 AM"
       },
       "End Date": {
-         "Time": "1/5/2022 13:00"
+         "Time": "01/05/2022 1:00:00 PM"
       },
       "Event_Agency": "Police Department",
       "Event_Type": "Parade",
@@ -201,10 +201,10 @@
       "Zone_ID": 232,
       "Zone_Name": "Seward Park",
       "Start_Date": {
-         "Time": "7/4/2022 0:00"
+         "Time": "07/04/2022 08:00:00 PM"
       },
       "End_Date": {
-         "Time": "7/4/2022 23:59"
+         "Time": "07/04/2022 10:00:00 PM"
       },
       "Event_Agency": "",
       "Event_Type": "Special Event",
