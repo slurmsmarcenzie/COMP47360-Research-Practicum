@@ -6,8 +6,8 @@ import { MapProvider } from './components/MapContext';
 function App() {
 
   const isMobileDevice = () => {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
-};
+    return (typeof window.orientation !== "undefined") && (window.innerWidth < 541);
+  };
 
   return (
     <MapProvider>

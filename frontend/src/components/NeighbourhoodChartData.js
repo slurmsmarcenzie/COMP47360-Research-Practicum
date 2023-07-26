@@ -224,8 +224,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
       const handleImpactOptionChange = (event) => {
         setHighlightActive(event.target.value === 'most'); 
       };
-
-
+  
     return (
         <div className='parent-chart-container'> 
             {showChart &&
