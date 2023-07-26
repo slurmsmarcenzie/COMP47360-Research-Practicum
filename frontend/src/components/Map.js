@@ -576,12 +576,12 @@ function Map() {
             hoveredZoneScore={hoveredZoneScore}
           />
 
-          <Timelapse
+          {/* <Timelapse
             map={map}
             originalBusynessHashMap={originalBusynessHashMap}
             eventBaselineHashMap={eventBaselineHashMap}
             busynessHashMap={busynessHashMap}
-          />
+          /> */}
 
           </>
         )}

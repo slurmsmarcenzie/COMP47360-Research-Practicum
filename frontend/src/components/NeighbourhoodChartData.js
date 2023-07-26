@@ -3,15 +3,11 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
-import { useToggleSlider }  from "react-toggle-slider";
-import { ToggleSlider }  from "react-toggle-slider";
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
-    console.log('this is our hashmap of difference', hashMap)
-
     const {neighbourhoods} = useMapContext();
-    const {useOriginal, setUseOriginal, showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
+    const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
@@ -188,7 +184,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         return gradientSegment;
     };
     
-
     const getGradientLeastImpacted = (context) => {
         const {ctx, chartArea: { top, bottom } } = context;
         const gradientSegment = ctx.createLinearGradient(0, top, 0, bottom);
@@ -198,8 +193,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     }
 
     const handleToggle = () => {
-        setUseOriginal(!useOriginal);
-        updateLayerColours(map.current, !useOriginal, eventBaselineHashMap, busynessHashMap);
+        updateLayerColours(map.current, !active, eventBaselineHashMap, busynessHashMap);
         resetColours();
         setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
@@ -217,8 +211,9 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         }
     }, [highlightActive]);
 
-    const handleOptionChange = (event) => {
-        setActive(event.target.value === 'eventImpact'); 
+    const handleOptionChange = () => {
+        setActive(!active); 
+        console.log('this is active', active);
       };
 
       const handleImpactOptionChange = (event) => {
@@ -243,33 +238,32 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
-            <div className="radio-button">
+                <div className="radio-button">
+                    <input
+                        type="radio"
+                        name="chartDataOption"
+                        value="baselineBusyness"
+                        id="baselineBusyness"
+                        checked={!active}
+                        onChange={handleOptionChange}
+                    />
+                    <label for="baselineBusyness">
+                        Baseline
+                    </label>
+                    <input
+                        type="radio"
+                        name="chartDataOption"
+                        value="eventImpact"
+                        id="eventImpact"
+                        checked={active}
+                        onChange={handleOptionChange}
+                    />
+                    <label for="eventImpact">
+                        Impact
+                    </label>
+                </div>
                 
-                <input
-                    type="radio"
-                    name="chartDataOption"
-                    value="eventImpact"
-                    id="eventImpact"
-                    checked={active}
-                    onChange={handleOptionChange}
-                />
-                <label for="eventImpact">
-                Impact
-                </label>
-                <input
-                    type="radio"
-                    name="chartDataOption"
-                    value="baselineBusyness"
-                    id="baselineBusyness"
-                    checked={!active}
-                    onChange={handleOptionChange}
-                />
-                <label for="baselineBusyness">
-                Baseline
-                </label>
-            </div>
-                
-            {/* {!active ? null : <div className='flex-direction-infobox'>
+            {!active ? null : <div className='flex-direction-infobox'>
             <div className="radio-button">
                 
                 <input
@@ -280,7 +274,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                     onChange={handleImpactOptionChange}
                 />
                 <label for="most">
-                Most
+                    Most
                 </label>
                 <input
                     type="radio"
@@ -293,7 +287,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 Least
                 </label>
                 </div>
-                </div>} */}
+                </div>}
 
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}

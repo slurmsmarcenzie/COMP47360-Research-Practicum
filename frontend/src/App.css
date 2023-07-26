@@ -4,7 +4,10 @@ body {
 }
 
 .radio-button {
-  width: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   border: 1px solid blueviolet;
   border-radius: 4px;
   overflow: hidden;
@@ -17,12 +20,18 @@ body {
   padding: 10px 16px;
   border-right: 1px solid blueviolet;
   cursor: pointer;
+  width: 50%;
   transition: all 0.3s;
+  text-align: center;
 }
+
 .radio-button label:last-of-type{ border-right: 0; }
 .radio-button label:hover{
   background: #eee;
+  color: black;
+  font-weight: 600;
 }
+
 .radio-button input:checked + label{
   background: blueviolet;
   color: white; 
@@ -374,7 +383,7 @@ body {
   align-items: center;
   padding: auto;
   margin-top: 12px;
-  gap: 4px;
+  gap: 12px;
 }
 
 .floating-infobox-box-toggle-button  {
@@ -863,9 +872,6 @@ input:checked + .slider:before {
   }
 
  
-}
-=======
-  } 
 }
 
 .timelapse-container{
