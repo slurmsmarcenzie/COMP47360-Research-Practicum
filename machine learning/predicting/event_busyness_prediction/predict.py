@@ -1,4 +1,4 @@
-from current_busyness_prediction.predict import general_prediction
+from predicting.current_busyness_prediction.predict import general_prediction
 import datetime
 
 def event_prediction(eventID):
