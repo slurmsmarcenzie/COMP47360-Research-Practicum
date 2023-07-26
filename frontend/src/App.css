@@ -3,6 +3,32 @@ body {
   background-color: rgb(43, 43, 45);
 }
 
+.radio-button {
+  width: fit-content;
+  border: 1px solid blueviolet;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: no-wrap;
+}
+.radio-button input{ display: none; }
+.radio-button label{
+  padding: 10px 16px;
+  border-right: 1px solid blueviolet;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.radio-button label:last-of-type{ border-right: 0; }
+.radio-button label:hover{
+  background: #eee;
+}
+.radio-button input:checked + label{
+  background: blueviolet;
+  color: white; 
+  font-weight: bold;
+}
+
 .dot {
   width: 3%;
   height: 100%;
@@ -834,6 +860,11 @@ input:checked + .slider:before {
     padding: 0;
     margin-right: 24px;
     height: 24px;
+  }
+
+ 
+}
+=======
   } 
 }
 
@@ -968,4 +999,3 @@ input:checked + .slider:before {
   transform: translateX(0);
   transition: transform 0.1s linear;
 }
-

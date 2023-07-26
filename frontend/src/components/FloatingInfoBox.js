@@ -12,7 +12,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
-  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal, removeMarker} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
@@ -86,6 +86,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       <button className='floating-info-box-back-button' onClick={() => {
         removeAntline(map.current)
         resetMap(map);
+        removeMarker();
       }}>
         <FontAwesomeIcon icon={faArrowLeft} /> Go Back
       </button>
