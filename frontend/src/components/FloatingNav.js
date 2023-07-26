@@ -54,8 +54,6 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
     
   };
 
-  const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
-
     return(
         <div className='floating-nav'>
           <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>

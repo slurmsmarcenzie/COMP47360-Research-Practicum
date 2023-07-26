@@ -292,12 +292,12 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}
                 </button>
-                <button className='floating-nav-cta-button' onClick={() => {
+                {/* <button className='floating-nav-cta-button' onClick={() => {
                     setShowMostImpactedZones(true)
                     highlightEventImpact(Zone_ID, selectedValues)}
                     }>
                   Highlight most impacted zones
-                </button>
+                </button> */}
                 {/* <button className='floating-nav-cta-button' onClick={() => {
                     setShowMostImpactedZones(false)
                     highlightEventImpact(Zone_ID, selectedValues)}

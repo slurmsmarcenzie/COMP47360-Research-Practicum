@@ -19,9 +19,12 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers, setShowMatchingEvent} = useMapContext();
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
-  
+
+  const {setIsFloatingNavVisible} = useMapContext();
+
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
+
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
@@ -87,6 +90,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         removeAntline(map.current)
         resetMap(map);
         removeMarker();
+        setIsFloatingNavVisible(true);
       }}>
         <FontAwesomeIcon icon={faArrowLeft} /> Go Back
       </button>

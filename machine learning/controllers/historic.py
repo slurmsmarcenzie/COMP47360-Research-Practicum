@@ -59,3 +59,83 @@ def event_baseline(eventID):
         raise abort(500, "Unable to filter 'baseline_events.json'")
 
     return outputjson, 200
+
+def event_comparison(eventID):
+    
+    general_logger.info(f"Event impact queried for event: {eventID}")
+
+    #Extract relevant event from impact_events:
+    eventID = int(eventID)
+
+    try:
+        baseline_file = open("static/baseline_events.json")
+        baseline_data = json.load(baseline_file)
+        general_logger.info("Successfully read file baseline_events.json for comparison")
+
+        impact_file = open("static/impact_events.json")
+        impact_data = json.load(impact_file)
+        general_logger.info("Successfully read file impacts_events.json for comparison")
+    
+    except IOError as err:
+        general_logger.error(f"Unable to read file: {err}")
+        raise
+
+    general_logger.info(f"Number of entries in baseline_data: {len(baseline_data)}")
+    general_logger.info(f"Number of entries in impact_data: {len(impact_data)}")
+
+    try:
+        baseline_filtered = [entry for entry in baseline_data if entry.get("Event_ID") == eventID]
+        impact_filtered = [entry for entry in impact_data if entry.get("Event_ID") == eventID]
+
+        general_logger.info(f"Number of entries after filtering baseline_data: {len(baseline_filtered)}")
+        general_logger.info(f"Number of entries after filtering impact_data: {len(impact_filtered)}")
+
+        baseline_dict = {}
+        impact_dict = {}
+
+        for entry in baseline_filtered:
+            time = entry.get("time")
+            location_id = entry.get("location_id")
+            busyness_score = entry.get("busyness_score")
+            if time and location_id and busyness_score:
+                if time not in baseline_dict:
+                    baseline_dict[time] = {}
+                baseline_dict[time][location_id] = busyness_score
+
+        for entry in impact_filtered:
+            time = entry.get("time")
+            location_id = entry.get("location_id")
+            busyness_score = entry.get("busyness_score")
+            if time and location_id and busyness_score:
+                if time not in impact_dict:
+                    impact_dict[time] = {}
+                impact_dict[time][location_id] = busyness_score
+
+
+        general_logger.info(f"Number of entries in baseline_dict: {len(baseline_dict)}")
+        general_logger.info(f"Number of entries in impact_dict: {len(impact_dict)}")
+
+        result = []
+
+        for time in sorted(set(baseline_dict.keys()) | set(impact_dict.keys())):
+            busyness_entry = {"Time": time, "busyness": {}}
+            for location_id in set(baseline_dict.get(time, {}).keys()) | set(impact_dict.get(time, {}).keys()):
+                baseline_score = baseline_dict.get(time, {}).get(location_id, 0.0)
+                current_score = impact_dict.get(time, {}).get(location_id, 0.0)
+                difference = current_score - baseline_score
+                busyness_entry["busyness"][location_id] = difference
+            result.append(busyness_entry)
+        
+        general_logger.info(f"Result data: {result}")
+    
+    except KeyError as err:
+        general_logger.error(f"Key Error occurred: {err}")
+        raise
+    except Exception as e:
+        general_logger.error(f"An unexpected error occurred: {e}")
+        raise
+
+    outputjson = json.dumps(result)
+    general_logger.info(f"Result is what we are sending back {outputjson}")
+
+    return outputjson, 200

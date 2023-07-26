@@ -34,8 +34,10 @@ function Map() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
+  const [eventComparisonData, setEventComparisonData] = useState(null);
+
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, neighbourhoodEvents} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -334,6 +336,7 @@ function Map() {
   const visualiseEventImpact = (Event_ID) => {
 
     setNeighbourhoodEvents([]);
+    setIsFloatingNavVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -342,9 +345,10 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
     
-    map.current.flyTo({zoom: 11.5, essential: true, center: [-73.929712, 40.763947]});
+    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
     getHistoricBusyness(Event_ID);
+    fetchEventComparison(Event_ID);
   
   }
 
@@ -529,6 +533,28 @@ function Map() {
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
 
+
+  const fetchEventComparison = async (Event_ID) => {
+  
+    try {
+     const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
+     console.log('this is response', eventComparisonResponse);
+     if (!eventComparisonResponse) {
+      throw new Error('Network response was not ok');
+     }
+     const eventComparisonData = await eventComparisonResponse.json();
+     console.log(eventComparisonData);
+     setEventComparisonData(eventComparisonData);
+    } catch (error) {
+     console.error('Issue with fetch request for event impact:', error);
+     setError(error);
+    }
+  }
+
+  useEffect(() => {
+    console.log('Event Comparison Data', eventComparisonData)
+  }, [eventComparisonData])
+
   return (
 
     <div>
@@ -549,13 +575,15 @@ function Map() {
 
           <Navbar />
 
-          <FloatingNav 
-            map={map}
-            disableColours = {disableColours}
-            isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-            changeColourScheme={changeColourScheme}
-            enableColours={enableColours}
-            />
+          {isFloatingNavVisible ? (
+            <FloatingNav 
+              map={map}
+              disableColours = {disableColours}
+              isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+              changeColourScheme={changeColourScheme}
+              enableColours={enableColours}
+              />
+            ): <></>}
 
           <FloatingInfoBox
             map={map}

@@ -1,7 +1,7 @@
 from flask import Blueprint
 from controllers.meta import list_events
 from controllers.predict import current
-from controllers.historic import event_baseline, event_impact
+from controllers.historic import event_baseline, event_impact, event_comparison
 from controllers.portal import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
@@ -31,6 +31,7 @@ prediction.before_request(check_token)
 #HISTORIC route for baselines and impact
 historic.route("/api/historic/<string:eventID>/baseline")(event_baseline)
 historic.route("/api/historic/<string:eventID>/impact")(event_impact)
+historic.route("/api/historic/<string:eventID>/comparison")(event_comparison)
 historic.before_request(check_token)
 
 # PORTAL routes for clients to login and create/view their API key

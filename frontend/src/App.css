@@ -191,7 +191,7 @@ body {
 .floating-info-box {
   position: absolute;
   z-index: 1;
-  min-width: 300px;
+  min-width: 360px;
   max-width: 300px;
   margin-top: 120px;
   right: 72px;
@@ -1004,4 +1004,12 @@ input:checked + .slider:before {
   border-radius: 50%;
   transform: translateX(0);
   transition: transform 0.1s linear;
+}
+
+.mapboxgl-ctrl-bottom-right{
+  display: none;
+  }
+
+.mapboxgl-ctrl-bottom-left{
+  display: none;
 }
