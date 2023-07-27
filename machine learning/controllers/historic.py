@@ -67,6 +67,7 @@ def event_comparison(eventID):
     #Extract relevant event from impact_events:
     eventID = int(eventID)
 
+    # Open our files and log status accordingly
     try:
         baseline_file = open("static/baseline_events.json")
         baseline_data = json.load(baseline_file)
@@ -83,6 +84,7 @@ def event_comparison(eventID):
     general_logger.info(f"Number of entries in baseline_data: {len(baseline_data)}")
     general_logger.info(f"Number of entries in impact_data: {len(impact_data)}")
 
+    # filter our files by the event id we extracted above and set this to an array
     try:
         baseline_filtered = [entry for entry in baseline_data if entry.get("Event_ID") == eventID]
         impact_filtered = [entry for entry in impact_data if entry.get("Event_ID") == eventID]
@@ -93,11 +95,14 @@ def event_comparison(eventID):
         baseline_dict = {}
         impact_dict = {}
 
+        # for every hour create an internal dictionary with the busyness scores related to each location
+        # do this for both impact and baseline dictionaries
+
         for entry in baseline_filtered:
             time = entry.get("time")
             location_id = entry.get("location_id")
             busyness_score = entry.get("busyness_score")
-            if time and location_id and busyness_score:
+            if time is not None and location_id is not None and busyness_score is not None:
                 if time not in baseline_dict:
                     baseline_dict[time] = {}
                 baseline_dict[time][location_id] = busyness_score
@@ -106,17 +111,20 @@ def event_comparison(eventID):
             time = entry.get("time")
             location_id = entry.get("location_id")
             busyness_score = entry.get("busyness_score")
-            if time and location_id and busyness_score:
+            if time is not None and location_id is not None and busyness_score is not None:
                 if time not in impact_dict:
                     impact_dict[time] = {}
                 impact_dict[time][location_id] = busyness_score
 
+        general_logger.info(f"Number of entries in baseline_dict: {baseline_dict}")
+        general_logger.info(f"Number of entries in impact_dict: {impact_dict}")
 
-        general_logger.info(f"Number of entries in baseline_dict: {len(baseline_dict)}")
-        general_logger.info(f"Number of entries in impact_dict: {len(impact_dict)}")
+        general_logger.info(f"Unique time values in baseline_dict: {set(baseline_dict.keys())}")
+        general_logger.info(f"Unique time values in impact_dict: {set(impact_dict.keys())}")
 
         result = []
 
+        # create a difference hashmap to show the relative rates of change between the two positions for each hour of the day
         for time in sorted(set(baseline_dict.keys()) | set(impact_dict.keys())):
             busyness_entry = {"Time": time, "busyness": {}}
             for location_id in set(baseline_dict.get(time, {}).keys()) | set(impact_dict.get(time, {}).keys()):
@@ -136,6 +144,5 @@ def event_comparison(eventID):
         raise
 
     outputjson = json.dumps(result)
-    general_logger.info(f"Result is what we are sending back {outputjson}")
 
     return outputjson, 200
