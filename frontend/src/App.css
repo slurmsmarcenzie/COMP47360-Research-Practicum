@@ -4,6 +4,7 @@ body {
 }
 
 .radio-button {
+  height: 36px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -17,7 +18,7 @@ body {
 }
 .radio-button input{ display: none; }
 .radio-button label{
-  padding: 10px 16px;
+  padding: 8px 12px;
   border-right: 1px solid blueviolet;
   cursor: pointer;
   width: 50%;
@@ -1018,4 +1019,9 @@ input[type=range]::-webkit-slider-thumb {
   margin-top: 6px;
   padding: auto;
   font-size: 12px;
+}
+
+.floating-info-box-event-analysis{
+  padding: auto;
+  margin: auto;
 }

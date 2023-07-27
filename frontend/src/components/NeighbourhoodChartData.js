@@ -238,6 +238,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
+                <h3 style={{margin: 'auto', padding: 'auto'}}>Toggle Event Impact On/Off</h3>
                 <div className="radio-button">
                     <input
                         type="radio"
@@ -248,7 +249,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         onChange={handleOptionChange}
                     />
                     <label for="baselineBusyness">
-                        Baseline
+                        Turn off Event Impact
                     </label>
                     <input
                         type="radio"
@@ -259,38 +260,12 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         onChange={handleOptionChange}
                     />
                     <label for="eventImpact">
-                        Impact
+                        Show Impact of Event
                     </label>
                 </div>
-                
-            {!active ? null : <div className='flex-direction-infobox'>
-            <div className="radio-button">
-                
-                <input
-                    type="radio"
-                    value="most"
-                    id="most"
-                    checked={highlightActive}
-                    onChange={handleImpactOptionChange}
-                />
-                <label for="most">
-                    Most
-                </label>
-                <input
-                    type="radio"
-                    value="least"
-                    id="least"
-                    checked={!highlightActive}
-                    onChange={handleImpactOptionChange}
-                />
-                <label for="least">
-                Least
-                </label>
-                </div>
-                </div>}
 
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Compare Busyness Levels'}
+                    {isSplitView ? 'Show Original' : 'Show Side-By-Side Maps'}
                 </button>
                 {/* <button className='floating-nav-cta-button' onClick={() => {
                     setShowMostImpactedZones(true)

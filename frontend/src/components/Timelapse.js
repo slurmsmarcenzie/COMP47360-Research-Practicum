@@ -48,6 +48,8 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
 
     const handleSliderChange = (e) => {
 
+        console.log('this is the vent on the slider', e);
+
         stopTimelapse(); 
         const newElapsedTime = Number(e.target.value);
         setElapsedTime(newElapsedTime);

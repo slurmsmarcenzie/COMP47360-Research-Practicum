@@ -25,7 +25,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
-
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
