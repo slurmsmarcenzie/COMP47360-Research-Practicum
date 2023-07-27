@@ -15,12 +15,16 @@ def event_impact(eventID):
     #Extract relevant event from impact_events:
     eventID = int(eventID)
 
+    peak_times = [15, 13, 19, 0, 19, 13, 19, 22]
+    position = eventID - 1
+    peak = peak_times[position]
+
     try:
         original = json.load(file)
         filtered = []
 
         for item in original:
-            if item["Event_ID"] == eventID and item["time"] == 18:
+            if item["Event_ID"] == eventID and item["time"] == peak:
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
@@ -44,12 +48,16 @@ def event_baseline(eventID):
     #Extract relevant event from baseline_events:
     eventID = int(eventID)
 
+    peak_times = [15, 13, 19, 0, 19, 13, 19, 22]
+    position = eventID - 1
+    peak = peak_times[position]
+
     try:
         original = json.load(file)
         filtered = []
 
         for item in original:
-            if item["Event_ID"] == eventID and item["time"] == 18:
+            if item["Event_ID"] == eventID and item["time"] == peak:
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
