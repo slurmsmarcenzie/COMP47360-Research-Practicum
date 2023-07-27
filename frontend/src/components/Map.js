@@ -35,6 +35,7 @@ function Map() {
   const {neighbourhoods, prunedEvents} = useMapContext();
 
   const [eventComparisonData, setEventComparisonData] = useState(null);
+  const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
@@ -349,6 +350,7 @@ function Map() {
 
     getHistoricBusyness(Event_ID);
     fetchEventComparison(Event_ID);
+    setTimeout(() => fetchTimelapse(Event_ID), 600)
   
   }
 
@@ -543,17 +545,32 @@ function Map() {
       throw new Error('Network response was not ok');
      }
      const eventComparisonData = await eventComparisonResponse.json();
-     console.log(eventComparisonData);
      setEventComparisonData(eventComparisonData);
+     console.log(eventComparisonData);
     } catch (error) {
      console.error('Issue with fetch request for event impact:', error);
      setError(error);
     }
   }
 
-  useEffect(() => {
-    console.log('Event Comparison Data', eventComparisonData)
-  }, [eventComparisonData])
+  const fetchTimelapse = async (Event_ID) => {
+
+    try {
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      console.log('this is response', timelapseResponse);
+      if (!timelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const timelapseData = await timelapseResponse.json();
+      console.log(timelapseData)
+      setTimelapseData(timelapseData);
+      console.log('this is timelapse', timelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
+
+  }
 
   return (
 

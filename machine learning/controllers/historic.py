@@ -154,3 +154,39 @@ def event_comparison(eventID):
     outputjson = json.dumps(result)
 
     return outputjson, 200
+
+def event_timelapse(eventID):
+
+    general_logger.info("event timelapse queried for event: {event}".format(event=eventID))
+
+    try:
+        file = open("static/impact_events.json")
+        general_logger.info("Reading file impact_events.json for timelapse")
+    except IOError as err:
+        general_logger.error("Unable to read file {error}".format(error=err))
+        raise abort(500, "Unable to read file 'impact_events.json' for timelapse")
+
+    #Extract relevant event from impact_events:
+    eventID = int(eventID)
+
+    try:
+        original = json.load(file)
+
+        # Initialise a list of 24 dictionaries
+        output = [{} for _ in range(24)]
+        
+        for item in original:
+            if item["Event_ID"] == eventID:
+                hour = item['time']
+                location_id = item['location_id']
+                busyness = item['busyness_score']
+                if location_id not in output[hour]:
+                    output[hour][location_id] = busyness
+        
+        outputjson = json.dumps(output)
+
+    except Exception as exc:
+        general_logger.error("There was an error filtering for timelapse events {error}".format(error=exc))
+        raise abort(500, "Unable to filter 'impact_events.json'")
+
+    return outputjson, 200
