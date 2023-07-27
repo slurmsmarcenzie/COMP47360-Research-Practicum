@@ -24,7 +24,6 @@ def current():
 
 
 def event(eventID):
-
     try:
         data = event_prediction(eventID)
         general_logger.info("calling model for event busyness")
