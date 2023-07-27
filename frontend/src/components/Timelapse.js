@@ -1,16 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useMapContext } from './MapContext';
 import "../App.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
 function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMap}) {
 
-    const { updateLayerColours } = useMapContext();
+    const { updateLayerColours, neighbourhoodEvents } = useMapContext();
     
     const [isPlaying, setIsPlaying] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [index, setIndex] = useState(0);
+    const [currentEvent, setCurrentEvent] = useState(null);
 
     const timerRef = useRef(null);
+
+    useEffect(() => {
+        console.log('neighbourhood events', neighbourhoodEvents);
+        setCurrentEvent(neighbourhoodEvents[0])
+        console.log('current event', currentEvent);
+    }, [neighbourhoodEvents]);
     
     const startTimelapse = () => {
         setIsPlaying(true);
@@ -74,11 +83,16 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
     return (
         <div className='timelapse-container'>
             <button className="timelapse-button" onClick={handlePlay}>
-                <span className="timelapse-arrow"></span>
+                {isPlaying ? <FontAwesomeIcon icon={faPause} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faPlay} style={{color:'#D3D3D3'}}/>}
                 <label htmlFor="toggle" className="timelapse-label">{isPlaying ? "pause" : "play"}</label>
             </button>
-            <div className='slider-container'>
-                <input type="range" min="0" max="24" value={elapsedTime} onChange={handleSliderChange} />
+            <div className='slider-container-parent'>
+                <div className='slider-context-container'>
+                    <p className='elapsed-time-text'> {elapsedTime >= 10 ? '' : 0}{elapsedTime}:00 {elapsedTime >= 12 ? 'PM' : 'AM'}</p>
+                </div>
+                <div className='slider-container'>
+                    <input type="range" min="0" max="24" value={elapsedTime} onChange={handleSliderChange} />
+                </div>
             </div>
         </div>
     );

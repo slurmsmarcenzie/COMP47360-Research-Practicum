@@ -1,8 +1,8 @@
 import React from 'react';
 import "../App.css";
 
+
 // import context
-import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 
 function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
@@ -60,8 +60,6 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
     setEventName(selectedEvent.Event_Name);
     setIsResetShowing(true);
   };
-
-    const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
 
     const {isMobileTileOpen, setIsMobileTileOpen} =useMapContext()
 
