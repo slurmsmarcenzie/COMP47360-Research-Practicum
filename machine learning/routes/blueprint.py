@@ -1,34 +1,44 @@
 from flask import Blueprint
-from controllers.meta import list_events, list_metrics
-from controllers.prediction import prediction
-from controllers.baseline import baseline, baseline_event
-from controllers.base import home, login, logout, register, dashboard
+from controllers.meta import list_events
+from controllers.predict import current
+from controllers.historic import event_baseline, event_impact, event_comparison, event_timelapse
+from controllers.portal import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
 
+#Associate routes with Blueprint and set rate limiters:
 info = Blueprint("info", __name__)
 limiter.limit("25/minute")(info)
 
-predict = Blueprint("predict", __name__)
-limiter.limit("10/minute")(predict)
+prediction = Blueprint("prediction", __name__)
+limiter.limit("10/minute")(prediction)
 
-base = Blueprint("base", __name__)
-limiter.limit("10/minute")(base)
+historic = Blueprint("historic", __name__)
+limiter.limit("10/minute")(historic)
+
+portal = Blueprint("portal", __name__)
+limiter.limit("10/minute")(portal)
 
 
-#ROUTES:
-info.route("/info/events")(list_events)
-info.route("/info/metrics")(list_metrics)
-info.before_request(check_token)
+#INFO route for Event information:
+info.route("/api/info/events")(list_events)
+info.before_request(check_token) # This checks if key is valid before allowing a success response
 
-predict.route("/baseline/<string:date>")(baseline)
-predict.route("/baseline/<string:date>/<string:event>")(baseline_event)
-predict.route("/predict/<string:date>/<string:event>")(prediction)
-predict.before_request(check_token)
+#PREDICT route for model predictions
+prediction.route("/api/prediction/current")(current)
+prediction.before_request(check_token)
 
-base.route("/")(home)
-base.route("/login", methods=("GET", "POST"))(login)
-base.route("/logout")(logout)
-base.route("/register", methods=("GET", "POST"))(register)
-base.route("/dashboard")(dashboard)
+#HISTORIC route for baselines and impact
+historic.route("/api/historic/<string:eventID>/baseline")(event_baseline)
+historic.route("/api/historic/<string:eventID>/impact")(event_impact)
+historic.route("/api/historic/<string:eventID>/comparison")(event_comparison)
+historic.route("/api/historic/<string:eventID>/timelapse")(event_timelapse)
+historic.before_request(check_token)
+
+# PORTAL routes for clients to login and create/view their API key
+portal.route("/portal")(home)
+portal.route("/portal/login", methods=("GET", "POST"))(login)
+portal.route("/portal/logout")(logout)
+portal.route("/protal/register", methods=("GET", "POST"))(register)
+portal.route("/portal/dashboard")(dashboard)
 

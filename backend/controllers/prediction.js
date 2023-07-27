@@ -2,48 +2,44 @@ const axios = require("axios");
 const generalLogger = require("../logging/generalLogger")(module)
 require("dotenv").config();
 
-//fetch prediction from ML:
-const queryPrediction = (req, res, next) => {
-    res.req.ip
-    let eventID = req.params.event
-    // get date from params and fix it to be the correct format
-    let date = new Date(Date.parse(req.params.date)).toISOString();
-    generalLogger.info(`prediction requested for: ${date}, of event ${eventID}`)
-    generalLogger.info(`converted to ISOString: ${date}`);
 
-    const uri = `http://127.0.0.1:7000/predict/${date}/${eventID}?key=${process.env.FLASK_API_KEY}` 
+//fetch current prediction from ML API:
+const current = (req, res, next) => {
+    res.req.ip //sets the object
+    generalLogger.info(`current prediction requested`)
+
+    const uri = `${process.env.FLASK_API_URL}/prediction/current?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
       .then(response => {
+        // Handle empty/null API result:
         if (response.data === null || response.data === undefined || response.data.length === 0){
-          generalLogger.warn(`prediction list is empty: ${response.data}`)
-          res.status(200).json([]); //send empty JSON list if empty response received
+          generalLogger.warn("warning, prediction list is empty")
+          res.status(200).json([]);
           next()
         }
         else {
-          //make sure response has correct format [location_id, busyness_score]:
+          // Ensure correct format of API result:
           const data = []
             for (item of response.data){
               if ("busyness_score" && "location_id" in item){
                 data.push(item);
               }
               else {
-                generalLogger.warn(`prediction item skipped (incorrect format): ${item}`);
+                generalLogger.warn("warning: prediction item skipped (incorrect format)");
               }
             }
-            generalLogger.info("prediction result is OK and contains data")
+            generalLogger.info("response is OK")
             res.status(200).json(data)
             next()
-            
         }
       })
+      // If error, respond 500 and log error message
       .catch(error => {
-        generalLogger.error(`error getting predictions: ${error}`)
+        generalLogger.error(`error getting prediction: ${error}`)
         res.status(500).json({"error": error})
         next()
       });
-
-
 }
 
-module.exports = {queryPrediction};
+module.exports = {current};

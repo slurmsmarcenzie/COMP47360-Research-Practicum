@@ -6,13 +6,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
 import prunedEvents from '../geodata/prunedEvents.json'
-import antline from '../geodata/antline.geo.json'
 
 // Create a new context
 const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000/api';
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/app/v1';
 let animationID = null;
 
 // Create a provider component
@@ -33,6 +32,11 @@ export const MapProvider = ({ children }) => {
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
     const [isResetShowing, setIsResetShowing] = useState(false)
     const [lastMarkers, setLastMarkers] = useState([]);
+    const [isNavVisible, setIsNavVisible] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+    const [isThereALiveInfoBox, setIsThereALiveInfoBox] = useState(false);
+    const [isMobileTileOpen, setIsMobileTileOpen] = useState(false); 
+    const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(true);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -211,7 +215,7 @@ export const MapProvider = ({ children }) => {
     
         setMarkers(prevMarkers => [...prevMarkers, ...newMarkers]); // Update the state 
         
-        };
+    };
     
     
     const removeAllMarkers = () => {
@@ -238,29 +242,39 @@ export const MapProvider = ({ children }) => {
     
     };
 
-    // update the colours on the map
+    // Function to update the color of each layer in a map, based on a 'busyness' score
     const updateLayerColours = (map, isOriginalHashMap, originalBusynessHashMap, busynessHashMap) => {
   
-        if (!map|| !busynessHashMap || !neighbourhoods) return; // Added a check for busynessMap
-    
-        // Get the current map's style
+        // If the map, busynessHashMap, or neighbourhoods are not defined, end the function
+        if (!map|| !busynessHashMap || !neighbourhoods) return; 
+
+        // Get the current style object from the map
         const style = map.getStyle();
       
+        // Iterate over each neighbourhood in the 'neighbourhoods' array
         neighbourhoods.features.forEach(neighbourhood => {
 
-            // Check if the layer exists in the style before trying to update it
+            // Check if a layer with the current neighbourhood's id exists in the map's style
             if (style.layers.some(layer => layer.id === neighbourhood.id)) {
+
+                // Based on the 'isOriginalHashMap' flag, select the appropriate 'busyness' score
                 const score = isOriginalHashMap ? originalBusynessHashMap[neighbourhood.id] : busynessHashMap[neighbourhood.id];
+
+                // Assign this score to the 'busyness_score' property of the neighbourhood
                 neighbourhood.busyness_score = score;
-                if (score !== undefined) { // Check if the score is defined before using it
+
+                // If the score is defined, use it to calculate a new color and set the 'fill-color' property of the neighbourhood's layer
+                if (score !== undefined) {
                     const newColour = colourScale(score);
                     map.setPaintProperty(neighbourhood.id, 'fill-color', newColour);
                 }
             } else {
+                // If a layer with the current neighbourhood's id does not exist in the map's style, log a warning to the console
                 console.warn(`Layer with ID ${neighbourhood.id} doesn't exist`);
             }
         });
     };
+
 
     const addAntline = (map, event) => {
 
@@ -410,6 +424,11 @@ export const MapProvider = ({ children }) => {
         mapStyle, setMapStyle,
         isResetShowing, setIsResetShowing,
         showMatchingEvent, setShowMatchingEvent,
+        isNavVisible, setIsNavVisible,
+        isDrawerOpen, setIsDrawerOpen,
+        isThereALiveInfoBox, setIsThereALiveInfoBox,
+        isMobileTileOpen, setIsMobileTileOpen,
+        isFloatingNavVisible, setIsFloatingNavVisible,
       
         neighbourhoods,
         prunedEvents,

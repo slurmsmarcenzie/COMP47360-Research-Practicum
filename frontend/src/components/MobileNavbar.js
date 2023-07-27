@@ -7,7 +7,7 @@ import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 
-export default function Navbar() {
+export default function MobileNavbar() {
 
   const {mapStyle, setMapStyle} = useMapContext();
 
@@ -46,7 +46,6 @@ export default function Navbar() {
       </div>
       <div className="navbar-links">
         <div className="button-group">
-          <button className="transparent-button" onClick={openModal}>About Us</button>
           <button 
           className='navbar-toggle-dark-mode-button'
           onClick={() => {

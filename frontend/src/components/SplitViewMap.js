@@ -34,7 +34,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
   const [viewState, setViewState] = useState({
     longitude: -73.9857,
     latitude: 40.7484,
-    zoom: 12,
+    zoom: 11.2,
     pitch: 30
   });
 
