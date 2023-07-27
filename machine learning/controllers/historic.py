@@ -25,6 +25,7 @@ def event_impact(eventID):
 
         for item in original:
             if item["Event_ID"] == eventID and item["time"] == peak:
+
                 filtered.append(item)
         
         outputjson = json.dumps(filtered)
