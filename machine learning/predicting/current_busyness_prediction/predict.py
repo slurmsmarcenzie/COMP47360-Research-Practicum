@@ -1,14 +1,15 @@
 import pickle
 import pandas as pd
 from logging_flask.logger import general_logger
-from predicting.data import col_names, location_ids
+from predicting.data import col_names_general, location_ids
 from custom_exceptions.model_error import ModelError
 
 # Passes input to the chosen model
+# Choice of returning normalised or non-normalised data
 # returns a list of location:busyness pairs
-def general_prediction(date):
+def general_prediction(date, normalise=True):
     try:
-        pickled_model = pickle.load(open('predicting/models/xgb_non_normalised_merged_model.pkl', 'rb'))
+        pickled_model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
         general_logger.info("Successfully loaded pickled model")
     except pickle.PickleError as err:
         raise ModelError("Error loading pickled model: {err}".format(err=err))
@@ -31,14 +32,22 @@ def general_prediction(date):
     except Exception as exc:
         raise ModelError("Could not generate model results: {exc}".format(exc=exc))
     
+    if normalise:
     # Normalise the busyness scores so they are relative to eachother and in the range 0-1
-    try:
-        normalised_data = normalise_and_format(data) 
-        general_logger.info("Normalising model results")
-    except Exception as exc:
-        raise ModelError("Problem normalising model results: {exc}".format(exc=exc))
+        try:
+            normalised_data = normalise_and_format(data) 
+            general_logger.info("Normalising model results")
+        except Exception as exc:
+            raise ModelError("Problem normalising model results: {exc}".format(exc=exc))
+        
+        return normalised_data
     
-    return normalised_data
+    if not normalise:
+    # Just format, dont normalise
+        for item in data:
+            item["busyness_score"] = str(item["busyness_score"])
+        return data
+            
 
 # Parses the date to suit our models input
 # Returns a dictionary of features and their values
@@ -50,7 +59,7 @@ def generate_model_input(date):
     weekend = 1 if day > 5 else 0 
     
     # Dictionary of features & their values
-    input_data = dict.fromkeys(col_names, 0)
+    input_data = dict.fromkeys(col_names_general, 0)
     input_data.update({"Hour": hour, "DayOfMonth": dayOfMonth, "Month": month, "Weekend": weekend})
 
     # Set the relevant day of week to 1 (i.e. True)

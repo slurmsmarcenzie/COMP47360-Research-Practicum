@@ -1,6 +1,6 @@
 from flask import Blueprint
 from controllers.meta import list_events
-from controllers.predict import current, event
+from controllers.predict import current
 from controllers.historic import event_baseline, event_impact
 from controllers.portal import home, login, logout, register, dashboard
 from extensions.limiter import limiter
@@ -26,7 +26,6 @@ info.before_request(check_token) # This checks if key is valid before allowing a
 
 #PREDICT route for model predictions
 prediction.route("/api/prediction/current")(current)
-prediction.route("/api/prediction/event/<string:eventID>")(event)
 prediction.before_request(check_token)
 
 #HISTORIC route for baselines and impact
