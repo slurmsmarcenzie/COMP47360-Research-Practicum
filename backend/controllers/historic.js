@@ -84,4 +84,67 @@ const eventBaseline = (req, res, next) => {
     });
 }
 
-module.exports = {eventImpact, eventBaseline};
+const eventComparison = (req, res, next) => {
+  res.req.ip //sets the object
+  let eventID = req.params.event
+  
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/comparison?key=${process.env.FLASK_API_KEY}` 
+  
+  generalLogger.info(`comparison requested for event: ${eventID}`)
+  
+  axios.get(uri)
+    .then(response => {
+      generalLogger.info(`${response} - loggin response`)
+      // Handle empty/null API result:
+      if (response.data === null || response.data === undefined || response.data.length === 0){
+        generalLogger.warn(`events comparison list is empty: ${response.data}`)
+        res.status(200).json([]);
+        next()
+      }
+      else {
+        generalLogger.info("event comparison result is OK")
+        res.status(200).json(response.data)
+        next()   
+      }
+    })
+    // If error, respond 500 and log error message
+    .catch(error => {
+      generalLogger.error(`error getting event comparison: ${error.message}`)
+      res.status(500).json({"error": error.message})
+      next()
+    });
+}
+
+const eventTimelapse = (req, res, next) => {
+
+  res.req.ip //sets the object
+  let eventID = req.params.event
+
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse?key=${process.env.FLASK_API_KEY}` 
+
+  generalLogger.info(`timelapse data requested for event: ${eventID}`)
+
+  axios.get(uri)
+    .then(response => {
+      generalLogger.info(`${response} - loggin response`)
+      // Handle empty/null API result:
+      if (response.data === null || response.data === undefined || response.data.length === 0){
+        generalLogger.warn(`events comparison list is empty: ${response.data}`)
+        res.status(200).json([]);
+        next()
+      }
+      else {
+        generalLogger.info("event comparison result is OK")
+        res.status(200).json(response.data)
+        next()   
+      }
+    })
+    // If error, respond 500 and log error message
+    .catch(error => {
+      generalLogger.error(`error getting event comparison: ${error.message}`)
+      res.status(500).json({"error": error.message})
+      next()
+    });
+}
+
+module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapse};

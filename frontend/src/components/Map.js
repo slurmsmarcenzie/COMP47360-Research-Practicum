@@ -14,6 +14,7 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
+import Timelapse from './Timelapse';
 
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
@@ -33,8 +34,11 @@ function Map() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
+  const [eventComparisonData, setEventComparisonData] = useState(null);
+  const [timelapseData, setTimelapseData] = useState(null);
+
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, neighbourhoodEvents} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -333,6 +337,7 @@ function Map() {
   const visualiseEventImpact = (Event_ID) => {
 
     setNeighbourhoodEvents([]);
+    setIsFloatingNavVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -340,12 +345,12 @@ function Map() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    
+    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
-    setTimeout(() => {
-      getHistoricBusyness(Event_ID);
-    }, 900)
+    getHistoricBusyness(Event_ID);
+    fetchEventComparison(Event_ID);
+    setTimeout(() => fetchTimelapse(Event_ID), 600)
   
   }
 
@@ -369,6 +374,24 @@ function Map() {
 
   };
   
+  // Define an effect that will run every time 'scores' or 'eventBaselineScores' changes
+  useEffect(() => {
+    // If 'scores' and 'eventBaselineScores' have been fetched
+    if (scores && eventBaselineScores) {
+      // Start a timeout that will delay the execution of the next function
+      const timeoutId = setTimeout(() => {
+        // After a delay of 2000 ms, update the colors of the layers on the map
+        updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+      }, 700); // Delay of 2000 ms
+
+      // Return a cleanup function that will run when the component unmounts, or before this effect runs again
+      return () => {
+        // If the component unmounts before the timeout finishes, cancel the timeout to prevent a potential memory leak
+        clearTimeout(timeoutId);
+      }
+    }
+  }, [scores, eventBaselineScores]); // Dependencies of this effect: 'scores' and 'eventBaselineScores'
+
   const calculateHashMapDifference = () => {
 
     if (!busynessHashMap || !originalBusynessHashMap) {
@@ -406,7 +429,6 @@ function Map() {
     // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
-
   // same implementation as above
   const eventBaselineHashMap = useMemo(() => {
     if (!eventBaselineScores) return {};  
@@ -424,7 +446,6 @@ function Map() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/prediction/current`);
-        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -490,7 +511,7 @@ function Map() {
 
       } 
     }
-  }, [scores, mapStyle]); // This effect runs when scores is fetched
+  }, [scores]); // This effect runs when scores is fetched
     
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
@@ -498,51 +519,52 @@ function Map() {
       // Change the style
       map.current.setStyle(mapStyle);
 
-      // Re-initialize map on style load
+      // Only fly to the location and update colours on style load
       map.current.once('style.load', () => {
         map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+        
         renderNeighbourhoods(map.current);
         add3DBuildings(map.current);
-        renderEvents(map.current);
-        initialiseMouseMapEvents(map.current);
+
         setTimeout(() => {
+          
           updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 800);
+        }, 900);
       });
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
 
-  // Define an effect that runs when the 'scores' prop changes
-  useEffect(() => {
 
-    // If the 'current' property of 'map' is defined (i.e., the map instance exists)
-    if (map.current) {
-      
-      // If the map's style is already loaded
-      if (map.current.isStyleLoaded()) {
-        
-        // Update the layer colours on the map
-        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-      } else {
-        // If the map's style is not yet loaded, set up an event listener to
-        // update the layer colours once the style is loaded
-        map.current.on('style.load', updateLayerColoursAfterLoad);
-      }
-    }
+  const fetchEventComparison = async (Event_ID) => {
   
-    // Define a cleanup function that will run when the component unmounts, or
-    // before this effect runs again
-    return () => {
-      
-      // If the 'current' property of 'map' is defined
-      if (map.current) {
-        
-        // Remove the event listener for the 'style.load' event to avoid
-        // potential memory leaks
-        map.current.off('style.load', updateLayerColoursAfterLoad);
-      }
+    try {
+     const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
+     if (!eventComparisonResponse) {
+      throw new Error('Network response was not ok');
+     }
+     const eventComparisonData = await eventComparisonResponse.json();
+     setEventComparisonData(eventComparisonData);
+    } catch (error) {
+     console.error('Issue with fetch request for event impact:', error);
+     setError(error);
     }
-  }, [scores]); // This effect depends on 'scores'. It will run every time 'scores' changes
+  }
+
+  const fetchTimelapse = async (Event_ID) => {
+
+    try {
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      if (!timelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const timelapseData = await timelapseResponse.json();
+      setTimelapseData(timelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
+
+  }
 
   return (
 
@@ -564,13 +586,15 @@ function Map() {
 
           <Navbar />
 
-          <FloatingNav 
-            map={map}
-            disableColours = {disableColours}
-            isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
-            changeColourScheme={changeColourScheme}
-            enableColours={enableColours}
-            />
+          {isFloatingNavVisible ? (
+            <FloatingNav 
+              map={map}
+              disableColours = {disableColours}
+              isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
+              changeColourScheme={changeColourScheme}
+              enableColours={enableColours}
+              />
+            ): <></>}
 
           <FloatingInfoBox
             map={map}
@@ -589,6 +613,13 @@ function Map() {
           <MapLegend
             colours={colourPairs[colourPairIndex]} 
             hoveredZoneScore={hoveredZoneScore}
+          />
+
+          <Timelapse
+            map={map}
+            originalBusynessHashMap={originalBusynessHashMap}
+            busynessHashMap={busynessHashMap}
+            timelapseData={timelapseData}
           />
 
           </>
