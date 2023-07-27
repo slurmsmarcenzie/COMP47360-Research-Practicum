@@ -14,7 +14,6 @@ function EventCard ({event, visualiseEventImpact, map}) {
     return (
         <div className='floating-info-box-event-card'>
             <h2 style={{marginTop: '0px'}}>{event.Event_Name}</h2>
-            <h3>Expected Attendees: {event.expected_attendees}</h3>
             <p>{event.description}</p>
             <button className='floating-nav-cta-button' onClick={() => {
                 removeAntline(map.current)
