@@ -44,11 +44,15 @@ def event_comparison(eventID):
     # Calculate difference between impact and baseline:
     difference = dict.fromkeys(baseline_filtered.keys(), {})
 
-    for time in baseline_filtered:
-        for location in baseline_filtered[time]:
-            impact_score = impact_filtered[time][location]
-            baseline_score = baseline_filtered[time][location]
-            difference[time][location] = impact_score - baseline_score
+    ### This code isnt working, some misunderstanding with dicts
+    # for time in baseline_filtered:
+    #     for location in baseline_filtered[time]:
+    #         impact_score = impact_filtered[time][location]
+    #         baseline_score = baseline_filtered[time][location]
+    #         difference[time][location] = impact_score - baseline_score
+
+    difference[0][4] = 0.13 # Seems to set [x1..xN][4] to 0.13
+    print(difference[15][5])
 
     outputjson = json.dumps(difference)
     return outputjson, 200
