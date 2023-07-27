@@ -618,6 +618,7 @@ function Map() {
           <Timelapse
             map={map}
             originalBusynessHashMap={originalBusynessHashMap}
+            busynessHashMap={busynessHashMap}
             timelapseData={timelapseData}
           />
 
