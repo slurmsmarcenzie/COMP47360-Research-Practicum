@@ -446,7 +446,6 @@ function Map() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/prediction/current`);
-        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -540,13 +539,11 @@ function Map() {
   
     try {
      const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
-     console.log('this is response', eventComparisonResponse);
      if (!eventComparisonResponse) {
       throw new Error('Network response was not ok');
      }
      const eventComparisonData = await eventComparisonResponse.json();
      setEventComparisonData(eventComparisonData);
-     console.log(eventComparisonData);
     } catch (error) {
      console.error('Issue with fetch request for event impact:', error);
      setError(error);
@@ -557,14 +554,11 @@ function Map() {
 
     try {
       const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
-      console.log('this is response', timelapseResponse);
       if (!timelapseResponse) {
        throw new Error('Network response was not ok');
       }
       const timelapseData = await timelapseResponse.json();
-      console.log(timelapseData)
       setTimelapseData(timelapseData);
-      console.log('this is timelapse', timelapseData);
      } catch (error) {
       console.error('Issue with fetch request for timelapse function:', error);
       setError(error);
@@ -621,12 +615,11 @@ function Map() {
             hoveredZoneScore={hoveredZoneScore}
           />
 
-          {/* <Timelapse
+          <Timelapse
             map={map}
             originalBusynessHashMap={originalBusynessHashMap}
-            eventBaselineHashMap={eventBaselineHashMap}
-            busynessHashMap={busynessHashMap}
-          /> */}
+            timelapseData={timelapseData}
+          />
 
           </>
         )}
