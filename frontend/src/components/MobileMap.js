@@ -2,8 +2,9 @@
 import React, { useEffect, useRef,useState, useMemo, lazy, Suspense } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { scaleLinear } from 'd3-scale';
-import { throttle } from 'lodash';
-import { feature, centroid } from '@turf/turf';
+import throttle from 'lodash/throttle';
+import { feature } from '@turf/helpers';
+import centroid from '@turf/centroid';
 
 // Context builder
 import { useMapContext } from './MapContext';
