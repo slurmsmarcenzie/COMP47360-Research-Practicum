@@ -29,7 +29,6 @@ app.disable('x-powered-by')
 app.use("/app/v1/meta", meta, http_logger)
 app.use("/app/v1/prediction", prediction, http_logger)
 app.use("/app/v1/historic", historic, http_logger)
-// In future: potentially more routes for filtering/sorting results
 
 app.get('/', (req, res, next) => {
   res.status(200).send("DEV mode. In production, REACT APP will be served here")
