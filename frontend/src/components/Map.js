@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
 import { throttle } from 'lodash';
-import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+import { feature, centroid } from '@turf/turf';
 
 // Context builder
 import { useMapContext } from './MapContext';
@@ -269,13 +269,13 @@ function Map() {
       const [firstFeature] = features;
 
       // Create a GeoJSON feature object from the clicked feature
-      const geojsonFeature = turf.feature(firstFeature.geometry);
+      const geojsonFeature = feature(firstFeature.geometry);
 
       // Use turf to calculate the centroid of the feature
-      const centroid = turf.centroid(geojsonFeature);
+      const featureCentroid = centroid(geojsonFeature);
 
       // Get the coordinates of the centroid
-      const [lng, lat] = centroid.geometry.coordinates;
+      const [lng, lat] = featureCentroid.geometry.coordinates;
 
       // Fly to the centroid of the polygon
       map.flyTo({ center: [lng, lat], zoom: 15, essential: true });

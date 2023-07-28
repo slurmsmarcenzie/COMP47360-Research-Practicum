@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, lazy} from 'react';
 import EventCard from './EventCard';
-import NeighbourhoodChartData from './NeighbourhoodChartData';
-import EventAnalysis from './EventAnalysis';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+
+const NeighbourhoodChartData = lazy(() => import('./NeighbourhoodChartData'))
+const EventAnalysis = lazy(() => import('./EventAnalysis'));
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
 
