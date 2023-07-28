@@ -30,6 +30,7 @@ def general_prediction(date, normalise=True):
             df = pd.DataFrame(input_data, index=[0])
             score = pickled_model.predict(df)
             data[str(loc)] = float(score[0]) #numpy float32 incompatible with JSON
+            
     except Exception as exc:
         raise ModelError("Could not generate model results: {exc}".format(exc=exc))
     
