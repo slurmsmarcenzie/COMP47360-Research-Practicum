@@ -36,6 +36,8 @@ export const MapProvider = ({ children }) => {
     const [isMobileTileOpen, setIsMobileTileOpen] = useState(false); 
     const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(true);
     const [isTimelapseVisible, setIsTimelapseVisible] = useState(false);
+    const [eventComparisonData, setEventComparisonData] = useState(null);
+    const [eventID, setEventID] = useState(null);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -429,6 +431,8 @@ export const MapProvider = ({ children }) => {
         isMobileTileOpen, setIsMobileTileOpen,
         isFloatingNavVisible, setIsFloatingNavVisible,
         isTimelapseVisible, setIsTimelapseVisible,
+        eventComparisonData, setEventComparisonData,
+        eventID, setEventID,
         
         neighbourhoods,
         prunedEvents,

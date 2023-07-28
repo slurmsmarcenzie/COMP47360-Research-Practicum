@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
+import LineChart from './LineChart';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
@@ -20,6 +21,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     
     const [renderChart, setRenderChart] = useState(null);
     const [selectedValues, setSelectedValues] = useState([]);
+    const [showLineChart, setShowLineChart] = useState(false);
     
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
@@ -297,6 +299,10 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     useEffect(() => {
         highlightZones()
     }, [labels])
+
+    const handleShowChart = () => {
+        setShowLineChart((prevShowChart) => !prevShowChart); // Toggle the showChart state
+      };
   
     return (
         <div className='parent-chart-container'> 
@@ -314,7 +320,14 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                     X
                 </button>
             </div>
-            }
+            }<button
+            className="floating-nav-outline-button"
+            onClick={handleShowChart}
+            style={{ marginBottom: '10px' }} 
+          >
+            {showLineChart ? 'Hide Chart' : 'Show Chart'}
+          </button>
+          {showLineChart && <LineChart map={map}/>}
             <div className='floating-infobox-box-button-container'>
                 <div className="radio-button">
                     <input
