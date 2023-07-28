@@ -15,7 +15,7 @@ const eventImpact = (req, res, next) => {
       // Handle empty/null API result:
       if (response.data === null || response.data === undefined || response.data.length === 0){
         generalLogger.warn(`event impact list is empty: ${response.data}`)
-        res.status(200).json([]);
+        res.status(200).json({});
         next()
       }
       else {
@@ -45,7 +45,7 @@ const eventBaseline = (req, res, next) => {
       // Handle empty/null API result:
       if (response.data === null || response.data === undefined || response.data.length === 0){
         generalLogger.warn(`events baseline list is empty: ${response.data}`)
-        res.status(200).json([]);
+        res.status(200).json({});
         next()
       }
       else { 
@@ -74,7 +74,7 @@ const eventComparison = (req, res, next) => {
       // Handle empty/null API result:
       if (response.data === null || response.data === undefined || response.data.length === 0){
         generalLogger.warn(`events comparison list is empty: ${response.data}`)
-        res.status(200).json([]);
+        res.status(200).json({});
         next()
       }
       else {
@@ -104,7 +104,7 @@ const eventTimelapse = (req, res, next) => {
       // Handle empty/null API result:
       if (response.data === null || response.data === undefined || response.data.length === 0){
         generalLogger.warn(`events comparison list is empty: ${response.data}`)
-        res.status(200).json([]);
+        res.status(200).json({});
         next()
       }
       else {
