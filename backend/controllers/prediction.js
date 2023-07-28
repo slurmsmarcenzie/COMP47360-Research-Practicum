@@ -20,7 +20,7 @@ const current = (req, res, next) => {
         }
         else {
             generalLogger.info("response is OK")
-            res.status(200).json(data)
+            res.status(200).json(response.data)
             next()
         }
       })
