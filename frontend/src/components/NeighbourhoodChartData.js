@@ -338,7 +338,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         checked={!active}
                         onChange={handleOptionChange}
                     />
-                    <label for="baselineBusyness">
+                    <label htmlFor="baselineBusyness">
                         Turn off Event Impact
                     </label>
                     <input
@@ -349,7 +349,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         checked={active}
                         onChange={handleOptionChange}
                     />
-                    <label for="eventImpact">
+                    <label htmlFor="eventImpact">
                         Show Impact of Event
                     </label>
                 </div>
