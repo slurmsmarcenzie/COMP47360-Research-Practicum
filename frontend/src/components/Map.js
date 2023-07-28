@@ -534,7 +534,6 @@ function Map() {
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
 
-
   const fetchEventComparison = async (Event_ID) => {
   
     try {

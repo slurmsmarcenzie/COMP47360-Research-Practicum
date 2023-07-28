@@ -59,36 +59,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     
         return {names, dataValues};
     }
-  
-    // This function will handle extraction of labels
-    const getImpactedZonesForHighlight = () => {
-
-        if (!hashMap) {
-            return [];
-        }
-
-        const entries = Object.entries(hashMap);
-        let filteredEntries;
-
-        if (showMostImpactedZones) {
-            entries.sort((a, b) => b[1] - a[1]);
-            // Filter only entries with a change greater than or equal to 0.2
-            filteredEntries = entries.filter((entry) => entry[1] >= 0.25);
-            // Get only the top 5 most impacted areas
-            // filteredEntries = filteredEntries.slice(0, 5);
-        } else {
-            entries.sort((a, b) => a[1] - b[1]);
-            // Filter only entries with a change less than 0.2
-            filteredEntries = entries.filter((entry) => entry[1] < 0.2);
-            // Get only the bottom 5 least impacted areas
-            filteredEntries = filteredEntries.slice(0, 5);
-        }
-
-        const filteredHashMap = Object.fromEntries(filteredEntries);
-        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
-
-        return selectedValues
-    }
 
     // function used to make the chart data
     const makeChartData = (names, dataValues) => {
@@ -162,9 +132,9 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         return {data, options};
     }
     
-    useEffect(() => {
-        setSelectedValues(getImpactedZonesForHighlight());
-    }, [hashMap, showMostImpactedZones]);
+    // useEffect(() => {
+    //     setSelectedValues(getImpactedZonesForHighlight());
+    // }, [hashMap, showMostImpactedZones]);
     
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
@@ -181,6 +151,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     //     highlightEventImpact(Zone_ID, labels);
     // };
 
+    // legacy code
     const getGradientMostImpacted = (context) => {
         const {ctx, chartArea: { top, bottom } } = context;
         const gradientSegment = ctx.createLinearGradient(0, top, 0, bottom);
@@ -212,21 +183,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         handleToggle();
     }, [active]);
 
-    const highlightZones = () => {
-
-        if (labels.length === 0) {
-            return;
-        }
-    
-        if (isButtonPressed) {
-            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
-            resetColours();
-        } else {
-            highlightEventImpact(labels);
-        }
-    }
-    
-
     // new function introduced by harry for buttons to filter map:
 
     const getMostImpactedZones = () => {
@@ -241,11 +197,11 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
         entries.sort((a, b) => b[1] - a[1]);
 
-        // Filter only entries with a change greater than or equal to 0.25
-        filteredEntries = entries.filter((entry) => entry[1] >= 0.3);
+        // Filter only entries with a change greater than or equal to 0.44
+        filteredEntries = entries.filter((entry) => entry[1] >= 0.44);
 
         // Get only the top 5 most impacted areas
-        // filteredEntries = filteredEntries.slice(0, 5);
+        filteredEntries = filteredEntries.slice(0, 8);
 
         const filteredHashMap = Object.fromEntries(filteredEntries);
         const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
@@ -265,11 +221,11 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
         entries.sort((a, b) => a[1] - b[1]);
 
-        // Filter only entries with a change less than 0.2
-        filteredEntries = entries.filter((entry) => entry[1] < 0.3);
+        // Filter only entries with a change less than 0.44
+        filteredEntries = entries.filter((entry) => entry[1] <= -0.22);
 
         // Get only the bottom 5 least impacted areas
-        // filteredEntries = filteredEntries.slice(0, 5);
+        // filteredEntries = filteredEntries.slice(0, 8);
 
         const filteredHashMap = Object.fromEntries(filteredEntries);
         const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
@@ -320,6 +276,24 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
     }
 
+    // logic to handle changing of zones being highlighted.
+
+    const highlightZones = () => {
+
+        if (labels.length === 0) {
+            return;
+        }
+    
+        if (isButtonPressed) {
+            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+            resetColours();
+        } else {
+            highlightEventImpact(labels);
+        }
+    }
+
+    // use effect used to handle changes in toggle states
+
     useEffect(() => {
         highlightZones()
     }, [labels])
@@ -342,7 +316,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
             </div>
             }
             <div className='floating-infobox-box-button-container'>
-                <h3 style={{margin: 'auto', padding: 'auto'}}>Toggle Event Impact On/Off</h3>
                 <div className="radio-button">
                     <input
                         type="radio"
@@ -383,7 +356,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 </div> : null
                 }
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Show Side-By-Side Maps'}
+                    {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
                 </button>
             </div>
         </div>

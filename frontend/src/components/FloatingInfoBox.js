@@ -113,7 +113,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
   }
   
-  
   function renderInfoBoxContent() {
 
     if (!showInfoBox) {
