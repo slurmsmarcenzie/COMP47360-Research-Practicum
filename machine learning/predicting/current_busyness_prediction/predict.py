@@ -1,4 +1,5 @@
 import pickle
+import json
 import pandas as pd
 from logging_flask.logger import general_logger
 from predicting.data import col_names_general, location_ids
@@ -6,7 +7,7 @@ from custom_exceptions.model_error import ModelError
 
 # Passes input to the chosen model
 # Choice of returning normalised or non-normalised data
-# returns a list of location:busyness pairs
+# returns a dictionary of location:busyness pairs
 def general_prediction(date, normalise=True):
     try:
         pickled_model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
@@ -15,7 +16,7 @@ def general_prediction(date, normalise=True):
         raise ModelError("Error loading pickled model: {err}".format(err=err))
     
     try:
-        data = []
+        data = {}
         input_data = generate_model_input(date)
         general_logger.info("Successfully generated model input")
     except Exception as exc:
@@ -28,14 +29,14 @@ def general_prediction(date, normalise=True):
             input_data["DOLocationID"] = loc
             df = pd.DataFrame(input_data, index=[0])
             score = pickled_model.predict(df)
-            data.append({"location_id":loc, "busyness_score":score[0]})
+            data[str(loc)] = float(score[0]) #numpy float32 incompatible with JSON
     except Exception as exc:
         raise ModelError("Could not generate model results: {exc}".format(exc=exc))
     
     if normalise:
     # Normalise the busyness scores so they are relative to eachother and in the range 0-1
         try:
-            normalised_data = normalise_and_format(data) 
+            normalised_data = normalise_data(data) 
             general_logger.info("Normalising model results")
         except Exception as exc:
             raise ModelError("Problem normalising model results: {exc}".format(exc=exc))
@@ -43,10 +44,7 @@ def general_prediction(date, normalise=True):
         return normalised_data
     
     if not normalise:
-    # Just format, dont normalise
-        for item in data:
-            item["busyness_score"] = str(item["busyness_score"])
-        return data
+        return json.dumps(data)
             
 
 # Parses the date to suit our models input
@@ -95,19 +93,19 @@ def generate_model_input(date):
 
 # Normalises the busyness scores to a value between 0 and 1.
 # Returns the normalised data (now ready for client)
-def normalise_and_format(data):
+def normalise_data(data):
     #get min and max for normalisation formula:
     min, max = 0, 0
-    for item in data:
-        if item["busyness_score"] < min:
-            min = item["busyness_score"]
-        elif item["busyness_score"] > max:
-            max = item["busyness_score"]
+    for key in data:
+        if data[key] < min:
+            min = data[key]
+        elif data[key] > max:
+            max = data[key]
 
     # Normalise and format:
     # busyness score is stringified to better suit JSON later
-    for item in data:
-        item["busyness_score"] = str((item["busyness_score"] - min) / (max - min))
+    for key in data:
+        data[key] = (data[key] - min) / (max - min)
 
     return data
     
