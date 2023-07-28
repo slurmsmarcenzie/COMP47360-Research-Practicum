@@ -29,26 +29,29 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         }, 1000);
     };
 
-    const stopTimelapse = () => {
-        setIndex(0);
-        
+    const pauseTimelapse = () => {
         setIsPlaying(false);
         clearInterval(timerRef.current);
+    };
 
+    const handlePlay = () => {
+        isPlaying ? pauseTimelapse() : startTimelapse();
+    };
+
+    const endTimelapse = () => {
+        
+        setIndex(0);
         setElapsedTime(0);
+        setIsPlaying(false);
 
         setTimeout(() => {
             updateLayerColours(map.current, false, busynessHashMap, busynessHashMap);
         }, 400)
-    };
-
-    const handlePlay = () => {
-        isPlaying ? stopTimelapse() : startTimelapse();
-    };
+    }
 
     const handleSliderChange = (e) => {
 
-        stopTimelapse(); 
+        pauseTimelapse(); 
         const newElapsedTime = Number(e.target.value);
         setElapsedTime(newElapsedTime);
     
@@ -64,7 +67,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
 
     useEffect(() => {
         if (elapsedTime >= 24) {
-            stopTimelapse();
+            endTimelapse();
         }
 
         if(Number.isInteger(elapsedTime) && timelapseData && timelapseData.length > index){
