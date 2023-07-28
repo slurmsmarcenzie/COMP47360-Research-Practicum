@@ -8,7 +8,6 @@ from static.peak_times import peak_times
 # HISTORIC/EVENT/IMPACT
 def event_impact(eventID):
     general_logger.info(f"impact quried for event: {eventID}")
-    eventID = int(eventID)
     impact_filtered = event_filter(load_event_impact(), eventID, peak_times.get(eventID))
     return json.dumps(impact_filtered), 200
 
@@ -16,7 +15,6 @@ def event_impact(eventID):
 # HISTORIC/EVENT/BASELINE
 def event_baseline(eventID):
     general_logger.info(f"baseline quried for event: {eventID}")
-    eventID = int(eventID)
     baseline_filtered = event_filter(load_event_baseline(), eventID, peak_times.get(eventID))
     return json.dumps(baseline_filtered), 200
 
@@ -25,7 +23,7 @@ def event_baseline(eventID):
 def event_timelapse(eventID):
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
-    impact_filtered = event_filter(load_event_impact(), eventID)
+    impact_filtered = event_filter(load_event_impact(), int(eventID))
     return json.dumps(impact_filtered), 200
 
 
@@ -35,8 +33,8 @@ def event_comparison(eventID):
     eventID = int(eventID)
 
     #Load and Filter event impact & event baseline:
-    baseline_filtered = event_filter(load_event_baseline(), eventID)
-    impact_filtered = event_filter(load_event_impact(), eventID)
+    baseline_filtered = event_filter(load_event_baseline(), int(eventID))
+    impact_filtered = event_filter(load_event_impact(), int(eventID))
 
     if baseline_filtered.keys() != impact_filtered.keys():
         raise abort(500, "time key mismatch for filtered baseline and impact")
@@ -81,6 +79,7 @@ def load_event_baseline():
 # If Time: Returns dictionary of {hour1: {location1: busyness...}...}
 # If Not Time: Returns dictionary of {location1: busness, location2: busyness}
 def event_filter(file, id, for_time=None):
+    id = int(id)
     original_json = json.load(file)
     filtered = {}
 
