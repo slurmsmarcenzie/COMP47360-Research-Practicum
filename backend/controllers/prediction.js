@@ -14,21 +14,11 @@ const current = (req, res, next) => {
       .then(response => {
         // Handle empty/null API result:
         if (response.data === null || response.data === undefined || response.data.length === 0){
-          generalLogger.warn("warning, prediction list is empty")
-          res.status(200).json([]);
-          next()
+            generalLogger.warn("warning, prediction list is empty")
+            res.status(200).json({});
+            next()
         }
         else {
-          // Ensure correct format of API result:
-          const data = []
-            for (item of response.data){
-              if ("busyness_score" && "location_id" in item){
-                data.push(item);
-              }
-              else {
-                generalLogger.warn("warning: prediction item skipped (incorrect format)");
-              }
-            }
             generalLogger.info("response is OK")
             res.status(200).json(data)
             next()
