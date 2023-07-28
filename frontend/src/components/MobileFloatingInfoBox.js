@@ -85,7 +85,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
 
   function renderHeader() {
     return (
-      <div style={{display: 'flex', alignItems: 'left'}}>
+      <div style={{display: 'flex', alignItems: 'left', width: '100%'}}>
         <button className='floating-info-box-back-button' onClick={() => {
           removeAntline(map.current)
           resetMap(map);
@@ -102,7 +102,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   function renderChartOrAnalysis() {
   
     if (!showChartData) {
-      return <h4 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
+      return <h4 style={{width: '100%'}}className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
     }
   
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
