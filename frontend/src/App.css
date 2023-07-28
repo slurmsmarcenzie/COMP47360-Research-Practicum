@@ -675,7 +675,8 @@ input:checked + .slider:before {
   }
 
   .navbar-toggle-dark-mode-button {
-    width: 36px;
+    width: 44px;
+    height: 44px;
     color: white;
     font-size: 12px;
     font-weight: 400;
@@ -691,7 +692,7 @@ input:checked + .slider:before {
 @media screen and (max-width: 540px) {
 
   .floating-map-legend-container {
-    min-width: 24px;
+    min-width: 34px;
     max-width: 24px; /* Change to desired width for mobile */
     top: 64px; /* Adjust to desired distance from top for mobile */
     right: 10px; /* Adjust to desired distance from right for mobile */
@@ -772,40 +773,43 @@ input:checked + .slider:before {
 }
 
 .floating-nav-tile {
-  width: 36px;
-  height: 36px;
-  background-color: #12131640;
-  border: 1px solid rgba(255, 255, 255, 0.125);
-  color: white;
-  padding: 12px;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  background-color: #12131640; /* Use a neutral background for Neumorphism */
   border-radius: 5px;
-  text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow:  8px 8px 16px 0 rgba(0, 0, 0, 0.1), 
+              -8px -8px 16px 0 rgba(255, 255, 255, 0.1); /* Create 3D effect with shadows */
 }
 
 .floating-nav-tile:hover {
-  background-color: #121316;
+  background-color: #322d3740; /* Slightly darken the tile on hover */
 }
 
 .floating-nav-tile:active {
-  background-color: #0a0a0a;
+  background-color: #322d3740; /* Darken the tile more when clicked */
+  box-shadow:  inset 4px 4px 8px 0 rgba(0, 0, 0, 0.2), 
+               inset -4px -4px 8px 0 rgba(255, 255, 255, 0.4); /* Inset shadows when clicked */
 }
 
 .floating-search-icon-container {
   z-index: 999;
-  min-width: 24px;
+  min-width: 44px;
   max-width: 24px; /* Change to desired width for mobile */
   margin-top: 206px; /* Adjust to desired distance from top for mobile */
-  right: 16px; /* Adjust to desired distance from right for mobile */
-  height: 36px;
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
   padding: 6px;
   position: absolute;   
 }
 
 .floating-search-icon-container-button {
-  width: 36px;
+  width: 100%;
   color: white;
   font-size: 12px;
   font-weight: 400;
@@ -821,11 +825,11 @@ input:checked + .slider:before {
 
 .floating-eye-icon-container{
   z-index: 999;
-  min-width: 24px;
+  min-width: 44px;
   max-width: 24px; /* Change to desired width for mobile */
   margin-top: 260px; /* Adjust to desired distance from top for mobile */
-  right: 16px; /* Adjust to desired distance from right for mobile */
-  height: 36px;
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
   padding: 6px;
   position: absolute;   
 }

@@ -4,7 +4,7 @@ import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowTrendDown, faArrowTrendUp, faChampagneGlasses, faTree} from '@fortawesome/free-solid-svg-icons';
+import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
 
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
@@ -342,10 +342,10 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 </div>
                 {active ? <div className='button-tile-icons-container'>
                     <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faChampagneGlasses} style={{ fontSize: '16px' }}/>
+                        <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
                     </div>
                     <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faTree} style={{ fontSize: '16px' }} />
+                        <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
                     </div>
                     <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
                         <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
