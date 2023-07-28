@@ -41,7 +41,7 @@ def event_comparison(eventID):
     if baseline_filtered.keys() != impact_filtered.keys():
         raise abort(500, "time key mismatch for filtered baseline and impact")
 
-    # Calculate difference between impact and baseline:
+    # Store difference between impact and baseline:
     difference = dict.fromkeys(baseline_filtered.keys())
 
     for time in baseline_filtered:
