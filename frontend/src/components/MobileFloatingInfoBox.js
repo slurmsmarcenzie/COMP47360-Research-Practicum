@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import EventCard from './EventCard';
-import NeighbourhoodChartData from './NeighbourhoodChartData';
+import MobileNeighbourhoodChartData from './MobileNeighbourhoodChartData'
 import EventAnalysis from './EventAnalysis';
 import "../App.css";
 import { useMapContext } from './MapContext';
@@ -116,7 +116,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   
     if (showChartData) {
       return (
-        <NeighbourhoodChartData 
+        <MobileNeighbourhoodChartData 
           map={map}
           hashMap={hashMapOfDifference}
           busynessHashMap={busynessHashMap}

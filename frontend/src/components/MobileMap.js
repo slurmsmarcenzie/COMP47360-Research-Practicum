@@ -29,13 +29,16 @@ function MobileMap() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName, isThereALiveInfoBox, setIsThereALiveInfoBox, setIsDrawerOpen} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
+  const [eventComparisonData, setEventComparisonData] = useState(null);
+  const [timelapseData, setTimelapseData] = useState(null);
+
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, neighbourhoodEvents} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -300,7 +303,6 @@ function MobileMap() {
 
       setZone(zone);
       setIsResetShowing(true)
-      setIsThereALiveInfoBox(true);
     }
   };
 
@@ -335,6 +337,7 @@ function MobileMap() {
   const visualiseEventImpact = (Event_ID) => {
 
     setNeighbourhoodEvents([]);
+    setIsFloatingNavVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -342,16 +345,16 @@ function MobileMap() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    
+    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
     getHistoricBusyness(Event_ID);
-
-    setIsDrawerOpen(false);
+    fetchEventComparison(Event_ID);
+    setTimeout(() => fetchTimelapse(Event_ID), 600)
   
   }
 
-  const highlightEventImpact = (Zone_ID, labels) => {
+  const highlightEventImpact = (impactedZones) => {
 
     isNeighbourhoodClickedRef.current = true;
   
@@ -361,7 +364,7 @@ function MobileMap() {
     };
    
     neighbourhoods.features.forEach((neighbourhood) => {
-      const isLabelPresent = labels.includes(neighbourhood.id);
+      const isLabelPresent = impactedZones.includes(neighbourhood.id);
       let opacity = isLabelPresent ? 0.7 : 0.1;
       let line = isLabelPresent ? 1 : 0;
   
@@ -379,7 +382,7 @@ function MobileMap() {
       const timeoutId = setTimeout(() => {
         // After a delay of 2000 ms, update the colors of the layers on the map
         updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
-      }, 900); // Delay of 2000 ms
+      }, 700); // Delay of 2000 ms
 
       // Return a cleanup function that will run when the component unmounts, or before this effect runs again
       return () => {
@@ -443,7 +446,6 @@ function MobileMap() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/prediction/current`);
-        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -511,7 +513,6 @@ function MobileMap() {
     }
   }, [scores]); // This effect runs when scores is fetched
     
-
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
     if (map.current) {
@@ -532,6 +533,37 @@ function MobileMap() {
       });
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
+
+  const fetchEventComparison = async (Event_ID) => {
+  
+    try {
+     const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
+     if (!eventComparisonResponse) {
+      throw new Error('Network response was not ok');
+     }
+     const eventComparisonData = await eventComparisonResponse.json();
+     setEventComparisonData(eventComparisonData);
+    } catch (error) {
+     console.error('Issue with fetch request for event impact:', error);
+     setError(error);
+    }
+  }
+
+  const fetchTimelapse = async (Event_ID) => {
+
+    try {
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      if (!timelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const timelapseData = await timelapseResponse.json();
+      setTimelapseData(timelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
+
+  }
 
   return (
 
