@@ -42,17 +42,14 @@ def event_comparison(eventID):
         raise abort(500, "time key mismatch for filtered baseline and impact")
 
     # Calculate difference between impact and baseline:
-    difference = dict.fromkeys(baseline_filtered.keys(), {})
+    difference = dict.fromkeys(baseline_filtered.keys())
 
-    ### This code isnt working, some misunderstanding with dicts
-    # for time in baseline_filtered:
-    #     for location in baseline_filtered[time]:
-    #         impact_score = impact_filtered[time][location]
-    #         baseline_score = baseline_filtered[time][location]
-    #         difference[time][location] = impact_score - baseline_score
-
-    difference[0][4] = 0.13 # Seems to set [x1..xN][4] to 0.13
-    print(difference[15][5])
+    for time in baseline_filtered:
+        difference[time] = {} # Allows 2D assignment
+        for location in baseline_filtered[time]:
+            impact_score = impact_filtered[time][location]
+            baseline_score = baseline_filtered[time][location]
+            difference[time][location] = impact_score - baseline_score
 
     outputjson = json.dumps(difference)
     return outputjson, 200
@@ -93,15 +90,15 @@ def event_filter(file, id, for_time=None):
             if for_time is not None:
 
                 if item["Event_ID"] == id and item["time"] == for_time:
-                    location = item["location_id"]
+                    location = str(item["location_id"])
                     filtered[location] = item["busyness_score"]
 
             # Filter by EVENT ONLY 
             if for_time is None:
 
                 if item["Event_ID"] == id:
-                    location = item["location_id"]
-                    time = item["time"]
+                    location = str(item["location_id"])
+                    time = str(item["time"])
 
                     if time not in filtered:
                         filtered[time] = {} # Allows 2D assignment next
