@@ -10,7 +10,8 @@ from extensions.cache_ext import cache
 @cache.memoize(timeout=0)
 def event_impact(eventID):
     general_logger.info(f"impact quried for event: {eventID}")
-    impact_filtered = event_filter(load_event_impact(), eventID, peak_times.get(eventID))
+    time = peak_times.get(eventID)
+    impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID, time)
     return json.dumps(impact_filtered), 200
 
 
@@ -18,7 +19,8 @@ def event_impact(eventID):
 @cache.memoize(timeout=0)
 def event_baseline(eventID):
     general_logger.info(f"baseline quried for event: {eventID}")
-    baseline_filtered = event_filter(load_event_baseline(), eventID, peak_times.get(eventID))
+    time = peak_times.get(eventID)
+    baseline_filtered = event_filter(load_file("static/PredictedBaseline"), eventID, time)
     return json.dumps(baseline_filtered), 200
 
 
@@ -27,57 +29,31 @@ def event_baseline(eventID):
 def event_timelapse(eventID):
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
-    impact_filtered = event_filter(load_event_impact(), int(eventID))
-    return json.dumps(impact_filtered), 200
+    timelapse_filtered = event_filter(load_file("static/PredictedImpact.json"), int(eventID))
+    return json.dumps(timelapse_filtered), 200
 
 
-# HISTORIC/EVENT/COMPARE
+# HISTORIC/EVENT/COMPARISON
 @cache.memoize(timeout=0)
 def event_comparison(eventID):
-    general_logger.info(f"Event impact queried for event: {eventID}")
+    general_logger.info(f"event comparison queried for event: {eventID}")
     eventID = int(eventID)
-
-    #Load and Filter event impact & event baseline:
-    baseline_filtered = event_filter(load_event_baseline(), int(eventID))
-    impact_filtered = event_filter(load_event_impact(), int(eventID))
-
-    if baseline_filtered.keys() != impact_filtered.keys():
-        raise abort(500, "time key mismatch for filtered baseline and impact")
-
-    # Store difference between impact and baseline:
-    difference = dict.fromkeys(baseline_filtered.keys())
-
-    for time in baseline_filtered:
-        difference[time] = {} # Allows 2D assignment
-        for location in baseline_filtered[time]:
-            impact_score = impact_filtered[time][location]
-            baseline_score = baseline_filtered[time][location]
-            difference[time][location] = impact_score - baseline_score
-
-    outputjson = json.dumps(difference)
-    return outputjson, 200
+    comparison_filtered = event_filter(
+        load_file("static/PredictedDifference.json"), 
+        int(eventID))
+    return json.dumps(comparison_filtered), 200
 
 
 ## HELPER FUNCTIONS ##
 
-# Load Event Impact JSON from static/
-def load_event_impact():
+# Load Historic Event JSON from static/
+def load_file(file_str):
     try:
-        file = open("static/impact_events.json")
-        general_logger.info("Reading file impact_events.json")
+        file = open(file_str)
+        general_logger.info(f"Reading file '{file_str}'")
     except IOError as err:
         general_logger.error(f"Unable to read file {err}")
-        raise abort(500, "Unable to read file 'impact_events.json'")
-    return file 
-
-# Load Event Baseline JSON from static/
-def load_event_baseline():
-    try:
-        file = open("static/baseline_events.json")
-        general_logger.info("Reading file baseline_events.json")
-    except IOError as err:
-        general_logger.error(f"Unable to read file {err}")
-        raise abort(500, "Unable to read file 'baseline_events.json'")
+        raise abort(500, f"Unable to read file '{file_str}'")
     return file 
 
 # Filter file by EventID and Time[optional]
