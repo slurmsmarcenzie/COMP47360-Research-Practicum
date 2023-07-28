@@ -5,16 +5,17 @@ from controllers.historic import event_baseline, event_impact, event_comparison,
 from controllers.portal import home, login, logout, register, dashboard
 from extensions.limiter import limiter
 from extensions.check_token import check_token
+from extensions.cache_ext import cache
 
 #Associate routes with Blueprint and set rate limiters:
 info = Blueprint("info", __name__)
 limiter.limit("25/minute")(info)
 
 prediction = Blueprint("prediction", __name__)
-limiter.limit("10/minute")(prediction)
+limiter.limit("20/minute")(prediction)
 
 historic = Blueprint("historic", __name__)
-limiter.limit("10/minute")(historic)
+limiter.limit("20/minute")(historic)
 
 portal = Blueprint("portal", __name__)
 limiter.limit("10/minute")(portal)

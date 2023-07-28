@@ -4,6 +4,7 @@ import pandas as pd
 from logging_flask.logger import general_logger
 from predicting.data import col_names_general, location_ids
 from custom_exceptions.model_error import ModelError
+from time import sleep
 
 # Passes input to the chosen model
 # Choice of returning normalised or non-normalised data

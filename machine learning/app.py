@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_wtf.csrf import CSRFProtect
 from extensions.database import db
 from extensions.limiter import limiter
+from extensions.cache_ext import cache
 from routes.blueprint import info, prediction, historic, portal
 from controllers.portal import login_manager, bcrypt
 from logging_flask.logger import http_logger
@@ -17,12 +18,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLDB")
 app.config["SECRET_KEY"] = os.getenv("SECRETKEY")
 app.config["RECAPTCHA_PUBLIC_KEY"] = os.getenv("RECAPTCHA_PUBLIC")
 app.config["RECAPTCHA_PRIVATE_KEY"] = os.getenv("RECAPTCHA_PRIVATE")
+app.config["CACHE_TYPE"] = os.getenv("CACHE_TYPE")
 # app.config["SESSION_COOKIE_SAMESITE"] = "strict"
 # app.config["SESSION_COOKIE_HTTPONLY"] = True
 
 # Initialize features
 db.init_app(app)
 limiter.init_app(app)
+cache.init_app(app)
 login_manager.init_app(app)
 bcrypt.init_app(app)
 csrf = CSRFProtect(app)

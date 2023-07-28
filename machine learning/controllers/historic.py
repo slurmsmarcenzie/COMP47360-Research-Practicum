@@ -2,10 +2,12 @@ import json
 from flask import abort
 from logging_flask.logger import general_logger
 from static.peak_times import peak_times
+from extensions.cache_ext import cache
 
 ## CONTROLLERS ##
 
 # HISTORIC/EVENT/IMPACT
+@cache.memoize(timeout=0)
 def event_impact(eventID):
     general_logger.info(f"impact quried for event: {eventID}")
     impact_filtered = event_filter(load_event_impact(), eventID, peak_times.get(eventID))
@@ -13,6 +15,7 @@ def event_impact(eventID):
 
 
 # HISTORIC/EVENT/BASELINE
+@cache.memoize(timeout=0)
 def event_baseline(eventID):
     general_logger.info(f"baseline quried for event: {eventID}")
     baseline_filtered = event_filter(load_event_baseline(), eventID, peak_times.get(eventID))
@@ -20,6 +23,7 @@ def event_baseline(eventID):
 
 
 # HISTORIC/EVENT/TIMELAPSE
+@cache.memoize(timeout=0)
 def event_timelapse(eventID):
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
@@ -28,6 +32,7 @@ def event_timelapse(eventID):
 
 
 # HISTORIC/EVENT/COMPARE
+@cache.memoize(timeout=0)
 def event_comparison(eventID):
     general_logger.info(f"Event impact queried for event: {eventID}")
     eventID = int(eventID)
