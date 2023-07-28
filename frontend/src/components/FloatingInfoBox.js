@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
-  
+
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
-  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal, removeMarker} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, removeMarker} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 

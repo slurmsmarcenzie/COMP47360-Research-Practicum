@@ -2,7 +2,6 @@ import React from 'react';
 import "../App.css";
 
 // import context
-import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 
 function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {

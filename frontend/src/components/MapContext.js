@@ -10,14 +10,13 @@ import prunedEvents from '../geodata/prunedEvents.json'
 // Create a new context
 const MapContext = createContext();
 
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
+const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/app/v1';
 let animationID = null;
 
 // Create a provider component
 export const MapProvider = ({ children }) => {
 
-    const [layerIds, setLayerIds] = useState([]);
     const [markers, setMarkers] = useState([]);
     const [colourPairIndex, setColourPairIndex] = useState(0);
     const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
@@ -27,7 +26,6 @@ export const MapProvider = ({ children }) => {
     const [isSplitView, setSplitView] = useState(false);
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
-    const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
     const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
     const [isResetShowing, setIsResetShowing] = useState(false)
@@ -37,6 +35,7 @@ export const MapProvider = ({ children }) => {
     const [isThereALiveInfoBox, setIsThereALiveInfoBox] = useState(false);
     const [isMobileTileOpen, setIsMobileTileOpen] = useState(false); 
     const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(true);
+    const [isTimelapseVisible, setIsTimelapseVisible] = useState(false);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -429,12 +428,12 @@ export const MapProvider = ({ children }) => {
         isThereALiveInfoBox, setIsThereALiveInfoBox,
         isMobileTileOpen, setIsMobileTileOpen,
         isFloatingNavVisible, setIsFloatingNavVisible,
-      
+        isTimelapseVisible, setIsTimelapseVisible,
+        
         neighbourhoods,
         prunedEvents,
         colourPairs,
         colourScale,
-        layerIds,
 
         originalLat,
         originalLng,

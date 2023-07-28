@@ -6,7 +6,7 @@ import { faDrumstickBite, faGhost, faClover, faRainbow, faChampagneGlasses, faMo
 // import context
 import { useMapContext } from './MapContext';
 
-function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
+function MobileFloatingNav({map, isNeighbourhoodClickedRef,  disableColours}) {
 
   const {isNavVisible, setIsNavVisible, setIsThereALiveInfoBox} = useMapContext();
 

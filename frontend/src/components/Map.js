@@ -12,11 +12,11 @@ import { useMapContext } from './MapContext';
 // Components
 import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
-import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
-import Timelapse from './Timelapse';
 
+const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
+const Timelapse = lazy(() => import('./Timelapse'));
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -29,19 +29,19 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  const [eventComparisonData, setEventComparisonData] = useState(null);
+  const [setEventComparisonData] = useState(null);
   const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
@@ -63,9 +63,6 @@ function Map() {
   
   // flimsy counter replace later
   const retryCount = useRef(0);
-
-  // define a new function that will be used as the event listener
-  const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   // Pop up properties  
   const markerHeight = 10;
@@ -614,12 +611,14 @@ function Map() {
             hoveredZoneScore={hoveredZoneScore}
           />
 
-          <Timelapse
-            map={map}
-            originalBusynessHashMap={originalBusynessHashMap}
-            busynessHashMap={busynessHashMap}
-            timelapseData={timelapseData}
-          />
+          {isTimelapseVisible ?
+            <Timelapse
+              map={map}
+              originalBusynessHashMap={originalBusynessHashMap}
+              busynessHashMap={busynessHashMap}
+              timelapseData={timelapseData}
+            /> : <></>
+          }
 
           </>
         )}

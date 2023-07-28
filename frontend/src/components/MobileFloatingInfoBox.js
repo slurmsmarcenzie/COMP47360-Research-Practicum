@@ -7,13 +7,12 @@ import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { useMap } from 'react-map-gl';
 
 function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline, setIsThereALiveInfoBox} = useMapContext();
 
-  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 

@@ -29,7 +29,7 @@ function MobileMap() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
@@ -38,7 +38,7 @@ function MobileMap() {
   const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -63,9 +63,6 @@ function MobileMap() {
   
   // flimsy counter replace later
   const retryCount = useRef(0);
-
-  // define a new function that will be used as the event listener
-  const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   // Pop up properties  
   const markerHeight = 10;

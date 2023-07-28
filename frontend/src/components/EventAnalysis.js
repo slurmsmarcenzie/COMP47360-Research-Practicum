@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import "../App.css";
-import { faUnderline } from '@fortawesome/free-solid-svg-icons';
 
 function EventAnalysis({ eventForAnalysisComponent }) {
 
