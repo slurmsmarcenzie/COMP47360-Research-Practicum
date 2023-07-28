@@ -39,7 +39,7 @@ function MobileMap() {
   const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setIsFloatingNavVisible} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setIsFloatingNavVisible, isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -336,6 +336,7 @@ function MobileMap() {
 
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
+    setIsTimelapseVisible(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   

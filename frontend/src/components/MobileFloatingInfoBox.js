@@ -19,6 +19,8 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers, setShowMatchingEvent} = useMapContext();
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
+
+  const { setIsTimelapseVisible } = useMapContext();
   
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
@@ -26,7 +28,8 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
-    setIsThereALiveInfoBox(false)
+    setIsTimelapseVisible(false);
+    setIsThereALiveInfoBox(false);
     setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);

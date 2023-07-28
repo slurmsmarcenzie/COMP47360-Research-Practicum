@@ -14,10 +14,10 @@ import { useMapContext } from './MapContext';
 import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import MapLegend from './MapLegend';
+import Timelapse from './Timelapse';
 
 const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
-const Timelapse = lazy(() => import('./Timelapse'));
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -42,7 +42,7 @@ function Map() {
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
@@ -336,6 +336,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
+    setIsTimelapseVisible(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
