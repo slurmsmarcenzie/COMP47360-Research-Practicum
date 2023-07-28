@@ -16,7 +16,6 @@ function EventAnalysis({ eventForAnalysisComponent }) {
         return text.length > 200 ? text.substring(0, 200) + "...  " : text;
     };
   
-  
     return (
       <div className='floating-info-box-event-analysis'>
         <p>
@@ -25,7 +24,7 @@ function EventAnalysis({ eventForAnalysisComponent }) {
             {eventForAnalysisComponent.Event_Impact_Analysis.length > 200 && 
               <span style={{color: 'white', cursor: 'pointer', textDecoration: 'underline'}} onClick={toggleIsTextShort}>
               
-                {isTextShort ? 'See more' : 'See less'}
+                {isTextShort ? 'Show more' : 'Show less'}
               </span>
             }
         </p>

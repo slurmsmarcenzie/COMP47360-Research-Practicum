@@ -1025,3 +1025,36 @@ input[type=range]::-webkit-slider-thumb {
   padding: auto;
   margin: auto;
 }
+
+.button-tile-icons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;  /* Updated this line */
+  align-items: center;
+}
+
+.button-tile-icons {
+  min-width: 44px;
+  width: 20%;
+  height: 44px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  background-color: #12131640;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-tile-icons:hover {
+  background-color: #282C34;
+}
+
+.button-tile-icons:active {
+  background-color: #44475A; 
+}

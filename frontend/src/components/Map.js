@@ -354,7 +354,7 @@ function Map() {
   
   }
 
-  const highlightEventImpact = (Zone_ID, labels) => {
+  const highlightEventImpact = (impactedZones) => {
 
     isNeighbourhoodClickedRef.current = true;
   
@@ -364,7 +364,7 @@ function Map() {
     };
    
     neighbourhoods.features.forEach((neighbourhood) => {
-      const isLabelPresent = labels.includes(neighbourhood.id);
+      const isLabelPresent = impactedZones.includes(neighbourhood.id);
       let opacity = isLabelPresent ? 0.7 : 0.1;
       let line = isLabelPresent ? 1 : 0;
   

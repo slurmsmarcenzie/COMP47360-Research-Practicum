@@ -1,14 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowTrendDown, faArrowTrendUp, faChampagneGlasses, faTree} from '@fortawesome/free-solid-svg-icons';
+
 
 function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
     const {neighbourhoods} = useMapContext();
     const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
+
+    const [isButtonPressed, setIsButtonPressed] = useState(false);
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
@@ -85,6 +90,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         return selectedValues
     }
 
+    // function used to make the chart data
     const makeChartData = (names, dataValues) => {
     
         const data = {
@@ -160,7 +166,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setSelectedValues(getImpactedZonesForHighlight());
     }, [hashMap, showMostImpactedZones]);
     
-    
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
         const {names, dataValues} = getImpactedZonesForChart();
@@ -169,12 +174,12 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setChartData(newChartData); // Set chartData here
     }, [showMostImpactedZones, hashMap]);
 
-    const toggleChartData = () => {
-        setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-        setRenderChart(chartData);
-        setShowChart(true);
-        highlightEventImpact(Zone_ID, labels);
-    };
+    // const toggleChartData = () => {
+    //     setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
+    //     setRenderChart(chartData);
+    //     setShowChart(true);
+    //     highlightEventImpact(Zone_ID, labels);
+    // };
 
     const getGradientMostImpacted = (context) => {
         const {ctx, chartArea: { top, bottom } } = context;
@@ -199,26 +204,125 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setShowMostImpactedZones(!showMostImpactedZones)
     };
 
+    const handleOptionChange = () => {
+        setActive(!active); 
+    };
+
     useEffect(() => {
         handleToggle();
     }, [active]);
 
-    useEffect(() => {
-        if (!initialRender) {
-            toggleChartData();
-        } else {
-            setInitialRender(false);
+    const highlightZones = () => {
+
+        if (labels.length === 0) {
+            return;
         }
-    }, [highlightActive]);
+    
+        if (isButtonPressed) {
+            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+            resetColours();
+        } else {
+            highlightEventImpact(labels);
+        }
+    }
+    
 
-    const handleOptionChange = () => {
-        setActive(!active); 
-        console.log('this is active', active);
-      };
+    // new function introduced by harry for buttons to filter map:
 
-      const handleImpactOptionChange = (event) => {
-        setHighlightActive(event.target.value === 'most'); 
-      };
+    const getMostImpactedZones = () => {
+
+        if (!hashMap) {
+            return [];
+        }
+
+        const entries = Object.entries(hashMap);
+
+        let filteredEntries;
+
+        entries.sort((a, b) => b[1] - a[1]);
+
+        // Filter only entries with a change greater than or equal to 0.25
+        filteredEntries = entries.filter((entry) => entry[1] >= 0.3);
+
+        // Get only the top 5 most impacted areas
+        // filteredEntries = filteredEntries.slice(0, 5);
+
+        const filteredHashMap = Object.fromEntries(filteredEntries);
+        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
+
+        return selectedValues
+    }
+
+    const getLeastImpactedZones = () => {
+        
+        if (!hashMap) {
+            return [];
+        }
+
+        const entries = Object.entries(hashMap);
+
+        let filteredEntries;
+
+        entries.sort((a, b) => a[1] - b[1]);
+
+        // Filter only entries with a change less than 0.2
+        filteredEntries = entries.filter((entry) => entry[1] < 0.3);
+
+        // Get only the bottom 5 least impacted areas
+        // filteredEntries = filteredEntries.slice(0, 5);
+
+        const filteredHashMap = Object.fromEntries(filteredEntries);
+        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
+
+        return selectedValues
+
+    }
+
+    const getBusiestZones = () => {
+
+        if (!busynessHashMap){
+            return [];
+        }
+
+        const entries = Object.entries(busynessHashMap)
+
+        let filteredEntries;
+
+        entries.sort((a, b) => b[1] - a[1]);
+
+        filteredEntries = entries.slice(0, 8)
+
+        const filteredHashMap = Object.fromEntries(filteredEntries);
+        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
+
+        return selectedValues
+
+    }
+
+    const getQuietestZones = () => {
+
+        if (!busynessHashMap){
+            return [];
+        }
+
+        const entries = Object.entries(busynessHashMap)
+
+        let filteredEntries;
+
+        entries.sort((a, b) => a[1] - b[1]);
+
+        filteredEntries = entries.slice(0, 8)
+
+        const filteredHashMap = Object.fromEntries(filteredEntries);
+        const selectedValues = filteredHashMap ? Object.keys(filteredHashMap) : [];
+
+        return selectedValues
+
+    }
+
+    useEffect(() => {
+        highlightZones()
+    }, [labels])
   
     return (
         <div className='parent-chart-container'> 
@@ -263,22 +367,24 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         Show Impact of Event
                     </label>
                 </div>
-
+                {active ? <div className='button-tile-icons-container'>
+                    <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                        <FontAwesomeIcon icon={faChampagneGlasses} style={{ fontSize: '16px' }}/>
+                    </div>
+                    <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                        <FontAwesomeIcon icon={faTree} style={{ fontSize: '16px' }} />
+                    </div>
+                    <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                        <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
+                    </div>
+                    <div className='button-tile-icons' title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                        <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
+                    </div>
+                </div> : null
+                }
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Show Side-By-Side Maps'}
                 </button>
-                {/* <button className='floating-nav-cta-button' onClick={() => {
-                    setShowMostImpactedZones(true)
-                    highlightEventImpact(Zone_ID, selectedValues)}
-                    }>
-                  Highlight most impacted zones
-                </button> */}
-                {/* <button className='floating-nav-cta-button' onClick={() => {
-                    setShowMostImpactedZones(false)
-                    highlightEventImpact(Zone_ID, selectedValues)}
-                    }>
-                  Highlight least impacted zones
-                </button> */}
             </div>
         </div>
     );
