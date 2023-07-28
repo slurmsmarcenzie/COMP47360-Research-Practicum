@@ -1,113 +1,71 @@
-import pickle
-import json
 import pandas as pd
-from logging_flask.logger import general_logger
-from predicting.data import col_names_general, location_ids
-from custom_exceptions.model_error import ModelError
-from time import sleep
+import numpy as np
+import pickle
+from sklearn.preprocessing import MinMaxScaler
+from predicting.data import location_ids, bins, labels
 
-# Passes input to the chosen model
-# Choice of returning normalised or non-normalised data
-# returns a dictionary of location:busyness pairs
-def general_prediction(date, normalise=True):
-    try:
-        pickled_model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
-        general_logger.info("Successfully loaded pickled model")
-    except pickle.PickleError as err:
-        raise ModelError("Error loading pickled model: {err}".format(err=err))
-    
-    try:
-        data = {}
-        input_data = generate_model_input(date)
-        general_logger.info("Successfully generated model input")
-    except Exception as exc:
-        raise ModelError("Problem generating model input: {exc}".format(exc=exc))
+# Load model and call for prediction
+def general_prediction(date):
+    model_input = generate_model_input(date)
+    model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
+    predictions = model.predict(model_input)
+    normalized_predictions = normalise_data(predictions)
+    predictions_dict = {str(location_id): float(prediction) for location_id, prediction in zip(location_ids, normalized_predictions)}
+    return predictions_dict
 
-    # Create a row of input for each individual location
-    # Create a dataframe from rows and pass to the model
-    try:
-        for loc in location_ids:
-            input_data["DOLocationID"] = loc
-            df = pd.DataFrame(input_data, index=[0])
-            score = pickled_model.predict(df)
-            data[str(loc)] = float(score[0]) #numpy float32 incompatible with JSON
-            
-    except Exception as exc:
-        raise ModelError("Could not generate model results: {exc}".format(exc=exc))
-    
-    if normalise:
-    # Normalise the busyness scores so they are relative to eachother and in the range 0-1
-        try:
-            normalised_data = normalise_data(data) 
-            general_logger.info("Normalising model results")
-        except Exception as exc:
-            raise ModelError("Problem normalising model results: {exc}".format(exc=exc))
+
+# Creating an empty dataframe to get the columns in the correct order for the model
+def create_empty_dataframe():
+    df = pd.DataFrame({'DOLocationID': location_ids})
+
+    # Using ranges to replicate the training set order
+    df['Hour'] = pd.Series(range(0, 23))
+    df['DayOfWeek'] = pd.Series(range(7))
+    df['DayOfMonth'] = pd.Series(range(1, 31))
+    df['Month'] = pd.Series(range(1, 13))
+
+    columns = ['Hour', 'DayOfWeek', 'DayOfMonth', 'Month']
+    df[columns] = df[columns].fillna(1)
+    df[columns] = df[columns].astype(int)
+
+    df['Weekend'] = np.where(df['DayOfWeek'].isin([5, 6]), 1, 0)
+    df['TimeOfDay'] = pd.cut(df['Hour'], bins=bins, labels=labels, right=False, include_lowest=True, ordered=False)
+
+    # Encoding dummy variables
+    df = pd.get_dummies(df, columns=['DOLocationID', 'TimeOfDay', 'DayOfWeek'], prefix=['DOLocationID', 'TimeOfDay', 'DayOfWeek'])
+
+    # Resetting all rows to 0 to create an empty dataframe
+    for col in df.columns:
+        df[col] = 0
         
-        return normalised_data
-    
-    if not normalise:
-        return json.dumps(data)
-            
+    return df
 
-# Parses the date to suit our models input
-# Returns a dictionary of features and their values
+# Function to set the actual values based on the given date
 def generate_model_input(date):
-    hour = date.hour
-    dayOfMonth = date.day
-    month = date.month
-    day = date.isoweekday()
-    weekend = 1 if day > 5 else 0 
-    
-    # Dictionary of features & their values
-    input_data = dict.fromkeys(col_names_general, 0)
-    input_data.update({"Hour": hour, "DayOfMonth": dayOfMonth, "Month": month, "Weekend": weekend})
+    Hour = date.hour
+    DayOfWeek = date.isoweekday()
+    DayOfMonth = date.day
+    Month = date.month
+    Weekend = 1 if DayOfWeek in [5, 6] else 0
+    current_hour_bin = pd.cut([Hour], bins=bins, labels=labels, right=False, include_lowest=True, ordered=False)[0]
 
-    # Set the relevant day of week to 1 (i.e. True)
-    match day:
-        case 1:
-            input_data["DayOfWeek_0"] = 1
-        case 2:
-            input_data["DayOfWeek_1"] = 1
-        case 3:
-            input_data["DayOfWeek_2"] = 1
-        case 4: 
-            input_data["DayOfWeek_3"] = 1
-        case 5:
-            input_data["DayOfWeek_4"] = 1
-        case 6:
-            input_data["DayOfWeek_5"] = 1
-        case 7:
-            input_data["DayOfWeek_6"] = 1
+    df = create_empty_dataframe()
 
-    # Set the relevant time of day to 1 (i.e. True)
-    if hour >= 0 and hour < 6:
-        input_data["TimeOfDay_Night"] = 1
-    elif hour < 12:
-        input_data["TimeOfDay_Morning"] = 1
-    elif hour < 17:
-        input_data["TimeOfDay_Afternoon"] = 1
-    elif hour < 22:
-        input_data["TimeOfDay_Evening"] = 1
-    elif hour < 24:
-        input_data["TimeOfDay_Night"] = 1
+    rows = []
+    for location_id in location_ids:
+        row = pd.Series(0, index=df.columns)
+        row[f'DOLocationID_{location_id}'] = 1
+        row['Hour'] = Hour
+        row['DayOfMonth'] = DayOfMonth
+        row['Month'] = Month
+        row['Weekend'] = Weekend
+        row[f'DayOfWeek_{DayOfWeek}'] = 1
+        row[f'TimeOfDay_{current_hour_bin}'] = 1
+        rows.append(row)
 
-    return input_data
+    return pd.concat(rows, axis=1).T.astype(int)
 
-# Normalises the busyness scores to a value between 0 and 1.
-# Returns the normalised data (now ready for client)
+# Normalise the data in the range 0 - 1
 def normalise_data(data):
-    #get min and max for normalisation formula:
-    min, max = 0, 0
-    for key in data:
-        if data[key] < min:
-            min = data[key]
-        elif data[key] > max:
-            max = data[key]
-
-    # Normalise and format:
-    # busyness score is stringified to better suit JSON later
-    for key in data:
-        data[key] = (data[key] - min) / (max - min)
-
-    return data
-    
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    return scaler.fit_transform(np.array(data).reshape(-1, 1))
