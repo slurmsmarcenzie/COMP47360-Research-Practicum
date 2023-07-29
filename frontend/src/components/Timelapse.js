@@ -41,6 +41,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         setIndex(0);
         setElapsedTime(0);
         setIsPlaying(false);
+        clearInterval(timerRef.current);
 
         setTimeout(() => {
             updateLayerColours(map.current, false, busynessHashMap, busynessHashMap);
