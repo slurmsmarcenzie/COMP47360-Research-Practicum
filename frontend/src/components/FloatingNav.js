@@ -39,8 +39,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
     disableColours();
     removeMarker();
-    //removeAllButOneMarker(selectedEvent.event_ID);
-
+  
     isNeighbourhoodClickedRef.current = true;
     
     setNeighbourhoodEvents([selectedEvent]);

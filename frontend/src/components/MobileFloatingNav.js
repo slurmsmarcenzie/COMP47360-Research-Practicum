@@ -1,7 +1,7 @@
 import React from 'react';
 import "../App.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDrumstickBite, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst} from '@fortawesome/free-solid-svg-icons';
+import { faDove, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst} from '@fortawesome/free-solid-svg-icons';
 
 // import context
 import { useMapContext } from './MapContext';
@@ -12,7 +12,7 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef,  disableColours}) {
 
   const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
 
-  const tileIcons = [faDrumstickBite, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst]
+  const tileIcons = [faDove, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst]
 
   const tileOptions = prunedEvents.map((event, index) => 
   <div 

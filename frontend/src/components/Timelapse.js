@@ -16,9 +16,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
     const timerRef = useRef(null);
 
     useEffect(() => {
-        console.log('neighbourhood events', neighbourhoodEvents);
         setCurrentEvent(neighbourhoodEvents[0])
-        console.log('current event', currentEvent);
     }, [neighbourhoodEvents]);
     
     const startTimelapse = () => {
