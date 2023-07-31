@@ -1,4 +1,6 @@
 /env
 /__pycache__
-/logging_flask/logs
+/logging_flask/logs/http.log
+/logging_flask/logs/general.log
+/logging_flask/logs/priority.log
 .env
