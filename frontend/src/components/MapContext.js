@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useMemo, useEffect} from 'react';
+import React, { createContext, useContext, useState, useMemo} from 'react';
 import { scaleLinear } from 'd3-scale';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import FontawesomeMarkers from "mapbox-gl-fontawesome-markers";
+import '@fortawesome/fontawesome-free/css/all.css';
 
 // Data
 import neighbourhoods from '../geodata/nyc-taxi-zone.geo.json';
@@ -10,14 +12,13 @@ import prunedEvents from '../geodata/prunedEvents.json'
 // Create a new context
 const MapContext = createContext();
 
-const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
+const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
 const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/app/v1';
 let animationID = null;
 
 // Create a provider component
 export const MapProvider = ({ children }) => {
 
-    const [layerIds, setLayerIds] = useState([]);
     const [markers, setMarkers] = useState([]);
     const [colourPairIndex, setColourPairIndex] = useState(0);
     const [neighbourhoodEvents, setNeighbourhoodEvents] = useState([]);
@@ -27,7 +28,6 @@ export const MapProvider = ({ children }) => {
     const [isSplitView, setSplitView] = useState(false);
     const [useOriginal, setUseOriginal] = useState(false); // this determines which hashmap we want to use the original baseline or the dynamic map?
     const [makePredictionRequest, setMakePredictionRequest] = useState(false);
-    const [isNeighbourhoodClicked, setIsNeighbourhoodClicked] = useState(false);
     const [eventForAnalysisComponent, setEventForAnalysisComponent] = useState(null);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/mapbox/dark-v11'); // default to dark mode
     const [isResetShowing, setIsResetShowing] = useState(false)
@@ -37,6 +37,9 @@ export const MapProvider = ({ children }) => {
     const [isThereALiveInfoBox, setIsThereALiveInfoBox] = useState(false);
     const [isMobileTileOpen, setIsMobileTileOpen] = useState(false); 
     const [isFloatingNavVisible, setIsFloatingNavVisible] = useState(true);
+    const [isTimelapseVisible, setIsTimelapseVisible] = useState(false);
+    const [eventComparisonData, setEventComparisonData] = useState(null);
+    const [eventID, setEventID] = useState(null);
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
@@ -169,9 +172,32 @@ export const MapProvider = ({ children }) => {
 
         const newMarkers = []; // array to hold our new markers
 
-        prunedEvents.forEach((event) =>{
+        prunedEvents.forEach((event, index) =>{
 
-            const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+            const scale = 1.2
+
+            // marker styling
+            const icons = [
+                'fa-solid fa-dove',
+                'fa-solid fa-ghost',
+                'fa-solid fa-clover',
+                'fa-solid fa-rainbow',
+                'fa-solid fa-champagne-glasses',
+                'fa-solid fa-moon',
+                'fa-solid fa-crown',
+                'fa-solid fa-burst'
+            ]
+
+            const icon = icons[index % icons.length];  // Rotate through the icons array
+
+            const marker = new FontawesomeMarkers({
+                icon,
+                iconColor: 'white',
+                color: 'blueviolet',
+                scale
+            })
+            .setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+            
             const markerElement = marker.getElement();
 
             // add our event id to our markers so that we can show/hide them based on their event ID value
@@ -200,15 +226,40 @@ export const MapProvider = ({ children }) => {
         
         const newMarkers = []; // array to hold our new markers
     
-        prunedEvents.forEach((event) => {
+        prunedEvents.forEach((event, index) => {
             const exists = markers.some(marker => 
                 marker.getLngLat().lng === event.Event_Location.Longitude && 
                 marker.getLngLat().lat === event.Event_Location.Latitude
             );
+
             if (!exists) {
-                const marker = new mapboxgl.Marker().setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
-                
+
+                const scale = 1.2
+
+                // marker styling
+                const icons = [
+                    'fa-solid fa-dove',
+                    'fa-solid fa-ghost',
+                    'fa-solid fa-clover',
+                    'fa-solid fa-rainbow',
+                    'fa-solid fa-champagne-glasses',
+                    'fa-solid fa-moon',
+                    'fa-solid fa-crown',
+                    'fa-solid fa-burst'
+                ]
+    
+                const icon = icons[index % icons.length];  // Rotate through the icons array
+   
+                const marker = new FontawesomeMarkers({
+                    icon,
+                    iconColor: 'white',
+                    color: 'blueviolet',
+                    scale
+                })
+                .setLngLat([event.Event_Location.Longitude, event.Event_Location.Latitude]).addTo(map);
+
                 marker.Event_ID = event.Event_ID;
+
                 newMarkers.push(marker);
             }
         });
@@ -224,22 +275,28 @@ export const MapProvider = ({ children }) => {
             marker.remove(); // Remove the marker from the map
         });
     
-        setMarkers([]); // Clear the markers array
+        // setMarkers([]); // Clear the markers array
     };
     
     const removeAllButOneMarker = (keptEvent) => {
 
+        console.log('all of markers at the top of the call', markers)
+
+        console.log('this is the keptEvent', keptEvent)
 
         markers.forEach((marker) => {
 
             if (marker.Event_ID !== keptEvent) {
                 marker.remove();
-                
+            }
+
+            if(marker.Event_ID == keptEvent){
+                console.log('this is the matching marker', marker)
             }
         });
         
         setMarkers(markers.filter(marker => marker.Event_ID == keptEvent))
-    
+  
     };
 
     // Function to update the color of each layer in a map, based on a 'busyness' score
@@ -274,7 +331,6 @@ export const MapProvider = ({ children }) => {
             }
         });
     };
-
 
     const addAntline = (map, event) => {
 
@@ -429,12 +485,14 @@ export const MapProvider = ({ children }) => {
         isThereALiveInfoBox, setIsThereALiveInfoBox,
         isMobileTileOpen, setIsMobileTileOpen,
         isFloatingNavVisible, setIsFloatingNavVisible,
-      
+        isTimelapseVisible, setIsTimelapseVisible,
+        eventComparisonData, setEventComparisonData,
+        eventID, setEventID,
+        
         neighbourhoods,
         prunedEvents,
         colourPairs,
         colourScale,
-        layerIds,
 
         originalLat,
         originalLng,

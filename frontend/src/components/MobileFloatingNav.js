@@ -1,15 +1,18 @@
 import React from 'react';
 import "../App.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDove, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst} from '@fortawesome/free-solid-svg-icons';
 
 // import context
-import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 
-function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
+function MobileFloatingNav({map, isNeighbourhoodClickedRef,  disableColours}) {
 
   const {isNavVisible, setIsNavVisible, setIsThereALiveInfoBox} = useMapContext();
 
   const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
+
+  const tileIcons = [faDove, faGhost, faClover, faRainbow, faChampagneGlasses, faMoon, faCrown, faBurst]
 
   const tileOptions = prunedEvents.map((event, index) => 
   <div 
@@ -22,7 +25,7 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
       setIsMobileTileOpen(false);
     }}
     >
-    {event.Event_ID}
+    <FontAwesomeIcon style={{width: '24px', height: '24px'}} icon={tileIcons[index % tileIcons.length]} />
   </div>
 );
   
@@ -61,8 +64,6 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
     setIsResetShowing(true);
   };
 
-    const [toggleSlider, active] = useToggleSlider({barBackgroundColorActive: "#8a2be2"});
-
     const {isMobileTileOpen, setIsMobileTileOpen} =useMapContext()
 
     return (
@@ -71,9 +72,6 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disa
           <div className='floating-nav-tiles'>
             {tileOptions}
           </div>
-          {isResetShowing &&
-            <button className="floating-nav-outline-button" onClick={() => { removeAntline(map.current); enableColours(); removeMarker();}}>Reset Map</button>
-          }
         </div>
     );
 }

@@ -2,13 +2,11 @@ import React, {useState, useEffect, useRef} from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
-import LineChart from './LineChart';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
 
-
-function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
 
     const {neighbourhoods} = useMapContext();
     const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
@@ -21,7 +19,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     
     const [renderChart, setRenderChart] = useState(null);
     const [selectedValues, setSelectedValues] = useState([]);
-    const [showLineChart, setShowLineChart] = useState(false);
     
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
@@ -299,10 +296,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     useEffect(() => {
         highlightZones()
     }, [labels])
-
-    const handleShowChart = () => {
-        setShowLineChart((prevShowChart) => !prevShowChart); // Toggle the showChart state
-      };
   
     return (
         <div className='parent-chart-container'> 
@@ -320,14 +313,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                     X
                 </button>
             </div>
-            }<button
-            className="floating-nav-outline-button"
-            onClick={handleShowChart}
-            style={{ marginBottom: '10px' }} 
-          >
-            {showLineChart ? 'Hide Chart' : 'Show Chart'}
-          </button>
-          {showLineChart && <LineChart map={map}/>}
+            }
             <div className='floating-infobox-box-button-container'>
                 <div className="radio-button">
                     <input
@@ -337,9 +323,10 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         id="baselineBusyness"
                         checked={!active}
                         onChange={handleOptionChange}
+                        style={{padding: 'auto'}}
                     />
-                    <label htmlFor="baselineBusyness">
-                        Turn off Event Impact
+                    <label for="baselineBusyness" style={{fontSize: '10px'}}>
+                        Event Baseline
                     </label>
                     <input
                         type="radio"
@@ -348,9 +335,10 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         id="eventImpact"
                         checked={active}
                         onChange={handleOptionChange}
+                        style={{padding: 'auto'}}
                     />
-                    <label htmlFor="eventImpact">
-                        Show Impact of Event
+                    <label for="eventImpact" style={{fontSize: '10px'}}>
+                        Event Impact
                     </label>
                 </div>
                 {active ? <div className='button-tile-icons-container'>
@@ -376,4 +364,4 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     );
 }
 
-export default NeighbourhoodChartData;
+export default MobileNeighbourhoodChartData;
