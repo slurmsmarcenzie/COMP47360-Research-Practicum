@@ -38,8 +38,25 @@ def event_timelapse(eventID):
     """
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
-    timelapse_filtered = event_filter(load_file("static/PredictedImpact.json"), int(eventID))
-    return json.dumps(timelapse_filtered), 200
+    
+     #Load and Filter event impact & event baseline:
+    baseline_filtered = event_filter(load_file("static/PredictedBaseline.json"), eventID)
+    impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID)
+
+    if baseline_filtered.keys() != impact_filtered.keys():
+        raise abort(500, "time key mismatch for filtered baseline and impact")
+    
+    difference = dict.fromkeys(baseline_filtered.keys())
+    
+    for time in baseline_filtered:
+        difference["time"] = {}
+        for location in baseline_filtered[time]:
+            impact_score = impact_filtered[time][location]
+            baseline_score = baseline_filtered[time][location]
+            difference[time][location] = impact_score - baseline_score
+
+    outputjson = json.dumps(difference)
+    return json.dumps(outputjson), 200
 
 
 @cache.memoize(timeout=0)
