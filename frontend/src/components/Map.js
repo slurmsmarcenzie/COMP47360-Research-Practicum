@@ -16,8 +16,8 @@ import Navbar from './Navbar';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
 
-const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
-const SplitViewMap = lazy(() => import('./SplitViewMap'));
+import FloatingInfoBox from './FloatingInfoBox';
+import SplitViewMap from './SplitViewMap';
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -35,17 +35,19 @@ function Map() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  const [setEventComparisonData] = useState(null);
+  
   const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible, setIsTimelapseVisible, eventComparisonData, setEventComparisonData} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
+
+  const {eventID, setEventID} = useMapContext();
 
   // swapping styles
   const {mapStyle} = useMapContext();
@@ -348,6 +350,7 @@ function Map() {
     map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
     getHistoricBusyness(Event_ID);
+    setEventID(Event_ID);
     fetchEventComparison(Event_ID);
     setTimeout(() => fetchTimelapse(Event_ID), 600)
   

@@ -193,7 +193,7 @@ body {
   position: absolute;
   z-index: 1;
   min-width: 360px;
-  max-width: 300px;
+  max-width: 400px;
   margin-top: 120px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
@@ -1059,4 +1059,12 @@ input[type=range]::-webkit-slider-thumb {
 
 .button-tile-icons:active {
   background-color: #44475A; 
+}
+
+.line-chart-container {
+  
+  height: 250px;
+  width: 100%;
+  margin-top: 20px;
+  
 }
