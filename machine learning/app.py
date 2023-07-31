@@ -38,6 +38,12 @@ app.register_blueprint(portal)
 
 @app.after_request
 def set_headers(response):
+    """
+    Sets security headers on responses.
+    
+    Currently all have been deactivated. Once we have a stable deployment I will
+    re-introduce each of the headers.
+    """
     ## Note: these may need to be set at the web server level, not here
     ## Note: commented out for now. Headers were causing issues
     #response.headers['Content-Security-Policy'] = "default-src 'self'"
@@ -46,9 +52,13 @@ def set_headers(response):
     return response
 
 
-## After Request decorator is used to log every http request/response in the app.
 @app.after_request
 def log_request_response(response):
+    """
+    Takes request and generates a http log with it, and the resulting response info.
+    Every req/res in the API is logged in 'logging_flask/logs/http.log'
+    """
+
     # Log success:
     if response.status_code < 400:
         http_logger.info(" | {ip} | {method} '{path}' | {status}".format(ip=request.remote_addr, method=request.method, path=request.path, status=response.status_code))
@@ -58,6 +68,6 @@ def log_request_response(response):
     
     return response
 
-
+## START API
 if __name__ == "__main__":
     app.run(debug=True, port=7000)

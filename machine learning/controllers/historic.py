@@ -1,41 +1,53 @@
 import json
 from flask import abort
 from logging_flask.logger import general_logger
-from static.peak_times import peak_times
+from predicting.data import peak_times
 from extensions.cache_ext import cache
 
 ## CONTROLLERS ##
 
-# HISTORIC/EVENT/IMPACT
 @cache.memoize(timeout=0)
 def event_impact(eventID):
+    """
+    Controller for: HISTORIC/EVENT/IMPACT\n
+    Returns event impact (filtered by peak time)
+    """
     general_logger.info(f"impact quried for event: {eventID}")
     time = peak_times.get(eventID)
     impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID, time)
     return json.dumps(impact_filtered), 200
 
 
-# HISTORIC/EVENT/BASELINE
 @cache.memoize(timeout=0)
 def event_baseline(eventID):
+    """
+    Controller for: HISTORIC/EVENT/BASELINE\n
+    Returns event baseline (filtered by peak time)
+    """
     general_logger.info(f"baseline quried for event: {eventID}")
     time = peak_times.get(eventID)
     baseline_filtered = event_filter(load_file("static/PredictedBaseline"), eventID, time)
     return json.dumps(baseline_filtered), 200
 
 
-# HISTORIC/EVENT/TIMELAPSE
 @cache.memoize(timeout=0)
 def event_timelapse(eventID):
+    """
+    Controller for: HISTORIC/EVENT/TIMELINE\n
+    Returns event timelaspse for 24hr period
+    """
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
     timelapse_filtered = event_filter(load_file("static/PredictedImpact.json"), int(eventID))
     return json.dumps(timelapse_filtered), 200
 
 
-# HISTORIC/EVENT/COMPARISON
 @cache.memoize(timeout=0)
 def event_comparison(eventID):
+    """
+    Controller for: HISTORIC/EVENT/COMPARISON\n
+    Returns event timelaspse for 24hr period
+    """
     general_logger.info(f"event comparison queried for event: {eventID}")
     eventID = int(eventID)
     comparison_filtered = event_filter(
@@ -46,8 +58,8 @@ def event_comparison(eventID):
 
 ## HELPER FUNCTIONS ##
 
-# Load Historic Event JSON from static/
 def load_file(file_str):
+    """ Loads Historic Event JSON from static/ """
     try:
         file = open(file_str)
         general_logger.info(f"Reading file '{file_str}'")
@@ -56,10 +68,16 @@ def load_file(file_str):
         raise abort(500, f"Unable to read file '{file_str}'")
     return file 
 
-# Filter file by EventID and Time[optional]
-# If Time: Returns dictionary of {hour1: {location1: busyness...}...}
-# If Not Time: Returns dictionary of {location1: busness, location2: busyness}
+# 
+
 def event_filter(file, id, for_time=None):
+    """
+    Filter file by EventID and Time[optional]
+
+    If Not Time: Returns dictionary of {location1: busness, location2: busyness}\n
+    If Time: Returns dictionary of {hour1: {location1: busyness...}...}
+    """
+    
     id = int(id)
     original_json = json.load(file)
     filtered = {}

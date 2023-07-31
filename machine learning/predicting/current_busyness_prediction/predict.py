@@ -4,8 +4,14 @@ import pickle
 from sklearn.preprocessing import MinMaxScaler
 from predicting.data import location_ids, bins, labels
 
-# Load model and call for prediction
 def general_prediction(date):
+    """
+    Loads the predictive model into memory
+    Calls model with generated input and returns a dictionary of predictions
+
+    Input: datetime
+    Returns: dictionary
+    """
     model_input = generate_model_input(date)
     model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
     predictions = model.predict(model_input)
@@ -14,8 +20,14 @@ def general_prediction(date):
     return predictions_dict
 
 
-# Creating an empty dataframe to get the columns in the correct order for the model
 def create_empty_dataframe():
+    """
+    Creates empty pandas dataframe. This is necessary to correctly order columns for model
+    input.
+
+    Input: None
+    returns: pd.DataFrame
+    """
     df = pd.DataFrame({'DOLocationID': location_ids})
 
     # Using ranges to replicate the training set order
@@ -40,8 +52,15 @@ def create_empty_dataframe():
         
     return df
 
-# Function to set the actual values based on the given date
+
 def generate_model_input(date):
+    """
+    Generates a Pandas Series of model input from a given datetime
+    Iterates through the list of Locations and creates input for each (based on date input)
+
+    Input: datetime
+    Returns: pd.Series
+    """
     Hour = date.hour
     DayOfWeek = date.isoweekday()
     DayOfMonth = date.day
@@ -65,7 +84,13 @@ def generate_model_input(date):
 
     return pd.concat(rows, axis=1).T.astype(int)
 
-# Normalise the data in the range 0 - 1
+
 def normalise_data(data):
+    """
+        Normalises numpy ndarray to be within the range 0 - 1
+        
+        Input: ndarray
+        Returns: ndarray (normalized)
+    """
     scaler = MinMaxScaler(feature_range=(0, 1))
     return scaler.fit_transform(np.array(data).reshape(-1, 1))

@@ -1,5 +1,19 @@
 import logging
 
+"""
+Create and sets up logging for the API
+Loggers are initialized and set to write logs in './logs/'
+
+Due to an issue with logging.FileHandler, log files are not being automatically 
+created if they dont already exist. This should be the default behaviour. 
+Currently, files are being created manually as a work-around
+
+Two Loggers:
+> General Logger is responsible for logging general system logs/warnings
+> HTTP Logger is reponsible for logging HTTP requests and responses within the API
+
+"""
+
 ## Create log files
 http_file = open('/logs/http.log', 'a')
 general_file = open('/logs/general.log', 'a')
