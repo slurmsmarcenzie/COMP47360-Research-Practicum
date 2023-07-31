@@ -26,7 +26,7 @@ def event_baseline(eventID):
     """
     general_logger.info(f"baseline quried for event: {eventID}")
     time = peak_times.get(eventID)
-    baseline_filtered = event_filter(load_file("static/PredictedBaseline"), eventID, time)
+    baseline_filtered = event_filter(load_file("static/PredictedBaseline.json"), eventID, time)
     return json.dumps(baseline_filtered), 200
 
 
