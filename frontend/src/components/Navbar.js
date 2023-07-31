@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import '../App.css';
-import afterParty from '../images/after-party-logo-white.png';
-import afterPartyHover from '../images/after-party-logo-violet.png';
+import { Helmet } from "react-helmet";
+import afterParty from '../images/after-party-logo-white.webp';
+import afterPartyHover from '../images/after-party-logo-violet.webp';
 import Modal from './Modal';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,6 +34,9 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
+      <Helmet>
+        <link rel="preload" href={logoImage} as="image" />
+      </Helmet>
       <div className="navbar-links-wrapper">
         <button className="transparent-button" onClick={openModal}>
           <img

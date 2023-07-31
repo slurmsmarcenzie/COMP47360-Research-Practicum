@@ -16,9 +16,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
     const timerRef = useRef(null);
 
     useEffect(() => {
-        console.log('neighbourhood events', neighbourhoodEvents);
         setCurrentEvent(neighbourhoodEvents[0])
-        console.log('current event', currentEvent);
     }, [neighbourhoodEvents]);
     
     const startTimelapse = () => {
@@ -43,6 +41,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         setIndex(0);
         setElapsedTime(0);
         setIsPlaying(false);
+        clearInterval(timerRef.current);
 
         setTimeout(() => {
             updateLayerColours(map.current, false, busynessHashMap, busynessHashMap);
