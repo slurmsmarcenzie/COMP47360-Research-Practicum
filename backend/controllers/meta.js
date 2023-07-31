@@ -2,9 +2,14 @@ const axios = require("axios")
 const generalLogger = require("../logging/generalLogger")(module)
 require("dotenv").config();
 
-// Controller to fetch Events information from Flask API and dent to client
-// Validates and ensures correct format of response
-// Responds contains list of JSON Objects (id, location, name, size)
+
+/**
+ * Controller to fetch Events information from Flask API and send to client
+ * 
+ * Validates and ensures correct format of response
+ * 
+ * Returns Event Info dictionary from database
+ */
 const getEvents = (req, res, next) => {
     res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
     const uri = `${process.env.FLASK_API_URL}/info/events?key=${process.env.FLASK_API_KEY}`

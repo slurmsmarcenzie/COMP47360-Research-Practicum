@@ -3,7 +3,11 @@ const generalLogger = require("../logging/generalLogger")(module)
 require("dotenv").config();
 
 
-//fetch current prediction from ML API:
+/**
+ * Fetch current busyness from the Prediction API
+ * 
+ * Returns ML API dictionary results
+ */
 const current = (req, res, next) => {
     res.req.ip //sets the object
     generalLogger.info(`current prediction requested`)
