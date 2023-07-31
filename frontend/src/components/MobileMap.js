@@ -413,31 +413,15 @@ function MobileMap() {
 
   // Define a memoized value 'busynessMap', which depends on 'scores'
   const busynessHashMap = useMemo(() => {
-
     if (!scores) return {};  
-    // 'reduce' is a function that transforms an array into a single value.
-    // In this case, it is transforming the 'scores' array into a single object
-    return scores.reduce((map, item) => {
-      // For each 'item' in 'scores', add a property to 'map' with a key of
-      // 'item.location_id' and a value of 'item.busyness_score'
-      map[item.location_id] = item.busyness_score;
-      // Return the updated 'map' to be used in the next iteration of 'reduce'
-      return map;
-    }, {});  
-    
-    // The second argument to 'reduce' is the initial value of 'map', in this case, an empty object
+    return {...scores}    
   }, [scores]);  // The array of dependencies for 'useMemo'. 'busynessMap' will be recomputed whenever 'scores' changes
 
   // same implementation as above
   const eventBaselineHashMap = useMemo(() => {
     if (!eventBaselineScores) return {};  
-    return eventBaselineScores.reduce((map, item) => {
-      
-      map[item.location_id] = item.busyness_score;
-      return map;
-    }, {});  
-    
-  }, [eventBaselineScores]);  
+    return {...eventBaselineScores}
+  }, [eventBaselineScores]);    
 
   useEffect(() => {
 
