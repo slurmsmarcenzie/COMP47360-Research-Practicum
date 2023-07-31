@@ -3,9 +3,10 @@ from sqlalchemy import exc
 from flask import abort
 from logging_flask.logger import general_logger
 
-# Query Database and get a list of Event dictionaries
-# "_sa_instance_state" is removed as only field names are needed
 def list_events():
+    """
+    Query Database and get a list of Event dictionaries
+    """
     events = []
     data = []
 
@@ -17,6 +18,7 @@ def list_events():
         raise abort(500, "There was an error retrieving events from the Database")
     
     # Ensure data is in correct format
+    # "_sa_instance_state" is removed as only field names are needed
     if len(events) > 0:  
         for event in events:
             if not isinstance(event, Event):

@@ -1,15 +1,38 @@
 import json
 from flask import abort
-from datetime import datetime
+import datetime
 from zoneinfo import ZoneInfo
 from logging_flask.logger import general_logger
 from predicting.current_busyness_prediction.predict import general_prediction
+from extensions.cache_ext import cache
 
-# Get baseline busyness from the model with the datetime specified in URL
-# Return a JSON array of busyness/location scores 
+
+def secs_left():
+    """
+    Determines the number of seconds left until next hour.
+    This is necessary to timeout cache every hour.
+    
+    Every hour of the day will have new prediction results. So the cached predictions must be removed
+
+    Input: None
+    Returns: Integer (seconds left)
+    """
+    now = datetime.datetime.now()
+    delta = datetime.timedelta(hours=1)
+    next = (now + delta).replace(microsecond=0, second=0, minute=0)
+    return (next - now).seconds
+
+
+@cache.cached(timeout=secs_left(), key_prefix="current")
 def current():
-   
-    datetimeNY = datetime.now(tz=ZoneInfo("America/New_York"))
+    """
+    Calls the model with the current datetime to get baseline predictions for NOW.
+
+    Input: None
+    Returns: JSON of busyness/location scores 
+    """
+
+    datetimeNY = datetime.datetime.now(tz=ZoneInfo("America/New_York"))
     general_logger.info("prediction quried for datetime: {date}".format(date=datetimeNY))
 
     try:
