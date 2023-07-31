@@ -22,7 +22,7 @@ const eventImpact = (req, res, next) => {
   axios.get(uri)
     .then(response => {
       // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
+      if (response.data === null || response.data === undefined ){
         generalLogger.warn(`event impact list is empty: ${response.data}`)
         res.status(200).json({});
         next()
@@ -61,7 +61,7 @@ const eventBaseline = (req, res, next) => {
   axios.get(uri)
     .then(response => {
       // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
+      if (response.data === null || response.data === undefined ){
         generalLogger.warn(`events baseline list is empty: ${response.data}`)
         res.status(200).json({});
         next()
@@ -100,7 +100,7 @@ const eventComparison = (req, res, next) => {
   axios.get(uri)
     .then(response => {
       // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
+      if (response.data === null || response.data === undefined){
         generalLogger.warn(`events comparison list is empty: ${response.data}`)
         res.status(200).json({});
         next()
@@ -137,9 +137,8 @@ const eventTimelapse = (req, res, next) => {
 
   axios.get(uri)
     .then(response => {
-      generalLogger.info(`${response} - loggin response`)
       // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
+      if (response.data === null || response.data === undefined){
         generalLogger.warn(`events comparison list is empty: ${response.data}`)
         res.status(200).json({});
         next()
