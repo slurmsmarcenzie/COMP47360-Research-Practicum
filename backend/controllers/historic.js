@@ -3,15 +3,15 @@ const generalLogger = require("../logging/generalLogger")(module)
 require("dotenv").config();
 
 
-//NOTE:
-// NODE CONTROLLERS NOW DO LESS WORK THAN BEFORE.
-// THIS IS DUE TO EXTRA FORMATTING AND FILTERING NOW TAKING PLACE IN THE FLASK API
-// I HAVE REMPVED CHECKS FROM HISTORIC AND PREDICT CONTROLLERS AS THEY ARE NOW REDUNDANT
-// IT IS NECESSARY TO DISCUSS THE FORMAT OF DATA NOW REQUIRED BY FRONTEND.
-// GOING FORWARD, THE PURPOSE OF THESE CONTROLLERS WILL BE TO RESHAPE DATA INTO
-// PRECISELY WHAT THE FRONT NEEDS (FORMAT, STRUCTURE, DATA STRUCTURE ETC)
-
-//fetch event impact from ML API:
+/**
+ * Fetch event impact from the Prediction API
+ * Event impact shows the busyness when the event is ongoing
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventImpact = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
@@ -42,6 +42,15 @@ const eventImpact = (req, res, next) => {
 }
 
 
+/**
+ * Fetch event baseline from the Prediction API
+ * Event baseline shows the normal busyness when the event is not on
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventBaseline = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
@@ -71,6 +80,16 @@ const eventBaseline = (req, res, next) => {
     });
 }
 
+
+/**
+ * Fetch event comparison from the Prediction API
+ * Event comparison shows the difference between event impact and event baseline
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventComparison = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
@@ -100,6 +119,15 @@ const eventComparison = (req, res, next) => {
     });
 }
 
+/**
+ * Fetch event timelapse from the Prediction API
+ * Event timelapse shows the busyness for the 24hrs surrounding an event.
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventTimelapse = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event

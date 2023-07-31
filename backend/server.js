@@ -43,7 +43,7 @@ app.get('*', (req, res, next) => {
 
 
 const port = process.env.PORT || 8000
-//START SERVER
+//START APP
 app.listen(port, () => { 
     console.log('server is listening on port', port)
 });

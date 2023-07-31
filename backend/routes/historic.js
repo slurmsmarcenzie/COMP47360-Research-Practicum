@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {eventImpact, eventBaseline, eventComparison, eventTimelapse} = require("../controllers/historic");
 
-// Router for historic/event/[options]
+// Router for 'HISTORIC/EVENT/[OPTION]'
 router.route("/:event/baseline").get(eventBaseline)
 router.route("/:event/impact").get(eventImpact);
 router.route("/:event/comparison").get(eventComparison);
