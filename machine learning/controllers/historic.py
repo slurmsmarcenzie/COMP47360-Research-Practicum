@@ -33,8 +33,23 @@ def event_baseline(eventID):
 @cache.memoize(timeout=0)
 def event_timelapse(eventID):
     """
-    Controller for: HISTORIC/EVENT/TIMELINE\n
+    Controller for: HISTORIC/EVENT/TIMELAPSE\n
     Returns event timelaspse for 24hr period
+    """
+    general_logger.info(f"event comparison queried for event: {eventID}")
+    eventID = int(eventID)
+    timelapse_filtered = event_filter(
+        load_file("static/PredictedImpact.json"), 
+        int(eventID))
+    print
+    return json.dumps(timelapse_filtered), 200
+
+
+@cache.memoize(timeout=0)
+def event_comparison(eventID):
+    """
+    Controller for: HISTORIC/EVENT/COMPARISON\n
+    Returns difference between event impact and baseline for 24hr period
     """
     general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
@@ -49,28 +64,13 @@ def event_timelapse(eventID):
     difference = dict.fromkeys(baseline_filtered.keys())
     
     for time in baseline_filtered:
-        difference["time"] = {}
+        difference[time] = {}
         for location in baseline_filtered[time]:
             impact_score = impact_filtered[time][location]
             baseline_score = baseline_filtered[time][location]
             difference[time][location] = impact_score - baseline_score
 
-    outputjson = json.dumps(difference)
-    return json.dumps(outputjson), 200
-
-
-@cache.memoize(timeout=0)
-def event_comparison(eventID):
-    """
-    Controller for: HISTORIC/EVENT/COMPARISON\n
-    Returns event timelaspse for 24hr period
-    """
-    general_logger.info(f"event comparison queried for event: {eventID}")
-    eventID = int(eventID)
-    comparison_filtered = event_filter(
-        load_file("static/PredictedDifference.json"), 
-        int(eventID))
-    return json.dumps(comparison_filtered), 200
+    return json.dumps(difference), 200
 
 
 ## HELPER FUNCTIONS ##
