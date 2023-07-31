@@ -13,8 +13,12 @@ ChartJS.register(
 
 function LineChart ({map})  {
 
-    const {neighbourhoods, eventID, eventComparisonData} = useMapContext();
-   
+      const {neighbourhoods, eventID, eventComparisonData} = useMapContext();
+      
+      useEffect(() => {
+        console.log('logging comparison data inside the line chart component', eventComparisonData)
+      }, [eventComparisonData])
+
       const zones = neighbourhoods.features;
       
       // Extract the 'zone' property from each object in the `features` array
@@ -116,17 +120,15 @@ function LineChart ({map})  {
         const updatedDataValues = [];
         const updatedLabels = [];
         
-    
-        for (let i = 0; i < eventComparisonData.length; i++) {
-          const currentDataObject = eventComparisonData[i];
-          const currentBusynessValue = currentDataObject.busyness[selectedZone];
-          const currentTimeValue = currentDataObject.Time;
-    
+        for (let key in eventComparisonData) {
+
+          const currentBusynessValue = eventComparisonData[key][selectedZone];
+          const currentTimeValue = key;
+        
           updatedDataValues.push(currentBusynessValue);
           updatedLabels.push(currentTimeValue);
         }
 
-        console.log(selectedZone);
         setDataValues(updatedDataValues);
         setLabels(updatedLabels);
 
@@ -136,8 +138,6 @@ function LineChart ({map})  {
           }
         }, [selectedZone, eventComparisonData, map, prevSelectedZone]);
 
-        
-    
       return (
         <div>
             

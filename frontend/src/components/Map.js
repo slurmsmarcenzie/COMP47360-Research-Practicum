@@ -524,10 +524,12 @@ function Map() {
   
     try {
      const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
+     console.log(eventComparisonResponse);
      if (!eventComparisonResponse) {
       throw new Error('Network response was not ok');
      }
      const eventComparisonData = await eventComparisonResponse.json();
+     console.log(eventComparisonData);
      setEventComparisonData(eventComparisonData);
     } catch (error) {
      console.error('Issue with fetch request for event impact:', error);
