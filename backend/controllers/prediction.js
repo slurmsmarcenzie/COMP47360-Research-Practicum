@@ -13,7 +13,7 @@ const current = (req, res, next) => {
     axios.get(uri)
       .then(response => {
         // Handle empty/null API result:
-        if (response.data === null || response.data === undefined || response.data.length === 0){
+        if (response.data === null || response.data === undefined){
             generalLogger.warn("warning, prediction list is empty")
             res.status(200).json({});
             next()
