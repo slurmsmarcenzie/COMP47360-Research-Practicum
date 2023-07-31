@@ -2,8 +2,9 @@
 import React, { useEffect, useRef,useState, useMemo, lazy, Suspense } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { scaleLinear } from 'd3-scale';
-import { throttle } from 'lodash';
-import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+import throttle from 'lodash/throttle';
+import { feature } from '@turf/helpers';
+import centroid from '@turf/centroid';
 
 // Context builder
 import { useMapContext } from './MapContext';
@@ -11,11 +12,11 @@ import { useMapContext } from './MapContext';
 // Components
 import MobileFloatingNav from './MobileFloatingNav';
 import MobileNavbar from './MobileNavbar';
-import MobileFloatingInfoBox from './MobileFloatingInfoBox';
 import MobileMapLegend from './MobileMapLegend';
 import MobileSearchIcon from './MobileSearchIcon';
 import MobileShowInfoBoxIcon from './MobileShowInfoBoxIcon';
 
+const MobileFloatingInfoBox = lazy(() => import('./MobileFloatingInfoBox'));
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
 // Note: the following lines are important to create a production build that includes mapbox
@@ -29,13 +30,16 @@ function MobileMap() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName, isThereALiveInfoBox, setIsThereALiveInfoBox, setIsDrawerOpen} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
+  const [eventComparisonData, setEventComparisonData] = useState(null);
+  const [timelapseData, setTimelapseData] = useState(null);
+
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, neighbourhoodEvents} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setIsFloatingNavVisible, isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
   
   // states to conditional render components
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
@@ -60,9 +64,6 @@ function MobileMap() {
   
   // flimsy counter replace later
   const retryCount = useRef(0);
-
-  // define a new function that will be used as the event listener
-  const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   // Pop up properties  
   const markerHeight = 10;
@@ -269,13 +270,13 @@ function MobileMap() {
       const [firstFeature] = features;
 
       // Create a GeoJSON feature object from the clicked feature
-      const geojsonFeature = turf.feature(firstFeature.geometry);
+      const geojsonFeature = feature(firstFeature.geometry);
 
       // Use turf to calculate the centroid of the feature
-      const centroid = turf.centroid(geojsonFeature);
+      const featureCentroid = centroid(geojsonFeature);
 
       // Get the coordinates of the centroid
-      const [lng, lat] = centroid.geometry.coordinates;
+      const [lng, lat] = featureCentroid.geometry.coordinates;
 
       // Fly to the centroid of the polygon
       map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
@@ -300,7 +301,6 @@ function MobileMap() {
 
       setZone(zone);
       setIsResetShowing(true)
-      setIsThereALiveInfoBox(true);
     }
   };
 
@@ -335,6 +335,8 @@ function MobileMap() {
   const visualiseEventImpact = (Event_ID) => {
 
     setNeighbourhoodEvents([]);
+    setIsFloatingNavVisible(false);
+    setIsTimelapseVisible(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -342,16 +344,16 @@ function MobileMap() {
       map.current.setPaintProperty(neighbourhood.id, 'fill-opacity', 0.6);
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
-  
-    map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
+    
+    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
     getHistoricBusyness(Event_ID);
-
-    setIsDrawerOpen(false);
+    fetchEventComparison(Event_ID);
+    setTimeout(() => fetchTimelapse(Event_ID), 600)
   
   }
 
-  const highlightEventImpact = (Zone_ID, labels) => {
+  const highlightEventImpact = (impactedZones) => {
 
     isNeighbourhoodClickedRef.current = true;
   
@@ -361,7 +363,7 @@ function MobileMap() {
     };
    
     neighbourhoods.features.forEach((neighbourhood) => {
-      const isLabelPresent = labels.includes(neighbourhood.id);
+      const isLabelPresent = impactedZones.includes(neighbourhood.id);
       let opacity = isLabelPresent ? 0.7 : 0.1;
       let line = isLabelPresent ? 1 : 0;
   
@@ -379,7 +381,7 @@ function MobileMap() {
       const timeoutId = setTimeout(() => {
         // After a delay of 2000 ms, update the colors of the layers on the map
         updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
-      }, 900); // Delay of 2000 ms
+      }, 700); // Delay of 2000 ms
 
       // Return a cleanup function that will run when the component unmounts, or before this effect runs again
       return () => {
@@ -443,7 +445,6 @@ function MobileMap() {
       
       try {
         const response = await fetch(`${BASE_API_URL}/prediction/current`);
-        console.log(response);
         if (!response.ok) { throw new Error('Network response was not ok'); }
         const data = await response.json();
         setScores(data);
@@ -511,7 +512,6 @@ function MobileMap() {
     }
   }, [scores]); // This effect runs when scores is fetched
     
-
   // Separate useEffect for handling mapStyle changes
   useEffect(() => {
     if (map.current) {
@@ -532,6 +532,37 @@ function MobileMap() {
       });
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
+
+  const fetchEventComparison = async (Event_ID) => {
+  
+    try {
+     const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
+     if (!eventComparisonResponse) {
+      throw new Error('Network response was not ok');
+     }
+     const eventComparisonData = await eventComparisonResponse.json();
+     setEventComparisonData(eventComparisonData);
+    } catch (error) {
+     console.error('Issue with fetch request for event impact:', error);
+     setError(error);
+    }
+  }
+
+  const fetchTimelapse = async (Event_ID) => {
+
+    try {
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      if (!timelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const timelapseData = await timelapseResponse.json();
+      setTimelapseData(timelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
+
+  }
 
   return (
 

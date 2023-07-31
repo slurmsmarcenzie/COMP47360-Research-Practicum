@@ -1,25 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import EventCard from './EventCard';
-import NeighbourhoodChartData from './NeighbourhoodChartData';
+import MobileNeighbourhoodChartData from './MobileNeighbourhoodChartData'
 import EventAnalysis from './EventAnalysis';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { useMap } from 'react-map-gl';
 
 function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
   
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline, setIsThereALiveInfoBox} = useMapContext();
 
-  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
   const {neighbourhoods, originalLat, originalLng, setNeighbourhoodEvents, showAllMarkers, setShowMatchingEvent} = useMapContext();
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
+
+  const { setIsTimelapseVisible } = useMapContext();
   
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
@@ -27,7 +28,8 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
-    setIsThereALiveInfoBox(false)
+    setIsTimelapseVisible(false);
+    setIsThereALiveInfoBox(false);
     setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
@@ -85,7 +87,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
 
   function renderHeader() {
     return (
-      <div style={{display: 'flex', alignItems: 'left'}}>
+      <div style={{display: 'flex', alignItems: 'left', width: '100%'}}>
         <button className='floating-info-box-back-button' onClick={() => {
           removeAntline(map.current)
           resetMap(map);
@@ -102,7 +104,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   function renderChartOrAnalysis() {
   
     if (!showChartData) {
-      return <h4 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
+      return <h4 style={{width: '100%'}}className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
     }
   
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
@@ -116,7 +118,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   
     if (showChartData) {
       return (
-        <NeighbourhoodChartData 
+        <MobileNeighbourhoodChartData 
           map={map}
           hashMap={hashMapOfDifference}
           busynessHashMap={busynessHashMap}

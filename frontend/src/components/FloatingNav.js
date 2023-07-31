@@ -2,7 +2,6 @@ import React from 'react';
 import "../App.css";
 
 // import context
-import { useToggleSlider }  from "react-toggle-slider";
 import { useMapContext } from './MapContext';
 
 function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
@@ -40,8 +39,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
     disableColours();
     removeMarker();
-    //removeAllButOneMarker(selectedEvent.event_ID);
-
+  
     isNeighbourhoodClickedRef.current = true;
     
     setNeighbourhoodEvents([selectedEvent]);

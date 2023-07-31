@@ -4,6 +4,7 @@ body {
 }
 
 .radio-button {
+  height: 36px;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -17,7 +18,7 @@ body {
 }
 .radio-button input{ display: none; }
 .radio-button label{
-  padding: 10px 16px;
+  padding: 8px 12px;
   border-right: 1px solid blueviolet;
   cursor: pointer;
   width: 50%;
@@ -117,12 +118,12 @@ body {
 
 .navbar-links-wrapper  {
   margin:40px;
-  padding:10px;
+  padding:10px; 
 }
 
 .navbar img  {
-  max-height: 36px;
-  max-width: 150px;
+  width: 111px;
+  height: 36px;
 }
 
 .button-group{
@@ -192,7 +193,7 @@ body {
   position: absolute;
   z-index: 1;
   min-width: 360px;
-  max-width: 300px;
+  max-width: 400px;
   margin-top: 120px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
@@ -674,7 +675,8 @@ input:checked + .slider:before {
   }
 
   .navbar-toggle-dark-mode-button {
-    width: 36px;
+    width: 44px;
+    height: 44px;
     color: white;
     font-size: 12px;
     font-weight: 400;
@@ -690,7 +692,7 @@ input:checked + .slider:before {
 @media screen and (max-width: 540px) {
 
   .floating-map-legend-container {
-    min-width: 24px;
+    min-width: 34px;
     max-width: 24px; /* Change to desired width for mobile */
     top: 64px; /* Adjust to desired distance from top for mobile */
     right: 10px; /* Adjust to desired distance from right for mobile */
@@ -771,40 +773,43 @@ input:checked + .slider:before {
 }
 
 .floating-nav-tile {
-  width: 36px;
-  height: 36px;
-  background-color: #12131640;
-  border: 1px solid rgba(255, 255, 255, 0.125);
-  color: white;
-  padding: 12px;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  background-color: #12131640; /* Use a neutral background for Neumorphism */
   border-radius: 5px;
-  text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  box-shadow:  8px 8px 16px 0 rgba(0, 0, 0, 0.1), 
+              -8px -8px 16px 0 rgba(255, 255, 255, 0.1); /* Create 3D effect with shadows */
 }
 
 .floating-nav-tile:hover {
-  background-color: #121316;
+  background-color: #322d3740; /* Slightly darken the tile on hover */
 }
 
 .floating-nav-tile:active {
-  background-color: #0a0a0a;
+  background-color: #322d3740; /* Darken the tile more when clicked */
+  box-shadow:  inset 4px 4px 8px 0 rgba(0, 0, 0, 0.2), 
+               inset -4px -4px 8px 0 rgba(255, 255, 255, 0.4); /* Inset shadows when clicked */
 }
 
 .floating-search-icon-container {
   z-index: 999;
-  min-width: 24px;
+  min-width: 44px;
   max-width: 24px; /* Change to desired width for mobile */
   margin-top: 206px; /* Adjust to desired distance from top for mobile */
-  right: 16px; /* Adjust to desired distance from right for mobile */
-  height: 36px;
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
   padding: 6px;
   position: absolute;   
 }
 
 .floating-search-icon-container-button {
-  width: 36px;
+  width: 100%;
   color: white;
   font-size: 12px;
   font-weight: 400;
@@ -820,11 +825,11 @@ input:checked + .slider:before {
 
 .floating-eye-icon-container{
   z-index: 999;
-  min-width: 24px;
+  min-width: 44px;
   max-width: 24px; /* Change to desired width for mobile */
   margin-top: 260px; /* Adjust to desired distance from top for mobile */
-  right: 16px; /* Adjust to desired distance from right for mobile */
-  height: 36px;
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
   padding: 6px;
   position: absolute;   
 }
@@ -870,14 +875,12 @@ input:checked + .slider:before {
     margin-right: 24px;
     height: 24px;
   }
-
- 
 }
 
 .timelapse-container{
   padding-right: 12px;
   width: 372px;
-  height: 48px;
+  height: fit-content;
   position: fixed;
   z-index: 1;
   bottom: 96px;
@@ -889,24 +892,25 @@ input:checked + .slider:before {
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   background-color: rgba(18, 19, 22, 0.3);	color: #fff;
   border-radius: 5px;
+  height: 56px;
 }
 
 .timelapse-button {
   margin-right: 8px;
-  width: 80px;
+  width: 60px;
   z-index: 1;
 	font-family: inherit;
 	transition: all 0.1s ease-in;
 	display: flex;
 	gap: 1rem;
 	cursor: pointer;
-	padding: 0.5rem 1rem;
+	padding: 0.25rem 0.5rem;
   background-color: rgba(18, 19, 22, 0);	color: #fff;
 	border: none;
   border-radius: 5px;
 	align-items: center;
 	font-size: 15px;
-	font-weight: 400;
+	font-weight: 500;
 	min-width: 9rem;
 	justify-content: center;
 }
@@ -917,37 +921,6 @@ input:checked + .slider:before {
 
 .timelapse-button:active {
   background-color: hsla(271, 76%, 53%, 0.6);
-}
-
-.timelapse-arrow {
-	position: relative;
-	transition: all 0.4s ease-in-out;
-	cursor: pointer;
-	width: 0;
-	height: 0;
-	border-top: 0.4rem solid transparent;
-	border-bottom: 0.4rem solid transparent;
-	border-left: 0.5rem solid #fff;
-}
-
-.timelapse-arrow::after {
-	transition: transform 0.4s ease-in-out;
-	content: "";
-	position: absolute;
-	background-color: transparent;
-	width: 1.5rem;
-	height: 2rem;
-	top: -1rem;
-}
-
-.arrow::before {
-	transition: all 0.3s ease-out;
-	content: "";
-	position: absolute;
-	background-color: transparent;
-	width: 1rem;
-	height: 1.6rem;
-	top: -0.8rem;
 }
 
 .timelapse-pause {
@@ -977,12 +950,6 @@ input:checked + .slider:before {
 	cursor: pointer;
 }
 
-.time-tick {
-  width: 2px;
-  height: 8px;
-  background: #D3D3D3;
-}
-
 .mapboxgl-ctrl-bottom-right{
   display: none;
   }
@@ -996,6 +963,7 @@ input:checked + .slider:before {
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 60%;
 }
 
 input[type=range] {
@@ -1018,4 +986,85 @@ input[type=range]::-webkit-slider-thumb {
   background: blueviolet; /* Blueviolet background */
   cursor: pointer; /* Cursor on hover */
   border-radius: 50%; 
+}
+
+.slider-container-parent{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 4px;
+  padding-top: 4px;
+}
+
+.slider-context-container{
+  display: flex;
+  flex-direction: column;
+  height: 40%;
+  align-items: flex-start;
+}
+
+.slider-context-event-name{
+  font-size: 12px;
+  margin: 0;
+}
+
+.slider-context-time{
+  font-size: 12px;
+  margin: 0;
+  color:#D3D3D3;
+}
+
+.elapsed-time-text{
+  margin-bottom: 0px;
+  margin-top: 6px;
+  padding: auto;
+  font-size: 12px;
+}
+
+.floating-info-box-event-analysis{
+  padding: auto;
+  margin: auto;
+}
+
+.button-tile-icons-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;  /* Updated this line */
+  align-items: center;
+}
+
+.button-tile-icons {
+  min-width: 44px;
+  width: 20%;
+  height: 44px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  background-color: #12131640;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-tile-icons:hover {
+  background-color: #282C34;
+}
+
+.button-tile-icons:active {
+  background-color: #44475A; 
+}
+
+.line-chart-container {
+  
+  height: 250px;
+  width: 100%;
+  margin-top: 20px;
+  
 }

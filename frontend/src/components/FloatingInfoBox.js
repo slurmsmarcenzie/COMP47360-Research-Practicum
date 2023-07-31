@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
-  
+
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
-  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, setUseOriginal, removeMarker} = useMapContext();
+  const {zoneID, setZoneID, eventName, setEventName, zone, setZone, useOriginal, removeMarker} = useMapContext();
 
   const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData} = useMapContext();
 
@@ -20,15 +20,15 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
 
-  const {setIsFloatingNavVisible} = useMapContext();
+  const {setIsFloatingNavVisible, setIsTimelapseVisible} = useMapContext();
 
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
-
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
+    setIsTimelapseVisible(false);
     setShowMatchingEvent(true);
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
@@ -113,7 +113,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
   }
-  
   
   function renderInfoBoxContent() {
 

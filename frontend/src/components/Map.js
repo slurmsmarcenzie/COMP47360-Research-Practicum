@@ -3,8 +3,9 @@ import React, { useEffect, useRef,useState, useMemo, lazy, Suspense } from 'reac
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
-import { throttle } from 'lodash';
-import * as turf from '@turf/turf'; // Make sure to install this library using npm or yarn
+import throttle from 'lodash/throttle';
+import { feature } from '@turf/helpers';
+import centroid from '@turf/centroid';
 
 // Context builder
 import { useMapContext } from './MapContext';
@@ -12,11 +13,11 @@ import { useMapContext } from './MapContext';
 // Components
 import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
-import FloatingInfoBox from './FloatingInfoBox';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
 
-const SplitViewMap = lazy(() => import('./SplitViewMap'));
+import FloatingInfoBox from './FloatingInfoBox';
+import SplitViewMap from './SplitViewMap';
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -29,22 +30,24 @@ function Map() {
   const {MAPBOX_ACCESS_TOKEN, BASE_API_URL} = useMapContext();
 
   // imported base functions
-  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers, setEventName} = useMapContext();
+  const { add3DBuildings, renderNeighbourhoods, updateLayerColours, renderEvents, showAllMarkers} = useMapContext();
 
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  const [eventComparisonData, setEventComparisonData] = useState(null);
+  
   const [timelapseData, setTimelapseData] = useState(null);
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, isTimelapseVisible, setIsTimelapseVisible, eventComparisonData, setEventComparisonData} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
+
+  const {eventID, setEventID} = useMapContext();
 
   // swapping styles
   const {mapStyle} = useMapContext();
@@ -63,9 +66,6 @@ function Map() {
   
   // flimsy counter replace later
   const retryCount = useRef(0);
-
-  // define a new function that will be used as the event listener
-  const updateLayerColoursAfterLoad = () => updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap);
 
   // Pop up properties  
   const markerHeight = 10;
@@ -272,13 +272,13 @@ function Map() {
       const [firstFeature] = features;
 
       // Create a GeoJSON feature object from the clicked feature
-      const geojsonFeature = turf.feature(firstFeature.geometry);
+      const geojsonFeature = feature(firstFeature.geometry);
 
       // Use turf to calculate the centroid of the feature
-      const centroid = turf.centroid(geojsonFeature);
+      const featureCentroid = centroid(geojsonFeature);
 
       // Get the coordinates of the centroid
-      const [lng, lat] = centroid.geometry.coordinates;
+      const [lng, lat] = featureCentroid.geometry.coordinates;
 
       // Fly to the centroid of the polygon
       map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
@@ -338,6 +338,7 @@ function Map() {
 
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
+    setIsTimelapseVisible(true);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -349,12 +350,13 @@ function Map() {
     map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
 
     getHistoricBusyness(Event_ID);
+    setEventID(Event_ID);
     fetchEventComparison(Event_ID);
     setTimeout(() => fetchTimelapse(Event_ID), 600)
   
   }
 
-  const highlightEventImpact = (Zone_ID, labels) => {
+  const highlightEventImpact = (impactedZones) => {
 
     isNeighbourhoodClickedRef.current = true;
   
@@ -364,7 +366,7 @@ function Map() {
     };
    
     neighbourhoods.features.forEach((neighbourhood) => {
-      const isLabelPresent = labels.includes(neighbourhood.id);
+      const isLabelPresent = impactedZones.includes(neighbourhood.id);
       let opacity = isLabelPresent ? 0.7 : 0.1;
       let line = isLabelPresent ? 1 : 0;
   
@@ -534,7 +536,6 @@ function Map() {
     }
   }, [mapStyle]); // This effect runs when mapStyle changes
 
-
   const fetchEventComparison = async (Event_ID) => {
   
     try {
@@ -615,12 +616,14 @@ function Map() {
             hoveredZoneScore={hoveredZoneScore}
           />
 
-          <Timelapse
-            map={map}
-            originalBusynessHashMap={originalBusynessHashMap}
-            busynessHashMap={busynessHashMap}
-            timelapseData={timelapseData}
-          />
+          {isTimelapseVisible ?
+            <Timelapse
+              map={map}
+              originalBusynessHashMap={originalBusynessHashMap}
+              busynessHashMap={busynessHashMap}
+              timelapseData={timelapseData}
+            /> : <></>
+          }
 
           </>
         )}
