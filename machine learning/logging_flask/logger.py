@@ -15,9 +15,9 @@ Two Loggers:
 """
 
 ## Create log files
-http_file = open('/logs/http.log', 'a')
-general_file = open('/logs/general.log', 'a')
-priority_file = open('/logs/priority.log', 'a')
+http_file = open('logging_flask/logs/http.log', 'a')
+general_file = open('logging_flask/logs/general.log', 'a')
+priority_file = open('logging_flask/logs/priority.log', 'a')
 
 ## GENERAL LOGGER
 # General Logger is called as needed to log application events
