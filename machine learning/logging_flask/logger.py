@@ -1,4 +1,5 @@
 import logging
+import os
 
 """
 Create and sets up logging for the API
@@ -13,6 +14,9 @@ Two Loggers:
 > HTTP Logger is reponsible for logging HTTP requests and responses within the API
 
 """
+
+##Create log folder
+os.makedirs(os.path.dirname("logging_flask/logs/"), exist_ok=True)
 
 ## Create log files
 http_file = open('logging_flask/logs/http.log', 'a')
