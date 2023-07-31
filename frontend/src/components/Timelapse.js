@@ -7,7 +7,7 @@ import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMap}) {
 
     const { updateLayerColours, neighbourhoodEvents } = useMapContext();
-    
+
     const [isPlaying, setIsPlaying] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [index, setIndex] = useState(0);
@@ -57,7 +57,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         // Ensure we have a valid integer index
 
         const index = Math.floor(newElapsedTime);
-        if (timelapseData && timelapseData.length > index) {
+        if (timelapseData && timelapseData.hasOwnProperty(index)) {
             const ActiveHashMap = timelapseData[index];
             updateLayerColours(map.current, false, originalBusynessHashMap, ActiveHashMap);
             setIndex(index);
@@ -69,7 +69,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
             endTimelapse();
         }
 
-        if(Number.isInteger(elapsedTime) && timelapseData && timelapseData.length > index){
+        if(Number.isInteger(elapsedTime) && timelapseData && timelapseData.hasOwnProperty(index)){
             const ActiveHashMap = timelapseData[index];
             updateLayerColours(map.current, false, originalBusynessHashMap, ActiveHashMap);
             setIndex(index + 1);
