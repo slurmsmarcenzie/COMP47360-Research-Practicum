@@ -15,7 +15,7 @@ def event_impact(eventID):
     general_logger.info(f"impact quried for event: {eventID}")
     time = peak_times.get(eventID)
     impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID, time)
-    return json.dumps(impact_filtered), 200
+    return impact_filtered, 200
 
 
 @cache.memoize(timeout=0)
@@ -27,7 +27,7 @@ def event_baseline(eventID):
     general_logger.info(f"baseline quried for event: {eventID}")
     time = peak_times.get(eventID)
     baseline_filtered = event_filter(load_file("static/PredictedBaseline.json"), eventID, time)
-    return json.dumps(baseline_filtered), 200
+    return baseline_filtered, 200
 
 
 @cache.memoize(timeout=0)
@@ -41,8 +41,7 @@ def event_timelapse(eventID):
     timelapse_filtered = event_filter(
         load_file("static/PredictedImpact.json"), 
         int(eventID))
-    print
-    return json.dumps(timelapse_filtered), 200
+    return timelapse_filtered, 200
 
 
 @cache.memoize(timeout=0)
@@ -70,7 +69,7 @@ def event_comparison(eventID):
             baseline_score = baseline_filtered[time][location]
             difference[time][location] = impact_score - baseline_score
 
-    return json.dumps(difference), 200
+    return difference, 200
 
 
 ## HELPER FUNCTIONS ##

@@ -42,4 +42,4 @@ def current():
         general_logger.error("Error getting predictions from model: {exc}".format(exc=exc))
         raise abort(500, "Error getting model predictions")
     
-    return json.dumps(data), 200
+    return data, 200
