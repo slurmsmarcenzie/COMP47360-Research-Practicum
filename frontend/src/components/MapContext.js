@@ -280,10 +280,6 @@ export const MapProvider = ({ children }) => {
     
     const removeAllButOneMarker = (keptEvent) => {
 
-        console.log('all of markers at the top of the call', markers)
-
-        console.log('this is the keptEvent', keptEvent)
-
         markers.forEach((marker) => {
 
             if (marker.Event_ID !== keptEvent) {

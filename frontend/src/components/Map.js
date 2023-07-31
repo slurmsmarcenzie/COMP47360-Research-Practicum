@@ -16,13 +16,14 @@ import Navbar from './Navbar';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
 
-import FloatingInfoBox from './FloatingInfoBox';
-import SplitViewMap from './SplitViewMap';
+
+const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
+const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-//mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 function Map() {
 
