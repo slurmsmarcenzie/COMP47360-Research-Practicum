@@ -268,7 +268,6 @@ export const MapProvider = ({ children }) => {
         
     };
     
-    
     const removeAllMarkers = () => {
 
         markers.forEach((marker) => {
@@ -330,15 +329,17 @@ export const MapProvider = ({ children }) => {
 
     const addAntline = (map, event) => {
 
+        console.log('event inside the antline', event);
+
         const colourMap = {
-            1: ['#996236','#F8B12C'],
-            2: ['#FFA500', '#000000'],
-            3: ['#035606', '#FFFFFF'],
-            4: ['#E50000', '#770088'],
-            5: ['#a9a5AA', '#FCFCFC'],
-            6: ['#CC232A', '#F5AC27'],
-            7: ['#2B4593', '#FEFEFE'],
-            8: ['#3B3B6D', '#B32134']
+            1: ['#FFFFFF', '#000000'],
+            2: ['#FFFFFF', '#000000'],
+            3: ['#FFFFFF', '#000000'],
+            4: ['#FFFFFF', '#000000'],
+            5: ['#FFFFFF', '#000000'],
+            6: ['#FFFFFF', '#000000'],
+            7: ['#FFFFFF', '#000000'],
+            8: ['#FFFFFF', '#000000']
         };
 
         map.addSource('line', {
@@ -356,6 +357,7 @@ export const MapProvider = ({ children }) => {
                 'line-opacity': 0.4
                 }
             });
+
             // add a line layer with line-dasharray set to the first value in dashArraySequence
             map.addLayer({
                 type: 'line',
@@ -408,7 +410,57 @@ export const MapProvider = ({ children }) => {
                 // Request the next frame of the animation.
                 animationID = requestAnimationFrame(animateDashArray);
             }
-             
+            
+            const icon = 'fa-solid fa-person-walking'
+            // trying to add a mini marker along the parade line
+            const marker = new FontawesomeMarkers({
+                icon,
+                iconColor: 'white',
+                color: 'orange',
+            })
+            .setLngLat(event.geometry.coordinates[0])
+            .addTo(map);
+
+            // Get the coordinates of the line
+            const coordinates = event.geometry.coordinates;
+
+            // Calculate the total number of steps
+            const numSteps = coordinates.length - 1;
+
+            // Initialize a variable for the current step
+            let currentStep = 0;
+
+            let animationFrameId = null;
+
+            // Function to move the marker
+            const moveMarker = () => {
+                // Only move the marker if we haven't reached the end of the line
+                if (currentStep <= numSteps) {
+                    // Get the current coordinate
+                    const currentCoordinate = coordinates[currentStep];
+            
+                    // Move the marker to the current coordinate
+                    marker.setLngLat(currentCoordinate);
+            
+                    // Increment the step
+                    currentStep++;
+                }
+            
+                // Continue the animation if we haven't reached the end of the line
+                if (currentStep <= numSteps) {
+                    // Add a delay before the next frame
+                    setTimeout(() => {
+                        requestAnimationFrame(moveMarker);
+                    }, 1000); // delay in milliseconds
+                }
+
+                if (currentStep > numSteps){
+                    marker.remove();
+                }
+            };
+
+            moveMarker();
+
             // start the animation
             animateDashArray(0);
     }
@@ -428,7 +480,16 @@ export const MapProvider = ({ children }) => {
     };
 
     const addMarker = (map, coordinates) => {
-        const marker = new mapboxgl.Marker({ color: 'red' }).setLngLat(coordinates).addTo(map);
+
+        const icon = 'fa-solid fa-flag-checkered'
+        const scale = 1.2
+
+        const marker = new FontawesomeMarkers({
+            icon,
+            iconColor: 'white',
+            color: 'red',
+            scale
+        }).setLngLat(coordinates).addTo(map);
         lastMarkers.push(marker);
       };
 

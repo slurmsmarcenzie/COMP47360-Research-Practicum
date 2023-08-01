@@ -454,10 +454,6 @@ function Map() {
   }, []);
 
   useEffect(() => {
-    console.log('baseline timelapse data', baselineTimelapseData)
-  }, [baselineTimelapseData])
-
-  useEffect(() => {
     if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
@@ -482,9 +478,7 @@ function Map() {
         add3DBuildings(map.current);
         renderEvents(map.current);
         initialiseMouseMapEvents(map.current);
-        setTimeout(() => {
-          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 900);
+        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
       }
   
       if (!map.current) {
