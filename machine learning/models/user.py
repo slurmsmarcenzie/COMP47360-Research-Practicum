@@ -8,5 +8,5 @@ class User(db.Model, UserMixin):
     """
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False) #80 because it will get hashed
+    password = db.Column(db.String(80), nullable=False) #80 because it will get hashed (extra space)
     access_token = db.Column(db.String(100), nullable=False)
