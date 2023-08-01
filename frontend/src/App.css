@@ -1032,25 +1032,33 @@ input[type=range]::-webkit-slider-thumb {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;  /* Updated this line */
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
 }
 
 .button-tile-icons {
   min-width: 44px;
-  width: 20%;
+  max-width: 44%;
+  width: calc(50% - 10px); /* calculate width for 2 elements per row considering some space between them */
   height: 44px;
   color: white;
   font-weight: 700;
   cursor: pointer;
   border: none;
   display: flex;
+  flex-direction: row; /* Arrange the icon and text in a row */
   background-color: #12131640;
   border: 1px solid rgba(255, 255, 255, 0.125);
   border-radius: 5px;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
+  align-items: center; /* Center the icon and text vertically */
+  justify-content: space-around; /* Center the icon and text horizontally */
+  margin-bottom: 10px; /* add some space between rows */
+  padding: 0 10px; /* Add some padding on the left and right */
+}
+
+.button-tile-icons span {
+  margin-left: 10px; /* Add some space to the left of the text */
 }
 
 .button-tile-icons:hover {

@@ -177,7 +177,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', left: '128px'}}>Typical Manhattan Activity Map</div>
+        <div className="split-view-map-label" style={{top: '18px', left: '64px'}}>Typical Manhattan Activity Map</div>
         <Map
           id="right-map"
           {...viewState}
@@ -189,7 +189,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', right: '128px'}}>Event-Impacted Manhattan Activity Map</div>
+        <div className="split-view-map-label" style={{top: '18px', right: '64px'}}>Event-Impacted Manhattan Activity Map</div>
         <SplitViewController
           isSplitView={isSplitView}
           setSplitView={setSplitView}

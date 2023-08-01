@@ -353,21 +353,29 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         Show Impact of Event
                     </label>
                 </div>
-                {active ? <div className='button-tile-icons-container'>
-                    <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
-                    </div>
-                    <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
-                    </div>
-                    <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
-                    </div>
-                    <div className='button-tile-icons' title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
-                    </div>
-                </div> : null
-                }
+                {active ? 
+                    <>
+                        <h3 style={{padding:'auto', margin:'4px'}}>Filter by: </h3>
+                        <div className='button-tile-icons-container'>
+                            <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                                <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
+                                <span>Busiest Zones</span>
+                            </div>
+                            <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                                <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
+                                <span>Least Busy Zones</span>
+                            </div>
+                            <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                                <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
+                                <span>Most Impacted Zones</span>
+                            </div>
+                            <div className='button-tile-icons' title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                                <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
+                                <span>Least Impacted Zones</span>
+                            </div>
+                        </div> 
+                    </>
+                : null }
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
                 </button>
