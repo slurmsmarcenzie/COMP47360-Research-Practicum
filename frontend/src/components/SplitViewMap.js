@@ -2,9 +2,11 @@ import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import Map from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import SplitViewController from '../components/SplitViewController'
+import DualMapTimelapse from './DualMapTimelapse';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
+import { map } from 'd3';
 
   const LeftMapStyle = {
       position: 'absolute',
@@ -19,7 +21,7 @@ import { scaleLinear } from 'd3-scale';
     height: '100vh'
   };
   
-function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
+function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData}) {
 
   const {MAPBOX_ACCESS_TOKEN, isSplitView, setSplitView, renderNeighbourhoods, markers, mapStyle} = useMapContext();
 
@@ -177,7 +179,8 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onLeftMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', left: '64px'}}>Typical Manhattan Activity Map</div>
+        <div className="split-view-map-label" style={{top: '18px', left: '64px', fontSize: '14px',  fontWeight: '400'}}>Typical Manhattan Activity Map</div>
+
         <Map
           id="right-map"
           {...viewState}
@@ -189,10 +192,19 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap}) {
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
           onLoad={map => onRightMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', right: '64px'}}>Event-Impacted Manhattan Activity Map</div>
+        <div className="split-view-map-label" style={{top: '18px', right: '64px', fontSize: '14px', fontWeight: '400'}}>Event-Impacted Manhattan Activity Map</div>
+        
         <SplitViewController
           isSplitView={isSplitView}
           setSplitView={setSplitView}
+        />
+
+        <DualMapTimelapse 
+          leftMap={leftMapRef}
+          rightMap={rightMapRef}
+          eventBaselineHashMap={eventBaselineHashMap}
+          busynessHashMap={busynessHashMap}
+          timelapseData={timelapseData}
         />
       </div>
     </>

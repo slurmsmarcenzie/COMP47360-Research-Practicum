@@ -563,6 +563,7 @@ function Map() {
         {isSplitView ? (
           <Suspense fallback={<div>Loading SplitViewMap...</div>}>
             <SplitViewMap 
+              timelapseData={timelapseData}
               eventBaselineHashMap={eventBaselineHashMap}
               originalBusynessHashMap={originalBusynessHashMap}
               busynessHashMap={busynessHashMap}
