@@ -36,7 +36,7 @@ def event_timelapse(eventID):
     Controller for: HISTORIC/EVENT/TIMELAPSE\n
     Returns event timelaspse for 24hr period
     """
-    general_logger.info(f"event comparison queried for event: {eventID}")
+    general_logger.info(f"event timelapse queried for event: {eventID}")
     eventID = int(eventID)
     timelapse_filtered = event_filter(
         load_file("static/PredictedImpact.json"), 
@@ -48,28 +48,41 @@ def event_timelapse(eventID):
 def event_comparison(eventID):
     """
     Controller for: HISTORIC/EVENT/COMPARISON\n
-    Returns difference between event impact and baseline for 24hr period
+    Returns event comparison for 24hr period
     """
-    general_logger.info(f"event timelapse queried for event: {eventID}")
+    general_logger.info(f"event comparison queried for event: {eventID}")
     eventID = int(eventID)
-    
-     #Load and Filter event impact & event baseline:
-    baseline_filtered = event_filter(load_file("static/PredictedBaseline.json"), eventID)
-    impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID)
+    timelapse_filtered = event_filter(
+        load_file("static/PredictedDifference.json"), 
+        int(eventID))
+    return timelapse_filtered, 200
 
-    if baseline_filtered.keys() != impact_filtered.keys():
-        raise abort(500, "time key mismatch for filtered baseline and impact")
-    
-    difference = dict.fromkeys(baseline_filtered.keys())
-    
-    for time in baseline_filtered:
-        difference[time] = {}
-        for location in baseline_filtered[time]:
-            impact_score = impact_filtered[time][location]
-            baseline_score = baseline_filtered[time][location]
-            difference[time][location] = impact_score - baseline_score
 
-    return difference, 200
+# def event_comparison_manual(eventID):
+#     """
+#     Controller for: HISTORIC/EVENT/COMPARISON\n
+#     Returns difference between event impact and baseline for 24hr period
+#     """
+#     general_logger.info(f"event timelapse queried for event: {eventID}")
+#     eventID = int(eventID)
+    
+#      #Load and Filter event impact & event baseline:
+#     baseline_filtered = event_filter(load_file("static/PredictedBaseline.json"), eventID)
+#     impact_filtered = event_filter(load_file("static/PredictedImpact.json"), eventID)
+
+#     if baseline_filtered.keys() != impact_filtered.keys():
+#         raise abort(500, "time key mismatch for filtered baseline and impact")
+    
+#     difference = dict.fromkeys(baseline_filtered.keys())
+    
+#     for time in baseline_filtered:
+#         difference[time] = {}
+#         for location in baseline_filtered[time]:
+#             impact_score = impact_filtered[time][location]
+#             baseline_score = baseline_filtered[time][location]
+#             difference[time][location] = impact_score - baseline_score
+
+#     return difference, 200
 
 
 ## HELPER FUNCTIONS ##
