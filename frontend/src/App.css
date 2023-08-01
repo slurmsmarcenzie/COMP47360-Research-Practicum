@@ -1070,9 +1070,11 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .line-chart-container {
-  
   height: 250px;
   width: 100%;
   margin-top: 20px;
-  
+}
+
+.button-tile-icons.pressed{
+  background-color: blueviolet;
 }

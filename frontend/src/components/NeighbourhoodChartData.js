@@ -14,7 +14,8 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
 
-    const [isButtonPressed, setIsButtonPressed] = useState(false);
+    const [lastButtonPressed, setLastButtonPressed] = useState(null);
+    const [activeButton, setActiveButton] = useState(null);
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
@@ -31,8 +32,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     const [labels, setLabels] = useState([]);    
 
     const [active, setActive] = useState(true);
-    const [highlightActive, setHighlightActive] = useState(null);
-    const [initialRender, setInitialRender] = useState(true);
 
     // This function will handle sorting and extraction of names and data values
     const getImpactedZonesForChart = () => {
@@ -134,10 +133,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         return {data, options};
     }
     
-    // useEffect(() => {
-    //     setSelectedValues(getImpactedZonesForHighlight());
-    // }, [hashMap, showMostImpactedZones]);
-    
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
         const {names, dataValues} = getImpactedZonesForChart();
@@ -145,13 +140,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         const newChartData = makeChartData(names, dataValues);
         setChartData(newChartData); // Set chartData here
     }, [showMostImpactedZones, hashMap]);
-
-    // const toggleChartData = () => {
-    //     setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-    //     setRenderChart(chartData);
-    //     setShowChart(true);
-    //     highlightEventImpact(Zone_ID, labels);
-    // };
 
     // legacy code
     const getGradientMostImpacted = (context) => {
@@ -279,25 +267,28 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     }
 
     // logic to handle changing of zones being highlighted.
-
     const highlightZones = () => {
-
         if (labels.length === 0) {
             return;
         }
     
-        if (isButtonPressed) {
-            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+        // Check if the same button has been pressed twice.
+        if (activeButton === lastButtonPressed) {
+            // If so, reset the colors, reset lastButtonPressed, and reset activeButton.
             resetColours();
+            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+            setLastButtonPressed(null);
+            setActiveButton(null);  // reset activeButton
         } else {
+            // If a different button was pressed, set it as lastButtonPressed and highlight the relevant zones.
+            setLastButtonPressed(activeButton);
             highlightEventImpact(labels);
         }
     }
 
     // use effect used to handle changes in toggle states
-
     useEffect(() => {
-        highlightZones()
+        highlightZones();
     }, [labels])
 
     const handleShowChart = () => {
@@ -357,19 +348,19 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                     <>
                         <h3 style={{padding:'auto', margin:'4px'}}>Filter Zones by: </h3>
                         <div className='button-tile-icons-container'>
-                            <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                            <div className={`button-tile-icons ${activeButton === "Busiest Zones" ? "pressed" : ""}`} title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setActiveButton("Busiest Zones")}}>
                                 <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
                                 <span>Busiest Zones</span>
                             </div>
-                            <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
+                            <div className={`button-tile-icons ${activeButton === "Least Busy Zones" ? "pressed" : ""}`} title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setActiveButton("Least Busy Zones")}}>
                                 <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
                                 <span>Least Busy Zones</span>
                             </div>
-                            <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                            <div className={`button-tile-icons ${activeButton === "Most Impacted Zones" ? "pressed" : ""}`} title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setActiveButton("Most Impacted Zones")}}>
                                 <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
                                 <span>Most Impacted Zones</span>
                             </div>
-                            <div className='button-tile-icons' title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
+                            <div className={`button-tile-icons ${activeButton === "Least Impacted Zones" ? "pressed" : ""}`}  title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setActiveButton("Least Impacted Zones")}}>
                                 <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
                                 <span>Least Impacted Zones</span>
                             </div>
