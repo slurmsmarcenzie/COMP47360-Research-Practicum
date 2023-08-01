@@ -355,7 +355,7 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                 </div>
                 {active ? 
                     <>
-                        <h3 style={{padding:'auto', margin:'4px'}}>Filter by: </h3>
+                        <h3 style={{padding:'auto', margin:'4px'}}>Filter Zones by: </h3>
                         <div className='button-tile-icons-container'>
                             <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
                                 <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
