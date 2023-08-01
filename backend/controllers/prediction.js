@@ -1,5 +1,6 @@
 const axios = require("axios");
 const generalLogger = require("../logging/generalLogger")(module)
+const {validate_response_hour} = require("./validations/validator")
 require("dotenv").config();
 
 
@@ -15,20 +16,18 @@ const current = (req, res, next) => {
     const uri = `${process.env.FLASK_API_URL}/prediction/current?key=${process.env.FLASK_API_KEY}` 
 
     axios.get(uri)
+      // Fetch OK
       .then(response => {
-        // Handle empty/null API result:
-        if (response.data === null || response.data === undefined){
-            generalLogger.warn("warning, prediction list is empty")
-            res.status(200).json({});
-            next()
+        // Validate response data
+        if (validate_response_hour(response.data)){
+          res.status(200).json(response.data)
         }
         else {
-            generalLogger.info("response is OK")
-            res.status(200).json(response.data)
-            next()
+          res.status(500).json("Response data did not pass validation checks")
         }
+        next()
       })
-      // If error, respond 500 and log error message
+      // Fetch ERROR, respond 500 and log error message
       .catch(error => {
         generalLogger.error(`error getting prediction: ${error}`)
         res.status(500).json({"error": error})
