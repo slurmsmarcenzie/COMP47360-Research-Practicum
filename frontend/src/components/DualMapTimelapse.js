@@ -4,7 +4,7 @@ import "../App.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
-function DualMapTimelpase ({leftMap, rightMap, originalBusynessHashMap, timelapseData, busynessHashMap}) {
+function DualMapTimelpase ({leftMap, rightMap, originalBusynessHashMap, timelapseData, baselineTimelapseData, busynessHashMap}) {
 
     const { updateLayerColours, neighbourhoodEvents } = useMapContext();
 
@@ -38,13 +38,15 @@ function DualMapTimelpase ({leftMap, rightMap, originalBusynessHashMap, timelaps
 
     const endTimelapse = () => {
         
+        const resetPosition = baselineTimelapseData[16]
+
         setIndex(0);
         setElapsedTime(0);
         setIsPlaying(false);
         clearInterval(timerRef.current);
 
         setTimeout(() => {
-            updateLayerColours(leftMap.current, false, busynessHashMap, busynessHashMap);
+            updateLayerColours(leftMap.current, false, busynessHashMap, resetPosition);
             updateLayerColours(rightMap.current, false, busynessHashMap, busynessHashMap);
         }, 400)
     }
@@ -56,27 +58,30 @@ function DualMapTimelpase ({leftMap, rightMap, originalBusynessHashMap, timelaps
         setElapsedTime(newElapsedTime);
     
         // Ensure we have a valid integer index
-
         const index = Math.floor(newElapsedTime);
         if (timelapseData && timelapseData.hasOwnProperty(index)) {
-            const ActiveHashMap = timelapseData[index];
-            updateLayerColours(leftMap.current, false, originalBusynessHashMap, ActiveHashMap);
-            updateLayerColours(rightMap.current, false, originalBusynessHashMap, ActiveHashMap);
+            const TimelapseHashMap = timelapseData[index];
+            const BaselineHashMap = baselineTimelapseData[index];
+            updateLayerColours(rightMap.current, false, originalBusynessHashMap, TimelapseHashMap);
+            updateLayerColours(leftMap.current, false, originalBusynessHashMap, BaselineHashMap);
             setIndex(index);
         }
     };
 
     useEffect(() => {
+
         if (elapsedTime >= 24) {
             endTimelapse();
         }
 
         if(Number.isInteger(elapsedTime) && timelapseData && timelapseData.hasOwnProperty(index)){
-            const ActiveHashMap = timelapseData[index];
-            updateLayerColours(leftMap.current, false, originalBusynessHashMap, ActiveHashMap);
-            updateLayerColours(rightMap.current, false, originalBusynessHashMap, ActiveHashMap);
+            const TimelapseHashMap = timelapseData[index];
+            const BaselineHashMap = baselineTimelapseData[index];
+            updateLayerColours(rightMap.current, false, originalBusynessHashMap, TimelapseHashMap);
+            updateLayerColours(leftMap.current, false, originalBusynessHashMap, BaselineHashMap);
             setIndex(index + 1);
         }
+        
     }, [elapsedTime]);
 
     useEffect(() => {

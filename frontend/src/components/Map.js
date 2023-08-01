@@ -36,8 +36,8 @@ function Map() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  
   const [timelapseData, setTimelapseData] = useState(null);
+  const [baselineTimelapseData, setBaselineTimelapseData] = useState(null)
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
@@ -354,7 +354,7 @@ function Map() {
     setEventID(Event_ID);
     fetchEventComparison(Event_ID);
     setTimeout(() => fetchTimelapse(Event_ID), 600)
-  
+    fetchBaslineTimelapse(Event_ID)
   }
 
   const highlightEventImpact = (impactedZones) => {
@@ -454,6 +454,10 @@ function Map() {
   }, []);
 
   useEffect(() => {
+    console.log('baseline timelapse data', baselineTimelapseData)
+  }, [baselineTimelapseData])
+
+  useEffect(() => {
     if (!originalBusynessHashMap && Object.keys(busynessHashMap).length > 0) {
       setOriginalBusynessHashMap({ ...busynessHashMap });
     }
@@ -551,7 +555,22 @@ function Map() {
       console.error('Issue with fetch request for timelapse function:', error);
       setError(error);
      }
+  }
 
+
+  const fetchBaslineTimelapse = async (Event_ID) => {
+
+    try {
+      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/baselinetimelapse`);
+      if (!baselineTimelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const baselineTimelapseData = await baselineTimelapseResponse.json();
+      setBaselineTimelapseData(baselineTimelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
   }
 
   return (
@@ -563,6 +582,7 @@ function Map() {
         {isSplitView ? (
           <Suspense fallback={<div>Loading SplitViewMap...</div>}>
             <SplitViewMap 
+              baselineTimelapseData={baselineTimelapseData}
               timelapseData={timelapseData}
               eventBaselineHashMap={eventBaselineHashMap}
               originalBusynessHashMap={originalBusynessHashMap}

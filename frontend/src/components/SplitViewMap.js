@@ -6,7 +6,6 @@ import DualMapTimelapse from './DualMapTimelapse';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
-import { map } from 'd3';
 
   const LeftMapStyle = {
       position: 'absolute',
@@ -21,7 +20,7 @@ import { map } from 'd3';
     height: '100vh'
   };
   
-function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData}) {
+function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, baselineTimelapseData}) {
 
   const {MAPBOX_ACCESS_TOKEN, isSplitView, setSplitView, renderNeighbourhoods, markers, mapStyle} = useMapContext();
 
@@ -57,7 +56,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData}) {
     return {right: mode === 'split-screen' ? width / 1 : 0, top: 0, left: 0, bottom: 0};
   }, [width, mode]);
 
-     // Map Event Listeners for mouse
+  // Map Event Listeners for mouse
   const handleSplitScreenMouseInteractions = (map, hashmap) => {
 
     // Create a new colourScale each time you handle the color change
@@ -204,6 +203,7 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData}) {
           rightMap={rightMapRef}
           eventBaselineHashMap={eventBaselineHashMap}
           busynessHashMap={busynessHashMap}
+          baselineTimelapseData={baselineTimelapseData}
           timelapseData={timelapseData}
         />
       </div>

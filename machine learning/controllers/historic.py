@@ -36,9 +36,20 @@ def event_timelapse(eventID):
     Controller for: HISTORIC/EVENT/TIMELINE\n
     Returns event timelaspse for 24hr period
     """
-    general_logger.info(f"event timelapse queried for event: {eventID}")
+    general_logger.info(f"event impact timelapse queried for event: {eventID}")
     eventID = int(eventID)
     timelapse_filtered = event_filter(load_file("static/PredictedImpact.json"), int(eventID))
+    return json.dumps(timelapse_filtered), 200
+
+@cache.memoize(timeout=0)
+def event_baselinetimelapse(eventID):
+    """
+    Controller for: HISTORIC/EVENT/TIMELINE\n
+    Returns event timelaspse for 24hr period
+    """
+    general_logger.info(f"event baseline timelapse queried for event: {eventID}")
+    eventID = int(eventID)
+    timelapse_filtered = event_filter(load_file("static/PredictedBaseline.json"), int(eventID))
     return json.dumps(timelapse_filtered), 200
 
 
