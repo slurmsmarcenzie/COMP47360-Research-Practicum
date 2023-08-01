@@ -84,7 +84,6 @@ def load_file(file_str):
         raise abort(500, f"Unable to read file '{file_str}'")
     return file 
 
-# 
 
 def event_filter(file, id, for_time=None):
     """
