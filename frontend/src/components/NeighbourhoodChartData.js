@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
 
 
-function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact,  resetColours}) {
 
     const {neighbourhoods} = useMapContext();
     const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
@@ -161,7 +161,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
     const handleToggle = () => {
         updateLayerColours(map.current, !active, eventBaselineHashMap, busynessHashMap);
         resetColours();
-        setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
     };
 
@@ -293,29 +292,16 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
 
     const handleShowChart = () => {
         setShowLineChart((prevShowChart) => !prevShowChart); // Toggle the showChart state
+        setShowChart(!showChart); 
       };
   
     return (
         <div className='parent-chart-container'> 
-            {showChart &&
-            <div className='floating-info-box-chart-container'>
-                {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
-                <button 
-                    className="floating-infobox-close-toggle-button" 
-                    onClick={() => {                     
-                    setShowChart(!showChart);
-                    setShowMostImpactedZones(!showMostImpactedZones)
-                    resetColours()
-                    }}
-                >
-                    X
-                </button>
-            </div>
-            }<button
-            className="floating-nav-outline-button"
-            onClick={handleShowChart}
-            style={{ marginBottom: '10px' }} 
-          >
+            <button
+                className="floating-nav-outline-button"
+                onClick={handleShowChart}
+                style={{ marginBottom: '10px' }} 
+          > 
             {showLineChart ? 'Hide Chart' : 'Show Chart'}
           </button>
           {showLineChart && <LineChart map={map}/>}

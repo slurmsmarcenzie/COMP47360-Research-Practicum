@@ -43,7 +43,7 @@ export const MapProvider = ({ children }) => {
 
     const [showInfoBox, setShowInfoBox] = useState(false); // sets the infobox state to true if we want to see if
     const [showNeighborhoodInfoBox, setShowNeighborhoodInfoBox] = useState(false); // sets sub-component of infobox, which basically handles whether or not to show that there are no events in an area
-    const [showChart, setShowChart] = useState(false);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
+    const [showChart, setShowChart] = useState(true);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
     const [showMatchingEvent, setShowMatchingEvent] = useState(true);
 

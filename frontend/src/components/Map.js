@@ -16,7 +16,6 @@ import Navbar from './Navbar';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
 
-
 const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
@@ -59,6 +58,8 @@ function Map() {
   const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
   const [hoveredZoneScore, setHoveredZoneScore] = useState(null);
+  const [showNoEventInfobox, setShowNoEventInfobox] = useState(true)
+  const [eventSelected, setEventSelected] = useState(false);
 
   // objects for our map
   const mapContainer = useRef(null);
@@ -98,7 +99,6 @@ function Map() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
-    setShowChart(false);
     setNeighbourhoodEvents([]);
     showAllMarkers(map.current);
 
@@ -177,9 +177,11 @@ function Map() {
       // Mouseleave event
       map.on('mouseleave', neighbourhood.id, () => handleMouseLeave(neighbourhood, map));
 
-      // On click event
-      map.on('click', (e) => handleClick(map, e));
     });
+
+    // On click event
+    map.on('click', (e) => handleClick(map, e));
+    
   };
 
   // Define the mousemove handler outside of the initialiseMouseMapEvents function
@@ -266,9 +268,9 @@ function Map() {
 
     if (features.length > 0 && features[0].id !== undefined) {
 
-      isNeighbourhoodClickedRef.current = true;  
+      // isNeighbourhoodClickedRef.current = true;  
 
-      disableColours();
+      // disableColours();
 
       const [firstFeature] = features;
 
@@ -282,9 +284,9 @@ function Map() {
       const [lng, lat] = featureCentroid.geometry.coordinates;
 
       // Fly to the centroid of the polygon
-      map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+      // map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
-      map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+      // map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
       const zone = firstFeature.properties.zone;
 
@@ -297,7 +299,10 @@ function Map() {
 
       if (matchingEvents.length > 0) {
         setShowInfoBox(true);
-      } else {
+        setShowNeighborhoodInfoBox(false);
+      } 
+      
+      if (matchingEvents.length == 0) {
         // Show the neighborhood info box since there are no matching events
         setShowNeighborhoodInfoBox(true);
       }
@@ -337,6 +342,10 @@ function Map() {
 
   const visualiseEventImpact = (Event_ID) => {
 
+    setEventSelected(true);
+    setShowChart(false);
+    setShowNoEventInfobox(false);
+    setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
     setIsTimelapseVisible(true);
@@ -523,12 +532,10 @@ function Map() {
   
     try {
      const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
-     console.log(eventComparisonResponse);
      if (!eventComparisonResponse) {
       throw new Error('Network response was not ok');
      }
      const eventComparisonData = await eventComparisonResponse.json();
-     console.log(eventComparisonData);
      setEventComparisonData(eventComparisonData);
     } catch (error) {
      console.error('Issue with fetch request for event impact:', error);
@@ -601,6 +608,10 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
+            eventSelected={eventSelected}
+            setEventSelected={setEventSelected}
+            showNoEventInfobox={showNoEventInfobox}
+            setShowNoEventInfobox={setShowNoEventInfobox}
             isNeighbourhoodClickedRef={isNeighbourhoodClickedRef}
             updateLayerColours={updateLayerColours}
             visualiseEventImpact={visualiseEventImpact}

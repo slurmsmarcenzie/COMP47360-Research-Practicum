@@ -170,7 +170,7 @@
     {
       "Event_ID": 7,
       "Event_Name": "Three Kings Day Parade",
-      "Zone_ID": 74,
+      "Zone_ID": 75,
       "Zone_Name": "East Harlem North",
       "Start_Date": {
          "Time": "01/05/2022 11:00:00 AM"
@@ -198,7 +198,7 @@
     {
       "Event_ID": 8,
       "Event_Name": "4th of July Fireworks",
-      "Zone_ID": 232,
+      "Zone_ID": 224,
       "Zone_Name": "Seward Park",
       "Start_Date": {
          "Time": "07/04/2022 08:00:00 PM"

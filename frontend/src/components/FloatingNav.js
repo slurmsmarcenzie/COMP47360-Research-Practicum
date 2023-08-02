@@ -30,14 +30,14 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
   const reviewEvent = (e) => {
 
     const selectedEvent = JSON.parse(e.target.value);
-    const latitude = selectedEvent.Event_Location.Latitude
-    const longitude = selectedEvent.Event_Location.Longitude
+    // const latitude = selectedEvent.Event_Location.Latitude
+    // const longitude = selectedEvent.Event_Location.Longitude
     
     setZone(selectedEvent.Zone_ID);
 
-    floatingNavZoomToLocation(longitude, latitude);
+    // floatingNavZoomToLocation(longitude, latitude);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    disableColours();
+    // disableColours();
     removeMarker();
   
     isNeighbourhoodClickedRef.current = true;

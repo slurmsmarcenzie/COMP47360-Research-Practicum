@@ -8,7 +8,7 @@ import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef}) {
+function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef, showNoEventInfobox, setShowNoEventInfobox, eventSelected, setEventSelected}) {
 
   const {showInfoBox, showChartData, showChart, showNeighborhoodInfoBox, neighbourhoodEvents, colourPairs, colourPairIndex, removeAntline} = useMapContext();
 
@@ -21,19 +21,21 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
 
   const {setIsFloatingNavVisible, setIsTimelapseVisible} = useMapContext();
-
+  
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
 
   // when the neighbourhood events changes/if they change/ then set the zone id to the zone id value of the first item in the events list, as they will all have the same value
 
   const resetMap = (map) => {
+    setShowNeighborhoodInfoBox(false);
+    setEventSelected(false);
+    setShowChart(false);
+    setShowNoEventInfobox(true); 
     setIsTimelapseVisible(false);
     setShowMatchingEvent(true);
     setShowInfoBox(false);
-    setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
-    setShowChart(false);
     setNeighbourhoodEvents([]);
     showAllMarkers(map.current);
     map.current.flyTo({zoom: 12, essential: true, center: [originalLng, originalLat] });
@@ -46,13 +48,12 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   }
 
   useEffect(() => {
-    if(neighbourhoodEvents && neighbourhoodEvents.length > 0) {
+    if(neighbourhoodEvents && neighbourhoodEvents.length > 0 && !eventSelected) {
       setZoneID(neighbourhoodEvents[0].Zone_ID);
       setEventName(neighbourhoodEvents[0].Event_Name);
       setZone(neighbourhoodEvents[0].Zone_Name)
       setEventForAnalysisComponent(neighbourhoodEvents[0])
     }
-    
   }, [neighbourhoodEvents]);
 
   useEffect(() => {
@@ -111,9 +112,10 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       return <h3 className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h3>;
     }
   
-    return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
+    return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent} showChart={showChart}/>;
   }
-  
+
+
   function renderInfoBoxContent() {
 
     if (!showInfoBox) {
@@ -141,7 +143,12 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
   
   function renderNeighborhoodMessage() {
 
-    return showNeighborhoodInfoBox && <p>There are no events happening in this neighbourhood.</p>;
+    if (showNeighborhoodInfoBox == false || showNoEventInfobox == false) {
+      return 
+    } else {
+      return <p>There are no events happening in this neighbourhood.</p>;
+    }
+
  
   }
   

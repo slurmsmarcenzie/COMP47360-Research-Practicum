@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import "../App.css";
 
-function EventAnalysis({ eventForAnalysisComponent }) {
+function EventAnalysis({ eventForAnalysisComponent, showChart }) {
 
     // code to handle truncated text to increase screen real-estate
+
+    console.log('showChart state inside Eventanalysis', showChart)
 
     const [isTextShort, setIsTextShort] = useState(true);
   
