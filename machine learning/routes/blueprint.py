@@ -1,5 +1,5 @@
 from flask import Blueprint
-from controllers.meta import list_events
+from controllers.meta import list_events, list_locations
 from controllers.predict import current
 from controllers.historic import event_baseline, event_impact, event_comparison, event_timelapse
 from controllers.portal import home, login, logout, register, dashboard
@@ -26,6 +26,7 @@ limiter.limit("10/minute")(portal)
 
 #INFO route (for Event information):
 info.route("/api/info/events")(list_events)
+info.route("/api/info/locations")(list_locations)
 info.before_request(check_token) # This checks if key is valid before allowing a success response
 
 #PREDICT route for (model predictions):
@@ -43,6 +44,6 @@ historic.before_request(check_token)
 portal.route("/portal")(home)
 portal.route("/portal/login", methods=("GET", "POST"))(login)
 portal.route("/portal/logout")(logout)
-portal.route("/protal/register", methods=("GET", "POST"))(register)
+portal.route("/portal/register", methods=("GET", "POST"))(register)
 portal.route("/portal/dashboard")(dashboard)
 

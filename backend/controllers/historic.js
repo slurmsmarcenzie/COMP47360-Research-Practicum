@@ -1,6 +1,6 @@
 const axios = require("axios")
 const generalLogger = require("../logging/generalLogger")(module)
-const {validate_response_day, validate_response_hour} = require("./validations/validator")
+const {validate_response_day, validate_response_hour} = require("./validations/busyness")
 require("dotenv").config();
 
 

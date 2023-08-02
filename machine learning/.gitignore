@@ -1,4 +1,5 @@
 /env
 /__pycache__
 /logging_flask/logs/
+/predicting/models/rf_final.pkl
 .env
