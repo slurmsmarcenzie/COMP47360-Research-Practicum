@@ -60,6 +60,7 @@ function Map() {
   const [hoveredZoneScore, setHoveredZoneScore] = useState(null);
   const [showNoEventInfobox, setShowNoEventInfobox] = useState(true)
   const [eventSelected, setEventSelected] = useState(false);
+  
 
   // objects for our map
   const mapContainer = useRef(null);
@@ -290,7 +291,7 @@ function Map() {
 
       const zone = firstFeature.properties.zone;
 
-      setZoneID(firstFeature.id)
+      setZoneID(firstFeature.id);
 
       // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
       const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
@@ -622,7 +623,7 @@ function Map() {
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}
             colours={colourPairs[colourPairIndex]}
-          />
+            />
 
           <MapLegend
             colours={colourPairs[colourPairIndex]} 

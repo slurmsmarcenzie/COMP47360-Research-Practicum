@@ -13,7 +13,7 @@ ChartJS.register(
 
 function LineChart ({map})  {
 
-      const {neighbourhoods, eventID, eventComparisonData} = useMapContext();
+      const {neighbourhoods, eventID, eventComparisonData, zoneID, setZoneID, zone, setZone} = useMapContext();
       
       useEffect(() => {
         console.log('logging comparison data inside the line chart component', eventComparisonData)
@@ -25,13 +25,11 @@ function LineChart ({map})  {
       const zoneOptions = zones.map((event) => event.properties.zone);
       const zoneKeys = zones.map((event) => event.properties.location_id);
     
-      const [selectedZone, setSelectedZone] = useState('4');
       const [prevSelectedZone, setPrevSelectedZone] = useState('4');
-      const [selectedZoneName, setSelectedZoneName] = useState('Alphabet City');
       const [dataValues, setDataValues] = useState([]);
       const [labels, setLabels] = useState([]);
 
-      map.current.setPaintProperty(selectedZone + '-line', 'line-width', 4);
+      map.current.setPaintProperty(zoneID + '-line', 'line-width', 4);
 
       const dropDownOptions = zoneOptions.map((zone, index) => (
         <option key={index} value={zone} data-zone-id={zoneKeys[index]}>
@@ -122,7 +120,7 @@ function LineChart ({map})  {
         
         for (let key in eventComparisonData) {
 
-          const currentBusynessValue = eventComparisonData[key][selectedZone];
+          const currentBusynessValue = eventComparisonData[key][zoneID];
           const currentTimeValue = key;
         
           updatedDataValues.push(currentBusynessValue);
@@ -132,21 +130,21 @@ function LineChart ({map})  {
         setDataValues(updatedDataValues);
         setLabels(updatedLabels);
 
-        if (prevSelectedZone !== selectedZone && map.current) {
+        if (prevSelectedZone !== zoneID && map.current) {
             map.current.setPaintProperty(prevSelectedZone + '-line', 'line-width', 0); // Set to the default line width
-            setPrevSelectedZone(selectedZone); // Update the previously selected zone
+            setPrevSelectedZone(zoneID); // Update the previously selected zone
           }
-        }, [selectedZone, eventComparisonData, map, prevSelectedZone]);
+        }, [zoneID, eventComparisonData, map, prevSelectedZone]);
 
       return (
         <div>
             
           <select className='floating-nav-dropdown'
-            value={selectedZoneName}
+            value={zone}
             onChange={(e) => {
                 
-                setSelectedZone(e.target.options[e.target.selectedIndex].dataset.zoneId);
-                setSelectedZoneName(e.target.value);
+                setZoneID(e.target.options[e.target.selectedIndex].dataset.zoneId);
+                setZone(e.target.value);
             }}
           >
             {dropDownOptions}

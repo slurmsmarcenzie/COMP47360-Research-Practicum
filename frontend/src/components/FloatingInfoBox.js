@@ -133,6 +133,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
           highlightEventImpact={highlightEventImpact}
           zoneID={zoneID}
           resetColours={resetColours}
+          
         />
       );
     }
