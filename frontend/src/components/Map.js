@@ -16,13 +16,13 @@ import Navbar from './Navbar';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
 
-import FloatingInfoBox from './FloatingInfoBox';
-import SplitViewMap from './SplitViewMap';
+const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
+const SplitViewMap = lazy(() => import('./SplitViewMap'));
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
-//mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 
 function Map() {
 
@@ -35,8 +35,8 @@ function Map() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  
   const [timelapseData, setTimelapseData] = useState(null);
+  const [baselineTimelapseData, setBaselineTimelapseData] = useState(null)
 
   // import base states
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
@@ -58,6 +58,9 @@ function Map() {
   const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
   const [hoveredZoneScore, setHoveredZoneScore] = useState(null);
+  const [showNoEventInfobox, setShowNoEventInfobox] = useState(true)
+  const [eventSelected, setEventSelected] = useState(false);
+  
 
   // objects for our map
   const mapContainer = useRef(null);
@@ -97,7 +100,6 @@ function Map() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
-    setShowChart(false);
     setNeighbourhoodEvents([]);
     showAllMarkers(map.current);
 
@@ -176,9 +178,11 @@ function Map() {
       // Mouseleave event
       map.on('mouseleave', neighbourhood.id, () => handleMouseLeave(neighbourhood, map));
 
-      // On click event
-      map.on('click', (e) => handleClick(map, e));
     });
+
+    // On click event
+    map.on('click', (e) => handleClick(map, e));
+    
   };
 
   // Define the mousemove handler outside of the initialiseMouseMapEvents function
@@ -265,9 +269,9 @@ function Map() {
 
     if (features.length > 0 && features[0].id !== undefined) {
 
-      isNeighbourhoodClickedRef.current = true;  
+      // isNeighbourhoodClickedRef.current = true;  
 
-      disableColours();
+      // disableColours();
 
       const [firstFeature] = features;
 
@@ -281,13 +285,13 @@ function Map() {
       const [lng, lat] = featureCentroid.geometry.coordinates;
 
       // Fly to the centroid of the polygon
-      map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
+      // map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
 
-      map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
+      // map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
       const zone = firstFeature.properties.zone;
 
-      setZoneID(firstFeature.id)
+      setZoneID(firstFeature.id);
 
       // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
       const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
@@ -296,7 +300,10 @@ function Map() {
 
       if (matchingEvents.length > 0) {
         setShowInfoBox(true);
-      } else {
+        setShowNeighborhoodInfoBox(false);
+      } 
+      
+      if (matchingEvents.length == 0) {
         // Show the neighborhood info box since there are no matching events
         setShowNeighborhoodInfoBox(true);
       }
@@ -336,6 +343,10 @@ function Map() {
 
   const visualiseEventImpact = (Event_ID) => {
 
+    setEventSelected(true);
+    setShowChart(false);
+    setShowNoEventInfobox(false);
+    setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
     setIsTimelapseVisible(true);
@@ -353,7 +364,7 @@ function Map() {
     setEventID(Event_ID);
     fetchEventComparison(Event_ID);
     setTimeout(() => fetchTimelapse(Event_ID), 600)
-  
+    fetchBaslineTimelapse(Event_ID)
   }
 
   const highlightEventImpact = (impactedZones) => {
@@ -477,9 +488,7 @@ function Map() {
         add3DBuildings(map.current);
         renderEvents(map.current);
         initialiseMouseMapEvents(map.current);
-        setTimeout(() => {
-          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 900);
+        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
       }
   
       if (!map.current) {
@@ -524,12 +533,10 @@ function Map() {
   
     try {
      const eventComparisonResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/comparison`);
-     console.log(eventComparisonResponse);
      if (!eventComparisonResponse) {
       throw new Error('Network response was not ok');
      }
      const eventComparisonData = await eventComparisonResponse.json();
-     console.log(eventComparisonData);
      setEventComparisonData(eventComparisonData);
     } catch (error) {
      console.error('Issue with fetch request for event impact:', error);
@@ -540,7 +547,7 @@ function Map() {
   const fetchTimelapse = async (Event_ID) => {
 
     try {
-      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse/impact`);
       if (!timelapseResponse) {
        throw new Error('Network response was not ok');
       }
@@ -550,7 +557,22 @@ function Map() {
       console.error('Issue with fetch request for timelapse function:', error);
       setError(error);
      }
+  }
 
+
+  const fetchBaslineTimelapse = async (Event_ID) => {
+
+    try {
+      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse/baseline`);
+      if (!baselineTimelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const baselineTimelapseData = await baselineTimelapseResponse.json();
+      setBaselineTimelapseData(baselineTimelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
   }
 
   return (
@@ -562,6 +584,8 @@ function Map() {
         {isSplitView ? (
           <Suspense fallback={<div>Loading SplitViewMap...</div>}>
             <SplitViewMap 
+              baselineTimelapseData={baselineTimelapseData}
+              timelapseData={timelapseData}
               eventBaselineHashMap={eventBaselineHashMap}
               originalBusynessHashMap={originalBusynessHashMap}
               busynessHashMap={busynessHashMap}
@@ -585,6 +609,10 @@ function Map() {
 
           <FloatingInfoBox
             map={map}
+            eventSelected={eventSelected}
+            setEventSelected={setEventSelected}
+            showNoEventInfobox={showNoEventInfobox}
+            setShowNoEventInfobox={setShowNoEventInfobox}
             isNeighbourhoodClickedRef={isNeighbourhoodClickedRef}
             updateLayerColours={updateLayerColours}
             visualiseEventImpact={visualiseEventImpact}
@@ -595,7 +623,7 @@ function Map() {
             busynessHashMap={busynessHashMap}
             hashMapOfDifference={hashMapOfDifference}
             colours={colourPairs[colourPairIndex]}
-          />
+            />
 
           <MapLegend
             colours={colourPairs[colourPairIndex]} 
