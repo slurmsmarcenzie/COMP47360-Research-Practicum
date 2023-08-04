@@ -15,7 +15,7 @@ const getEvents = (req, res, next) => {
     res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
     generalLogger.info(`events list requested`)
 
-    const uri = `${process.env.FLASK_API_URL}/info/events?key=${process.env.FLASK_API_KEY}`
+    const uri = `${process.env.FLASK_API_URL}/meta/events?key=${process.env.FLASK_API_KEY}`
 
     axios.get(uri)
       // Fetch OK
@@ -47,7 +47,7 @@ const getEvents = (req, res, next) => {
  */
 const getLocations = (req, res, next) => {
   res.req.ip // TODO: Find out why this is necessary in all controllers but getEvents 
-  const uri = `${process.env.FLASK_API_URL}/info/locations?key=${process.env.FLASK_API_KEY}`
+  const uri = `${process.env.FLASK_API_URL}/meta/locations?key=${process.env.FLASK_API_KEY}`
 
   axios.get(uri)
     // Fetch OK

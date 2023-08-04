@@ -3,7 +3,7 @@ from flask_wtf.csrf import CSRFProtect
 from extensions.database import db
 from extensions.limiter import limiter
 from extensions.cache_ext import cache
-from routes.blueprint import info, prediction, historic, portal
+from routes.blueprint import meta, prediction, historic, portal
 from controllers.portal import login_manager, bcrypt
 from logging_flask.logger import http_logger
 from dotenv import load_dotenv
@@ -31,7 +31,7 @@ bcrypt.init_app(app)
 csrf = CSRFProtect(app)
 
 # Register app blueprints/routes
-app.register_blueprint(info)
+app.register_blueprint(meta)
 app.register_blueprint(prediction)
 app.register_blueprint(historic)
 app.register_blueprint(portal)
@@ -70,4 +70,4 @@ def log_request_response(response):
 
 ## START API
 if __name__ == "__main__":
-    app.run(debug=True, port=7000)
+    app.run(debug=False, port=7000)

@@ -34,6 +34,7 @@ def current():
 
     datetimeNY = datetime.datetime.now(tz=ZoneInfo("America/New_York"))
     general_logger.info("prediction quried for datetime: {date}".format(date=datetimeNY))
+    general_logger.info("Note: this is a cached function")
 
     try:
         data = general_prediction(datetimeNY)

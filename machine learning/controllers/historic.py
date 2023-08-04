@@ -25,6 +25,7 @@ def event_impact(eventID):
     Returns event impact (filtered by peak time)
     """
     general_logger.info(f"impact quried for event: {eventID}")
+    general_logger.info("Note: this is a cached function")
     time = peak_times.get(eventID)
     impact_filtered = query_database(eventID, Metric.IMPACT, time=time)
     return impact_filtered, 200
@@ -37,6 +38,7 @@ def event_baseline(eventID):
     Returns event baseline (filtered by peak time)
     """
     general_logger.info(f"baseline quried for event: {eventID}")
+    general_logger.info("Note: this is a cached function")
     time = peak_times.get(eventID)
     baseline_filtered = query_database(eventID, Metric.BASELINE, time=time)
     return baseline_filtered, 200
@@ -49,6 +51,7 @@ def event_timelapse(eventID):
     Returns event timelaspse for 24hr period
     """
     general_logger.info(f"event timelapse queried for event: {eventID}")
+    general_logger.info("Note: this is a cached function")
     timelapse_filtered = query_database(eventID, Metric.TIMELAPSE)
     return timelapse_filtered, 200
 
@@ -60,6 +63,7 @@ def event_comparison(eventID):
     Returns event comparison for 24hr period
     """
     general_logger.info(f"event comparison queried for event: {eventID}")
+    general_logger.info("Note: this is a cached function")
     comparison_filtered = query_database(eventID, Metric.COMPARISON)
     return comparison_filtered, 200
 

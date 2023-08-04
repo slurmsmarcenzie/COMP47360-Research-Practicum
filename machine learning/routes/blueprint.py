@@ -9,8 +9,8 @@ from extensions.check_token import check_token
 ## BLUEPRINT SETUP ##
 
 #Associate routes with Blueprint and set rate limiters:
-info = Blueprint("info", __name__)
-limiter.limit("25/minute")(info)
+meta = Blueprint("meta", __name__)
+limiter.limit("25/minute")(meta)
 
 prediction = Blueprint("prediction", __name__)
 limiter.limit("20/minute")(prediction)
@@ -24,10 +24,10 @@ limiter.limit("10/minute")(portal)
 
 ## ROUTES ##
 
-#INFO route (for Event information):
-info.route("/api/info/events")(list_events)
-info.route("/api/info/locations")(list_locations)
-info.before_request(check_token) # This checks if key is valid before allowing a success response
+#META route (for Event information):
+meta.route("/api/meta/events")(list_events)
+meta.route("/api/meta/locations")(list_locations)
+meta.before_request(check_token) # This checks if key is valid before allowing a success response
 
 #PREDICT route for (model predictions):
 prediction.route("/api/prediction/current")(current)

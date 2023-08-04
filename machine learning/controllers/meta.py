@@ -2,8 +2,10 @@ from models.event import Event
 from models.location import Location
 from sqlalchemy import exc
 from flask import abort
+from extensions.cache_ext import cache
 from logging_flask.logger import general_logger
 
+@cache.memoize(timeout=0)
 def list_events():
     """Query Database and get a list of Event dictionaries"""
 
@@ -30,6 +32,7 @@ def list_events():
     return data, 200
 
 
+@cache.memoize(timeout=0)
 def list_locations():
     """Query Database and get a list of location dictionaries"""
 
