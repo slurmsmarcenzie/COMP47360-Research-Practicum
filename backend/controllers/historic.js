@@ -114,7 +114,7 @@ const eventComparison = (req, res, next) => {
 }
 
 /**
- * Fetch event timelapse from the Prediction API
+ * Fetch event impact timelapse from the Prediction API
  * Event timelapse shows the busyness for the 24hrs surrounding an event.
  * 
  * Handles empty/undefined API response. 
@@ -122,12 +122,48 @@ const eventComparison = (req, res, next) => {
  * Returns ML API dictionary results
  * 
  */
-const eventTimelapse = (req, res, next) => {
+const eventTimelapseImpact = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
-  generalLogger.info(`timelapse requested for event: ${eventID}`)
+  generalLogger.info(`impact timelapse requested for event: ${eventID}`)
 
-  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse?key=${process.env.FLASK_API_KEY}` 
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse/impact?key=${process.env.FLASK_API_KEY}` 
+
+  axios.get(uri)
+    // Fetch OK
+    .then(response => {
+      // Validate response data
+      if (validate_response_day(response.data)){
+        res.status(200).json(response.data)
+      }
+      else {
+        res.status(500).json("Response from ML API did not pass validation checks")
+      }
+      next()
+    })
+    // Fetch ERROR, respond 500 and log error message
+    .catch(error => {
+      generalLogger.error(`error getting event timelapse: ${error.message}`)
+      res.status(500).json({"error": error.message})
+      next()
+    });
+}
+
+/**
+ * Fetch event baseline timelapse from the Prediction API
+ * Event timelapse shows the busyness for the 24hrs surrounding an event.
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
+const eventTimelapseBaseline = (req, res, next) => {
+  res.req.ip //sets the object
+  let eventID = req.params.event
+  generalLogger.info(`baseline timelapse requested for event: ${eventID}`)
+
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse/baseline?key=${process.env.FLASK_API_KEY}` 
 
   axios.get(uri)
     // Fetch OK
@@ -150,4 +186,4 @@ const eventTimelapse = (req, res, next) => {
 }
 
 
-module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapse};
+module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapseBaseline, eventTimelapseImpact};
