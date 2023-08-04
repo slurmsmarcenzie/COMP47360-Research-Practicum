@@ -159,11 +159,14 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
       <div className='floating-info-box'>
         {renderHeader()}
         {renderZoneInfo()}
-        {renderChartOrAnalysis()}
+        {renderChartOrAnalysis()} 
         {renderInfoBoxContent()}
         {renderNeighborhoodMessage()}
+
       </div>
+      
     )
+    
   );
 }
 

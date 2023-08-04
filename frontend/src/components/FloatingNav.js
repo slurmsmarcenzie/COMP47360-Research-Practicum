@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "../App.css";
+import LineChart from './LineChart';
 
 // import context
 import { useMapContext } from './MapContext';
@@ -52,7 +53,9 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
     
   };
 
+
     return(
+      
         <div className='floating-nav'>
           <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>
           <form className='floating-nav-form'>
@@ -64,7 +67,10 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
           {isResetShowing &&
           <button className="floating-nav-outline-button" onClick={() => { removeAntline(map.current); enableColours(); removeMarker();}}>Reset Map</button>
           }
-        </div>
+  
+  </div>
+        
+        
     )
 }
 

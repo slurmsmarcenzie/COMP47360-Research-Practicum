@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import "../App.css";
 import LineChart from './LineChart';
+import Accordion from './Accordion';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
@@ -295,16 +296,43 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
         setShowChart(!showChart); 
       };
   
+      const accordionData = [
+        
+        {
+          title: 'Line Chart Analysis',
+          content: <LineChart map = {map}/>
+        },
+        {
+         title: 'Filter By',
+         content: <div className='button-tile-icons-container'>
+         <div className={`button-tile-icons ${activeButton === "Busiest Zones" ? "pressed" : ""}`} title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setActiveButton("Busiest Zones")}}>
+             <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
+             <span>Busiest Zones</span>
+         </div>
+         <div className={`button-tile-icons ${activeButton === "Least Busy Zones" ? "pressed" : ""}`} title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setActiveButton("Least Busy Zones")}}>
+             <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
+             <span>Least Busy Zones</span>
+         </div>
+         <div className={`button-tile-icons ${activeButton === "Most Impacted Zones" ? "pressed" : ""}`} title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setActiveButton("Most Impacted Zones")}}>
+             <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
+             <span>Most Impacted Zones</span>
+         </div>
+         <div className={`button-tile-icons ${activeButton === "Least Impacted Zones" ? "pressed" : ""}`}  title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setActiveButton("Least Impacted Zones")}}>
+             <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
+             <span>Least Impacted Zones</span>
+         </div>
+     </div> 
+        }
+      ];
+    
+    
     return (
         <div className='parent-chart-container'> 
-            <button
-                className="floating-nav-outline-button"
-                onClick={handleShowChart}
-                style={{ marginBottom: '10px' }} 
-          > 
-            {showLineChart ? 'Hide Chart' : 'Show Chart'}
-          </button>
-          {showLineChart && <LineChart map={map}/>}
+  <div className="accordion">
+    {accordionData.map(({ title, content }) => (
+      <Accordion key={title} title={title} content={content} />
+    ))}
+      </div>
             <div className='floating-infobox-box-button-container'>
                 <div className="radio-button">
                     <input
@@ -330,29 +358,6 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
                         Show Impact of Event
                     </label>
                 </div>
-                {active ? 
-                    <>
-                        <h3 style={{padding:'auto', margin:'4px'}}>Filter Zones by: </h3>
-                        <div className='button-tile-icons-container'>
-                            <div className={`button-tile-icons ${activeButton === "Busiest Zones" ? "pressed" : ""}`} title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setActiveButton("Busiest Zones")}}>
-                                <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
-                                <span>Busiest Zones</span>
-                            </div>
-                            <div className={`button-tile-icons ${activeButton === "Least Busy Zones" ? "pressed" : ""}`} title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setActiveButton("Least Busy Zones")}}>
-                                <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
-                                <span>Least Busy Zones</span>
-                            </div>
-                            <div className={`button-tile-icons ${activeButton === "Most Impacted Zones" ? "pressed" : ""}`} title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setActiveButton("Most Impacted Zones")}}>
-                                <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
-                                <span>Most Impacted Zones</span>
-                            </div>
-                            <div className={`button-tile-icons ${activeButton === "Least Impacted Zones" ? "pressed" : ""}`}  title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setActiveButton("Least Impacted Zones")}}>
-                                <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
-                                <span>Least Impacted Zones</span>
-                            </div>
-                        </div> 
-                    </>
-                : null }
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
                 </button>
