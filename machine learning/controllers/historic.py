@@ -12,8 +12,9 @@ class Metric(Enum):
     """ Enumeration for Busyness Metrics """
     BASELINE = 0
     IMPACT = 1
-    TIMELAPSE = 2
-    COMPARISON = 3
+    TIMELAPSE_IMPACT = 2
+    TIMELAPSE_BASELINE = 3
+    COMPARISON = 4
 
 
 ## CONTROLLERS ##
@@ -45,15 +46,26 @@ def event_baseline(eventID):
 
 
 @cache.memoize(timeout=0)
-def event_timelapse(eventID):
+def event_timelapse_impact(eventID):
     """
-    Controller for: HISTORIC/EVENT/TIMELAPSE\n
+    Controller for: HISTORIC/EVENT/TIMELAPSE/IMPACT\n
     Returns event timelaspse for 24hr period
     """
     general_logger.info(f"event timelapse queried for event: {eventID}")
     general_logger.info("Note: this is a cached function")
-    timelapse_filtered = query_database(eventID, Metric.TIMELAPSE)
+    timelapse_filtered = query_database(eventID, Metric.TIMELAPSE_IMPACT)
     return timelapse_filtered, 200
+
+@cache.memoize(timeout=0)
+def event_timelapse_baseline(eventID):
+    """
+    Controller for: HISTORIC/EVENT/TIMELAPSE/BASELINE\n
+    Returns event timelaspse for 24hr period
+    """
+    general_logger.info(f"event baseline timelapse queried for event: {eventID}")
+    general_logger.info("Note: this is a cached function")
+    timelapse_filtered = query_database(eventID, Metric.TIMELAPSE_BASELINE)
+    return json.dumps(timelapse_filtered), 200
 
 
 @cache.memoize(timeout=0)
@@ -98,15 +110,23 @@ def query_database(eventID, metric, time=None):
                 busyness = Busyness.query.filter_by(event_id=eventID, time_hour=hour).all()
                 result[str(hour)] = {}
                 for item in busyness:
-                    result[str(hour)][str(item.location_id)] = item.impact 
+                    result[str(hour)][str(item.location_id)] = item.difference 
 
-        if metric == Metric.TIMELAPSE:
+        if metric == Metric.TIMELAPSE_IMPACT:
             # filter for impact and full day
             for hour in range(23):
                 busyness = Busyness.query.filter_by(event_id=eventID, time_hour=hour).all()
                 result[str(hour)] = {}
                 for item in busyness:
-                    result[str(hour)][str(item.location_id)] = item.difference
+                    result[str(hour)][str(item.location_id)] = item.impact
+        
+        if metric == Metric.TIMELAPSE_BASELINE:
+            # filter for baseline and full day
+            for hour in range(23):
+                busyness = Busyness.query.filter_by(event_id=eventID, time_hour=hour).all()
+                result[str(hour)] = {}
+                for item in busyness:
+                    result[str(hour)][str(item.location_id)] = item.baseline
 
     except exc.SQLAlchemyError as er:
         general_logger.error("Issue retreiving from database: {error}".format(error=er.orig))
