@@ -192,7 +192,7 @@ body {
 .floating-info-box {
   position: absolute;
   z-index: 1;
-  min-width: 360px;
+  min-width: 400px;
   max-width: 400px;
   margin-top: 120px;
   right: 72px;
@@ -379,12 +379,75 @@ body {
 .floating-infobox-box-button-container {
   display: flex;
   height: auto;
+  padding-left:10px;
+  padding-right:10px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: auto;
   margin-top: 12px;
   gap: 12px;
+}
+
+
+.accordion {
+  max-width: 600px;
+  margin: 2rem auto;
+  border-radius: 5px;
+}
+
+.accordion-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+}
+
+.new-timelapse-container {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+  padding: 10px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.accordion-title:hover {
+  background-color: #393739;
+}
+
+.accordion-title,
+.accordion-content {
+  padding: 1rem;
+}
+
+.accordion-item {
+  margin: 10px;
+}
+
+.accordion-content {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    font-size: 18px;
+  }
+
+  .accordion {
+    width: 90%;
+  }
 }
 
 .floating-infobox-box-toggle-button  {
@@ -420,8 +483,8 @@ body {
   width: fit-content;
   margin-bottom: 16px;
   margin-top: 0px;
-  /* margin: auto;
-  padding: auto; */
+  padding-left:10px;
+  
 }
 
 .modal-overlay  {
@@ -878,22 +941,31 @@ input:checked + .slider:before {
 }
 
 .timelapse-container{
-  padding-right: 12px;
-  width: 372px;
-  height: fit-content;
-  position: fixed;
-  z-index: 1;
-  bottom: 96px;
-  left: 0;
-  right: 0;
-  margin: auto;
   display: flex;
+  padding:10px;
+  margin-left:10px;
+  margin-right:10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+  gap: 12px;
+  z-index: 1;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   background-color: rgba(18, 19, 22, 0.3);	color: #fff;
   border-radius: 5px;
-  height: 56px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
 }
+
+.slider-tick {
+  position: absolute;
+  bottom: -5px;
+  width: 2px;
+  height: 10px;
+  background-color: #d3d3d3;
+}
+
 
 .timelapse-button {
   margin-right: 8px;
@@ -1024,8 +1096,24 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .floating-info-box-event-analysis{
-  padding: auto;
-  margin: auto;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding:10px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+}
+
+.floating-info-box-event-card{
+  padding:20px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 12px;
+
 }
 
 .button-tile-icons-container {
@@ -1039,7 +1127,7 @@ input[type=range]::-webkit-slider-thumb {
 
 .button-tile-icons {
   min-width: 44px;
-  max-width: 44%;
+  max-width: 40%;
   width: calc(50% - 10px); /* calculate width for 2 elements per row considering some space between them */
   height: 44px;
   color: white;
