@@ -6,7 +6,7 @@ import "../App.css";
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 
 function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, originalBusynessHashMap, eventBaselineHashMap, busynessHashMap, hashMapOfDifference, colours, resetColours, updateLayerColours, isNeighbourhoodClickedRef, showNoEventInfobox, setShowNoEventInfobox, eventSelected, setEventSelected}) {
 
@@ -20,7 +20,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   const {eventForAnalysisComponent, setEventForAnalysisComponent} = useMapContext();
 
-  const {setIsFloatingNavVisible, setIsTimelapseVisible} = useMapContext();
+  const {setIsFloatingNavVisible, setIsTimelapseVisible, isTimelapseVisible} = useMapContext();
   
   const [richText, setRichText] = useState(null);
   const [textColour, setTextColour] = useState(null);
@@ -87,14 +87,26 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
 
   function renderHeader() {
     return (
-      <button className='floating-info-box-back-button' onClick={() => {
-        removeAntline(map.current)
-        resetMap(map);
-        removeMarker();
-        setIsFloatingNavVisible(true);
-      }}>
-        <FontAwesomeIcon icon={faArrowLeft} /> Go Back
-      </button>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <button className='floating-info-box-back-button' onClick={() => {
+          removeAntline(map.current)
+          resetMap(map);
+          removeMarker();
+          setIsFloatingNavVisible(true);
+        }}>
+          <FontAwesomeIcon icon={faArrowLeft} /> <span style={{marginRight: '8px'}}>Go Back</span>
+        </button>
+        {eventSelected 
+          ? (isTimelapseVisible 
+              ? <button className='floating-info-box-show-hide-timelapse' onClick={() => setIsTimelapseVisible(!isTimelapseVisible)}> 
+                  <FontAwesomeIcon icon={faEyeSlash} /> <span style={{marginRight: '8px'}}>Hide Timelapse </span>
+                </button> 
+              : <button className='floating-info-box-show-hide-timelapse' onClick={() => setIsTimelapseVisible(!isTimelapseVisible)}>
+                  <FontAwesomeIcon icon={faEye} /> <span style={{marginRight: '8px'}}> Show Timelapse</span>
+                </button>) 
+          : null 
+        }
+      </div>
     );
   }
   
@@ -149,8 +161,6 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     } else {
       return <p>There are no events happening in this neighbourhood.</p>;
     }
-
- 
   }
   
   return (
@@ -162,11 +172,8 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
         {renderChartOrAnalysis()} 
         {renderInfoBoxContent()}
         {renderNeighborhoodMessage()}
-
       </div>
-      
     )
-    
   );
 }
 

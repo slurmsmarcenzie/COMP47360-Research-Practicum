@@ -299,27 +299,27 @@ function NeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHa
       const accordionData = [
         
         {
-          title: 'Line Chart Analysis',
+          title: 'Display Line Chart Analysis',
           content: <LineChart map = {map}/>
         },
         {
-         title: 'Filter By',
+         title: 'Filter Zones By',
          content: <div className='button-tile-icons-container'>
          <div className={`button-tile-icons ${activeButton === "Busiest Zones" ? "pressed" : ""}`} title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setActiveButton("Busiest Zones")}}>
              <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
-             <span>Busiest Zones</span>
+             <span>Most Busy</span>
          </div>
          <div className={`button-tile-icons ${activeButton === "Least Busy Zones" ? "pressed" : ""}`} title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setActiveButton("Least Busy Zones")}}>
              <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
-             <span>Least Busy Zones</span>
+             <span>Least Busy</span>
          </div>
          <div className={`button-tile-icons ${activeButton === "Most Impacted Zones" ? "pressed" : ""}`} title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setActiveButton("Most Impacted Zones")}}>
              <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
-             <span>Most Impacted Zones</span>
+             <span>Most Impacted</span>
          </div>
          <div className={`button-tile-icons ${activeButton === "Least Impacted Zones" ? "pressed" : ""}`}  title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setActiveButton("Least Impacted Zones")}}>
              <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
-             <span>Least Impacted Zones</span>
+             <span>Least Impacted</span>
          </div>
      </div> 
         }
