@@ -491,13 +491,20 @@ export const MapProvider = ({ children }) => {
             scale
         }).setLngLat(coordinates).addTo(map);
         lastMarkers.push(marker);
-      };
+    };
 
     const removeMarker = () => {
         lastMarkers.forEach((marker) => {
             marker.remove(); // Remove each marker from the map
           });
           setLastMarkers([]);
+    };
+
+    const removeAllLines = (map) => {
+
+        neighbourhoods.features.forEach((neighbourhood) => {
+            map.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
+        });
     }
 
   return (
@@ -518,6 +525,7 @@ export const MapProvider = ({ children }) => {
         removeAntline,
         removeMarker,
         addMarker,
+        removeAllLines,
 
         colourPairIndex, setColourPairIndex,
         neighbourhoodEvents, setNeighbourhoodEvents,

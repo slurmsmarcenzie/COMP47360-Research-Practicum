@@ -60,6 +60,9 @@ function LineChart ({map})  {
         maintainAspectRatio: false, 
         aspectRatio: 4,
         plugins: {
+          legend: {
+            display: false, // add this line
+          },
           annotation: {
             annotations: {
               startLine: {
@@ -101,15 +104,25 @@ function LineChart ({map})  {
             }
           }
         },
-        // scales: {
-        //     x: {
-        //       title: {
-        //         display: true,
-        //         text: 'Time', // Your x-axis title here
-        //       },
-        //     }
-        // },
         
+        scales: {
+            x: {
+              grid: {
+                color: '#D3D3D310', // change the grid line color for x-axis
+              },
+              ticks: {
+                color: '#D3D3D3', // change the label (text) color for x-axis
+              },
+            },
+            y: {
+              grid: {
+                color: '#D3D3D310', // change the grid line color for y-axis
+              },
+              ticks: {
+                color: '#D3D3D3', // change the label (text) color for y-axis
+              },
+            },
+          },
       };
 
       useEffect(() => {
@@ -123,7 +136,7 @@ function LineChart ({map})  {
           const currentBusynessValue = eventComparisonData[key][zoneID];
           const currentTimeValue = key;
         
-          updatedDataValues.push(currentBusynessValue);
+          updatedDataValues.push(currentBusynessValue * 100); 
           updatedLabels.push(currentTimeValue);
         }
 

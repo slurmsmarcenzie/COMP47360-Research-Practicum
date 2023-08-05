@@ -159,7 +159,7 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
     if (showNeighborhoodInfoBox == false || showNoEventInfobox == false) {
       return 
     } else {
-      return <p>There are no events happening in this neighbourhood.</p>;
+      return <p style={{padding: '0 8px'}}>There are no events happening in this neighbourhood.</p>;
     }
   }
   

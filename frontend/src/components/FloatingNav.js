@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
 import "../App.css";
-import LineChart from './LineChart';
 
 // import context
 import { useMapContext } from './MapContext';
 
-function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
+function FloatingNav({map, isNeighbourhoodClickedRef, enableColours}) {
 
-  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
+  const {prunedEvents, removeAllLines, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
@@ -31,14 +30,10 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
   const reviewEvent = (e) => {
 
     const selectedEvent = JSON.parse(e.target.value);
-    // const latitude = selectedEvent.Event_Location.Latitude
-    // const longitude = selectedEvent.Event_Location.Longitude
-    
-    setZone(selectedEvent.Zone_ID);
 
-    // floatingNavZoomToLocation(longitude, latitude);
+    // removeAllLines(map.current)
+    setZone(selectedEvent.Zone_ID);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    // disableColours();
     removeMarker();
   
     isNeighbourhoodClickedRef.current = true;

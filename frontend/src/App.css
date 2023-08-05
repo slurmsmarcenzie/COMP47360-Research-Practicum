@@ -521,7 +521,8 @@ body {
 .floating-info-box-zone-busyness-sub-header {
   text-align: left;
   width: fit-content;
-  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-bottom: 16 px;
   padding-left: 10px;
 }
 
