@@ -14,14 +14,6 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours}) {
     </option>
   );
   
-  const floatingNavZoomToLocation = (longitude, latitude) => {
-    map.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 15, // specify your desired zoom level
-      essential: true
-    });
-  }
-  
   const floatingNavSetLineWidth = (zone) => {
       const lineLayerId = zone + '-line';
       map.current.setPaintProperty(lineLayerId, 'line-width', 4);
@@ -47,7 +39,6 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours}) {
     setIsResetShowing(true)
     
   };
-
 
     return(
       

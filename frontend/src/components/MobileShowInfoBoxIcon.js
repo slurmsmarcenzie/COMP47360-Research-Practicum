@@ -8,10 +8,13 @@ import { useMapContext } from './MapContext';
 export default function MobileShowInfoBoxIcon() {
 
 
-    const {showInfoBox, setShowInfoBox, showNeighborhoodInfoBox, isDrawerOpen, setIsDrawerOpen, isThereALiveInfoBox } = useMapContext();
+    const {showInfoBox, setShowInfoBox, showNeighborhoodInfoBox, isDrawerOpen, setIsDrawerOpen, isThereALiveInfoBox, isTimelapseVisible, setIsTimelapseVisible } = useMapContext();
 
     const handleToggle = () => {
       setIsDrawerOpen(!isDrawerOpen);
+      if (!isTimelapseVisible) {
+        setIsTimelapseVisible(true);
+      }
     };
 
     return (

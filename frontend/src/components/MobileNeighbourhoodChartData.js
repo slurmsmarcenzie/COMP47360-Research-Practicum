@@ -1,24 +1,27 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { Bar } from 'react-chartjs-2';
+import React, {useState, useEffect} from 'react';
+import MobileAccordion from './Accordion';
+import MobileLineChart from './LineChart';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowTrendDown, faArrowTrendUp, faWineGlass, faWineGlassEmpty} from '@fortawesome/free-solid-svg-icons';
 
-function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, Zone_ID,  resetColours}) {
+function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBaselineHashMap, colours, highlightEventImpact, resetColours}) {
 
     const {neighbourhoods} = useMapContext();
     const {showChart, setShowChart, isSplitView, setSplitView} = useMapContext();
     const {updateLayerColours} = useMapContext()
 
-    const [isButtonPressed, setIsButtonPressed] = useState(false);
+    const [lastButtonPressed, setLastButtonPressed] = useState(null);
+    const [activeButton, setActiveButton] = useState(null);
 
     // This state holds the data and options that the chart component needs to create the chart on the page. 
     // When this state changes, it triggers the chart to re-render with the new data and options.
     
     const [renderChart, setRenderChart] = useState(null);
     const [selectedValues, setSelectedValues] = useState([]);
+    const [showLineChart, setShowLineChart] = useState(false);
     
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
@@ -28,8 +31,6 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     const [labels, setLabels] = useState([]);    
 
     const [active, setActive] = useState(true);
-    const [highlightActive, setHighlightActive] = useState(null);
-    const [initialRender, setInitialRender] = useState(true);
 
     // This function will handle sorting and extraction of names and data values
     const getImpactedZonesForChart = () => {
@@ -131,10 +132,6 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
         return {data, options};
     }
     
-    // useEffect(() => {
-    //     setSelectedValues(getImpactedZonesForHighlight());
-    // }, [hashMap, showMostImpactedZones]);
-    
     // Trigger chart rerender whenever showMostImpacted state changes
     useEffect(() => {
         const {names, dataValues} = getImpactedZonesForChart();
@@ -142,13 +139,6 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
         const newChartData = makeChartData(names, dataValues);
         setChartData(newChartData); // Set chartData here
     }, [showMostImpactedZones, hashMap]);
-
-    // const toggleChartData = () => {
-    //     setShowMostImpactedZones(!showMostImpactedZones); // Toggle showMostImpacted state here
-    //     setRenderChart(chartData);
-    //     setShowChart(true);
-    //     highlightEventImpact(Zone_ID, labels);
-    // };
 
     // legacy code
     const getGradientMostImpacted = (context) => {
@@ -170,7 +160,6 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     const handleToggle = () => {
         updateLayerColours(map.current, !active, eventBaselineHashMap, busynessHashMap);
         resetColours();
-        setShowChart(false); 
         setShowMostImpactedZones(!showMostImpactedZones)
     };
 
@@ -276,44 +265,73 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     }
 
     // logic to handle changing of zones being highlighted.
-
     const highlightZones = () => {
-
         if (labels.length === 0) {
             return;
         }
     
-        if (isButtonPressed) {
-            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+        // Check if the same button has been pressed twice.
+        if (activeButton === lastButtonPressed) {
+            // If so, reset the colors, reset lastButtonPressed, and reset activeButton.
             resetColours();
+            updateLayerColours(map.current, false, eventBaselineHashMap, busynessHashMap);
+            setLastButtonPressed(null);
+            setActiveButton(null);  // reset activeButton
         } else {
+            // If a different button was pressed, set it as lastButtonPressed and highlight the relevant zones.
+            setLastButtonPressed(activeButton);
             highlightEventImpact(labels);
         }
     }
 
     // use effect used to handle changes in toggle states
-
     useEffect(() => {
-        highlightZones()
+        highlightZones();
     }, [labels])
+
+    const handleShowChart = () => {
+        setShowLineChart((prevShowChart) => !prevShowChart); // Toggle the showChart state
+        setShowChart(!showChart); 
+      };
   
+      const accordionData = [
+        
+        {
+          title: 'Display Line Chart Analysis',
+          content: <MobileLineChart map = {map}/>
+        },
+        {
+         title: 'Filter Zones By',
+         content: 
+         <div className='button-tile-icons-container-mobile'>
+            <div className={`button-tile-icons-mobile ${activeButton === "Busiest Zones" ? "pressed" : ""}`} title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setActiveButton("Busiest Zones")}}>
+                <FontAwesomeIcon icon={faWineGlass}/>
+                <span style={{ fontSize: '10px' }}>Most Busy</span>
+            </div>
+            <div className={`button-tile-icons-mobile ${activeButton === "Least Busy Zones" ? "pressed" : ""}`} title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setActiveButton("Least Busy Zones")}}>
+                <FontAwesomeIcon icon={faWineGlassEmpty} />
+                <span style={{ fontSize: '10px' }} >Least Busy</span>
+            </div>
+            <div className={`button-tile-icons-mobile ${activeButton === "Most Impacted Zones" ? "pressed" : ""}`} title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setActiveButton("Most Impacted Zones")}}>
+                <FontAwesomeIcon icon={faArrowTrendUp}/>
+                <span style={{ fontSize: '10px' }}>Most Impacted</span>
+            </div>
+            <div className={`button-tile-icons-mobile ${activeButton === "Least Impacted Zones" ? "pressed" : ""}`}  title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setActiveButton("Least Impacted Zones")}}>
+                <FontAwesomeIcon icon={faArrowTrendDown} />
+                <span style={{ fontSize: '10px' }}>Least Impacted</span>
+            </div>
+        </div> 
+        }
+      ];
+    
+    
     return (
         <div className='parent-chart-container'> 
-            {showChart &&
-            <div className='floating-info-box-chart-container'>
-                {renderChart && <Bar data={renderChart.data} options={renderChart.options} />}
-                <button 
-                    className="floating-infobox-close-toggle-button" 
-                    onClick={() => {                     
-                    setShowChart(!showChart);
-                    setShowMostImpactedZones(!showMostImpactedZones)
-                    resetColours()
-                    }}
-                >
-                    X
-                </button>
-            </div>
-            }
+  <div className="accordion-mobile">
+    {accordionData.map(({ title, content }) => (
+      <MobileAccordion key={title} title={title} content={content} />
+    ))}
+      </div>
             <div className='floating-infobox-box-button-container'>
                 <div className="radio-button">
                     <input
@@ -323,10 +341,9 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
                         id="baselineBusyness"
                         checked={!active}
                         onChange={handleOptionChange}
-                        style={{padding: 'auto'}}
                     />
-                    <label for="baselineBusyness" style={{fontSize: '10px'}}>
-                        Event Baseline
+                    <label htmlFor="baselineBusyness">
+                        Baseline
                     </label>
                     <input
                         type="radio"
@@ -335,27 +352,11 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
                         id="eventImpact"
                         checked={active}
                         onChange={handleOptionChange}
-                        style={{padding: 'auto'}}
                     />
-                    <label for="eventImpact" style={{fontSize: '10px'}}>
+                    <label htmlFor="eventImpact">
                         Event Impact
                     </label>
                 </div>
-                {active ? <div className='button-tile-icons-container'>
-                    <div className='button-tile-icons' title="Highlight Busiest Zones" onClick={() => {setLabels(getBusiestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faWineGlass} style={{ fontSize: '16px' }}/>
-                    </div>
-                    <div className='button-tile-icons' title="Highlight Least Busy Zones" onClick={() => {setLabels(getQuietestZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faWineGlassEmpty} style={{ fontSize: '16px' }} />
-                    </div>
-                    <div className='button-tile-icons' title="Highlight Zones Most Impacted by Event" onClick={() => {setLabels(getMostImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faArrowTrendUp} style={{ fontSize: '16px' }} />
-                    </div>
-                    <div className='button-tile-icons' title='Highlight Zones Least Impacted by Event' onClick={() => {setLabels(getLeastImpactedZones()); setIsButtonPressed(!isButtonPressed)}}>
-                        <FontAwesomeIcon icon={faArrowTrendDown} style={{ fontSize: '16px' }}/>
-                    </div>
-                </div> : null
-                }
                 <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
                     {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
                 </button>

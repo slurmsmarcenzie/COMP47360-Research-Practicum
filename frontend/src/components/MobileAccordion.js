@@ -6,7 +6,7 @@ const Accordion = ({ title, content }) => {
   const [isActive, setIsActive] = useState(false);
 
   return (
-    <div className="accordion-item-mobile">
+    <div className="accordion-item">
       <div 
         className={`accordion-title ${isActive ? 'pressed' : ''}`}
         onClick={() => setIsActive(!isActive)}

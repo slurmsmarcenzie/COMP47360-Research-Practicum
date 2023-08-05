@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import EventCard from './EventCard';
+import MobileEventCard from './MobileEventCard';
 import MobileNeighbourhoodChartData from './MobileNeighbourhoodChartData'
 import EventAnalysis from './EventAnalysis';
 import "../App.css";
@@ -76,7 +76,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   
   const eventCards = neighbourhoodEvents ? neighbourhoodEvents.map((event, i) =>{
     return (
-      <EventCard 
+      <MobileEventCard 
         key = {i}
         event={event}
         visualiseEventImpact={visualiseEventImpact}
@@ -88,13 +88,13 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   function renderHeader() {
     return (
       <div style={{display: 'flex', alignItems: 'left', width: '100%'}}>
-        <button className='floating-info-box-back-button' onClick={() => {
+        <button className='floating-info-box-back-button-mobile' onClick={() => {
           removeAntline(map.current)
           resetMap(map);
         }}>
           <FontAwesomeIcon icon={faArrowLeft} />
         </button>
-        <h2 className='floating-info-box-zone-header'>
+        <h2 className='floating-info-box-zone-header-mobile'>
             {showChartData ? eventName : zone}
         </h2>
       </div>
@@ -104,7 +104,7 @@ function MobileFloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact
   function renderChartOrAnalysis() {
   
     if (!showChartData) {
-      return <h4 style={{width: '100%'}}className='floating-info-box-zone-busyness-sub-header'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
+      return <h4 style={{width: '100%'}}className='floating-info-box-zone-busyness-sub-header-mobile'> {zone} is <span style={{ color: textColour }}>{richText}</span></h4>;
     }
   
     return showChart ? null : <EventAnalysis eventForAnalysisComponent={eventForAnalysisComponent}/>;
