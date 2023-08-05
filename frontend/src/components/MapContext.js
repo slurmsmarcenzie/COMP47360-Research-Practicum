@@ -204,7 +204,7 @@ export const MapProvider = ({ children }) => {
             marker.Event_ID = event.Event_ID;
 
             markerElement.addEventListener('click', () => {
-                console.log(event);
+                // console.log(event);
             });
 
             markerElement.addEventListener('mouseover', () => {
@@ -328,8 +328,6 @@ export const MapProvider = ({ children }) => {
     };
 
     const addAntline = (map, event) => {
-
-        console.log('event inside the antline', event);
 
         const colourMap = {
             1: ['#FFFFFF', '#000000'],

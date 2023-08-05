@@ -31,7 +31,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours}) {
 
     const selectedEvent = JSON.parse(e.target.value);
 
-    // removeAllLines(map.current)
+    removeAllLines(map.current)
     setZone(selectedEvent.Zone_ID);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
     removeMarker();

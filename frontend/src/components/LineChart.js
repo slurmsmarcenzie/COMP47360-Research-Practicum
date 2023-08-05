@@ -14,11 +14,7 @@ ChartJS.register(
 function LineChart ({map})  {
 
       const {neighbourhoods, eventID, eventComparisonData, zoneID, setZoneID, zone, setZone} = useMapContext();
-      
-      useEffect(() => {
-        console.log('logging comparison data inside the line chart component', eventComparisonData)
-      }, [eventComparisonData])
-
+  
       const zones = neighbourhoods.features;
       
       // Extract the 'zone' property from each object in the `features` array
