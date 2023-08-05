@@ -231,9 +231,10 @@ body {
   border-radius: 2px;
   border: none;
   cursor: pointer;
-  .icon {
-    margin-right: 12px;
-  }
+}
+
+.floating-info-box-back-button:active {
+  background-color: rgba(18, 19, 22, 0.3);
 }
 
 .floating-info-box-show-hide-timelapse {
@@ -248,12 +249,10 @@ body {
   border-radius: 2px;
   border: none;
   cursor: pointer;
-  .icon {
-    margin-right: 8px;
-  }
+  align-self: center;
 }
 
-.floating-info-box-back-button:active {
+.floating-info-box-show-hide-timelapse:active{
   background-color: rgba(18, 19, 22, 0.3);
 }
 
@@ -452,7 +451,7 @@ body {
 }
 
 .accordion-title:hover {
-  background-color: #393739;
+  background-color: #282C34;
 }
 
 .accordion-title {

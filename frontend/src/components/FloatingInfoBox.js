@@ -94,15 +94,15 @@ function FloatingInfoBox( {map, visualiseEventImpact, highlightEventImpact, orig
           removeMarker();
           setIsFloatingNavVisible(true);
         }}>
-          <FontAwesomeIcon icon={faArrowLeft} /> <span style={{marginRight: '8px'}}>Go Back</span>
+          <FontAwesomeIcon icon={faArrowLeft} /> <span style={{marginLeft: '8px'}}>Go Back</span>
         </button>
         {eventSelected 
           ? (isTimelapseVisible 
               ? <button className='floating-info-box-show-hide-timelapse' onClick={() => setIsTimelapseVisible(!isTimelapseVisible)}> 
-                  <FontAwesomeIcon icon={faEyeSlash} /> <span style={{marginRight: '8px'}}>Hide Timelapse </span>
+                  <FontAwesomeIcon icon={faEyeSlash} /> <span style={{marginLeft: '8px'}}>Hide Timelapse </span>
                 </button> 
               : <button className='floating-info-box-show-hide-timelapse' onClick={() => setIsTimelapseVisible(!isTimelapseVisible)}>
-                  <FontAwesomeIcon icon={faEye} /> <span style={{marginRight: '8px'}}> Show Timelapse</span>
+                  <FontAwesomeIcon icon={faEye} /> <span style={{marginLeft: '8px'}}> Show Timelapse</span>
                 </button>) 
           : null 
         }
