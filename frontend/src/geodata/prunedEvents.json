@@ -86,8 +86,8 @@
     {
       "Event_ID": 4,
       "Event_Name": "NYC Pride March",
-      "Zone_ID": 90,
-      "Zone_Name": "Flatiron",
+      "Zone_ID": 234,
+      "Zone_Name": "Union Square",
       "Start_Date": {
          "Time": "06/24/2022 12:00:00 PM"
       },
@@ -100,8 +100,8 @@
       "Event_Location_Text": "WEST 19 STREET between 7 AVENUE and 9 AVENUE,  WEST   18 STREET between 7 AVENUE and 9 AVENUE,  WEST   17 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 6 AVENUE and 7 AVENUE,  WEST   15 STREET between 7 AVENUE and 9 AVENUE,  7 AVENUE between WEST   19 STREET and 7 AVENUE SOUTH,  CHRISTOPHER STREET between 7 AVENUE SOUTH and GREENWICH AVENUE,  GREENWICH AVENUE between CHRISTOPHER STREET and 6 AVENUE,  WEST    8 STREET between 6",
       "Event_Location_Start_Coordinates": "[40.74265656195649, -73.99981520990745]",
       "Event_Location": {
-       "Latitude": 40.74265656195649,
-       "Longitude": -73.99981520990745
+       "Latitude": 40.743458561729994,
+       "Longitude": -73.98822836937437
        },
       "Event_Street_Side": "Full",
       "Street_Closure_Type": "Full Street Closure ",
