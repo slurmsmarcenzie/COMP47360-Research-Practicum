@@ -62,7 +62,7 @@ def generate_model_input(date):
     Returns: pd.Series
     """
     Hour = date.hour
-    DayOfWeek = date.isoweekday()
+    DayOfWeek = date.weekday()
     DayOfMonth = date.day
     Month = date.month
     Weekend = 1 if DayOfWeek in [5, 6] else 0
