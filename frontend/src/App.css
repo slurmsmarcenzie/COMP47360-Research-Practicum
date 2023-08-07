@@ -346,10 +346,8 @@ body {
 
 .navbar-logo  {
   transition: opacity 0.7s ease;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(18, 19, 22, 0.3);
   border-radius: 5px;
+  padding-top:10px;
 }
 
 .navbar-logo.hovered {

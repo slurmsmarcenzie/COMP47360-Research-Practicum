@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css';
-import afterParty from '../images/after-party-logo-white.png';
+import afterParty from '../images/EINYCwhite.png';
 
 
 export default function Modal({ onClose }) {
@@ -18,7 +18,7 @@ export default function Modal({ onClose }) {
           X
         </button>
         <div className="modal-image-container">
-          <img src={afterParty} alt="After Party Logo" />
+          <img src={afterParty} alt="After Party Logo" style={{ width: '180px', height: 'auto' }}/>
         </div>
         <div className="modal-scroll-content">
           <p> The Event Impact Analysis Tool is an application designed to provide insights into the impact of events on busyness in Manhattan, NYC. By analyzing taxi data supplied by the TLC (Taxi and Limousine Commission), the tool aims to identify patterns and understand how events influence the usual urban flow.</p>

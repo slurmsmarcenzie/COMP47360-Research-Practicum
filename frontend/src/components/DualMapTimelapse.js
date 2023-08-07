@@ -21,7 +21,6 @@ function DualMapTimelpase ({leftMap, rightMap, originalBusynessHashMap, timelaps
     
     const startTimelapse = () => {
         setIsPlaying(true);
-
         timerRef.current = setInterval(() => {
             setElapsedTime(prevTime => prevTime + 1);
         }, 1000);

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import '../App.css';
 import { Helmet } from "react-helmet";
-import afterParty from '../images/after-party-logo-white.webp';
-import afterPartyHover from '../images/after-party-logo-violet.webp';
+import afterParty from '../images/EINYCwhite.png';
+import afterPartyHover from '../images/EINYCpurple.png';
 import Modal from './Modal';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -45,6 +45,7 @@ export default function Navbar() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             alt="After Party Logo"
+            style={{ width: '180px', height: 'auto'}}
           />
         </button>
       </div>
