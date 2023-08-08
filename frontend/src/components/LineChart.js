@@ -147,7 +147,6 @@ function LineChart ({map})  {
 
       return (
         <div>
-            
           <select className='floating-nav-dropdown'
             value={zone}
             onChange={(e) => {
@@ -158,8 +157,8 @@ function LineChart ({map})  {
           >
             {dropDownOptions}
           </select>
-    
           <div className='line-chart-container'>
+            <h3 style={{display:'flex', flexDirection:'row', margin:'0px', justifyContent:'center'}}>+/- Change in Busyness</h3>
             <Line  options={options} data={chartData}/>
           </div>
         </div>

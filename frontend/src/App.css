@@ -55,7 +55,7 @@ body {
   z-index: 1;
   min-width: 180px;
   max-width: 240px;
-  margin-top: 120px;
+  margin-top: 100px;
   margin-left: 92px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -194,7 +194,7 @@ body {
   z-index: 1;
   min-width: 400px;
   max-width: 400px;
-  margin-top: 120px;
+  margin-top: 100px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -454,7 +454,7 @@ body {
 
 .accordion-title {
   padding: 0 16px;
-  height: 48px;
+  height: 40px;
   border-radius: 5px;
   align-items: center ;
   margin-bottom: 12px;
@@ -1140,13 +1140,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .floating-info-box-event-card{
-  padding:20px;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(18, 19, 22, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.125);
-  border-radius: 12px;
-
+  padding: 0 8px;
 }
 
 .button-tile-icons-container {
@@ -1191,10 +1185,10 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .line-chart-container {
-  height: 250px;
+  height: 150px;
   width: 100%;
   margin-top: 20px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 }
 
 .button-tile-icons.pressed{

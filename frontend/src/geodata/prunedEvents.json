@@ -1,227 +1,242 @@
 [
-    {
-      "Event_ID": 1,
-      "Event_Name": "Thanksgiving Day Parade",
-      "Zone_ID": 239,
-      "Zone_Name": "Upper West Side South",
-      "Start_Date": {
-         "Time": "11/24/2022 9:00:00 AM"
+   {
+     "Event_ID": 1,
+     "Event_Name": "Thanksgiving Day Parade",
+     "Zone_ID": 239,
+     "Zone_Name": "Upper West Side South",
+     "Start_Date": {
+        "Time": "11/24/2022 9:00:00 AM"
+     },
+     "End Date": {
+        "Time": "11/24/2022 12:00:00 PM"
+     },
+     "Event_Agency": "Parks Department",
+     "Event_Type": "Special Event",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": "Central Park: Central Park West Sidewalks - 72nd St to 81st St ,Central Park: Central Park West Sidewalks - 65th St to 72nd St ,Central Park: Central Park West Sidewalks - Merchant's Gate to 65 St ,Central Park: Merchants' Gate ,Central Park: Central Park South Sidewalks - 7 Ave to Merchant's Gate ,Central Park: Central Park South Sidewalks - 6th Ave to 7th Ave ",
+     "Event_Location_Start_Coordinates": "[40.783268305609866, -73.97456188389754]",
+     "Event_Location": {
+      "Latitude": 40.783268305609866,
+      "Longitude": -73.97456188389754
       },
-      "End Date": {
-         "Time": "11/24/2022 12:00:00 PM"
+     "Event_Street_Side": "",
+     "Street_Closure_Type": "",
+     "Community_Board": "64, ",
+     "Police Precinct": "22, ",
+     "expected_attendees": 500000,
+     "description": "The Thanksgiving Day Parade is a special event organized by the Parks Department. It takes place in Manhattan's Central Park and features various floats, balloons, and performances. Thousands of people are expected to attend.",
+     "Event_Impact_Analysis" : "The Macy's Thanksgiving Day Parade significantly invigorates Manhattan's cityscape. Streets along the parade route, primarily Central Park West and 6th Avenue, experience heightened foot traffic, with families, tourists, and locals flooding in to partake in the iconic celebration. Retail and dining sectors benefit from the increased visitor influx, while public transport and ride-hailing services observe elevated demand due to temporary road closures.",
+     "Event_Impact_Start" : "09:00 AM",
+     "Event_Impact_End" : "12:30 PM"
+  },
+   {
+     "Event_ID": 2,
+     "Event_Name": "Halloween Parade and Party",
+     "Zone_ID": 231,
+     "Zone_Name": "TriBeCa",
+     "Start_Date": {
+        "Time": "10/31/2022 7:00:00 PM"
+     },
+     "End Date": {
+        "Time": "10/31/2022 01:20:00 PM"
+     },
+     "Event_Agency": "Police Department",
+     "Event_Type": "Parade",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": " GREENWICH STREET between NORTH MOORE STREET and BEACH STREET,  GREENWICH STREET between NORTH MOORE STREET and DUANE STREET,  GREENWICH STREET between DUANE STREET and READE STREET",
+     "Event_Location_Start_Coordinates": "[40.720777, -74.010019]",
+     "Event_Location": {
+      "Latitude": 40.720777,
+      "Longitude": -74.010019
       },
-      "Event_Agency": "Parks Department",
-      "Event_Type": "Special Event",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": "Central Park: Central Park West Sidewalks - 72nd St to 81st St ,Central Park: Central Park West Sidewalks - 65th St to 72nd St ,Central Park: Central Park West Sidewalks - Merchant's Gate to 65 St ,Central Park: Merchants' Gate ,Central Park: Central Park South Sidewalks - 7 Ave to Merchant's Gate ,Central Park: Central Park South Sidewalks - 6th Ave to 7th Ave ",
-      "Event_Location_Start_Coordinates": "[40.783268305609866, -73.97456188389754]",
-      "Event_Location": {
-       "Latitude": 40.783268305609866,
-       "Longitude": -73.97456188389754
-       },
-      "Event_Street_Side": "",
-      "Street_Closure_Type": "",
-      "Community_Board": "64, ",
-      "Police Precinct": "22, ",
-      "expected_attendees": 500000,
-      "description": "The Thanksgiving Day Parade is a special event organized by the Parks Department. It takes place in Manhattan's Central Park and features various floats, balloons, and performances. Thousands of people are expected to attend.",
-      "Event_Impact_Analysis" : "The Macy's Thanksgiving Day Parade significantly invigorates Manhattan's cityscape. Streets along the parade route, primarily Central Park West and 6th Avenue, experience heightened foot traffic, with families, tourists, and locals flooding in to partake in the iconic celebration. Retail and dining sectors benefit from the increased visitor influx, while public transport and ride-hailing services observe elevated demand due to temporary road closures."
-   },
-    {
-      "Event_ID": 2,
-      "Event_Name": "Halloween Parade and Party",
-      "Zone_ID": 231,
-      "Zone_Name": "TriBeCa",
-      "Start_Date": {
-         "Time": "10/31/2022 7:00:00 PM"
+     "Event_Street_Side": "Full",
+     "Street_Closure_Type": "Full Street Closure ",
+     "Community_Board": "1, ",
+     "Police Precinct": "1, ",
+     "expected_attendees": 10000,
+     "description": "The Halloween Parade and Party is a festive parade organized by the Police Department in Manhattan. It takes place on Greenwich Street and features participants dressed in Halloween costumes. The event is expected to attract a crowd of around 10,000 people.",
+     "Event_Impact_Analysis" : "Manhattan's Village Halloween Parade considerably animates the city's atmosphere. The parade route along 6th Avenue is transformed into a thrilling hub of creativity and entertainment, attracting large crowds. Local businesses, particularly party supply stores, costume shops, and hospitality venues, flourish from the increased activity. The temporary reshaping of transportation routes augments public transit usage and ride-hailing services.",
+     "Event_Impact_Start" : "07:00 PM",
+     "Event_Impact_End" : "12:30 PM"
+  },
+   {
+     "Event_ID": 3,
+     "Event_Name": "Saint Patrick's Day Parade",
+     "Zone_ID": 237,
+     "Zone_Name": "Upper East Side South",
+     "Start_Date": {
+        "Time": "03/17/2022 11:00:00 AM"
+     },
+     "End Date": {
+        "Time": "03/17/2022 04:30:00 PM"
+     },
+     "Event_Agency": "Parks Department",
+     "Event_Type": "Special Event",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": "Central Park: Fifth Ave Sidewalks - 60 St to 65 St ",
+     "Event_Location_Start_Coordinates": "[40.774317073647985, -73.96566061866508]",
+     "Event_Location": {
+      "Latitude": 40.774317073647985,
+      "Longitude": -73.96566061866508
       },
-      "End Date": {
-         "Time": "10/31/2022 01:20:00 PM"
+     "Event_Street_Side": "",
+     "Street_Closure_Type": "",
+     "Community_Board": "64, ",
+     "Police Precinct": "22, ",
+     "expected_attendees": 250000,
+     "description": "The NYC Saint Patrick's Day Parade is a special event organized by the Parks Department. It takes place on the Fifth Avenue sidewalks, spanning from 60th Street to 65th Street. The parade celebrates Irish culture and heritage and is expected to draw a crowd of around 250,000 attendees.",
+     "Event_Impact_Analysis" : "St. Patrick's Day significantly increases Manhattan's activity levels. The parade route along Fifth Avenue becomes a major hub, swelling foot traffic and boosting local businesses, especially hospitality venues. Road closures alter transportation patterns, intensifying usage of public transit and ride-hailing services. Cultural events across neighborhoods add to the overall buzz. However, the impact varies by area and can cause temporary disruptions to normal routines.",
+     "Event_Impact_Start" : "11:00 AM",
+     "Event_Impact_End" : "04:30 PM"
+  },
+   {
+     "Event_ID": 4,
+     "Event_Name": "NYC Pride March",
+     "Zone_ID": 234,
+     "Zone_Name": "Union Square",
+     "Start_Date": {
+        "Time": "06/24/2022 12:00:00 PM"
+     },
+     "End Date": {
+        "Time": "06/24/2022 05:00:00 PM"
+     },
+     "Event_Agency": "Police Department",
+     "Event_Type": "Parade",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": "WEST 19 STREET between 7 AVENUE and 9 AVENUE,  WEST   18 STREET between 7 AVENUE and 9 AVENUE,  WEST   17 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 6 AVENUE and 7 AVENUE,  WEST   15 STREET between 7 AVENUE and 9 AVENUE,  7 AVENUE between WEST   19 STREET and 7 AVENUE SOUTH,  CHRISTOPHER STREET between 7 AVENUE SOUTH and GREENWICH AVENUE,  GREENWICH AVENUE between CHRISTOPHER STREET and 6 AVENUE,  WEST    8 STREET between 6",
+     "Event_Location_Start_Coordinates": "[40.74265656195649, -73.99981520990745]",
+     "Event_Location": {
+      "Latitude": 40.743458561729994,
+      "Longitude": -73.98822836937437
       },
-      "Event_Agency": "Police Department",
-      "Event_Type": "Parade",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": " GREENWICH STREET between NORTH MOORE STREET and BEACH STREET,  GREENWICH STREET between NORTH MOORE STREET and DUANE STREET,  GREENWICH STREET between DUANE STREET and READE STREET",
-      "Event_Location_Start_Coordinates": "[40.720777, -74.010019]",
-      "Event_Location": {
-       "Latitude": 40.720777,
-       "Longitude": -74.010019
-       },
-      "Event_Street_Side": "Full",
-      "Street_Closure_Type": "Full Street Closure ",
-      "Community_Board": "1, ",
-      "Police Precinct": "1, ",
-      "expected_attendees": 10000,
-      "description": "The Halloween Parade and Party is a festive parade organized by the Police Department in Manhattan. It takes place on Greenwich Street and features participants dressed in Halloween costumes. The event is expected to attract a crowd of around 10,000 people.",
-      "Event_Impact_Analysis" : "Manhattan's Village Halloween Parade considerably animates the city's atmosphere. The parade route along 6th Avenue is transformed into a thrilling hub of creativity and entertainment, attracting large crowds. Local businesses, particularly party supply stores, costume shops, and hospitality venues, flourish from the increased activity. The temporary reshaping of transportation routes augments public transit usage and ride-hailing services."
-   },
-    {
-      "Event_ID": 3,
-      "Event_Name": "Saint Patrick's Day Parade",
-      "Zone_ID": 237,
-      "Zone_Name": "Upper East Side South",
-      "Start_Date": {
-         "Time": "03/17/2022 11:00:00 AM"
+     "Event_Street_Side": "Full",
+     "Street_Closure_Type": "Full Street Closure ",
+     "Community_Board": "2, 4, 5, ",
+     "Police Precinct": "10, 13, 14, 6, ",
+     "expected_attendees": 2000000,
+     "description": "The NYC Pride March is a large-scale parade celebrating LGBTQ+ pride organized by the Police Department. It takes place in Manhattan, with street closures along West 19th Street, West 18th Street, West 17th Street, West 16th Street, West 15th Street, 7th Avenue, Christopher Street, Greenwich Avenue, and West 8th Street. The march is expected to attract a massive crowd of approximately 2 million attendees.",
+     "Event_Impact_Analysis" : "The NYC Pride March considerably boosts the dynamism of Manhattan. The parade route, often passing through Fifth Avenue and Greenwich Village, attracts vast crowds celebrating love and equality. This uplifts local businesses, especially those in the hospitality sector. Changes in road accessibility increase the demand for public transportation and ride services.",
+     "Event_Impact_Start" : "12:00 PM",
+     "Event_Impact_End" : "05:00 PM"
+  },
+   {
+     "Event_ID": 5,
+     "Event_Name": "Times Square Ball",
+     "Zone_ID": 230,
+     "Zone_Name": "Times Square",
+     "Start_Date": {
+        "Time": "12/31/2022 6:00:00 PM"
+     },
+     "End Date": {
+        "Time": "01/01/2023 12:30:00 AM"
+     },
+     "Event_Agency": "Parks Department",
+     "Event_Type": "Special Event",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": "Father Duffy Square",
+     "Event_Location_Start_Coordinates": "[40.75895078453756, -73.98483981311989]",
+     "Event_Location": {
+      "Latitude": 40.75895078453756,
+      "Longitude": -73.98483981311989
       },
-      "End Date": {
-         "Time": "03/17/2022 04:30:00 PM"
+     "Event_Street_Side": "",
+     "Street_Closure_Type": "",
+     "Community_Board": "5, ",
+     "Police Precinct": "18, ",
+     "expected_attendees": 100000,
+     "description": "The Times Square Ball event is a special event organized by the Parks Department. It takes place at Father Duffy Square in Manhattan and marks the New Year's Eve celebration. Thousands of people gather in Times Square to witness the iconic ball drop, and the event is expected to attract around 100,000 attendees.",
+     "Event_Impact_Analysis" : "The Times Square Ball Drop on New Year's Eve significantly heightens activity levels in Manhattan. Times Square transforms into a global hotspot, with increased foot traffic and boosted local commerce, particularly in the hospitality and retail sectors. Road closures alter transportation patterns, increasing usage of public transit and ride-hailing services.",
+     "Event_Impact_Start" : "06:00 PM",
+     "Event_Impact_End" : "12:30 AM"
+  },
+   {
+     "Event_ID": 6,
+     "Event_Name": "Lunar New Year Parade",
+     "Zone_ID": 144,
+     "Zone_Name": "NoLiTa",
+     "Start_Date": {
+        "Time": "02/25/2022 01:00:00 PM"
+     },
+     "End Date": {
+        "Time": "02/25/2022 04:00:00 PM"
+     },
+     "Event_Agency": "Police Department",
+     "Event_Type": "Parade",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": " MOTT STREET between GRAND STREET and CANAL STREET,  MOTT STREET between CANAL STREET and CHATHAM SQUARE,  EAST BROADWAY between CHATHAM SQUARE and FORSYTHE STREET,  ELDRIDGE STREET between EAST BROADWAY and HESTER STREET,  HESTER STREET between BOWERY and MULBERRY STREET,  HESTER STREET between ELDRIDGE STREET and FORSYTH STREET,  FORSYTH STREET between GRAND STREET and DELANCEY STREET,  BROOME STREET between FORSYTH STREET and ELDRIDGE STREET,  FORSYTH STREET between HESTER STREET and GRAND ST",
+     "Event_Location_Start_Coordinates": "[40.71791248486757, -73.997152457876]",
+     "Event_Location": {
+      "Latitude": 40.71791248486757,
+      "Longitude": -73.997152457876
       },
-      "Event_Agency": "Parks Department",
-      "Event_Type": "Special Event",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": "Central Park: Fifth Ave Sidewalks - 60 St to 65 St ",
-      "Event_Location_Start_Coordinates": "[40.774317073647985, -73.96566061866508]",
-      "Event_Location": {
-       "Latitude": 40.774317073647985,
-       "Longitude": -73.96566061866508
-       },
-      "Event_Street_Side": "",
-      "Street_Closure_Type": "",
-      "Community_Board": "64, ",
-      "Police Precinct": "22, ",
-      "expected_attendees": 250000,
-      "description": "The NYC Saint Patrick's Day Parade is a special event organized by the Parks Department. It takes place on the Fifth Avenue sidewalks, spanning from 60th Street to 65th Street. The parade celebrates Irish culture and heritage and is expected to draw a crowd of around 250,000 attendees.",
-      "Event_Impact_Analysis" : "St. Patrick's Day significantly increases Manhattan's activity levels. The parade route along Fifth Avenue becomes a major hub, swelling foot traffic and boosting local businesses, especially hospitality venues. Road closures alter transportation patterns, intensifying usage of public transit and ride-hailing services. Cultural events across neighborhoods add to the overall buzz. However, the impact varies by area and can cause temporary disruptions to normal routines."
-   },
-    {
-      "Event_ID": 4,
-      "Event_Name": "NYC Pride March",
-      "Zone_ID": 234,
-      "Zone_Name": "Union Square",
-      "Start_Date": {
-         "Time": "06/24/2022 12:00:00 PM"
+     "Event_Street_Side": "Full",
+     "Street_Closure_Type": "Full Street Closure ",
+     "Community_Board": "2, 3, ",
+     "Police Precinct": "5, ",
+     "expected_attendees": 150000,
+     "description": "The Lunar New Year Parade is a vibrant parade celebrating the Lunar New Year organized by the Police Department. It takes place in Manhattan, featuring colorful floats and traditional performances. The parade route includes Mott Street, East Broadway, Eldridge Street, Hester Street, Forsyth Street, and Broome Street. The event is expected to attract a crowd of approximately 150,000 attendees.",
+     "Event_Impact_Analysis" : "The Lunar New Year Parade in Chinatown revitalizes Manhattan's spirit. Streets along the parade route witness increased foot traffic, significantly benefiting local businesses, especially eateries and souvenir shops. Road closures necessitate adjustments in transportation patterns, intensifying usage of public transit.",
+     "Event_Impact_Start" : "01:00 PM",
+     "Event_Impact_End" : "04:00 PM"
+  },
+   {
+     "Event_ID": 7,
+     "Event_Name": "Three Kings Day Parade",
+     "Zone_ID": 75,
+     "Zone_Name": "East Harlem North",
+     "Start_Date": {
+        "Time": "01/05/2022 11:00:00 AM"
+     },
+     "End Date": {
+        "Time": "01/05/2022 1:00:00 PM"
+     },
+     "Event_Agency": "Police Department",
+     "Event_Type": "Parade",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": " EAST  115 STREET between PARK AVENUE and MADISON AVENUE,  EAST  106 STREET between PARK AVENUE and 3 AVENUE,  EAST  106 STREET between 5 AVENUE and PARK AVENUE,  3 AVENUE between EAST  106 STREET and EAST  116 STREET,  EAST  116 STREET between 3 AVENUE and PARK AVENUE,  PARK AVENUE between EAST  116 STREET and EAST  115 STREET",
+     "Event_Location_Start_Coordinates": "[40.7989778691995, -73.94463769065234]",
+     "Event_Location": {
+      "Latitude": 40.7930550804651,
+      "Longitude": -73.95200584670602
       },
-      "End Date": {
-         "Time": "06/24/2022 05:00:00 PM"
+     "Event_Street_Side": "Both",
+     "Street_Closure_Type": "Full Street Closure ",
+     "Community_Board": "11, ",
+     "Police Precinct": "23, 25, ",
+     "expected_attendees": 50000,
+     "description": "The Annual Three Kings Day Parade is a joyful parade celebrating the Christian feast of the Epiphany organized by the Police Department. It takes place in Manhattan, with the parade route spanning East 115th Street, East 106th Street, 3rd Avenue, and Park Avenue. The event is expected to attract a crowd of approximately 50,000 attendees.",
+     "Event_Impact_Analysis" : "The Three Kings Day Parade, primarily in East Harlem, significantly invigorates Manhattan's atmosphere. Increased pedestrian traffic along the parade route benefits local businesses, particularly those offering traditional Latin food and merchandise. Road closures reroute regular transportation, leading to heightened usage of public transit and ride-hailing services.",
+     "Event_Impact_Start" : "11:00 AM",
+     "Event_Impact_End" : "01:00 PM"
+  },
+   {
+     "Event_ID": 8,
+     "Event_Name": "4th of July Fireworks",
+     "Zone_ID": 224,
+     "Zone_Name": "Seward Park",
+     "Start_Date": {
+        "Time": "07/04/2022 08:00:00 PM"
+     },
+     "End_Date": {
+        "Time": "07/04/2022 10:00:00 PM"
+     },
+     "Event_Agency": "",
+     "Event_Type": "Special Event",
+     "Event_Borough": "Manhattan",
+     "Event_Location_Text": "East River Walk: East River Esplanade",
+     "Event_Location_Start_Coordinates": "[40.71599281291161, -73.97536662439524]",
+     "Event_Location": {
+      "Latitude": 40.73513251962613,
+      "Longitude": -73.97489999621705
       },
-      "Event_Agency": "Police Department",
-      "Event_Type": "Parade",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": "WEST 19 STREET between 7 AVENUE and 9 AVENUE,  WEST   18 STREET between 7 AVENUE and 9 AVENUE,  WEST   17 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 7 AVENUE and 9 AVENUE,  WEST   16 STREET between 6 AVENUE and 7 AVENUE,  WEST   15 STREET between 7 AVENUE and 9 AVENUE,  7 AVENUE between WEST   19 STREET and 7 AVENUE SOUTH,  CHRISTOPHER STREET between 7 AVENUE SOUTH and GREENWICH AVENUE,  GREENWICH AVENUE between CHRISTOPHER STREET and 6 AVENUE,  WEST    8 STREET between 6",
-      "Event_Location_Start_Coordinates": "[40.74265656195649, -73.99981520990745]",
-      "Event_Location": {
-       "Latitude": 40.743458561729994,
-       "Longitude": -73.98822836937437
-       },
-      "Event_Street_Side": "Full",
-      "Street_Closure_Type": "Full Street Closure ",
-      "Community_Board": "2, 4, 5, ",
-      "Police Precinct": "10, 13, 14, 6, ",
-      "expected_attendees": 2000000,
-      "description": "The NYC Pride March is a large-scale parade celebrating LGBTQ+ pride organized by the Police Department. It takes place in Manhattan, with street closures along West 19th Street, West 18th Street, West 17th Street, West 16th Street, West 15th Street, 7th Avenue, Christopher Street, Greenwich Avenue, and West 8th Street. The march is expected to attract a massive crowd of approximately 2 million attendees.",
-      "Event_Impact_Analysis" : "The NYC Pride March considerably boosts the dynamism of Manhattan. The parade route, often passing through Fifth Avenue and Greenwich Village, attracts vast crowds celebrating love and equality. This uplifts local businesses, especially those in the hospitality sector. Changes in road accessibility increase the demand for public transportation and ride services."
-   },
-    {
-      "Event_ID": 5,
-      "Event_Name": "Times Square Ball",
-      "Zone_ID": 230,
-      "Zone_Name": "Times Square",
-      "Start_Date": {
-         "Time": "12/31/2022 6:00:00 PM"
-      },
-      "End Date": {
-         "Time": "01/01/2023 12:30:00 AM"
-      },
-      "Event_Agency": "Parks Department",
-      "Event_Type": "Special Event",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": "Father Duffy Square",
-      "Event_Location_Start_Coordinates": "[40.75895078453756, -73.98483981311989]",
-      "Event_Location": {
-       "Latitude": 40.75895078453756,
-       "Longitude": -73.98483981311989
-       },
-      "Event_Street_Side": "",
-      "Street_Closure_Type": "",
-      "Community_Board": "5, ",
-      "Police Precinct": "18, ",
-      "expected_attendees": 100000,
-      "description": "The Times Square Ball event is a special event organized by the Parks Department. It takes place at Father Duffy Square in Manhattan and marks the New Year's Eve celebration. Thousands of people gather in Times Square to witness the iconic ball drop, and the event is expected to attract around 100,000 attendees.",
-      "Event_Impact_Analysis" : "The Times Square Ball Drop on New Year's Eve significantly heightens activity levels in Manhattan. Times Square transforms into a global hotspot, with increased foot traffic and boosted local commerce, particularly in the hospitality and retail sectors. Road closures alter transportation patterns, increasing usage of public transit and ride-hailing services."
-   },
-    {
-      "Event_ID": 6,
-      "Event_Name": "Lunar New Year Parade",
-      "Zone_ID": 144,
-      "Zone_Name": "NoLiTa",
-      "Start_Date": {
-         "Time": "02/25/2022 01:00:00 PM"
-      },
-      "End Date": {
-         "Time": "02/25/2022 04:00:00 PM"
-      },
-      "Event_Agency": "Police Department",
-      "Event_Type": "Parade",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": " MOTT STREET between GRAND STREET and CANAL STREET,  MOTT STREET between CANAL STREET and CHATHAM SQUARE,  EAST BROADWAY between CHATHAM SQUARE and FORSYTHE STREET,  ELDRIDGE STREET between EAST BROADWAY and HESTER STREET,  HESTER STREET between BOWERY and MULBERRY STREET,  HESTER STREET between ELDRIDGE STREET and FORSYTH STREET,  FORSYTH STREET between GRAND STREET and DELANCEY STREET,  BROOME STREET between FORSYTH STREET and ELDRIDGE STREET,  FORSYTH STREET between HESTER STREET and GRAND ST",
-      "Event_Location_Start_Coordinates": "[40.71791248486757, -73.997152457876]",
-      "Event_Location": {
-       "Latitude": 40.71791248486757,
-       "Longitude": -73.997152457876
-       },
-      "Event_Street_Side": "Full",
-      "Street_Closure_Type": "Full Street Closure ",
-      "Community_Board": "2, 3, ",
-      "Police Precinct": "5, ",
-      "expected_attendees": 150000,
-      "description": "The Lunar New Year Parade is a vibrant parade celebrating the Lunar New Year organized by the Police Department. It takes place in Manhattan, featuring colorful floats and traditional performances. The parade route includes Mott Street, East Broadway, Eldridge Street, Hester Street, Forsyth Street, and Broome Street. The event is expected to attract a crowd of approximately 150,000 attendees.",
-      "Event_Impact_Analysis" : "The Lunar New Year Parade in Chinatown revitalizes Manhattan's spirit. Streets along the parade route witness increased foot traffic, significantly benefiting local businesses, especially eateries and souvenir shops. Road closures necessitate adjustments in transportation patterns, intensifying usage of public transit."
-   },
-    {
-      "Event_ID": 7,
-      "Event_Name": "Three Kings Day Parade",
-      "Zone_ID": 75,
-      "Zone_Name": "East Harlem North",
-      "Start_Date": {
-         "Time": "01/05/2022 11:00:00 AM"
-      },
-      "End Date": {
-         "Time": "01/05/2022 1:00:00 PM"
-      },
-      "Event_Agency": "Police Department",
-      "Event_Type": "Parade",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": " EAST  115 STREET between PARK AVENUE and MADISON AVENUE,  EAST  106 STREET between PARK AVENUE and 3 AVENUE,  EAST  106 STREET between 5 AVENUE and PARK AVENUE,  3 AVENUE between EAST  106 STREET and EAST  116 STREET,  EAST  116 STREET between 3 AVENUE and PARK AVENUE,  PARK AVENUE between EAST  116 STREET and EAST  115 STREET",
-      "Event_Location_Start_Coordinates": "[40.7989778691995, -73.94463769065234]",
-      "Event_Location": {
-       "Latitude": 40.7930550804651,
-       "Longitude": -73.95200584670602
-       },
-      "Event_Street_Side": "Both",
-      "Street_Closure_Type": "Full Street Closure ",
-      "Community_Board": "11, ",
-      "Police Precinct": "23, 25, ",
-      "expected_attendees": 50000,
-      "description": "The Annual Three Kings Day Parade is a joyful parade celebrating the Christian feast of the Epiphany organized by the Police Department. It takes place in Manhattan, with the parade route spanning East 115th Street, East 106th Street, 3rd Avenue, and Park Avenue. The event is expected to attract a crowd of approximately 50,000 attendees.",
-      "Event_Impact_Analysis" : "The Three Kings Day Parade, primarily in East Harlem, significantly invigorates Manhattan's atmosphere. Increased pedestrian traffic along the parade route benefits local businesses, particularly those offering traditional Latin food and merchandise. Road closures reroute regular transportation, leading to heightened usage of public transit and ride-hailing services."
-   },
-    {
-      "Event_ID": 8,
-      "Event_Name": "4th of July Fireworks",
-      "Zone_ID": 224,
-      "Zone_Name": "Seward Park",
-      "Start_Date": {
-         "Time": "07/04/2022 08:00:00 PM"
-      },
-      "End_Date": {
-         "Time": "07/04/2022 10:00:00 PM"
-      },
-      "Event_Agency": "",
-      "Event_Type": "Special Event",
-      "Event_Borough": "Manhattan",
-      "Event_Location_Text": "East River Walk: East River Esplanade",
-      "Event_Location_Start_Coordinates": "[40.71599281291161, -73.97536662439524]",
-      "Event_Location": {
-       "Latitude": 40.73513251962613,
-       "Longitude": -73.97489999621705
-       },
-      "Event_Street_Side": "",
-      "Street_Closure_Type": "",
-      "Community_Board": "",
-      "Police Precinct": "",
-      "expected_attendees": 3000000,
-      "description": "The 4th of July Fireworks is a grand fireworks display held in Manhattan along the East River Esplanade. It is a highly anticipated event celebrating Independence Day. The spectacular fireworks show is expected to attract a massive crowd of around 3 million attendees.",
-      "Event_Impact_Analysis" : "The 4th of July fireworks significantly amplify Manhattan's activity levels. Public spaces and rooftop venues become hotspots for spectators, increasing patronage for surrounding businesses, particularly in the hospitality sector. Road closures and heightened security measures alter transportation patterns, leading to increased use of public transit and ride-hailing services."
-   }
+     "Event_Street_Side": "",
+     "Street_Closure_Type": "",
+     "Community_Board": "",
+     "Police Precinct": "",
+     "expected_attendees": 3000000,
+     "description": "The 4th of July Fireworks is a grand fireworks display held in Manhattan along the East River Esplanade. It is a highly anticipated event celebrating Independence Day. The spectacular fireworks show is expected to attract a massive crowd of around 3 million attendees.",
+     "Event_Impact_Analysis" : "The 4th of July fireworks significantly amplify Manhattan's activity levels. Public spaces and rooftop venues become hotspots for spectators, increasing patronage for surrounding businesses, particularly in the hospitality sector. Road closures and heightened security measures alter transportation patterns, leading to increased use of public transit and ride-hailing services.",
+     "Event_Impact_Start" : "08:00 PM",
+     "Event_Impact_End" : "10:00 PM"
+  }
 ]
-   
