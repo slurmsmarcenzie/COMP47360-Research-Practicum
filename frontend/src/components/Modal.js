@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../App.css';
-import afterParty from '../images/EINYCwhite.png';
+import afterParty from '../images/after-party-logo-white.webp';
 
 
 export default function Modal({ onClose }) {
