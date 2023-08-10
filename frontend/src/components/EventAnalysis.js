@@ -12,8 +12,8 @@ function EventAnalysis({ eventForAnalysisComponent, showChart }) {
     return (
       <div className='floating-info-box-event-analysis'>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'flex-start'}}>
-          <h4 style={{margin: '0', marginRight: '1rem', textAlign: 'left'}}>Start Time: {eventForAnalysisComponent.Event_Impact_Start}</h4>
-          <h4 style={{margin: '0', textAlign: 'left'}}> End Time: {eventForAnalysisComponent.Event_Impact_End}</h4>
+          <h5 style={{margin: '0', marginRight: '1rem', textAlign: 'left'}}>Start Time: {eventForAnalysisComponent.Event_Impact_Start}</h5>
+          <h5 style={{margin: '0', textAlign: 'left'}}> End Time: {eventForAnalysisComponent.Event_Impact_End}</h5>
         </div>
         <p>
           {isTextShort ? getShortText(eventForAnalysisComponent.Event_Impact_Analysis) : eventForAnalysisComponent.Event_Impact_Analysis}

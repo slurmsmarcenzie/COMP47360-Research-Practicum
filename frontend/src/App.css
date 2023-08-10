@@ -1185,7 +1185,7 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .line-chart-container {
-  height: 150px;
+  height: 210px;
   width: 100%;
   margin-top: 20px;
   margin-bottom: 24px;
@@ -1267,8 +1267,8 @@ input[type=range]::-webkit-slider-thumb {
 
 .timelapse-container-mobile{
   padding-right: 12px;
-  width: 372px;
-  height: fit-content;
+  width: 300px;
+  height: 48px;
   position: fixed;
   z-index: 1;
   bottom: 36px;
@@ -1281,4 +1281,44 @@ input[type=range]::-webkit-slider-thumb {
   background-color: rgba(18, 19, 22, 0.3);	color: #fff;
   border-radius: 5px;
   height: 56px;
+}
+
+.timelapse-button-mobile{
+  margin-right: 8px;
+  max-width: 40px;
+  z-index: 1;
+	font-family: inherit;
+	transition: all 0.1s ease-in;
+	display: flex;
+	gap: 1rem;
+	cursor: pointer;
+	padding: 0.25rem 0.5rem;
+  background-color: rgba(18, 19, 22, 0);	color: #fff;
+	border: none;
+  border-radius: 5px;
+	align-items: center;
+	font-size: 15px;
+	font-weight: 500;
+	min-width: 9rem;
+	justify-content: center;
+}
+
+
+.timelapse-button:hover {
+	background-color: hsla(271, 76%, 53%, 0.2);
+}
+
+.timelapse-button:active {
+  background-color: hsla(271, 76%, 53%, 0.6);
+}
+
+.floating-play-icon-container{
+  z-index: 999;
+  min-width: 44px;
+  max-width: 24px; /* Change to desired width for mobile */
+  margin-top: 312px; /* Adjust to desired distance from top for mobile */
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
+  margin-right: 8px;
+  position: absolute;   
 }

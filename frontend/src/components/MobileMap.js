@@ -14,6 +14,7 @@ import MobileMapLegend from './MobileMapLegend';
 import MobileSearchIcon from './MobileSearchIcon';
 import MobileShowInfoBoxIcon from './MobileShowInfoBoxIcon';
 import MobileTimelapse from './MobileTimelapse';
+import MobileShowTimelpase from './MobileShowTimelapse'
 
 const MobileFloatingInfoBox = lazy(() => import('./MobileFloatingInfoBox'));
 const MobileSplitViewMap = lazy(() => import('./MobileSplitViewMap'));
@@ -41,7 +42,7 @@ function MobileMap() {
   const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, setIsDrawerOpen, isTimelapseVisible, setIsTimelapseVisible, eventComparisonData, setEventComparisonData} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, setIsDrawerOpen, isTimelapseVisible, setIsTimelapseVisible, eventComparisonData, setEventComparisonData, setIsThereALiveInfoBox} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
@@ -333,6 +334,7 @@ function MobileMap() {
 
   const visualiseEventImpact = (Event_ID) => {
 
+    setIsThereALiveInfoBox(true);
     setIsDrawerOpen(false);
     setEventSelected(true);
     setShowChart(false);
@@ -340,7 +342,7 @@ function MobileMap() {
     setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
-    setIsTimelapseVisible(true);
+    setIsTimelapseVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -591,6 +593,8 @@ function MobileMap() {
           <MobileSearchIcon />
 
           <MobileShowInfoBoxIcon />
+
+          <MobileShowTimelpase />
 
           <MobileFloatingNav 
             map={map}
