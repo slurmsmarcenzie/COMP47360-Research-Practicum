@@ -16,6 +16,9 @@ const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiaGFyc
 const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/app/v1';
 let animationID = null;
 
+// comment
+// comment
+
 // Create a provider component
 export const MapProvider = ({ children }) => {
 
