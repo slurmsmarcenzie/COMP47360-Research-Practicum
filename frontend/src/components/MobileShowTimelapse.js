@@ -8,7 +8,7 @@ import { useMapContext } from './MapContext';
 export default function MobileShowInfoBoxIcon() {
 
 
-    const {isThereALiveInfoBox, isTimelapseVisible, setIsTimelapseVisible } = useMapContext();
+    const {eventComparisonData, isTimelapseVisible, setIsTimelapseVisible } = useMapContext();
 
     const handleToggle = () => {
     
@@ -17,7 +17,7 @@ export default function MobileShowInfoBoxIcon() {
 
     return (
 
-        ( isThereALiveInfoBox ) && (
+        ( eventComparisonData ) && (
             <div className='floating-play-icon-container'>
                 <button className='floating-search-icon-container-button'
                     onClick={() => {
