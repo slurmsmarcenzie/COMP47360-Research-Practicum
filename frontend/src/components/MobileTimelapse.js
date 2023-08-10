@@ -4,7 +4,7 @@ import "../App.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
-function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMap}) {
+function MobileTimelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMap}) {
 
     const { updateLayerColours, neighbourhoodEvents } = useMapContext();
 
@@ -83,8 +83,8 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
     }, []);
 
     return (
-        <div className='timelapse-container'>
-            <button className="timelapse-button" onClick={handlePlay}>
+        <div className='timelapse-container-mobile'>
+            <button className="timelapse-button-mobile" onClick={handlePlay}>
                 {isPlaying ? <FontAwesomeIcon icon={faPause} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faPlay} style={{color:'#D3D3D3'}}/>}
                 <label htmlFor="toggle" className="timelapse-label">{isPlaying ? "pause" : "play"}</label>
             </button>
@@ -99,4 +99,4 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         </div>
     );
 }
-export default Timelapse;
+export default MobileTimelapse;

@@ -4,8 +4,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { scaleLinear } from 'd3-scale';
 import throttle from 'lodash/throttle';
-import { feature } from '@turf/helpers';
-import centroid from '@turf/centroid';
 
 // Context builder
 import { useMapContext } from './MapContext';
@@ -15,6 +13,7 @@ import FloatingNav from './FloatingNav';
 import Navbar from './Navbar';
 import MapLegend from './MapLegend';
 import Timelapse from './Timelapse';
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const FloatingInfoBox = lazy(() => import('./FloatingInfoBox'));
 const SplitViewMap = lazy(() => import('./SplitViewMap'));
@@ -263,31 +262,19 @@ function Map() {
 
   const handleClick = (map, e) => {
 
+    isNeighbourhoodClickedRef.current = false;
+
     popup.current?.remove();
 
     const features = map.queryRenderedFeatures(e.point);
 
     if (features.length > 0 && features[0].id !== undefined) {
 
-      // isNeighbourhoodClickedRef.current = true;  
-
-      // disableColours();
+      neighbourhoods.features.forEach(neighbourhood =>{
+        map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
+      });
 
       const [firstFeature] = features;
-
-      // Create a GeoJSON feature object from the clicked feature
-      const geojsonFeature = feature(firstFeature.geometry);
-
-      // Use turf to calculate the centroid of the feature
-      const featureCentroid = centroid(geojsonFeature);
-
-      // Get the coordinates of the centroid
-      const [lng, lat] = featureCentroid.geometry.coordinates;
-
-      // Fly to the centroid of the polygon
-      // map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
-
-      // map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
 
       const zone = firstFeature.properties.zone;
 
@@ -301,6 +288,8 @@ function Map() {
       if (matchingEvents.length > 0) {
         setShowInfoBox(true);
         setShowNeighborhoodInfoBox(false);
+        isNeighbourhoodClickedRef.current = true;
+        map.setPaintProperty(firstFeature.id+'-line', 'line-width', 4);
       } 
       
       if (matchingEvents.length == 0) {
@@ -349,7 +338,7 @@ function Map() {
     setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
-    setIsTimelapseVisible(true);
+    setIsTimelapseVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -563,7 +552,7 @@ function Map() {
   const fetchBaslineTimelapse = async (Event_ID) => {
 
     try {
-      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse/baseline`);
+      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/baselinetimelapse`);
       if (!baselineTimelapseResponse) {
        throw new Error('Network response was not ok');
       }

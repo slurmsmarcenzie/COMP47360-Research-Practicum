@@ -1,26 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import "../App.css";
 
 // import context
 import { useMapContext } from './MapContext';
 
-function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableColours}) {
+function FloatingNav({map, isNeighbourhoodClickedRef, enableColours}) {
 
-  const {prunedEvents, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
+  const {prunedEvents, removeAllLines, setNeighbourhoodEvents, setShowInfoBox, setShowNeighborhoodInfoBox, setShowChartData, setZone, setEventName, isResetShowing, setIsResetShowing, removeAntline, removeMarker, removeAllButOneMarker} = useMapContext();
 
   const dropDownOptions = prunedEvents.map((event, index) => 
     <option key={index} value={JSON.stringify(event)}>
       {event.Event_Name}  
     </option>
   );
-  
-  const floatingNavZoomToLocation = (longitude, latitude) => {
-    map.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 15, // specify your desired zoom level
-      essential: true
-    });
-  }
   
   const floatingNavSetLineWidth = (zone) => {
       const lineLayerId = zone + '-line';
@@ -30,14 +22,10 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
   const reviewEvent = (e) => {
 
     const selectedEvent = JSON.parse(e.target.value);
-    const latitude = selectedEvent.Event_Location.Latitude
-    const longitude = selectedEvent.Event_Location.Longitude
-    
-    setZone(selectedEvent.Zone_ID);
 
-    floatingNavZoomToLocation(longitude, latitude);
+    removeAllLines(map.current)
+    setZone(selectedEvent.Zone_ID);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    disableColours();
     removeMarker();
   
     isNeighbourhoodClickedRef.current = true;
@@ -53,6 +41,7 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
   };
 
     return(
+      
         <div className='floating-nav'>
           <h3 className='floating-nav-header-text'>Explore events in Manhattan and their impact on urban flow</h3>
           <form className='floating-nav-form'>
@@ -64,7 +53,10 @@ function FloatingNav({map, isNeighbourhoodClickedRef, enableColours,  disableCol
           {isResetShowing &&
           <button className="floating-nav-outline-button" onClick={() => { removeAntline(map.current); enableColours(); removeMarker();}}>Reset Map</button>
           }
-        </div>
+  
+  </div>
+        
+        
     )
 }
 

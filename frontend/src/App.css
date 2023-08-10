@@ -55,7 +55,7 @@ body {
   z-index: 1;
   min-width: 180px;
   max-width: 240px;
-  margin-top: 120px;
+  margin-top: 100px;
   margin-left: 92px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -192,9 +192,9 @@ body {
 .floating-info-box {
   position: absolute;
   z-index: 1;
-  min-width: 360px;
+  min-width: 400px;
   max-width: 400px;
-  margin-top: 120px;
+  margin-top: 100px;
   right: 72px;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -234,6 +234,25 @@ body {
 }
 
 .floating-info-box-back-button:active {
+  background-color: rgba(18, 19, 22, 0.3);
+}
+
+.floating-info-box-show-hide-timelapse {
+  margin-bottom: 12px;
+  width: 50%;
+  color: white;
+  text-align: right;
+  padding-left: 12px;
+  font-weight: 500;
+  background-color: rgba(18, 19, 22, 0);
+  height: 28px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+  align-self: center;
+}
+
+.floating-info-box-show-hide-timelapse:active{
   background-color: rgba(18, 19, 22, 0.3);
 }
 
@@ -327,10 +346,8 @@ body {
 
 .navbar-logo  {
   transition: opacity 0.7s ease;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(18, 19, 22, 0.3);
   border-radius: 5px;
+  padding-top:10px;
 }
 
 .navbar-logo.hovered {
@@ -338,7 +355,10 @@ body {
 }
 
 .parent-chart-container {
+  margin-top: 12px;
+  width: 100%;
   gap: 4px;
+  height: fit-content;
 }
 
 .floating-info-box-chart-container {
@@ -384,7 +404,88 @@ body {
   align-items: center;
   padding: auto;
   margin-top: 12px;
-  gap: 12px;
+  gap: 4px;
+}
+
+.accordion {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  border-radius: var(--main-border-radius);
+}
+
+.accordion-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
+  backdrop-filter: blur(25px) saturate(200%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  font-size: 12 px;
+  background-color: #12131600; /* Same background color as tiles for consistency */
+}
+
+.accordion-title.pressed {
+  background-color: #393739;
+}
+
+.accordion-title:hover,
+.accordion-title:focus {
+  background-color: rgba(18, 19, 22, 0.5);  /* darker color for hover/focus state */
+}
+
+.new-timelapse-container {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+  padding: 10px;
+  margin-left:10px;
+  margin-right:10px;
+}
+
+.accordion-title:hover {
+  background-color: #282C34;
+}
+
+.accordion-title {
+  padding: 0 16px;
+  height: 40px;
+  border-radius: 5px;
+  align-items: center ;
+  margin-bottom: 12px;
+}
+
+.accordion-content{
+  border-radius: 5px;
+}
+
+.accordion-item {
+  margin: 10px;
+  border-radius: 5px;
+}
+
+.accordion-content {
+  /* backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.125); */
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    font-size: 18px;
+  }
+
+  .accordion {
+    width: 90%;
+  }
 }
 
 .floating-infobox-box-toggle-button  {
@@ -418,10 +519,9 @@ body {
 .floating-info-box-zone-busyness-sub-header {
   text-align: left;
   width: fit-content;
-  margin-bottom: 16px;
   margin-top: 0px;
-  /* margin: auto;
-  padding: auto; */
+  margin-bottom: 16 px;
+  padding-left: 10px;
 }
 
 .modal-overlay  {
@@ -654,6 +754,7 @@ input:checked + .slider:before {
     padding: 0px;
     margin: 6px;
     font-size: medium;
+    height: 44px;
   }
 
   .navbar-links button {
@@ -676,7 +777,7 @@ input:checked + .slider:before {
 
   .navbar-toggle-dark-mode-button {
     width: 44px;
-    height: 44px;
+    min-width: none;height: 44px;
     color: white;
     font-size: 12px;
     font-weight: 400;
@@ -800,12 +901,11 @@ input:checked + .slider:before {
 .floating-search-icon-container {
   z-index: 999;
   min-width: 44px;
-  max-width: 24px; /* Change to desired width for mobile */
   margin-top: 206px; /* Adjust to desired distance from top for mobile */
   right: 4px; /* Adjust to desired distance from right for mobile */
-  height: 44px;
-  padding: 6px;
-  position: absolute;   
+  height: 44px; 
+  position: absolute;
+  margin-right: 8px;
 }
 
 .floating-search-icon-container-button {
@@ -830,7 +930,7 @@ input:checked + .slider:before {
   margin-top: 260px; /* Adjust to desired distance from top for mobile */
   right: 4px; /* Adjust to desired distance from right for mobile */
   height: 44px;
-  padding: 6px;
+  margin-right: 8px;
   position: absolute;   
 }
 
@@ -894,6 +994,15 @@ input:checked + .slider:before {
   border-radius: 5px;
   height: 56px;
 }
+
+.slider-tick {
+  position: absolute;
+  bottom: -5px;
+  width: 2px;
+  height: 10px;
+  background-color: #d3d3d3;
+}
+
 
 .timelapse-button {
   margin-right: 8px;
@@ -1024,33 +1133,49 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .floating-info-box-event-analysis{
-  padding: auto;
-  margin: auto;
+
+  padding: 0 8px;
+}
+
+.floating-info-box-event-analysis > p {
+  margin-bottom: 4px;
+}
+
+.floating-info-box-event-card{
+  padding: 0 8px;
 }
 
 .button-tile-icons-container {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;  /* Updated this line */
+  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
 }
 
 .button-tile-icons {
   min-width: 44px;
-  width: 20%;
+  max-width: 42%;
+  width: calc(50% - 10px); /* calculate width for 2 elements per row considering some space between them */
   height: 44px;
   color: white;
   font-weight: 700;
   cursor: pointer;
   border: none;
   display: flex;
+  flex-direction: row; /* Arrange the icon and text in a row */
   background-color: #12131640;
   border: 1px solid rgba(255, 255, 255, 0.125);
   border-radius: 5px;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
+  align-items: center; /* Center the icon and text vertically */
+  justify-content: space-around; /* Center the icon and text horizontally */
+  margin-bottom: 10px; /* add some space between rows */
+  padding: 0 10px; /* Add some padding on the left and right */
+}
+
+.button-tile-icons span {
+  margin-left: 10px; /* Add some space to the left of the text */
 }
 
 .button-tile-icons:hover {
@@ -1062,9 +1187,147 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .line-chart-container {
-  
-  height: 250px;
+  height: 240px;
   width: 100%;
   margin-top: 20px;
-  
+  margin-bottom: 24px;
+}
+
+.line-chart-container-mobile {
+  height: 150px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.button-tile-icons.pressed{
+  background-color: blueviolet;
+}
+
+.floating-info-box-zone-header-mobile {
+  text-align: left;
+  width: fit-content;
+  margin-top: 0px;
+  margin-bottom: 16 px;
+  font-size: medium;
+}
+
+.floating-info-box-zone-busyness-sub-header-mobile{
+  text-align: left;
+  width: fit-content;
+  margin-top: 0px;
+  margin-bottom: 16 px;
+  font-size: 12px;
+}
+
+.floating-info-box-back-button-mobile{
+  margin-bottom: 12px;
+  padding-right: 12px;
+  align-self: center;
+  width: fit-content;
+  color: white;
+  text-align: left;
+  font-weight: 500;
+  background-color: rgba(18, 19, 22, 0);
+  height: 20px;
+  border-radius: 2px;
+  border: none;
+  cursor: pointer;
+}
+
+.floating-info-box-event-card-mobile{
+  padding: 0;
+}
+
+.accordion-mobile{
+  width: auto;
+  margin: auto;
+  height: fit-content;
+}
+
+.button-tile-icons-container-mobile {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* This creates two columns of equal width */
+  grid-gap: 8px; /* This adds some space between your grid items */
+  justify-items: center; /* This centers the items horizontally in the grid area */
+  align-items: center; /* This centers the items vertically in the grid area */
+}
+
+.button-tile-icons-mobile{
+  width: 85%;
+  height: 44px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  flex-direction: row; /* Arrange the icon and text in a row */
+  background-color: #12131640;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  border-radius: 5px;
+  align-items: center; /* Center the icon and text vertically */
+  justify-content: space-around; /* Center the icon and text horizontally */
+  margin-bottom: 10px; /* add some space between rows */
+  padding: 0 10px; /* Add some padding on the left and right */
+}
+
+.button-tile-icons-mobile.pressed{
+  background-color: blueviolet;
+}
+
+.timelapse-container-mobile{
+  padding-right: 12px;
+  width: 300px;
+  height: 48px;
+  position: fixed;
+  z-index: 1;
+  bottom: 36px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  display: flex;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(18, 19, 22, 0.3);	color: #fff;
+  border-radius: 5px;
+  height: 56px;
+}
+
+.timelapse-button-mobile{
+  margin-right: 8px;
+  max-width: 40px;
+  z-index: 1;
+	font-family: inherit;
+	transition: all 0.1s ease-in;
+	display: flex;
+	gap: 1rem;
+	cursor: pointer;
+	padding: 0.25rem 0.5rem;
+  background-color: rgba(18, 19, 22, 0);	color: #fff;
+	border: none;
+  border-radius: 5px;
+	align-items: center;
+	font-size: 15px;
+	font-weight: 500;
+	min-width: 9rem;
+	justify-content: center;
+}
+
+
+.timelapse-button:hover {
+	background-color: hsla(271, 76%, 53%, 0.2);
+}
+
+.timelapse-button:active {
+  background-color: hsla(271, 76%, 53%, 0.6);
+}
+
+.floating-play-icon-container{
+  z-index: 999;
+  min-width: 44px;
+  max-width: 24px; /* Change to desired width for mobile */
+  margin-top: 312px; /* Adjust to desired distance from top for mobile */
+  right: 4px; /* Adjust to desired distance from right for mobile */
+  height: 44px;
+  margin-right: 8px;
+  position: absolute;   
 }

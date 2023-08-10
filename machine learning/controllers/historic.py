@@ -51,6 +51,29 @@ def event_timelapse_impact(eventID):
     Controller for: HISTORIC/EVENT/TIMELAPSE/IMPACT\n
     Returns event timelaspse for 24hr period
     """
+    general_logger.info(f"event impact timelapse queried for event: {eventID}")
+    eventID = int(eventID)
+    timelapse_filtered = event_filter(load_file("static/PredictedImpact.json"), int(eventID))
+    return json.dumps(timelapse_filtered), 200
+
+@cache.memoize(timeout=0)
+def event_baselinetimelapse(eventID):
+    """
+    Controller for: HISTORIC/EVENT/TIMELINE\n
+    Returns event timelaspse for 24hr period
+    """
+    general_logger.info(f"event baseline timelapse queried for event: {eventID}")
+    eventID = int(eventID)
+    timelapse_filtered = event_filter(load_file("static/PredictedBaseline.json"), int(eventID))
+    return json.dumps(timelapse_filtered), 200
+
+
+@cache.memoize(timeout=0)
+def event_comparison(eventID):
+    """
+    Controller for: HISTORIC/EVENT/COMPARISON\n
+    Returns difference between event impact and baseline for 24hr period
+    """
     general_logger.info(f"event timelapse queried for event: {eventID}")
     general_logger.info("Note: this is a cached function")
     timelapse_filtered = query_database(eventID, Metric.TIMELAPSE_IMPACT)
@@ -78,7 +101,6 @@ def event_comparison(eventID):
     general_logger.info("Note: this is a cached function")
     comparison_filtered = query_database(eventID, Metric.COMPARISON)
     return comparison_filtered, 200
-
 
 
 ## HELPER FUNCTIONS ##

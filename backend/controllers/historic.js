@@ -185,5 +185,5 @@ const eventTimelapseBaseline = (req, res, next) => {
     });
 }
 
-
 module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapseBaseline, eventTimelapseImpact};
+

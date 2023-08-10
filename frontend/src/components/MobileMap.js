@@ -3,8 +3,6 @@ import React, { useEffect, useRef,useState, useMemo, lazy, Suspense } from 'reac
 import mapboxgl from 'mapbox-gl';
 import { scaleLinear } from 'd3-scale';
 import throttle from 'lodash/throttle';
-import { feature } from '@turf/helpers';
-import centroid from '@turf/centroid';
 
 // Context builder
 import { useMapContext } from './MapContext';
@@ -15,9 +13,11 @@ import MobileNavbar from './MobileNavbar';
 import MobileMapLegend from './MobileMapLegend';
 import MobileSearchIcon from './MobileSearchIcon';
 import MobileShowInfoBoxIcon from './MobileShowInfoBoxIcon';
+import MobileTimelapse from './MobileTimelapse';
+import MobileShowTimelpase from './MobileShowTimelapse'
 
 const MobileFloatingInfoBox = lazy(() => import('./MobileFloatingInfoBox'));
-const SplitViewMap = lazy(() => import('./SplitViewMap'));
+const MobileSplitViewMap = lazy(() => import('./MobileSplitViewMap'));
 
 // Note: the following lines are important to create a production build that includes mapbox
 // @ts-ignore
@@ -35,17 +35,19 @@ function MobileMap() {
   // add arrays
   const {neighbourhoods, prunedEvents} = useMapContext();
 
-  const [eventComparisonData, setEventComparisonData] = useState(null);
   const [timelapseData, setTimelapseData] = useState(null);
+  const [baselineTimelapseData, setBaselineTimelapseData] = useState(null)
 
   // import base states
-  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, setIsFloatingNavVisible, isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
+  const { colourPairIndex, setColourPairIndex, colourPairs, setNeighbourhoodEvents, eventsMap, setZone, setError, isSplitView, isFloatingNavVisible, setIsFloatingNavVisible} = useMapContext();
   
   // states to conditional render components
-  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing} = useMapContext();
+  const {setShowInfoBox, setShowNeighborhoodInfoBox, setShowChart, setShowChartData, setZoneID, setIsResetShowing, setIsDrawerOpen, isTimelapseVisible, setIsTimelapseVisible, eventComparisonData, setEventComparisonData, setIsThereALiveInfoBox} = useMapContext();
 
   // magic numbers
   const { originalLat, originalLng, zoom, pitch, boundary } = useMapContext();
+
+  const {eventID, setEventID} = useMapContext();
 
   // swapping styles
   const {mapStyle} = useMapContext();
@@ -56,6 +58,9 @@ function MobileMap() {
   const [eventBaselineScores, setEventBaselineScores] = useState(null);
   const [hashMapOfDifference, setHashMapOfDifference] = useState(null);
   const [hoveredZoneScore, setHoveredZoneScore] = useState(null);
+  const [showNoEventInfobox, setShowNoEventInfobox] = useState(true)
+  const [eventSelected, setEventSelected] = useState(false);
+  
 
   // objects for our map
   const mapContainer = useRef(null);
@@ -95,7 +100,6 @@ function MobileMap() {
     setShowInfoBox(false);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
-    setShowChart(false);
     setNeighbourhoodEvents([]);
     showAllMarkers(map.current);
 
@@ -174,9 +178,11 @@ function MobileMap() {
       // Mouseleave event
       map.on('mouseleave', neighbourhood.id, () => handleMouseLeave(neighbourhood, map));
 
-      // On click event
-      map.on('click', (e) => handleClick(map, e));
     });
+
+    // On click event
+    map.on('click', (e) => handleClick(map, e));
+    
   };
 
   // Define the mousemove handler outside of the initialiseMouseMapEvents function
@@ -257,35 +263,23 @@ function MobileMap() {
 
   const handleClick = (map, e) => {
 
+    isNeighbourhoodClickedRef.current = false;
+
     popup.current?.remove();
 
     const features = map.queryRenderedFeatures(e.point);
 
     if (features.length > 0 && features[0].id !== undefined) {
 
-      isNeighbourhoodClickedRef.current = true;  
-
-      disableColours();
+      neighbourhoods.features.forEach(neighbourhood =>{
+        map.setPaintProperty(neighbourhood.id+'-line', 'line-width', 0);
+      });
 
       const [firstFeature] = features;
 
-      // Create a GeoJSON feature object from the clicked feature
-      const geojsonFeature = feature(firstFeature.geometry);
-
-      // Use turf to calculate the centroid of the feature
-      const featureCentroid = centroid(geojsonFeature);
-
-      // Get the coordinates of the centroid
-      const [lng, lat] = featureCentroid.geometry.coordinates;
-
-      // Fly to the centroid of the polygon
-      map.flyTo({ center: [lng, lat], zoom: 15, essential: true });
-
-      map.setPaintProperty(firstFeature.id, 'fill-opacity', 0);
-
       const zone = firstFeature.properties.zone;
 
-      setZoneID(firstFeature.id)
+      setZoneID(firstFeature.id);
 
       // check to see if a map belongs in our hashmap of events or otherwise filter by events that match the location id on each event by the current id of our zone
       const matchingEvents = eventsMap[firstFeature.id] || prunedEvents.filter(event => event.Zone_ID === firstFeature.id);
@@ -294,7 +288,12 @@ function MobileMap() {
 
       if (matchingEvents.length > 0) {
         setShowInfoBox(true);
-      } else {
+        setShowNeighborhoodInfoBox(false);
+        isNeighbourhoodClickedRef.current = true;
+        map.setPaintProperty(firstFeature.id+'-line', 'line-width', 4);
+      } 
+      
+      if (matchingEvents.length == 0) {
         // Show the neighborhood info box since there are no matching events
         setShowNeighborhoodInfoBox(true);
       }
@@ -303,6 +302,7 @@ function MobileMap() {
       setIsResetShowing(true)
     }
   };
+
 
   // Fetch Request for Historic Busyness
   const getHistoricBusyness = async (Event_ID) => {
@@ -334,9 +334,15 @@ function MobileMap() {
 
   const visualiseEventImpact = (Event_ID) => {
 
+    setIsThereALiveInfoBox(true);
+    setIsDrawerOpen(false);
+    setEventSelected(true);
+    setShowChart(false);
+    setShowNoEventInfobox(false);
+    setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
-    setIsTimelapseVisible(true);
+    setIsTimelapseVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
@@ -345,12 +351,13 @@ function MobileMap() {
       map.current.setPaintProperty(neighbourhood.id + '-line', 'line-width', 0);
     });
     
-    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.92769581823755, 40.768749153384405]}); 
+    map.current.flyTo({zoom: 11.2, essential: true, center: [-73.97517705676826, 40.75432169094746]}); 
 
     getHistoricBusyness(Event_ID);
+    setEventID(Event_ID);
     fetchEventComparison(Event_ID);
     setTimeout(() => fetchTimelapse(Event_ID), 600)
-  
+    fetchBaslineTimelapse(Event_ID)
   }
 
   const highlightEventImpact = (impactedZones) => {
@@ -421,7 +428,7 @@ function MobileMap() {
   const eventBaselineHashMap = useMemo(() => {
     if (!eventBaselineScores) return {};  
     return {...eventBaselineScores}
-  }, [eventBaselineScores]);    
+  }, [eventBaselineScores]);  
 
   useEffect(() => {
 
@@ -474,9 +481,7 @@ function MobileMap() {
         add3DBuildings(map.current);
         renderEvents(map.current);
         initialiseMouseMapEvents(map.current);
-        setTimeout(() => {
-          updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
-        }, 900);
+        updateLayerColours(map.current, false, originalBusynessHashMap, busynessHashMap)
       }
   
       if (!map.current) {
@@ -545,7 +550,22 @@ function MobileMap() {
       console.error('Issue with fetch request for timelapse function:', error);
       setError(error);
      }
+  }
 
+
+  const fetchBaslineTimelapse = async (Event_ID) => {
+
+    try {
+      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/baselinetimelapse`);
+      if (!baselineTimelapseResponse) {
+       throw new Error('Network response was not ok');
+      }
+      const baselineTimelapseData = await baselineTimelapseResponse.json();
+      setBaselineTimelapseData(baselineTimelapseData);
+     } catch (error) {
+      console.error('Issue with fetch request for timelapse function:', error);
+      setError(error);
+     }
   }
 
   return (
@@ -556,7 +576,9 @@ function MobileMap() {
 
         {isSplitView ? (
           <Suspense fallback={<div>Loading SplitViewMap...</div>}>
-            <SplitViewMap 
+            <MobileSplitViewMap 
+              baselineTimelapseData={baselineTimelapseData}
+              timelapseData={timelapseData}
               eventBaselineHashMap={eventBaselineHashMap}
               originalBusynessHashMap={originalBusynessHashMap}
               busynessHashMap={busynessHashMap}
@@ -572,13 +594,15 @@ function MobileMap() {
 
           <MobileShowInfoBoxIcon />
 
+          <MobileShowTimelpase />
+
           <MobileFloatingNav 
             map={map}
             disableColours = {disableColours}
             isNeighbourhoodClickedRef = {isNeighbourhoodClickedRef}
             changeColourScheme={changeColourScheme}
             enableColours={enableColours}
-            />
+          />
 
           <MobileFloatingInfoBox
             map={map}
@@ -598,6 +622,15 @@ function MobileMap() {
             colours={colourPairs[colourPairIndex]} 
             hoveredZoneScore={hoveredZoneScore}
           />
+          
+          {isTimelapseVisible ?
+            <MobileTimelapse
+              map={map}
+              originalBusynessHashMap={originalBusynessHashMap}
+              busynessHashMap={busynessHashMap}
+              timelapseData={timelapseData}
+            /> : <></>
+          }
 
           </>
         )}
