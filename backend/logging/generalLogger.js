@@ -2,15 +2,23 @@ const winston = require("winston");
 const {transports, format} = winston;
 const path = require("path")
 
-// function to extract filename from module name passed to logger
+/**
+ * function to extract filename from module name passed to logger
+ * 
+ * @param {module} callingModule 
+ * @returns Formatted filename
+ */
 var formatLabel = function (callingModule) {
     var parts = callingModule.filename.split(path.sep);
     const newparts = parts[parts.length - 2] + path.sep + parts.pop();
     return newparts
 };
 
-//Format for general logging
-// [level] 'datetime' ['filename'] 'message'
+/**
+ * Format for general logging
+ * 
+ * [level] 'datetime' ['filename'] 'message'
+ */
 const generalFormat = format.printf(({ level, timestamp, label, message}) => {
     return `[${level}] ${timestamp} [${label}] ${message}`;
   });

@@ -1,39 +1,37 @@
 const axios = require("axios")
 const generalLogger = require("../logging/generalLogger")(module)
+const {validate_response_day, validate_response_hour} = require("./validations/busyness")
 require("dotenv").config();
 
 
-//NOTE:
-// NODE CONTROLLERS NOW DO LESS WORK THAN BEFORE.
-// THIS IS DUE TO EXTRA FORMATTING AND FILTERING NOW TAKING PLACE IN THE FLASK API
-// I HAVE REMPVED CHECKS FROM HISTORIC AND PREDICT CONTROLLERS AS THEY ARE NOW REDUNDANT
-// IT IS NECESSARY TO DISCUSS THE FORMAT OF DATA NOW REQUIRED BY FRONTEND.
-// GOING FORWARD, THE PURPOSE OF THESE CONTROLLERS WILL BE TO RESHAPE DATA INTO
-// PRECISELY WHAT THE FRONT NEEDS (FORMAT, STRUCTURE, DATA STRUCTURE ETC)
-
-//fetch event impact from ML API:
+/**
+ * Fetch event impact from the Prediction API
+ * Event impact shows the busyness when the event is ongoing
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventImpact = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
   generalLogger.info(`impact requested for event: ${eventID}`)
 
   const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/impact?key=${process.env.FLASK_API_KEY}` 
-
   axios.get(uri)
+    // Fetch OK
     .then(response => {
-      // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
-        generalLogger.warn(`event impact list is empty: ${response.data}`)
-        res.status(200).json({});
-        next()
+      // Validate response data
+      if (validate_response_hour(response.data)){
+        res.status(200).json(response.data)
       }
       else {
-        generalLogger.info("event impact result is OK")
-        res.status(200).json(response.data)
-        next()
+        res.status(500).json("Response from ML API did not pass validation checks")
       }
+      next()
     })
-    // If error, respond 500 and log error message
+    // Fetch ERROR, respond 500 and log error message
     .catch(error => {
       generalLogger.error(`error getting predictions: ${error}`)
       res.status(500).json({"error": error})
@@ -42,6 +40,15 @@ const eventImpact = (req, res, next) => {
 }
 
 
+/**
+ * Fetch event baseline from the Prediction API
+ * Event baseline shows the normal busyness when the event is not on
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventBaseline = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
@@ -50,20 +57,18 @@ const eventBaseline = (req, res, next) => {
   const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/baseline?key=${process.env.FLASK_API_KEY}` 
 
   axios.get(uri)
+    // Fetch OK
     .then(response => {
-      // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
-        generalLogger.warn(`events baseline list is empty: ${response.data}`)
-        res.status(200).json({});
-        next()
-      }
-      else { 
-        generalLogger.info("event baseline result is OK")
+      // Validate response data
+      if (validate_response_hour(response.data)){
         res.status(200).json(response.data)
-        next()
       }
+      else {
+        res.status(500).json("Response from ML API did not pass validation checks")
+      }
+      next()
     })
-    // If error, respond 500 and log error message
+    // Fetch ERROR, respond 500 and log error message
     .catch(error => {
       generalLogger.error(`error getting event baseline: ${error}`)
       res.status(500).json({"error": error})
@@ -71,6 +76,16 @@ const eventBaseline = (req, res, next) => {
     });
 }
 
+
+/**
+ * Fetch event comparison from the Prediction API
+ * Event comparison shows the difference between event impact and event baseline
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
 const eventComparison = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
@@ -79,20 +94,18 @@ const eventComparison = (req, res, next) => {
   const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/comparison?key=${process.env.FLASK_API_KEY}` 
   
   axios.get(uri)
+    // Fetch OK
     .then(response => {
-      // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
-        generalLogger.warn(`events comparison list is empty: ${response.data}`)
-        res.status(200).json({});
-        next()
+      // Validate response data
+      if (validate_response_day(response.data)){
+        res.status(200).json(response.data)
       }
       else {
-        generalLogger.info("event comparison result is OK")
-        res.status(200).json(response.data)
-        next()   
+        res.status(500).json("Response from ML API did not pass validation checks")
       }
+      next()
     })
-    // If error, respond 500 and log error message
+    // Fetch ERROR, respond 500 and log error message
     .catch(error => {
       generalLogger.error(`error getting event comparison: ${error.message}`)
       res.status(500).json({"error": error.message})
@@ -100,64 +113,77 @@ const eventComparison = (req, res, next) => {
     });
 }
 
-const eventTimelapse = (req, res, next) => {
+/**
+ * Fetch event impact timelapse from the Prediction API
+ * Event timelapse shows the busyness for the 24hrs surrounding an event.
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
+const eventTimelapseImpact = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
-  generalLogger.info(`timelapse requested for event: ${eventID}`)
+  generalLogger.info(`impact timelapse requested for event: ${eventID}`)
 
-  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse?key=${process.env.FLASK_API_KEY}` 
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse/impact?key=${process.env.FLASK_API_KEY}` 
 
   axios.get(uri)
+    // Fetch OK
     .then(response => {
-      generalLogger.info(`${response} - loggin response`)
-      // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
-        generalLogger.warn(`events comparison list is empty: ${response.data}`)
-        res.status(200).json({});
-        next()
+      // Validate response data
+      if (validate_response_day(response.data)){
+        res.status(200).json(response.data)
       }
       else {
-        generalLogger.info("event timelapse result is OK")
-        res.status(200).json(response.data)
-        next()   
+        res.status(500).json("Response from ML API did not pass validation checks")
       }
+      next()
     })
-    // If error, respond 500 and log error message
+    // Fetch ERROR, respond 500 and log error message
     .catch(error => {
-      generalLogger.error(`error getting event comparison: ${error.message}`)
+      generalLogger.error(`error getting event timelapse: ${error.message}`)
       res.status(500).json({"error": error.message})
       next()
     });
 }
 
-const eventBaselineTimelapse = (req, res, next) => {
+/**
+ * Fetch event baseline timelapse from the Prediction API
+ * Event timelapse shows the busyness for the 24hrs surrounding an event.
+ * 
+ * Handles empty/undefined API response. 
+ * 
+ * Returns ML API dictionary results
+ * 
+ */
+const eventTimelapseBaseline = (req, res, next) => {
   res.req.ip //sets the object
   let eventID = req.params.event
-  generalLogger.info(`timelapse requested for event: ${eventID}`)
+  generalLogger.info(`baseline timelapse requested for event: ${eventID}`)
 
-  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/baselinetimelapse?key=${process.env.FLASK_API_KEY}` 
+  const uri = `${process.env.FLASK_API_URL}/historic/${eventID}/timelapse/baseline?key=${process.env.FLASK_API_KEY}` 
 
   axios.get(uri)
+    // Fetch OK
     .then(response => {
-      generalLogger.info(`${response} - loggin response`)
-      // Handle empty/null API result:
-      if (response.data === null || response.data === undefined || response.data.length === 0){
-        generalLogger.warn(`events comparison list is empty: ${response.data}`)
-        res.status(200).json({});
-        next()
+      // Validate response data
+      if (validate_response_day(response.data)){
+        res.status(200).json(response.data)
       }
       else {
-        generalLogger.info("event timelapse result is OK")
-        res.status(200).json(response.data)
-        next()   
+        res.status(500).json("Response from ML API did not pass validation checks")
       }
+      next()
     })
-    // If error, respond 500 and log error message
+    // Fetch ERROR, respond 500 and log error message
     .catch(error => {
-      generalLogger.error(`error getting event comparison: ${error.message}`)
+      generalLogger.error(`error getting event timelapse: ${error.message}`)
       res.status(500).json({"error": error.message})
       next()
     });
 }
 
-module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapse, eventBaselineTimelapse};
+
+module.exports = {eventImpact, eventBaseline, eventComparison, eventTimelapseBaseline, eventTimelapseImpact};

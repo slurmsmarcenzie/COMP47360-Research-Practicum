@@ -34,6 +34,7 @@ def current():
 
     datetimeNY = datetime.datetime.now(tz=ZoneInfo("America/New_York"))
     general_logger.info("prediction quried for datetime: {date}".format(date=datetimeNY))
+    general_logger.info("Note: this is a cached function")
 
     try:
         data = general_prediction(datetimeNY)
@@ -42,4 +43,4 @@ def current():
         general_logger.error("Error getting predictions from model: {exc}".format(exc=exc))
         raise abort(500, "Error getting model predictions")
     
-    return json.dumps(data), 200
+    return data, 200

@@ -11,7 +11,7 @@ import jwt
 
 bcrypt = Bcrypt() # Used to encrypt user passwords before storing in DB
 login_manager = LoginManager()
-login_manager.login_view = "base.login"
+login_manager.login_view = "portal.login"
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -26,7 +26,7 @@ def home():
     """
 
     if current_user.is_authenticated:
-        return redirect(url_for("base.dashboard"))
+        return redirect(url_for("portal.dashboard"))
     return render_template("home.html")
 
 
@@ -38,7 +38,7 @@ def login():
     Will redirect to the dashboard if user is already logged in.    
     """
     if current_user.is_authenticated:
-        return redirect(url_for("base.dashboard"))
+        return redirect(url_for("portal.dashboard"))
 
     form = LoginForm()
 
@@ -49,7 +49,7 @@ def login():
         if user:
             if bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user)
-                return redirect(url_for("base.dashboard"))
+                return redirect(url_for("portal.dashboard"))
             
     return render_template("login.html", form=form)
 
@@ -70,7 +70,7 @@ def logout():
     Logs user out an redirects them to the Portal Home page
     """
     logout_user()
-    return redirect(url_for("base.home"))
+    return redirect(url_for("portal.home"))
 
 
 def register():
@@ -87,7 +87,7 @@ def register():
     """
     
     if current_user.is_authenticated:
-        return redirect(url_for("base.dashboard"))
+        return redirect(url_for("portal.dashboard"))
 
     form = RegisterForm()
 
@@ -98,6 +98,6 @@ def register():
         new_user = User(username=form.username.data, password = hashed_pwd, access_token=token)
         db.session.add(new_user)
         db.session.commit()
-        return redirect(url_for("base.login"))
+        return redirect(url_for("portal.login"))
 
     return render_template("register.html", form=form)
