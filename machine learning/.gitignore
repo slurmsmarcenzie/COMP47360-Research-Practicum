@@ -1,0 +1,4 @@
+/env
+/__pycache__
+/logging_flask/logs/
+.env
