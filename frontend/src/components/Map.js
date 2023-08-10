@@ -536,7 +536,7 @@ function Map() {
   const fetchTimelapse = async (Event_ID) => {
 
     try {
-      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse`);
+      const timelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse/impact`);
       if (!timelapseResponse) {
        throw new Error('Network response was not ok');
       }
@@ -548,11 +548,10 @@ function Map() {
      }
   }
 
-
   const fetchBaslineTimelapse = async (Event_ID) => {
 
     try {
-      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/baselinetimelapse`);
+      const baselineTimelapseResponse = await fetch(`${BASE_API_URL}/historic/${Event_ID}/timelapse/baseline`);
       if (!baselineTimelapseResponse) {
        throw new Error('Network response was not ok');
       }
