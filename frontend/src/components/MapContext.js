@@ -46,6 +46,7 @@ export const MapProvider = ({ children }) => {
     const [showChart, setShowChart] = useState(true);  // This boolean state controls the visibility of the chart. If it's true, the chart is displayed; if false, the chart is hidden.
     const [showChartData, setShowChartData] = useState(false); // determines the data being used when setShowChart has been set to true
     const [showMatchingEvent, setShowMatchingEvent] = useState(true);
+    const [isAccordionActive, setIsAccordionActive] = useState(false);
 
     // zone and event setters used in floating info box and elsewhere
     const [zoneID, setZoneID] = useState(null);
@@ -551,7 +552,8 @@ export const MapProvider = ({ children }) => {
         isTimelapseVisible, setIsTimelapseVisible,
         eventComparisonData, setEventComparisonData,
         eventID, setEventID,
-        
+        isAccordionActive, setIsAccordionActive,
+                
         neighbourhoods,
         prunedEvents,
         colourPairs,

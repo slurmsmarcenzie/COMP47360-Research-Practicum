@@ -168,4 +168,3 @@ function MobileLineChart ({map})  {
 
     
     export default MobileLineChart;
-    

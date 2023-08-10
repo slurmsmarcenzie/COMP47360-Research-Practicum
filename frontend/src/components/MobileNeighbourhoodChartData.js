@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import MobileAccordion from './Accordion';
-import MobileLineChart from './LineChart';
+import MobileAccordion from './MobileAccordion';
+import MobileLineChart from './MobileLineChart';
 import 'chart.js/auto';
 import "../App.css";
 import { useMapContext } from './MapContext';
@@ -22,6 +22,8 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     const [renderChart, setRenderChart] = useState(null);
     const [selectedValues, setSelectedValues] = useState([]);
     const [showLineChart, setShowLineChart] = useState(false);
+
+    const {isAccordionActive, setIsAccordionActive} = useMapContext();
     
     // This state holds a separate copy of the data and options for a chart. 
     // This copy isn't used directly in rendering but is useful for storing temporary or intermediary states of the chart's data and options.
@@ -328,10 +330,11 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     return (
         <div className='parent-chart-container'> 
   <div className="accordion-mobile">
-    {accordionData.map(({ title, content }) => (
-      <MobileAccordion key={title} title={title} content={content} />
+    {accordionData.map(({ index, title, content }) => (
+      <MobileAccordion key={title} title={title} content={content} index={index}/>
     ))}
       </div>
+      {!isAccordionActive && (
             <div className='floating-infobox-box-button-container'>
                 <div className="radio-button">
                     <input
@@ -361,6 +364,7 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
                     {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
                 </button>
             </div>
+        )}
         </div>
     );
 }
