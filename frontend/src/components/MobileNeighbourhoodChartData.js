@@ -188,8 +188,8 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
 
         entries.sort((a, b) => b[1] - a[1]);
 
-        // Filter only entries with a change greater than or equal to 0.44
-        filteredEntries = entries.filter((entry) => entry[1] >= 0.44);
+        // Filter only entries with a change greater than or equal to 0.22
+        filteredEntries = entries.filter((entry) => entry[1] >= 0.22);
 
         // Get only the top 5 most impacted areas
         filteredEntries = filteredEntries.slice(0, 8);
@@ -212,8 +212,8 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
 
         entries.sort((a, b) => a[1] - b[1]);
 
-        // Filter only entries with a change less than 0.44
-        filteredEntries = entries.filter((entry) => entry[1] <= -0.22);
+        // Filter only entries with a change less than 0.11
+        filteredEntries = entries.filter((entry) => entry[1] <= -0.11);
 
         // Get only the bottom 5 least impacted areas
         // filteredEntries = filteredEntries.slice(0, 8);
