@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const {getEvents} = require("../controllers/meta");
+const {getEvents, getLocations} = require("../controllers/meta");
 
-// Router for 'app/v1/meta/events'
+// Router for 'META/EVENTS'
 router.route("/events").get(getEvents);
+router.route("/locations").get(getLocations);
 
 module.exports = router;
