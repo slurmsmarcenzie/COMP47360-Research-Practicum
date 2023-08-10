@@ -4,7 +4,7 @@ import "../App.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
-function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMap}) {
+function DualMapTimelpase ({topMap, bottomMap, originalBusynessHashMap, timelapseData, baselineTimelapseData, busynessHashMap}) {
 
     const { updateLayerColours, neighbourhoodEvents } = useMapContext();
 
@@ -38,13 +38,16 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
 
     const endTimelapse = () => {
         
+        const resetPosition = baselineTimelapseData[16]
+
         setIndex(0);
         setElapsedTime(0);
         setIsPlaying(false);
         clearInterval(timerRef.current);
 
         setTimeout(() => {
-            updateLayerColours(map.current, false, busynessHashMap, busynessHashMap);
+            updateLayerColours(topMap.current, false, busynessHashMap, resetPosition);
+            updateLayerColours(bottomMap.current, false, busynessHashMap, busynessHashMap);
         }, 400)
     }
 
@@ -55,25 +58,30 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         setElapsedTime(newElapsedTime);
     
         // Ensure we have a valid integer index
-
         const index = Math.floor(newElapsedTime);
         if (timelapseData && timelapseData.hasOwnProperty(index)) {
-            const ActiveHashMap = timelapseData[index];
-            updateLayerColours(map.current, false, originalBusynessHashMap, ActiveHashMap);
+            const TimelapseHashMap = timelapseData[index];
+            const BaselineHashMap = baselineTimelapseData[index];
+            updateLayerColours(bottomMap.current, false, originalBusynessHashMap, TimelapseHashMap);
+            updateLayerColours(topMap.current, false, originalBusynessHashMap, BaselineHashMap);
             setIndex(index);
         }
     };
 
     useEffect(() => {
+
         if (elapsedTime >= 24) {
             endTimelapse();
         }
 
         if(Number.isInteger(elapsedTime) && timelapseData && timelapseData.hasOwnProperty(index)){
-            const ActiveHashMap = timelapseData[index];
-            updateLayerColours(map.current, false, originalBusynessHashMap, ActiveHashMap);
+            const TimelapseHashMap = timelapseData[index];
+            const BaselineHashMap = baselineTimelapseData[index];
+            updateLayerColours(bottomMap.current, false, originalBusynessHashMap, TimelapseHashMap);
+            updateLayerColours(topMap.current, false, originalBusynessHashMap, BaselineHashMap);
             setIndex(index + 1);
         }
+        
     }, [elapsedTime]);
 
     useEffect(() => {
@@ -83,7 +91,7 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
     }, []);
 
     return (
-        <div className='timelapse-container'>
+        <div className='timelapse-container-mobile'>
             <button className="timelapse-button" onClick={handlePlay}>
                 {isPlaying ? <FontAwesomeIcon icon={faPause} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faPlay} style={{color:'#D3D3D3'}}/>}
                 <label htmlFor="toggle" className="timelapse-label">{isPlaying ? "pause" : "play"}</label>
@@ -99,4 +107,4 @@ function Timelapse ({map, originalBusynessHashMap, timelapseData, busynessHashMa
         </div>
     );
 }
-export default Timelapse;
+export default DualMapTimelpase;

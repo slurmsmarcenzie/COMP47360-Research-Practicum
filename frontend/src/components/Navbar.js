@@ -35,7 +35,7 @@ export default function Navbar() {
   return (
     <div className="navbar">
       <Helmet>
-        <link rel="preload" href={logoImage} as="image" />
+        <link rel="preload" href={logoImage} as="image"/>
       </Helmet>
       <div className="navbar-links-wrapper">
         <button className="transparent-button" onClick={openModal}>
@@ -45,6 +45,7 @@ export default function Navbar() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             alt="After Party Logo"
+            style={{ width: '120px', height: 'auto'}}
           />
         </button>
       </div>

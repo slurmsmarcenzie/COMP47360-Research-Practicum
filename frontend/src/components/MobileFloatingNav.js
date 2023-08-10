@@ -28,29 +28,16 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef,  disableColours}) {
     <FontAwesomeIcon style={{width: '24px', height: '24px'}} icon={tileIcons[index % tileIcons.length]} />
   </div>
 );
-  
-  const floatingNavZoomToLocation = (longitude, latitude) => {
-    map.current.flyTo({
-      center: [longitude, latitude],
-      zoom: 15, // specify your desired zoom level
-      essential: true
-    });
-  }
-  
+    
   const floatingNavSetLineWidth = (zone) => {
       const lineLayerId = zone + '-line';
       map.current.setPaintProperty(lineLayerId, 'line-width', 4);
   } 
 
   const reviewEvent = (selectedEvent) => {
-    const latitude = selectedEvent.Event_Location.Latitude;
-    const longitude = selectedEvent.Event_Location.Longitude;
-
+ 
     setZone(selectedEvent.Zone_ID);
-
-    floatingNavZoomToLocation(longitude, latitude);
     floatingNavSetLineWidth(selectedEvent.Zone_ID);
-    disableColours();
     removeMarker();
 
     isNeighbourhoodClickedRef.current = true;
@@ -59,7 +46,6 @@ function MobileFloatingNav({map, isNeighbourhoodClickedRef,  disableColours}) {
     setShowInfoBox(true);
     setShowNeighborhoodInfoBox(false);
     setShowChartData(false);
-
     setEventName(selectedEvent.Event_Name);
     setIsResetShowing(true);
   };

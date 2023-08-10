@@ -8,6 +8,7 @@ export default function MobileSearchIcon() {
 
     const {isNavVisible, setIsNavVisible} = useMapContext();
     const {isMobileTileOpen, setIsMobileTileOpen} =useMapContext()
+    const {isTimelapseVisible, setIsTimelapseVisible} = useMapContext();
 
     return (
         <div className='floating-search-icon-container'>
@@ -15,6 +16,9 @@ export default function MobileSearchIcon() {
                 onClick={() => {
                     // setIsNavVisible(!isNavVisible);
                     setIsMobileTileOpen(!isMobileTileOpen);
+                    if (isTimelapseVisible) {
+                        setIsTimelapseVisible(false);
+                    }
                 }}>
                 <FontAwesomeIcon icon={faSearch} style={{color:'#D3D3D3'}}/>
             </button>   

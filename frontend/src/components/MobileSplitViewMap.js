@@ -1,26 +1,27 @@
-import React, { useState, useCallback, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useRef} from 'react';
 import Map from 'react-map-gl';
 import mapboxgl from 'mapbox-gl';
 import SplitViewController from '../components/SplitViewController'
-import DualMapTimelapse from './DualMapTimelapse';
+import MobileDualMapTimelapse from './MobileDualMapTimelapse';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useMapContext } from './MapContext';
 import { scaleLinear } from 'd3-scale';
 
-  const LeftMapStyle = {
-      position: 'absolute',
-      width: '50%',
-      height: '100vh'
-  };
-  
-  const RightMapStyle = {
+const TopMapStyle = {
     position: 'absolute',
-    left: '50%',
-    width: '50%',
-    height: '100vh'
-  };
+    top: '0',
+    width: '100%',
+    height: '50vh'
+};
+
+const BottomMapStyle = {
+  position: 'absolute',
+  bottom: '0',
+  width: '100%',
+  height: '50vh'
+};
   
-function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, baselineTimelapseData}) {
+function MobileSplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, baselineTimelapseData}) {
 
   const {MAPBOX_ACCESS_TOKEN, isSplitView, setSplitView, renderNeighbourhoods, markers, mapStyle} = useMapContext();
 
@@ -28,8 +29,8 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, bas
 
   const {colourPairs, colourPairIndex, neighbourhoods} = useMapContext();
 
-  const leftMapRef = useRef();
-  const rightMapRef = useRef();
+  const topMapRef = useRef();
+  const bottomMapRef = useRef();
   const popup = useRef(null);
 
   const [viewState, setViewState] = useState({
@@ -42,19 +43,21 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, bas
   const [mode, setMode] = useState('side-by-side');
   const [activeMap, setActiveMap] = useState('left');
 
-  const onLeftMoveStart = useCallback(() => setActiveMap('left'), []);
-  const onRightMoveStart = useCallback(() => setActiveMap('right'), []);
+  const onTopMoveStart = useCallback(() => setActiveMap('top'), []);
+  const onBottomMoveStart = useCallback(() => setActiveMap('bottom'), []);
   const onMove = useCallback(evt => setViewState(evt.viewState), []);
 
+  const height = typeof window === 'undefined' ? 100 : window.innerHeight;
+
+  const topMapPadding = useMemo(() => {
+    return {top: mode === 'split-screen' ? height / 2 : 0, left: 0, right: 0, bottom: 0};
+  }, [height, mode]);
+  
+  const bottomMapPadding = useMemo(() => {
+    return {bottom: mode === 'split-screen' ? height / 2 : 0, top: 0, left: 0, right: 0};
+  }, [height, mode]);
+
   const width = typeof window === 'undefined' ? 100 : window.innerWidth;
-
-  const leftMapPadding = useMemo(() => {
-    return {left: mode === 'split-screen' ? width / 1 : 0, top: 0, right: 0, bottom: 0};
-  }, [width, mode]);
-
-  const rightMapPadding = useMemo(() => {
-    return {right: mode === 'split-screen' ? width / 1 : 0, top: 0, left: 0, bottom: 0};
-  }, [width, mode]);
 
   // Map Event Listeners for mouse
   const handleSplitScreenMouseInteractions = (map, hashmap) => {
@@ -146,21 +149,19 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, bas
     });
   }
 
-  const onLeftMapLoad = useCallback((event) => {
+  const onTopMapLoad = useCallback((event) => {
     const map = event.target;
-    leftMapRef.current = map;
-    console.log('r', map);
+    topMapRef.current = map;
     renderNeighbourhoods(map);
-    updateLayerColours(map, true, eventBaselineHashMap, busynessHashMap)
+    updateLayerColours(map, false, eventBaselineHashMap, busynessHashMap)
     handleSplitScreenMouseInteractions(map, eventBaselineHashMap)
   }, [renderNeighbourhoods]);
 
-  const onRightMapLoad = useCallback((event) => {
+  const onBottomMapLoad = useCallback((event) => {
     const map = event.target;
-    rightMapRef.current = map;
-    console.log('r', map);
+    bottomMapRef.current = map;
     renderNeighbourhoods(map);
-    updateLayerColours(map, false, eventBaselineHashMap, busynessHashMap)
+    updateLayerColours(map, true, eventBaselineHashMap, busynessHashMap)
     handleSplitScreenMouseInteractions(map, busynessHashMap)
   }, [renderNeighbourhoods]);
 
@@ -168,39 +169,37 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, bas
     <>
       <div style={{position: 'relative', height: '100vh'}}>
         <Map
-          id="left-map"
+          id="top-map"
           {...viewState}
-          padding={leftMapPadding}
-          onMoveStart={onLeftMoveStart}
-          onMove={activeMap === 'left' ? onMove : undefined}
-          style={LeftMapStyle}
+          padding={topMapPadding}
+          onMoveStart={onTopMoveStart}
+          onMove={activeMap === 'top' ? onMove : undefined}
+          style={TopMapStyle}
           mapStyle={mapStyle}
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
-          onLoad={map => onLeftMapLoad(map)} // Added this line
+          onLoad={map => onTopMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', left: '64px', fontSize: '14px',  fontWeight: '400'}}>Typical Manhattan Activity Map</div>
 
         <Map
-          id="right-map"
+          id="bottom-map"
           {...viewState}
-          padding={rightMapPadding}
-          onMoveStart={onRightMoveStart}
-          onMove={activeMap === 'right' ? onMove : undefined}
-          style={RightMapStyle}
+          padding={bottomMapPadding}
+          onMoveStart={onBottomMoveStart}
+          onMove={activeMap === 'bottom' ? onMove : undefined}
+          style={BottomMapStyle}
           mapStyle={mapStyle}
           mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
-          onLoad={map => onRightMapLoad(map)} // Added this line
+          onLoad={map => onBottomMapLoad(map)} // Added this line
         />
-        <div className="split-view-map-label" style={{top: '18px', right: '64px', fontSize: '14px', fontWeight: '400'}}>Event-Impacted Manhattan Activity Map</div>
         
         <SplitViewController
           isSplitView={isSplitView}
           setSplitView={setSplitView}
         />
 
-        <DualMapTimelapse 
-          leftMap={leftMapRef}
-          rightMap={rightMapRef}
+        <MobileDualMapTimelapse 
+          topMap={topMapRef}
+          bottomMap={bottomMapRef}
           eventBaselineHashMap={eventBaselineHashMap}
           busynessHashMap={busynessHashMap}
           baselineTimelapseData={baselineTimelapseData}
@@ -211,4 +210,4 @@ function SplitViewMap({eventBaselineHashMap, busynessHashMap, timelapseData, bas
   );
 }
 
-export default SplitViewMap;
+export default MobileSplitViewMap;

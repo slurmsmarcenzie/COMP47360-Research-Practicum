@@ -47,4 +47,3 @@ portal.route("/portal/login", methods=("GET", "POST"))(login)
 portal.route("/portal/logout")(logout)
 portal.route("/portal/register", methods=("GET", "POST"))(register)
 portal.route("/portal/dashboard")(dashboard)
-

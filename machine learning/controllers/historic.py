@@ -216,4 +216,3 @@ def query_database(eventID, metric, time=None):
 #     except Exception as exc:
 #         general_logger.error(f"There was an error filtering '{file.name}': {exc}")
 #         raise abort(500, f"Unable to filter '{file.name}'")
-

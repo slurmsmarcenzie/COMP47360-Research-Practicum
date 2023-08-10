@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
-import afterParty from '../images/after-party-logo-white.png';
-import afterPartyHover from '../images/after-party-logo-violet.png';
+import afterParty from '../images/after-party-logo-white.webp';
+import afterPartyHover from '../images/after-party-logo-violet.webp';
 import Modal from './Modal';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
