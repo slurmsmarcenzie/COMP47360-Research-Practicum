@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import '../App.css';
 import afterParty from '../images/after-party-logo-white.webp';
 import afterPartyHover from '../images/after-party-logo-violet.webp';
-import Modal from './Modal';
+import MobileModal from './MobileModal';
 import { useMapContext } from './MapContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
@@ -58,7 +58,7 @@ export default function MobileNavbar() {
         </div>
       </div>
       {showModal && (
-        <Modal onClose={closeModal} />
+        <MobileModal onClose={closeModal} />
       )}
     </div>
   );

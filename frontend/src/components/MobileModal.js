@@ -3,7 +3,7 @@ import '../App.css';
 import afterParty from '../images/after-party-logo-white.png';
 
 
-export default function Modal({ onClose }) {
+export default function MobileModal({ onClose }) {
 
   const handleOutsideClick = (e) => {
     if (e.target.id === 'modal') {
@@ -13,7 +13,7 @@ export default function Modal({ onClose }) {
 
   return (
     <div id="modal" className="modal-overlay" onClick={handleOutsideClick}>  
-      <div className="modal-content">
+      <div className="mobile-modal-content">
         <button className="modal-close" onClick={onClose}>
           X
         </button>
