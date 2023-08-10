@@ -358,6 +358,7 @@ body {
   margin-top: 12px;
   width: 100%;
   gap: 4px;
+  height: fit-content;
 }
 
 .floating-info-box-chart-container {
@@ -1186,10 +1187,16 @@ input[type=range]::-webkit-slider-thumb {
 }
 
 .line-chart-container {
-  height: 210px;
+  height: 240px;
   width: 100%;
   margin-top: 20px;
   margin-bottom: 24px;
+}
+
+.line-chart-container-mobile {
+  height: 150px;
+  width: 100%;
+  margin-top: 12px;
 }
 
 .button-tile-icons.pressed{
@@ -1234,6 +1241,7 @@ input[type=range]::-webkit-slider-thumb {
 .accordion-mobile{
   width: auto;
   margin: auto;
+  height: fit-content;
 }
 
 .button-tile-icons-container-mobile {

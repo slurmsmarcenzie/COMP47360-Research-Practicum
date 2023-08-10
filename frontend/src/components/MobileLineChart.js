@@ -159,7 +159,7 @@ function MobileLineChart ({map})  {
             {dropDownOptions}
           </select>
     
-          <div className='line-chart-container'>
+          <div className='line-chart-container-mobile'>
             <Line  options={options} data={chartData}/>
           </div>
         </div>

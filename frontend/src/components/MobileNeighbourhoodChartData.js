@@ -33,6 +33,7 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
     const [labels, setLabels] = useState([]);    
 
     const [active, setActive] = useState(true);
+    const [isChartDisplayed, setIsChartDisplayed] = useState(false);
 
     // This function will handle sorting and extraction of names and data values
     const getImpactedZonesForChart = () => {
@@ -300,7 +301,8 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
         
         {
           title: 'Display Line Chart Analysis',
-          content: <MobileLineChart map = {map}/>
+          content: <MobileLineChart map = {map}/>,
+          toggleChartDisplay: () => setIsChartDisplayed(!isChartDisplayed),
         },
         {
          title: 'Filter Zones By',
@@ -326,47 +328,61 @@ function MobileNeighbourhoodChartData({ map, hashMap, busynessHashMap, eventBase
         }
       ];
     
-    
-    return (
-        <div className='parent-chart-container'> 
-  <div className="accordion-mobile">
-    {accordionData.map(({ index, title, content }) => (
-      <MobileAccordion key={title} title={title} content={content} index={index}/>
-    ))}
-      </div>
-      {!isAccordionActive && (
+      return (
+        <div className='parent-chart-container'>
+          <div className="accordion-mobile">
+            {accordionData.map(({ index, title, content, toggleChartDisplay }, i) => {
+              // Always render the first accordion item
+              if (i === 0) {
+                return (
+                  <MobileAccordion key={title} title={title} content={content} index={index} onClick={toggleChartDisplay} />
+                );
+              }
+      
+              // Render the second accordion item only if the chart is not displayed
+              if (i === 1 && !isChartDisplayed) {
+                return (
+                  <MobileAccordion key={title} title={title} content={content} index={index} />
+                );
+              }
+      
+              return null;
+            })}
+          </div>
+      
+          {!isChartDisplayed && !isAccordionActive && (
             <div className='floating-infobox-box-button-container'>
-                <div className="radio-button">
-                    <input
-                        type="radio"
-                        name="chartDataOption"
-                        value="baselineBusyness"
-                        id="baselineBusyness"
-                        checked={!active}
-                        onChange={handleOptionChange}
-                    />
-                    <label htmlFor="baselineBusyness">
-                        Baseline
-                    </label>
-                    <input
-                        type="radio"
-                        name="chartDataOption"
-                        value="eventImpact"
-                        id="eventImpact"
-                        checked={active}
-                        onChange={handleOptionChange}
-                    />
-                    <label htmlFor="eventImpact">
-                        Event Impact
-                    </label>
-                </div>
-                <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
-                    {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
-                </button>
+              <div className="radio-button">
+                <input
+                  type="radio"
+                  name="chartDataOption"
+                  value="baselineBusyness"
+                  id="baselineBusyness"
+                  checked={!active}
+                  onChange={handleOptionChange}
+                />
+                <label htmlFor="baselineBusyness">
+                  Baseline
+                </label>
+                <input
+                  type="radio"
+                  name="chartDataOption"
+                  value="eventImpact"
+                  id="eventImpact"
+                  checked={active}
+                  onChange={handleOptionChange}
+                />
+                <label htmlFor="eventImpact">
+                  Event Impact
+                </label>
+              </div>
+              <button className='floating-nav-cta-button' onClick={() => setSplitView(!isSplitView)}>
+                {isSplitView ? 'Show Original' : 'Display Dual Map Comparison'}
+              </button>
             </div>
-        )}
+            )}
         </div>
     );
-}
+}      
 
 export default MobileNeighbourhoodChartData;
