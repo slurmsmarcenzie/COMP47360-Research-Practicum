@@ -13,7 +13,7 @@ def general_prediction(date):
     Returns: dictionary
     """
     model_input = generate_model_input(date)
-    model = pickle.load(open('predicting/models/rf_final.pkl', 'rb'))
+    model = pickle.load(open('predicting/models/xgb_final.pkl', 'rb'))
     predictions = model.predict(model_input)
     normalized_predictions = normalise_data(predictions)
     predictions_dict = {str(location_id): float(prediction) for location_id, prediction in zip(location_ids, normalized_predictions)}
