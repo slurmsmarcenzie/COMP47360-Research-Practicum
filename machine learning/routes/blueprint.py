@@ -38,7 +38,7 @@ historic.route("/api/historic/<string:eventID>/baseline")(event_baseline)
 historic.route("/api/historic/<string:eventID>/impact")(event_impact)
 historic.route("/api/historic/<string:eventID>/comparison")(event_comparison)
 historic.route("/api/historic/<string:eventID>/timelapse/impact")(event_timelapse_impact)
-historic.route("/api/historic/<string:eventID>/timelapse/baseline")(event_timelapse_impact)
+historic.route("/api/historic/<string:eventID>/timelapse/baseline")(event_timelapse_baseline)
 historic.before_request(check_token)
 
 # PORTAL routes (for clients to login and create/view their API key):

@@ -65,7 +65,7 @@ def event_timelapse_baseline(eventID):
     general_logger.info(f"event baseline timelapse queried for event: {eventID}")
     general_logger.info("Note: this is a cached function")
     timelapse_filtered = query_database(eventID, Metric.TIMELAPSE_BASELINE)
-    return json.dumps(timelapse_filtered), 200
+    return timelapse_filtered, 200
 
 
 @cache.memoize(timeout=0)
