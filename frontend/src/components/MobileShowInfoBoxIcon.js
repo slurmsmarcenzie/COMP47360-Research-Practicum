@@ -12,9 +12,6 @@ export default function MobileShowInfoBoxIcon() {
 
     const handleToggle = () => {
       setIsDrawerOpen(!isDrawerOpen);
-      if (!isTimelapseVisible) {
-        setIsTimelapseVisible(true);
-      }
     };
 
     return (

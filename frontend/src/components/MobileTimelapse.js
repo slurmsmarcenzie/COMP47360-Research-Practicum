@@ -84,7 +84,7 @@ function MobileTimelapse ({map, originalBusynessHashMap, timelapseData, busyness
 
     return (
         <div className='timelapse-container-mobile'>
-            <button className="timelapse-button" onClick={handlePlay}>
+            <button className="timelapse-button-mobile" onClick={handlePlay}>
                 {isPlaying ? <FontAwesomeIcon icon={faPause} style={{color:'#D3D3D3'}}/> : <FontAwesomeIcon icon={faPlay} style={{color:'#D3D3D3'}}/>}
                 <label htmlFor="toggle" className="timelapse-label">{isPlaying ? "pause" : "play"}</label>
             </button>

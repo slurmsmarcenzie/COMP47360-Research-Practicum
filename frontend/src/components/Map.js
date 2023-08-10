@@ -338,7 +338,7 @@ function Map() {
     setShowNeighborhoodInfoBox(false);
     setNeighbourhoodEvents([]);
     setIsFloatingNavVisible(false);
-    setIsTimelapseVisible(true);
+    setIsTimelapseVisible(false);
 
     isNeighbourhoodClickedRef.current = false; // user has reset the select function so we reset the map to default state.
   
