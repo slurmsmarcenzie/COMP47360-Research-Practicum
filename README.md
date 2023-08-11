@@ -42,5 +42,5 @@ CACHE_TYPE=simple
 **Additional**
 
 It is possible to use the 'machine learning' folder independently for running a Flask Prediction API.\
-The Flask API has its own portal login page if you wish to generate new API access tokens. This page is found at http://localhost:7000/portal
+The Flask API has its own login portal if you wish to generate new API access tokens. This page is found at http://localhost:7000/portal
 
