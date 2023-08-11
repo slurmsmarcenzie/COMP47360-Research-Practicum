@@ -18,7 +18,7 @@ Fill file with the following (note, below is a testing/development key):
 
 FLASK_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2ZWxvcGVyIn0.IF_FDOmKtZ_HAJnJj-ZN05GSTzqlrUgVg_I9M1Vfh24\
 PORT=8000\
-FLASK_API_URL=http://127.0.0.1:7000/api\
+FLASK_API_URL=http://127.0.0.1:7000/api \
 
 In 'machine learning' folder, create file '.env'
 
