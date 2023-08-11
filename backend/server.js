@@ -1,3 +1,9 @@
+//changes for HTTPS
+const port = process.env.PORT || 8080
+const https = require('https');
+const fs = require('fs');
+
+
 const express = require('express')
 const app = express()
 const meta = require("./routes/meta")
@@ -9,6 +15,14 @@ const helmet = require('helmet')
 const cors = require("cors");
 const path = require("path")
 require("dotenv").config();
+
+
+// putting in key and cert for https taken from certbot
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/afterparty.solutions/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/afterparty.solutions/fullchain.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
+
+
 
 
 //Middleware:
@@ -41,9 +55,8 @@ app.get('*', (req, res, next) => {
   next()
 }, http_logger);
 
-
-const port = process.env.PORT || 8000
-//START APP
-app.listen(port, () => { 
-    console.log('server is listening on port', port)
+//START SERVER
+const server = https.createServer(credentials, app);
+server.listen(port, () => {
+        console.log(`Server is running on https ${port}`);
 });
