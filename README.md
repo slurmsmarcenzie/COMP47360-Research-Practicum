@@ -34,6 +34,13 @@ CACHE_TYPE=simple
 
 
 **Running the application:**
+
 1) in 'backend' run node server
 2) in 'machine learning' activate python environment and run 'python app.py'
 3) Visit http://localhost:8000
+
+**Additional**
+
+It is possible to use the 'machine learning' folder independently for running a Flask Prediction API.\
+The Flask API has its own portal login page if you wish to generate new API access tokens. This page is found at http://localhost:7000/portal
+
