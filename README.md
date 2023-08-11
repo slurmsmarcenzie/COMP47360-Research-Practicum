@@ -2,7 +2,7 @@
 
 ## Development setup
 
-A) Download zip of branch 'production' or clone repository to local environment and checkout branch 'production'
+A) Download zip of branch 'production' or clone repository to local environment and checkout branch 'production'\
 B) Ensure that global version of npm is > 9 and node is > 18
 
 ### Steps:
