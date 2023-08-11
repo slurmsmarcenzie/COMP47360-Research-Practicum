@@ -8,10 +8,12 @@ B) Ensure that global version of npm is > 9 and node is > 18
 ### Steps:
 
 **Installations:**
+
 1) in 'backend' folder, run npm install
 2) in 'machine learning' folder, create virtual environment, activate, and run 'pip install -r requirements.txt'
 
-**Environment variables:**\
+**Environment variables:**
+
 In 'backend' folder, create file '.env'
    
 Fill file with the following (note, below is a testing/development key):
