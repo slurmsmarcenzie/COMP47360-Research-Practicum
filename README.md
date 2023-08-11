@@ -18,7 +18,7 @@ In 'backend' folder, create file '.env'
    
 Fill file with the following (note, below is a testing/development key):
 
-FLASK_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2ZWxvcGVyIn0.IF_FDOmKtZ_HAJnJj-ZN05GSTzqlrUgVg_I9M1Vfh24\
+FLASK_API_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZGV2ZWxvcGVyMTAifQ.sfRyA5cBRCPx_YHbdpnfPnWvq8WNV03OLUnKv8GdZNw\
 PORT=8000\
 FLASK_API_URL=http://127.0.0.1:7000/api
 
@@ -27,7 +27,7 @@ In 'machine learning' folder, create file '.env'
 Fill file with the following (note, recaptcha keys below are for testing/development):
 
 SQLDB=sqlite:///api_database.db\
-SECRETKEY=[enter key of your choosing here]\
+SECRETKEY=team4testingkey\
 RECAPTCHA_PRIVATE=6LdKjJonAAAAAGi1HM7uC38KFk5y7tbv1LOFV0Y-\
 RECAPTCHA_PUBLIC=6LdKjJonAAAAAKMcyTbRd4m4-GI2eia7R2HExuSh\
 CACHE_TYPE=simple
