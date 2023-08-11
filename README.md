@@ -28,8 +28,8 @@ Fill file with the following:
 
 SQLDB=sqlite:///api_database.db\
 SECRETKEY=[enter key of your choosing here]\
-RECAPTCHA_PRIVATE=[please generate your own google v2 'im not a robot' recaptcha key]\
-RECAPTCHA_PUBLIC=[please generate your own google v2 'im not a robot' recaptcha key]\
+RECAPTCHA_PRIVATE=[please generate your own google v2 'im not a robot' secret recaptcha key]\
+RECAPTCHA_PUBLIC=[please generate your own google v2 'im not a robot' site recaptcha key]\
 CACHE_TYPE=simple
 
 
