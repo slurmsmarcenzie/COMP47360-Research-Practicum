@@ -13,7 +13,9 @@ import prunedEvents from '../geodata/prunedEvents.json'
 const MapContext = createContext();
 
 const MAPBOX_ACCESS_TOKEN = process.env.MAPBOX_ACCESS_TOKEN || 'pk.eyJ1IjoiaGFycnlvY2xlaXJpZ2giLCJhIjoiY2xpdzJmMzNjMWV2NDNubzd4NTBtOThzZyJ9.m_TBrBXxkO0y0GjEci199g';
-const BASE_API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8000/app/v1';
+// changing url to https of website as node needs this
+const BASE_API_URL = process.env.REACT_APP_API_URL || 'https://afterparty.solutions/app/v1';
+
 let animationID = null;
 
 // Create a provider component
