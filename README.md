@@ -24,12 +24,12 @@ FLASK_API_URL=http://127.0.0.1:7000/api
 
 In 'machine learning' folder, create file '.env'
 
-Fill file with the following:
+Fill file with the following (note, recaptcha keys below are for testing/development):
 
 SQLDB=sqlite:///api_database.db\
 SECRETKEY=[enter key of your choosing here]\
-RECAPTCHA_PRIVATE=[please generate your own google v2 'im not a robot' secret recaptcha key]\
-RECAPTCHA_PUBLIC=[please generate your own google v2 'im not a robot' site recaptcha key]\
+RECAPTCHA_PRIVATE=6LdKjJonAAAAAGi1HM7uC38KFk5y7tbv1LOFV0Y-\
+RECAPTCHA_PUBLIC=6LdKjJonAAAAAKMcyTbRd4m4-GI2eia7R2HExuSh\
 CACHE_TYPE=simple
 
 
