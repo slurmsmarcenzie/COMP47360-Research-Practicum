@@ -28,7 +28,7 @@ SQLDB=sqlite:///api_database.db\
 SECRETKEY=[enter key of your choosing here]\
 RECAPTCHA_PRIVATE=[please generate your own keys from google's recaptcha page]\
 RECAPTCHA_PUBLIC=[please generate your own keys from google's recaptcha page]\
-CACHE_TYPE=simple\
+CACHE_TYPE=simple
 
 
 **Running the application:**
